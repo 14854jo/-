@@ -159,6 +159,19 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 @media(max-width:700px){.companion-art{width:148px;height:148px;flex-basis:148px;border-radius:30px}.rank-animal{width:34px;height:34px;flex-basis:34px}.feed-avatar .pet-svg-mini{width:36px;height:36px}}
 @media(prefers-reduced-motion:reduce){.pet-floor,.pet-body,.pet-head,.pet-tail,.pet-blink,.pet-sparkle{animation:none!important}.companion-art.pet-bounce .pet-svg,.companion-art.pet-wiggle .pet-svg,.companion-art.pet-feeding .pet-svg,.companion-art.pet-level-up .pet-svg,.companion-art.pet-arrival .pet-svg{animation:none!important}}
 
+
+/* Softer storybook polish for the original SD companions */
+.pet-svg{filter:drop-shadow(0 7px 3px rgba(65,47,85,.13));overflow:visible}
+.pet-svg-mini{filter:none}
+.pet-head,.pet-body{will-change:transform}
+.pet-face-happy,.pet-face-eating{opacity:0;transition:opacity .16s ease}
+.companion-art.pet-bounce .pet-eyes-normal,.companion-art.pet-level-up .pet-eyes-normal{opacity:0}
+.companion-art.pet-bounce .pet-face-happy,.companion-art.pet-level-up .pet-face-happy,.companion-art.pet-feeding .pet-face-eating{opacity:1}
+.companion-art.pet-feeding .pet-face-happy{opacity:0}
+.companion-art{background:radial-gradient(circle at 50% 32%,#fff 0%,#fff9fb 35%,#eee9ff 72%,#e2f4ed 100%);box-shadow:inset 0 0 0 1px #ffffffc9,0 14px 30px rgba(88,69,170,.13)}
+.rank-animal .pet-svg-mini,.feed-avatar .pet-svg-mini{filter:drop-shadow(0 2px 1px rgba(65,47,85,.1))}
+.pet-growth-current{background:linear-gradient(110deg,#fff9fc,#f6f3ff)}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -425,77 +438,127 @@ const PET_PALETTES={
   otter:{fur:'#8b5c43',light:'#c99875',shade:'#62402f',inner:'#d68b8a',muzzle:'#f1d8b8',limb:'#754932',foot:'#51362d'},
   duck:{fur:'#f5c94d',light:'#ffe98a',shade:'#d79e28',inner:'#ffb0a8',muzzle:'#fff1bf',limb:'#e9aa27',foot:'#ed8b2b'}
 };
+let petSvgSequence=0;
 function animalGrowthSvg(id,level=1,mode='full'){
-  const animal=animalInfo(id),c=PET_PALETTES[id]||PET_PALETTES.cat,L=Math.max(1,Math.min(animalGrowthStages(id).length,Number(level)||1));
-  const mini=mode==='mini',headTop=(id==='rabbit'?17:id==='fox'?24:id==='duck'?44:id==='penguin'?35:31);
-  let ears='';
-  if(id==='cat')ears=`<path d="M77 68 L75 31 Q76 24 84 31 L106 50 Q120 43 134 50 L156 31 Q164 25 165 34 L162 68Z" fill="${c.shade}"/><path d="M84 57 L83 38 L99 53Z M141 53 L158 37 L155 58Z" fill="${c.inner}"/>`;
-  else if(id==='dog')ears=`<ellipse cx="76" cy="72" rx="18" ry="28" transform="rotate(-18 76 72)" fill="${c.shade}"/><ellipse cx="164" cy="72" rx="18" ry="28" transform="rotate(18 164 72)" fill="${c.shade}"/><ellipse cx="78" cy="72" rx="10" ry="19" fill="${c.inner}" opacity=".65"/><ellipse cx="162" cy="72" rx="10" ry="19" fill="${c.inner}" opacity=".65"/>`;
-  else if(id==='fox')ears=`<path d="M78 72 L68 18 Q68 12 75 19 L111 48 L129 48 L165 19 Q172 12 171 20 L161 73Z" fill="${c.shade}"/><path d="M82 58 L76 30 L102 52Z M138 52 L164 30 L157 59Z" fill="#ffd3b1"/>`;
-  else if(id==='rabbit')ears=`<ellipse cx="96" cy="41" rx="17" ry="37" transform="rotate(-13 96 41)" fill="${c.fur}"/><ellipse cx="144" cy="41" rx="17" ry="37" transform="rotate(13 144 41)" fill="${c.fur}"/><ellipse cx="97" cy="40" rx="8" ry="27" transform="rotate(-13 97 40)" fill="${c.inner}"/><ellipse cx="143" cy="40" rx="8" ry="27" transform="rotate(13 143 40)" fill="${c.inner}"/>`;
-  else if(id==='bear')ears=`<circle cx="83" cy="52" r="19" fill="${c.shade}"/><circle cx="157" cy="52" r="19" fill="${c.shade}"/><circle cx="83" cy="52" r="10" fill="${c.light}"/><circle cx="157" cy="52" r="10" fill="${c.light}"/>`;
-  else if(id==='panda')ears=`<circle cx="82" cy="51" r="19" fill="${c.limb}"/><circle cx="158" cy="51" r="19" fill="${c.limb}"/><circle cx="82" cy="51" r="9" fill="#f4b0ad"/><circle cx="158" cy="51" r="9" fill="#f4b0ad"/>`;
-  else if(id==='penguin')ears=`<path d="M105 45 Q112 25 120 42 Q130 23 137 45Z" fill="#f7d76e"/>`;
-  else if(id==='otter')ears=`<circle cx="84" cy="55" r="12" fill="${c.shade}"/><circle cx="156" cy="55" r="12" fill="${c.shade}"/><circle cx="84" cy="55" r="6" fill="${c.light}"/><circle cx="156" cy="55" r="6" fill="${c.light}"/>`;
-  else ears=`<path d="M103 50 Q94 21 107 29 Q119 34 120 48 Q131 26 140 31 Q148 38 136 53Z" fill="${c.light}"/><path d="M104 47 Q100 34 107 36 L116 49 M128 49 L138 37 Q142 36 139 46" stroke="#e8ac35" stroke-width="3" fill="none" stroke-linecap="round"/>`;
-  let tail='';
-  if(id==='cat')tail=`<path d="M154 150 Q201 159 183 121 Q174 106 186 101" fill="none" stroke="${c.shade}" stroke-width="15" stroke-linecap="round"/>`;
-  else if(id==='dog')tail=`<path d="M154 151 Q191 160 180 130" fill="none" stroke="${c.shade}" stroke-width="13" stroke-linecap="round"/>`;
-  else if(id==='fox')tail=`<path d="M151 151 Q195 161 194 121 Q190 105 174 110 Q167 115 177 126 Q174 139 154 139Z" fill="${c.shade}"/><path d="M180 116 Q193 121 184 137 Q176 141 165 140 Q180 133 180 116Z" fill="#fff1df"/>`;
-  else if(id==='rabbit')tail=`<circle cx="157" cy="157" r="12" fill="${c.light}"/>`;
-  else if(id==='bear')tail=`<circle cx="157" cy="155" r="10" fill="${c.shade}"/>`;
-  else if(id==='panda')tail=`<circle cx="157" cy="155" r="9" fill="${c.limb}"/>`;
-  else if(id==='otter')tail=`<path d="M151 159 Q180 174 188 156 Q190 145 179 147 Q172 161 153 147Z" fill="${c.shade}"/>`;
-  else if(id==='duck')tail=`<path d="M153 151 L177 141 L164 164 L151 161Z" fill="${c.shade}"/>`;
-  let sideFeatures='';
-  if(id==='panda')sideFeatures=`<ellipse cx="103" cy="83" rx="11" ry="14" transform="rotate(25 103 83)" fill="#303545"/><ellipse cx="137" cy="83" rx="11" ry="14" transform="rotate(-25 137 83)" fill="#303545"/>`;
-  if(id==='penguin')sideFeatures=`<ellipse cx="120" cy="116" rx="25" ry="32" fill="#fff5e5"/>`;
-  let cheeks=`<circle cx="91" cy="91" r="7" fill="#f38c9e" opacity=".62"/><circle cx="149" cy="91" r="7" fill="#f38c9e" opacity=".62"/>`;
-  let muzzle='';
-  if(id==='duck') muzzle=`<path d="M109 88 Q120 82 139 88 Q130 101 115 94Z" fill="#ee8c26" stroke="#c9761b" stroke-width="2" stroke-linejoin="round"/>`;
-  else muzzle=`<ellipse cx="109" cy="92" rx="13" ry="10" fill="${c.muzzle}"/><ellipse cx="131" cy="92" rx="13" ry="10" fill="${c.muzzle}"/><path d="M116 91 Q120 88 124 91 Q120 98 116 91Z" fill="${id==='cat'?'#8a4c5d':c.foot}"/><path d="M120 97 Q116 103 112 99 M120 97 Q124 103 128 99" stroke="${c.foot}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
-  if(id==='panda')muzzle=`<ellipse cx="109" cy="92" rx="13" ry="10" fill="#fffdf7"/><ellipse cx="131" cy="92" rx="13" ry="10" fill="#fffdf7"/><path d="M116 91 Q120 88 124 91 Q120 98 116 91Z" fill="#252936"/><path d="M120 97 Q116 103 112 99 M120 97 Q124 103 128 99" stroke="#252936" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
-  const wingColor=(id==='duck'||id==='penguin')?c.shade:c.limb;
-  const feet=`<ellipse cx="101" cy="181" rx="19" ry="9" fill="${c.foot}"/><ellipse cx="139" cy="181" rx="19" ry="9" fill="${c.foot}"/>`;
+  const animal=animalInfo(id);id=animal.id;const c=PET_PALETTES[id]||PET_PALETTES.cat;
+  const L=Math.max(1,Math.min(animalGrowthStages(id).length,Number(level)||1)),mini=mode==='mini';
+  const uid=`fitpet-${String(id).replace(/[^a-z0-9_-]/gi,'')}-${++petSvgSequence}`;
+  const fur=`${uid}-fur`,body=`${uid}-body`,ear=`${uid}-ear`,scarf=`${uid}-scarf`,gold=`${uid}-gold`;
+  const headFill=id==='panda'?'#fffdf7':id==='penguin'?'#45536e':`url(#${fur})`;
+  const bodyFill=id==='panda'?'#fffdf7':id==='penguin'?'url(#'+body+')':`url(#${body})`;
+  const outline=id==='panda'?'#a9a7a8':c.shade;
+
+  let ears='',tail='',facePatches='',belly='',wing='',muzzle='',specialFace='',whiskers='';
+  // 둥근 귀와 짧은 팔다리로 통일하고, 동물별 실루엣은 확실히 다르게 유지합니다.
+  if(id==='cat'){
+    ears=`<g class="pet-ears"><path d="M76 72 Q70 61 73 34 Q74 25 82 32 L108 53 Q120 48 132 53 L158 32 Q166 26 167 36 L164 72Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.8" stroke-linejoin="round"/><path d="M82 57 L81 39 Q81 36 85 40 L101 54Z M139 54 L157 39 Q160 37 158 44 L155 58Z" fill="${c.inner}" opacity=".95"/></g>`;
+    tail=`<path d="M151 159 Q190 167 187 139 Q184 124 194 119" fill="none" stroke="${outline}" stroke-width="17" stroke-linecap="round"/><path d="M151 157 Q182 164 181 141" fill="none" stroke="${c.fur}" stroke-width="10" stroke-linecap="round"/>`;
+    whiskers=`<g stroke="${c.shade}" stroke-width="1.8" stroke-linecap="round" opacity=".7"><path d="M91 101 L72 96 M91 107 L70 109 M149 101 L168 96 M149 107 L170 109"/></g>`;
+  } else if(id==='dog'){
+    ears=`<g class="pet-ears"><path d="M83 53 Q55 42 54 76 Q52 100 72 105 Q87 101 91 77Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5"/><path d="M157 53 Q185 42 186 76 Q188 100 168 105 Q153 101 149 77Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5"/><path d="M65 68 Q63 88 74 92 M175 68 Q177 88 166 92" fill="none" stroke="${c.light}" stroke-width="4" stroke-linecap="round" opacity=".8"/></g>`;
+    tail=`<path d="M155 158 Q191 170 191 146 Q191 136 184 134" fill="none" stroke="${outline}" stroke-width="14" stroke-linecap="round"/><path d="M155 157 Q181 166 183 146" fill="none" stroke="${c.fur}" stroke-width="8" stroke-linecap="round"/>`;
+    specialFace=`<path d="M113 67 Q120 61 127 67" fill="none" stroke="${c.shade}" stroke-width="2" stroke-linecap="round" opacity=".5"/>`;
+  } else if(id==='fox'){
+    ears=`<g class="pet-ears"><path d="M76 75 L64 22 Q63 14 72 22 L111 53 L129 53 L168 22 Q177 14 176 24 L164 75Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5" stroke-linejoin="round"/><path d="M80 59 L72 31 L101 54Z M139 54 L168 31 L160 59Z" fill="#fff0dd"/><path d="M85 55 L78 35 L98 54Z M142 54 L162 35 L155 56Z" fill="${c.inner}" opacity=".7"/></g>`;
+    tail=`<path d="M151 158 Q184 166 194 142 Q207 115 186 111 Q175 108 166 126 Q181 127 177 144 Q171 154 151 151Z" fill="${outline}"/><path d="M181 119 Q196 123 187 139 Q181 147 169 147 Q185 135 181 119Z" fill="#fff4e5"/>`;
+    facePatches=`<path d="M83 84 Q92 101 111 105 Q103 113 91 107 Q83 101 83 84Z M157 84 Q148 101 129 105 Q137 113 149 107 Q157 101 157 84Z" fill="#fff3e4" opacity=".95"/>`;
+  } else if(id==='rabbit'){
+    ears=`<g class="pet-ears"><path d="M88 76 Q72 49 81 18 Q86 7 95 20 Q107 45 108 70Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5"/><path d="M132 70 Q133 45 145 20 Q154 7 159 18 Q168 49 152 76Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5"/><path d="M91 62 Q80 35 88 24 Q96 40 100 62Z M140 62 Q144 40 152 24 Q160 35 149 62Z" fill="${c.inner}" opacity=".92"/></g>`;
+    tail=`<circle cx="159" cy="161" r="13" fill="#fffaf6" stroke="${outline}" stroke-width="2.5"/><circle cx="155" cy="157" r="4" fill="#fff" opacity=".9"/>`;
+  } else if(id==='bear'){
+    ears=`<g class="pet-ears"><circle cx="78" cy="60" r="22" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5"/><circle cx="162" cy="60" r="22" fill="url(#${fur})" stroke="${outline}" stroke-width="3.5"/><circle cx="78" cy="60" r="12" fill="${c.inner}"/><circle cx="162" cy="60" r="12" fill="${c.inner}"/><circle cx="75" cy="56" r="4" fill="#fff" opacity=".45"/><circle cx="159" cy="56" r="4" fill="#fff" opacity=".45"/></g>`;
+    tail=`<circle cx="158" cy="159" r="9" fill="${c.shade}" stroke="${outline}" stroke-width="2"/>`;
+  } else if(id==='panda'){
+    ears=`<g class="pet-ears"><circle cx="78" cy="57" r="21" fill="#303542" stroke="#242936" stroke-width="3"/><circle cx="162" cy="57" r="21" fill="#303542" stroke="#242936" stroke-width="3"/><circle cx="77" cy="55" r="8" fill="#515766"/><circle cx="161" cy="55" r="8" fill="#515766"/></g>`;
+    tail=`<circle cx="157" cy="159" r="8" fill="#303542"/>`;
+    facePatches=`<ellipse cx="101" cy="81" rx="13" ry="17" transform="rotate(25 101 81)" fill="#303542"/><ellipse cx="139" cy="81" rx="13" ry="17" transform="rotate(-25 139 81)" fill="#303542"/>`;
+    belly=`<ellipse cx="120" cy="150" rx="27" ry="30" fill="#f5eee3" opacity=".94"/>`;
+  } else if(id==='penguin'){
+    ears=`<g class="pet-ears"><path d="M101 48 Q103 25 117 40 Q128 22 140 46 Q132 52 121 51Z" fill="#f8d36d" stroke="#b88030" stroke-width="2.5" stroke-linejoin="round"/><path d="M110 40 Q117 33 120 45" fill="none" stroke="#fff2ac" stroke-width="2.5" stroke-linecap="round"/></g>`;
+    tail=`<path d="M150 157 Q177 168 187 151 Q190 144 181 143 L158 148Z" fill="${c.shade}"/>`;
+    belly=`<ellipse cx="120" cy="151" rx="28" ry="32" fill="#fff8ee" stroke="#e9e1d8" stroke-width="1.6"/>`;
+    muzzle=`<path d="M117 91 Q132 87 146 94 Q136 105 121 100Z" fill="#f5a12e" stroke="#c9781d" stroke-width="2.2" stroke-linejoin="round"/>`;
+  } else if(id==='otter'){
+    ears=`<g class="pet-ears"><circle cx="79" cy="62" r="15" fill="url(#${fur})" stroke="${outline}" stroke-width="3"/><circle cx="161" cy="62" r="15" fill="url(#${fur})" stroke="${outline}" stroke-width="3"/><circle cx="79" cy="62" r="7" fill="${c.inner}"/><circle cx="161" cy="62" r="7" fill="${c.inner}"/></g>`;
+    tail=`<path d="M153 160 Q178 178 195 156 Q200 148 191 144 Q178 161 157 150Z" fill="url(#${fur})" stroke="${outline}" stroke-width="2.5"/>`;
+    muzzle=`<ellipse cx="120" cy="100" rx="29" ry="19" fill="${c.muzzle}" stroke="#8a5c43" stroke-width="1.5"/><ellipse cx="111" cy="98" rx="12" ry="9" fill="#f7e5d2"/><ellipse cx="130" cy="98" rx="12" ry="9" fill="#f7e5d2"/><path d="M116 94 Q120 90 124 94 Q120 100 116 94Z" fill="${c.foot}"/><path d="M120 100 Q114 108 109 103 M120 100 Q126 108 131 103" stroke="${c.foot}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+    whiskers=`<g stroke="${c.shade}" stroke-width="1.6" stroke-linecap="round" opacity=".65"><path d="M95 101 L77 97 M95 106 L76 108 M145 101 L163 97 M145 106 L164 108"/></g>`;
+  } else { // duck
+    ears=`<g class="pet-ears"><path d="M99 53 Q90 34 103 29 Q115 27 120 48 Q127 25 140 31 Q153 38 140 56Z" fill="url(#${fur})" stroke="${outline}" stroke-width="3.2" stroke-linejoin="round"/><path d="M105 43 Q109 34 115 47 M129 45 Q136 34 140 41" stroke="#fff0a9" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
+    tail=`<path d="M153 153 L176 143 L165 166 L151 162Z" fill="${c.shade}" stroke="${outline}" stroke-width="2.3" stroke-linejoin="round"/>`;
+    wing=`<path d="M85 132 Q57 128 62 153 Q68 172 95 157 Q103 150 94 139Z" fill="url(#${ear})" stroke="${outline}" stroke-width="3" stroke-linejoin="round"/><path d="M155 132 Q183 128 178 153 Q172 172 145 157 Q137 150 146 139Z" fill="url(#${ear})" stroke="${outline}" stroke-width="3" stroke-linejoin="round"/><path d="M73 150 Q80 159 91 151 M167 150 Q160 159 149 151" stroke="#fff3b1" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+    muzzle=`<path d="M111 91 Q121 86 141 91 Q139 100 126 102 L116 99Z" fill="#ffac3e" stroke="#d47b22" stroke-width="2.5" stroke-linejoin="round"/><path d="M117 93 Q126 92 135 94" stroke="#ffd982" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  }
+
+  if(id!=='duck'&&id!=='penguin'&&id!=='otter'&&id!=='panda'){
+    muzzle=`<ellipse cx="109" cy="100" rx="15" ry="12" fill="${c.muzzle}"/><ellipse cx="131" cy="100" rx="15" ry="12" fill="${c.muzzle}"/><path d="M116 96 Q120 92 124 96 Q120 103 116 96Z" fill="${id==='cat'?'#9c5268':c.foot}"/><path d="M120 102 Q115 109 110 104 M120 102 Q125 109 130 104" stroke="${c.foot}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  }
+  if(id==='cat') muzzle+=`<path d="M86 99 L93 102 M154 99 L147 102" stroke="${c.shade}" stroke-width="1.8" stroke-linecap="round"/>`;
+  if(id==='fox') muzzle=`<path d="M90 93 Q100 83 112 94 L120 101 L128 94 Q141 83 150 93 Q144 111 120 112 Q96 111 90 93Z" fill="#fff4e4"/><path d="M116 96 Q120 92 124 96 Q120 103 116 96Z" fill="${c.foot}"/><path d="M120 102 Q115 109 110 104 M120 102 Q125 109 130 104" stroke="${c.foot}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  if(id==='panda') muzzle=`<ellipse cx="109" cy="101" rx="14" ry="11" fill="#fffdf7"/><ellipse cx="131" cy="101" rx="14" ry="11" fill="#fffdf7"/><path d="M116 96 Q120 92 124 96 Q120 103 116 96Z" fill="#303542"/><path d="M120 102 Q115 109 110 104 M120 102 Q125 109 130 104" stroke="#303542" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+
   let neckWear='';
-  if(L>=2) neckWear=`<path d="M89 118 Q120 131 151 118 L145 133 Q120 145 95 133Z" fill="${L>=4?'#5a77d6':'#ec829c'}" stroke="#ffffff" stroke-opacity=".6" stroke-width="2"/><path d="M120 132 L111 148 L125 143 L129 155 L137 134Z" fill="${L>=4?'#3e59b7':'#d96081'}"/>`;
-  if(L>=3) neckWear+=`<circle cx="120" cy="130" r="6" fill="#ffe28a" stroke="#b98223" stroke-width="2"/>`;
+  if(L>=2){
+    const scarfColor=L>=4?'#83a7ee':'#f58fb2',scarfDark=L>=4?'#557ad0':'#dc668d';
+    neckWear=`<path d="M83 121 Q120 139 157 121 L149 138 Q120 153 91 138Z" fill="url(#${scarf})" stroke="#fff" stroke-opacity=".82" stroke-width="2.2"/><path d="M121 137 L112 151 L124 148 L132 158 L139 139Z" fill="${scarfDark}" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/><path d="M93 127 Q120 141 147 127" fill="none" stroke="#fff" stroke-width="2.2" opacity=".62" stroke-linecap="round"/>`;
+  }
+  if(L>=3) neckWear+=`<circle cx="120" cy="137" r="7" fill="url(#${gold})" stroke="#b8842e" stroke-width="2"/><circle cx="118" cy="135" r="2" fill="#fff6c6"/>`;
+
   let headAccessory='';
-  if(L===4) headAccessory=`<path d="M84 51 Q120 24 156 51 L150 59 L90 59Z" fill="#5e80dd" stroke="#354c9e" stroke-width="2"/><path d="M91 51 Q120 36 149 51" fill="none" stroke="#a9c2ff" stroke-width="3" stroke-linecap="round"/>`;
-  if(L===5) headAccessory=`<path d="M90 50 L96 35 L109 45 L120 25 L132 45 L145 35 L151 51Z" fill="#f2c84d" stroke="#b78221" stroke-width="2.5"/><circle cx="120" cy="41" r="4" fill="#f56c8a"/>`;
-  if(L>=6) headAccessory=`<path d="M89 52 L97 23 L111 42 L120 12 L131 42 L146 22 L152 53Z" fill="#f6cf54" stroke="#b37b1e" stroke-width="3" stroke-linejoin="round"/><circle cx="120" cy="37" r="5" fill="#f17898"/><circle cx="99" cy="45" r="3.5" fill="#67c7b7"/><circle cx="142" cy="44" r="3.5" fill="#67c7b7"/>`;
-  let heroCape=L>=6?`<path d="M87 126 Q67 144 80 176 L96 170 L120 182 L143 170 L160 176 Q173 145 153 126Z" fill="#c84c6b" stroke="#8b2f4d" stroke-width="3"/><path d="M91 137 Q82 158 92 166 M149 137 Q158 158 148 166" stroke="#f8c9d5" stroke-width="4" fill="none" stroke-linecap="round"/>`:'';
-  const eyes=`<g class="pet-blink"><ellipse cx="104" cy="76" rx="4.5" ry="6" fill="#2c2938"/><ellipse cx="136" cy="76" rx="4.5" ry="6" fill="#2c2938"/><circle cx="105.5" cy="74" r="1.7" fill="#fff"/><circle cx="137.5" cy="74" r="1.7" fill="#fff"/></g>`;
-  const bodyColor=(id==='panda')?'#fffdf7':c.fur;
-  const wings=(id==='duck'||id==='penguin')?`<path d="M88 128 Q60 128 65 153 Q70 166 94 154Z" fill="${wingColor}" stroke="${c.shade}" stroke-width="2.5"/><path d="M152 128 Q180 128 175 153 Q170 166 146 154Z" fill="${wingColor}" stroke="${c.shade}" stroke-width="2.5"/>`:'';
-  const stageSize=mini?'.95':String(Math.min(1.055,.94+(L-1)*.023));
-  const svg=`<svg class="pet-svg ${mini?'pet-svg-mini':''}" viewBox="0 0 240 210" role="img" aria-label="${esc(animal.name)} SD 캐릭터, 현재 성장 단계" focusable="false">
-    <ellipse class="pet-floor" cx="120" cy="190" rx="59" ry="10" fill="#8d84bd" opacity=".20"/>
-    <g transform="translate(${(1-Number(stageSize))*120} ${(1-Number(stageSize))*182}) scale(${stageSize})">
+  if(L===4) headAccessory=`<path d="M72 62 Q120 25 168 62" fill="none" stroke="#6c8fdf" stroke-width="8" stroke-linecap="round"/><path d="M78 59 Q120 30 162 59" fill="none" stroke="#bcd1ff" stroke-width="2.5" stroke-linecap="round"/><circle cx="120" cy="43" r="6" fill="#ffe58b" stroke="#c59230" stroke-width="2"/>`;
+  if(L===5) headAccessory=`<g stroke="#b87e24" stroke-width="2.3" stroke-linejoin="round"><path d="M94 51 L99 34 L112 44 L120 26 L129 44 L142 34 L147 51Z" fill="url(#${gold})"/><path d="M97 51 L143 51" stroke="#e5a63b" stroke-width="4" stroke-linecap="round"/></g><circle cx="120" cy="39" r="4" fill="#f58ba9" stroke="#fff0b6" stroke-width="1.4"/>`;
+  if(L>=6) headAccessory=`<g stroke="#ab7422" stroke-width="2.5" stroke-linejoin="round"><path d="M82 54 L89 28 L106 45 L120 11 L135 45 L152 28 L159 54Z" fill="url(#${gold})"/><path d="M85 53 L156 53" stroke="#f9df80" stroke-width="4" stroke-linecap="round"/></g><circle cx="120" cy="31" r="5" fill="#ed7699" stroke="#fff2be" stroke-width="1.7"/><circle cx="96" cy="45" r="3.4" fill="#72cdb9"/><circle cx="144" cy="45" r="3.4" fill="#72cdb9"/>`;
+  const heroCape=L>=6?`<path d="M86 126 Q65 145 78 179 L99 169 L120 184 L142 169 L162 179 Q175 145 154 126Z" fill="#d96685" stroke="#a94062" stroke-width="3.2"/><path d="M91 137 Q82 160 94 169 M149 137 Q158 160 146 169" stroke="#ffc9d8" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M103 132 L120 145 L137 132" fill="none" stroke="#ffebee" stroke-width="2.5"/>`:'';
+  const stageScale=mini?'.92':String(Math.min(1.045,.96+(L-1)*.017));
+  const normalEyes=id==='panda'?`<g class="pet-eyes-normal"><g class="pet-blink"><ellipse cx="101" cy="81" rx="7.6" ry="9.1" fill="#fffdf7"/><ellipse cx="139" cy="81" rx="7.6" ry="9.1" fill="#fffdf7"/><ellipse cx="103" cy="81" rx="4.3" ry="6.2" fill="#30283a"/><ellipse cx="137" cy="81" rx="4.3" ry="6.2" fill="#30283a"/><circle cx="104.5" cy="78" r="1.8" fill="#fff"/><circle cx="138.5" cy="78" r="1.8" fill="#fff"/></g></g>`:`<g class="pet-eyes-normal"><g class="pet-blink"><ellipse cx="103" cy="81" rx="7.2" ry="9.2" fill="#30283a"/><ellipse cx="137" cy="81" rx="7.2" ry="9.2" fill="#30283a"/><ellipse cx="105.2" cy="77.4" rx="2.7" ry="3.1" fill="#fff"/><ellipse cx="139.2" cy="77.4" rx="2.7" ry="3.1" fill="#fff"/><circle cx="100.8" cy="84.5" r="1.3" fill="#fff" opacity=".8"/><circle cx="134.8" cy="84.5" r="1.3" fill="#fff" opacity=".8"/></g></g>`;
+  const happyEyes=`<g class="pet-face-happy" opacity="0" fill="none" stroke="#30283a" stroke-width="3.4" stroke-linecap="round"><path d="M94 82 Q103 71 112 82"/><path d="M128 82 Q137 71 146 82"/></g>`;
+  const eatingMouth=`<g class="pet-face-eating" opacity="0"><ellipse cx="120" cy="107" rx="7" ry="9" fill="#74384a"/><ellipse cx="120" cy="111" rx="4" ry="3" fill="#f58ba5"/></g>`;
+  const bodyBelly=belly||(id==='duck'?`<ellipse cx="120" cy="153" rx="26" ry="28" fill="#fff0b6" opacity=".96"/>`:id==='cat'?`<ellipse cx="120" cy="151" rx="25" ry="26" fill="#ffe8c5" opacity=".92"/>`:id==='fox'?`<ellipse cx="120" cy="153" rx="27" ry="28" fill="#fff0dd" opacity=".92"/>`:id==='dog'?`<ellipse cx="120" cy="153" rx="25" ry="27" fill="#f8d8b0" opacity=".88"/>`:id==='bear'||id==='otter'?`<ellipse cx="120" cy="153" rx="25" ry="27" fill="#f3d7b9" opacity=".92"/>`:``);
+  const foreArms=id==='duck'||id==='penguin'
+    ? (wing||`<path d="M85 132 Q60 133 66 158 Q71 170 96 156Z" fill="${c.limb}" stroke="${outline}" stroke-width="3"/><path d="M155 132 Q180 133 174 158 Q169 170 144 156Z" fill="${c.limb}" stroke="${outline}" stroke-width="3"/>`)
+    : `<g class="pet-arms"><ellipse cx="83" cy="143" rx="17" ry="22" transform="rotate(-25 83 143)" fill="url(#${body})" stroke="${outline}" stroke-width="3"/><ellipse cx="157" cy="143" rx="17" ry="22" transform="rotate(25 157 143)" fill="url(#${body})" stroke="${outline}" stroke-width="3"/><ellipse cx="80" cy="140" rx="5" ry="8" transform="rotate(-25 80 140)" fill="#fff" opacity=".23"/><ellipse cx="160" cy="140" rx="5" ry="8" transform="rotate(25 160 140)" fill="#fff" opacity=".23"/></g>`;
+  const paws=`<g class="pet-feet"><ellipse cx="101" cy="179" rx="21" ry="11" fill="${c.foot}"/><ellipse cx="139" cy="179" rx="21" ry="11" fill="${c.foot}"/><ellipse cx="97" cy="176.5" rx="8" ry="3" fill="#fff" opacity=".14"/><ellipse cx="135" cy="176.5" rx="8" ry="3" fill="#fff" opacity=".14"/></g>`;
+  const glints=`<g class="pet-glints" opacity=".72"><ellipse cx="86" cy="70" rx="14" ry="5" transform="rotate(-28 86 70)" fill="#fff" opacity=".13"/><ellipse cx="143" cy="66" rx="9" ry="3.5" transform="rotate(-25 143 66)" fill="#fff" opacity=".23"/><path d="M61 112 Q66 118 72 117 M169 112 Q174 118 179 117" stroke="#fff" stroke-width="2" opacity=".46" fill="none" stroke-linecap="round"/></g>`;
+  const sparkles=`<g class="pet-sparkle" opacity="${L>=5?'.96':'.62'}"><path d="M44 89 L48 99 L58 103 L48 107 L44 117 L40 107 L30 103 L40 99Z" fill="#ffe58b" stroke="#fff8cb" stroke-width="1.2"/><path d="M188 99 L191 106 L198 109 L191 112 L188 119 L185 112 L178 109 L185 106Z" fill="#fff1a8"/><circle cx="62" cy="65" r="3" fill="#fff"/><circle cx="180" cy="73" r="2.5" fill="#fff"/></g>`;
+
+  return `<svg class="pet-svg ${mini?'pet-svg-mini':''}" viewBox="0 0 240 210" role="img" aria-label="${esc(animal.name)} SD 캐릭터, 현재 성장 단계" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="${fur}" cx="32%" cy="18%" r="86%"><stop offset="0" stop-color="${c.light}"/><stop offset=".58" stop-color="${c.fur}"/><stop offset="1" stop-color="${c.shade}"/></radialGradient>
+      <linearGradient id="${body}" x1="0" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="${c.light}"/><stop offset=".45" stop-color="${c.fur}"/><stop offset="1" stop-color="${c.shade}"/></linearGradient>
+      <linearGradient id="${ear}" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="${c.light}"/><stop offset="1" stop-color="${c.fur}"/></linearGradient>
+      <linearGradient id="${scarf}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${L>=4?'#adc6ff':'#ffbad0'}"/><stop offset="1" stop-color="${L>=4?'#668ce2':'#e7749b'}"/></linearGradient>
+      <linearGradient id="${gold}" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#fff1a8"/><stop offset=".55" stop-color="#f6cc54"/><stop offset="1" stop-color="#d9952d"/></linearGradient>
+    </defs>
+    <ellipse class="pet-floor" cx="120" cy="192" rx="59" ry="9" fill="#8276ab" opacity=".19"/>
+    <g transform="translate(${(1-Number(stageScale))*120} ${(1-Number(stageScale))*183}) scale(${stageScale})">
       <g class="pet-body">
         ${tail}
         ${heroCape}
-        <ellipse cx="120" cy="148" rx="42" ry="39" fill="${bodyColor}" stroke="${c.shade}" stroke-width="3"/>
-        ${id==='panda'?'<ellipse cx="120" cy="151" rx="25" ry="29" fill="#f2eee7"/>':id==='penguin'?'<ellipse cx="120" cy="151" rx="26" ry="30" fill="#fff5e8"/>':id==='duck'?'<ellipse cx="120" cy="151" rx="23" ry="26" fill="#ffe98d" opacity=".9"/>':`<ellipse cx="120" cy="151" rx="25" ry="28" fill="${c.light}" opacity=".92"/>`}
-        ${wings}
-        <ellipse cx="88" cy="142" rx="14" ry="22" transform="rotate(-23 88 142)" fill="${id==='panda'?c.limb:c.fur}" stroke="${c.shade}" stroke-width="2.5"/>
-        <ellipse cx="152" cy="142" rx="14" ry="22" transform="rotate(23 152 142)" fill="${id==='panda'?c.limb:c.fur}" stroke="${c.shade}" stroke-width="2.5"/>
-        ${feet}
+        <ellipse cx="120" cy="148" rx="46" ry="40" fill="${bodyFill}" stroke="${outline}" stroke-width="3.5"/>
+        <ellipse cx="111" cy="124" rx="20" ry="7" fill="#fff" opacity=".16"/>
+        ${bodyBelly}
+        ${foreArms}
+        ${paws}
         ${neckWear}
       </g>
       <g class="pet-head">
         ${ears}
-        <ellipse cx="120" cy="74" rx="48" ry="43" fill="${id==='panda'?'#fffdf7':id==='penguin'?'#3d4b65':c.fur}" stroke="${c.shade}" stroke-width="3"/>
-        ${sideFeatures}
-        ${eyes}
-        ${cheeks}
+        <ellipse cx="120" cy="81" rx="52" ry="47" fill="${headFill}" stroke="${outline}" stroke-width="3.8"/>
+        ${glints}
+        ${facePatches}
+        ${specialFace}
+        ${normalEyes}
+        ${happyEyes}
+        <ellipse cx="89" cy="98" rx="10" ry="6.5" fill="#f78fa6" opacity=".47"/><ellipse cx="151" cy="98" rx="10" ry="6.5" fill="#f78fa6" opacity=".47"/>
         ${muzzle}
+        ${whiskers}
+        ${L>=2?'<path d="M82 68 Q86 64 90 68 M150 68 Q154 64 158 68" stroke="#fff" stroke-width="2.2" opacity=".55" fill="none" stroke-linecap="round"/>':''}
         ${headAccessory}
       </g>
-      <g class="pet-sparkle" opacity="${L>=5?'.95':'.38'}"><path d="M48 76 L52 86 L62 90 L52 94 L48 104 L44 94 L34 90 L44 86Z" fill="#ffe27a"/><path d="M185 92 L188 99 L195 102 L188 105 L185 112 L182 105 L175 102 L182 99Z" fill="#ffe27a"/></g>
+      ${eatingMouth}
+      ${sparkles}
     </g>
   </svg>`;
-  return svg;
 }
 function petArtHtml(id,level){return `${animalGrowthSvg(id,level)}<span class="pet-treat-flight" aria-hidden="true">🍪</span><span class="pet-levelup-label" aria-hidden="true">LEVEL UP!</span><span class="pet-floating-hearts" aria-hidden="true">💗 ✨ 💕</span>`}
 function playPetAnimation(kind){const art=$('#companionAnimal');if(!art)return;art.classList.remove('pet-bounce','pet-wiggle','pet-feeding','pet-level-up','pet-arrival');void art.offsetWidth;const cls=kind==='stroke'?'pet-bounce':kind==='play'?'pet-wiggle':kind==='feed'?'pet-feeding':kind==='level'?'pet-level-up':'pet-arrival';art.classList.add(cls);const ms=kind==='level'?1750:kind==='feed'?2000:kind==='arrival'?1100:950;window.setTimeout(()=>{if(document.body.contains(art))art.classList.remove(cls)},ms)}

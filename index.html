@@ -581,6 +581,9 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .wb-reward{font-size:16px;margin-bottom:8px}
 @media(max-width:760px){.wb-hero{flex-direction:column}.wb-art{width:180px;height:150px;flex:none}.wb-row{grid-template-columns:30px 70px 1fr auto}.wb-coin{display:none}.wb-party svg{width:26px;height:26px}}
 .wb-info h3,.wb-info p{background:none!important}
+.vc-head{display:flex;align-items:center;gap:8px;margin:12px 0 4px}.vc-head span{font-size:12px;color:#7d7290;font-family:Inter,sans-serif;font-weight:800}
+.vc-bar{flex:1;height:7px;border-radius:9px;background:#eee;overflow:hidden}.vc-bar span{display:block;height:100%;background:linear-gradient(90deg,#8fe08a,#4fbf5f)}
+.vc-bonus{font-size:12px;font-family:'Malgun Gothic',sans-serif;font-weight:700;color:#9a8fab;background:#f7f2e7;border-radius:9px;padding:4px 8px;margin-bottom:6px}.vc-bonus.on{color:#3f8a30;background:#e5f7dc}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1173,7 +1176,7 @@ const vgN=v=>Math.floor(Number(v)||0).toLocaleString();
 function vgToast(msg,err){document.querySelectorAll('.vg-toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='vg-toast'+(err?' err':'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
 function vgSeen(){try{const uid=window.fitVillage?.me()||'x';return new Set(JSON.parse(localStorage.getItem('fitVgSeen_'+uid)||'[]'))}catch(e){return new Set()}}
 function vgMarkSeen(keys){try{const uid=window.fitVillage?.me()||'x',s=vgSeen();keys.forEach(k=>s.add(k));localStorage.setItem('fitVgSeen_'+uid,JSON.stringify([...s]))}catch(e){}}
-function vgSetState(st){if(!st)return;VG.state=st;VG.off=new Date(st.server_time).getTime()-Date.now();vgMarkSeen((st.items||[]).map(i=>i.item_key))}
+function vgSetState(st){if(!st)return;if(VG.codex&&st.items)st.items.forEach(i=>{if(!VG.codex.keys.includes(i.item_key))VG.codex.keys.push(i.item_key)});VG.state=st;VG.off=new Date(st.server_time).getTime()-Date.now();vgMarkSeen((st.items||[]).map(i=>i.item_key))}
 function vgSize(level){return 6+2*(Number(level)||1)}
 function vgEcon(items){let r=0,ch=0;(items||[]).forEach(i=>{if(i.x==null)return;const c=VG.cat[i.item_key];if(!c)return;if(c.kind==='animal')r+=(Number(c.rate)||0)*(1+.05*(Number(i.tr)||0));else if(c.kind==='deco')ch+=Number(c.charm)||0});const mult=1+Math.min(ch,300)/300;return {rate:r,charm:ch,mult,hour:r*mult,cap:r*mult*12}}
 function vgLive(){const st=VG.state;if(!st?.village)return {pending:0,cap:0};const e=vgEcon(st.items),v=st.village,p=Number(v.pending)||0,hrs=Math.max(0,(Date.now()+VG.off-new Date(v.last_collect).getTime())/36e5);return {pending:Math.max(p,Math.min(e.cap,p+e.hour*hrs)),cap:e.cap,e}}
@@ -1300,8 +1303,11 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
     <b style="display:block;margin:6px 0 8px">태어날 수 있는 친구들</b><div class="vg-codex">${pool.map(c=>`<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(c.item_key)}<b style="font-size:13px">${esc(c.name)}</b><div class="vg-meta">+${vgN(c.rate)}/h</div></div>`).join('')}</div>`}
   if(VG.tab==='inv'){const grp={};inv.forEach(i=>(grp[i.item_key]=grp[i.item_key]||[]).push(i.id));const keys=Object.keys(grp).sort((a,b)=>(VG.cat[a]?.sort||0)-(VG.cat[b]?.sort||0));
     body=keys.length?`<p class="vg-note">보관함의 개체는 코인을 만들지 않아요. 마을에 배치해 주세요!</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button><button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>'}
-  if(VG.tab==='codex'){const seen=vgSeen(),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
-    body=`<p class="vg-note">만난 친구 <b>${got}</b> / ${an.length}</p>${[1,2,3,4,5,6].map(gr=>{const l=an.filter(c=>c.grade===gr);if(!l.length)return '';return `<b style="display:block;margin:10px 0 6px;color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(c.item_key)}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':c.grade===6?'조합':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
+  if(VG.tab==='codex'){if(!VG.codex){VG.codex={keys:[...vgSeen()],flags:{}};window.fitVillage.codexList().then(d=>{VG.codex={keys:d.keys||[],flags:d.flags||{}};vgMarkSeen(VG.codex.keys);if(VG.tab==='codex')vgRenderSide()}).catch(()=>{})}
+    const seen=new Set([...VG.codex.keys,...vgSeen()]),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
+    const CB={1:'공격 시 3% 확률로 추가 공격',2:'전투 시작 시 보호막 (최대 체력 8%)',3:'받는 피해 −3%',4:'필살기 피해 +5%',5:'매 턴 체력 2% 회복',6:'모든 능력치 +5%'};
+    body=`<p class="vg-note">만난 친구 <b>${got}</b> / ${an.length} · 등급별 도감을 모두 채우면 던전·월드 보스에서 <b>도감 보너스</b>가 적용돼요. (한 번이라도 얻은 캐릭터는 계속 기록돼요)</p>${[1,2,3,4,5,6].map(gr=>{const l=an.filter(c=>c.grade===gr);if(!l.length)return '';const n=l.filter(c=>seen.has(c.item_key)).length,done=n===l.length;
+      return `<div class="vc-head"><b style="color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><span>${n}/${l.length}</span><div class="vc-bar"><span style="width:${n/l.length*100}%"></span></div></div><div class="vc-bonus ${done?'on':''}">${done?'✅':'🔒'} 완성 보너스: ${CB[gr]}</div><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(c.item_key)}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':c.grade===6?'조합':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
   if(VG.tab==='game')body=vgGameTab();
   if(VG.tab==='fuse')body=vgFuseTab();
   if(VG.tab==='friends'){if(!VG.friends){body='<div class="vg-empty">친구 마을을 불러오는 중…</div>';window.fitVillage.friends().then(l=>{VG.friends=l;if(VG.tab==='friends')vgRenderSide()}).catch(e=>{VG.friends=[];vgToast(e.message||String(e),true)})}
@@ -1413,17 +1419,17 @@ function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=
   <div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b></div><div class="vd-picks">${pickHtml}</div>
   <button class="vg-btn green" id="vdGo" style="min-width:240px;margin-top:12px" ${!VD.pick.length||left<=0?'disabled':''}>${left<=0?'오늘 입장 횟수를 모두 사용했어요':`${VD.floor}층 입장하기`}</button>`);
   VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
-  VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
+  VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
   VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used_by_floor[VD.floor]=(Number(VD.st.used_by_floor[VD.floor])||0)+1;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
-const VD_SK={nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활']};
+const VD_SK={nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 1.5배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 25%만큼 아군 회복 (신화 전용)']};
 const VD_BA={bite:['🗡️','물어뜯기','한 명에게 공격'],sweep:['🌀','휩쓸기','아군 전체 공격'],charge:['💢','힘 모으기','다음 턴에 강력한 일격!'],smash:['💥','강력한 일격','전체 큰 피해 — 방어·보호막·기절로 대비하세요!'],poison:['☠️','독안개','전체 피해 + 3턴 독'],curse:['🌑','저주','전체 피해 + 공격력 −30%'],harden:['🪨','단단해지기','다음 턴 받는 피해 −50%'],regen:['💚','재생','체력 8% 회복'],stunhit:['⚡','기절 일격','한 명 피해 + 1턴 기절']};
 function vdSkillOf(key){const c=VG.cat[key]||{};return {s:c.skill||'nuke',n:c.skill_name||'필살 일격'}}
 function vgBattleView(logHtml){const bt=VD.battle,bs=bt.floor===0?(VD.bosses.find(x=>x.floor===10)||{image_url:'images/bosses/boss10.webp'}):(VD.bosses.find(x=>x.floor===bt.floor)||{}),b=bt.boss,fx=bt.fx||{},en=b.hp<b.max*.5;
   if(!VD.sel||VD.sel.length!==bt.party.length)VD.sel=bt.party.map(()=>'attack');
   const party=bt.party.map((p,i)=>{const tags=[];if(p.shield>0)tags.push(`🛡️${p.shield}`);if(p.stun>0)tags.push('💫기절');if(fx.taunt===i&&fx.tauntt>0)tags.push('🪨도발');
     return `<div class="vd-mem ${p.hp<=0?'dead':''}" data-mem="${i}"><div class="vd-tags">${tags.map(t=>`<span>${t}</span>`).join('')}</div><svg viewBox="-48 -96 96 102" class="vd-memart">${vgArt(p.key)}</svg><div class="vd-memname">${esc(p.name)}</div>${vgStars(p.tr,'sm')}<div class="vd-hp"><span style="width:${p.hp/p.max*100}%"></span></div><small class="vd-hpt">${p.hp}/${p.max}</small></div>`}).join('');
-  const bt_tags=[];if(b.burn>0)bt_tags.push(`🔥화상 ${b.burn}`);if(b.weak>0)bt_tags.push(`⬇️약화 ${b.weak}`);if(b.brk>0)bt_tags.push(`💔방어파괴 ${b.brk}`);if(b.harden>0)bt_tags.push('🪨단단함');if(b.stunimm>0)bt_tags.push(`기절저항 ${b.stunimm}`);if(en)bt_tags.push('😡분노');
-  const pt=[];if(fx.buff>0)pt.push('⚡ 공격력 강화');if(fx.curse>0)pt.push('🌑 저주 (공격력 −30%)');if(fx.poison>0)pt.push(`☠️ 독 ${fx.poison}턴`);
+  const bt_tags=[];if(b.conf>0)bt_tags.push(`🌙혼란 ${b.conf}`);if(b.burn>0)bt_tags.push(`🔥화상 ${b.burn}`);if(b.weak>0)bt_tags.push(`⬇️약화 ${b.weak}`);if(b.brk>0)bt_tags.push(`💔방어파괴 ${b.brk}`);if(b.harden>0)bt_tags.push('🪨단단함');if(b.stunimm>0)bt_tags.push(`기절저항 ${b.stunimm}`);if(en)bt_tags.push('😡분노');
+  const pt=[];const cx=fx.codex||{};const cxn=Object.keys(cx).filter(k=>cx[k]).length;if(cxn)pt.push(`📖 도감 보너스 ${cxn}`);if(fx.dr>0)pt.push(`🛡️ 결계 ${fx.dr}`);if(fx.grove>0)pt.push(`🌳 생명의 숲 ${fx.grove}`);if(fx.rebirth>0)pt.push(`🔥 불사 ${fx.rebirth}`);if(fx.ll>0)pt.push(`🌌 흡혈 오라 ${fx.ll}`);if(fx.buff>0)pt.push('⚡ 공격력 강화');if(fx.curse>0)pt.push('🌑 저주 (공격력 −30%)');if(fx.poison>0)pt.push(`☠️ 독 ${fx.poison}턴`);
   const nx=VD_BA[b.next]||['❔',b.next,''];
   vgBody(`<div class="vd-top"><b>${bt.floor?`${bt.floor}층`:'🐉 월드 보스'} · ${esc(b.name)}</b><span>턴 <b>${Math.min(bt.turn,bt.max_turn)}</b>/${bt.max_turn}</span></div>
   <div class="vd-arena"><div class="vd-cave"></div><div class="vd-pside"><div class="vd-pfx">${pt.map(t=>`<span>${t}</span>`).join('')}</div><div class="vd-party">${party}</div></div>
@@ -1453,7 +1459,7 @@ async function vgAct(actions){if(VD.busy)return;if(actions[0]==='flee'&&!window.
       if(e.dmg!=null){vdShake(boss);bhp-=e.dmg;setB();vdPop(boss,'-'+e.dmg,'big')}
       if(e.skill==='heal'||e.skill==='revive')old.party.forEach((p,j)=>{const before=php[j];php[j]=e.skill==='revive'&&before<=0?Math.round(p.max*.3):before>0?Math.min(p.max,before+Math.round(p.max*(e.skill==='heal'?.35:.3))):before;setHp(j);if(php[j]>before)vdPop(mem(j),'+'+(php[j]-before),'heal')});
       if(e.skill==='shield')old.party.forEach((p,j)=>{if(php[j]>0)vdPop(mem(j),'🛡️+'+e.amt,'heal')});
-      const extra={burn:'3턴 화상!',stun:'보스 기절 시도!',weaken:'보스 약화!',break:'보스 방어 파괴!',shield:`아군 보호막 ${e.amt}`,heal:'아군 회복 + 상태이상 해제',buff:'아군 공격력 강화!',taunt:'도발! 보스 공격을 대신 맞습니다',revive:'아군 회복·부활!'}[e.skill]||'';
+      const extra={aegis:'아군 받는 피해 절반!',grove:'3턴간 매 턴 회복!',confuse:'보스가 혼란에 빠졌다!',rebirth:'쓰러지면 되살아나는 불꽃!',combo:`${e.amt||9}연격!`,charge_up:'아군 필살기 즉시 재사용 가능!',execute:'잃은 체력 비례 일격!',lifelink:'준 피해만큼 회복하는 오라!',burn:'3턴 화상!',stun:'보스 기절 시도!',weaken:'보스 약화!',break:'보스 방어 파괴!',shield:`아군 보호막 ${e.amt}`,heal:'아군 회복 + 상태이상 해제',buff:'아군 공격력 강화!',taunt:'도발! 보스 공격을 대신 맞습니다',revive:'아군 회복·부활!'}[e.skill]||'';
       lines.push(`✨ ${nm(e.who)}의 <b>${esc(e.name)}</b>!${e.dmg!=null?` ${e.dmg} 피해.`:''} ${extra}`);w=420}
     else if(e.t==='guard'){vdPop(mem(e.who),'🛡️ 방어','heal');lines.push(`${nm(e.who)} 방어 태세`);w=120}
     else if(e.t==='stunned'){vdPop(mem(e.who),'💫','hurt');lines.push(`${nm(e.who)}은(는) 기절해서 움직일 수 없다!`)}
@@ -1464,6 +1470,11 @@ async function vgAct(actions){if(VD.busy)return;if(actions[0]==='flee'&&!window.
     else if(e.t==='bdmg'){php[e.who]-=e.dmg;setHp(e.who);vdShake(mem(e.who));vdPop(mem(e.who),(e.abs>0?`🛡️${e.abs} `:'')+'-'+e.dmg,'hurt');lines.push(`→ ${nm(e.who)} ${e.dmg} 피해${e.abs>0?` (보호막 ${e.abs} 흡수)`:''}`);w=160}
     else if(e.t==='pstun'){vdPop(mem(e.who),'💫 기절','hurt');lines.push(`→ ${nm(e.who)} 기절! 다음 턴 행동 불가`)}
     else if(e.t==='bheal'){bhp+=e.amt;setB();vdPop(boss,'+'+e.amt,'heal');lines.push(`💚 보스 체력 ${e.amt} 회복`)}
+    else if(e.t==='extra'){bhp-=e.dmg;setB();vdShake(boss);vdPop(boss,'📖 추가 공격 -'+e.dmg,'crit');lines.push(`📖 ${nm(e.who)}의 추가 공격! ${e.dmg} 피해`)}
+    else if(e.t==='bconfused'){vdShake(boss);vdPop(boss,'🌙 혼란!','big');lines.push(`🌙 보스가 혼란에 빠져 ${(VD_BA[e.act]||['',e.act])[1]}을(를) 하지 못했다!`);w=420}
+    else if(e.t==='rebirth'){php[e.who]=Math.round(old.party[e.who].max*.4);setHp(e.who);vdPop(mem(e.who),'🔥 부활!','heal');lines.push(`🔥 ${nm(e.who)}이(가) 불꽃 속에서 되살아났다!`);w=420}
+    else if(e.t==='lifelink'){old.party.forEach((p,j)=>{if(php[j]>0){php[j]=Math.min(p.max,php[j]+e.amt);setHp(j);vdPop(mem(j),'🌌+'+e.amt,'heal')}});lines.push(`🌌 흡혈 오라! 아군 각각 ${e.amt} 회복`)}
+    else if(e.t==='grove'){old.party.forEach((p,j)=>{if(php[j]>0)vdPop(mem(j),'🌳','heal')});lines.push('🌳 생명의 숲이 아군을 치유한다')}
     else if(e.t==='reflect'){bhp-=e.dmg;setB();vdShake(boss);vdPop(boss,'🪨 반사 -'+e.dmg,'crit');lines.push(`🪨 피해 반사! 보스에게 ${e.dmg} 피해`)}
     else if(e.t==='ptick'){php[e.who]-=e.dmg;setHp(e.who);vdPop(mem(e.who),'☠️-'+e.dmg,'hurt');w=120}
     await vdSleep(w)}
@@ -1522,7 +1533,7 @@ async function vgFuse(){const F=VG.fuse,A=(VG.state.items||[]).find(i=>i.id===F.
 /* ===== 초월 시스템 + 필살기 연출 ===== */
 const VG_TRB={1:300,2:800,3:2000,4:5000,5:12000,6:9000};
 const vgTrCost=(g,t)=>(VG_TRB[g]||9000)*(t+1);
-const VG_TR5={nuke:'방어를 무시하는 일격',burn:'화상 5턴 지속',stun:'기절 저항 무시',weaken:'약화 3턴 지속',break:'방어 파괴 5턴 지속',shield:'보호막 + 아군 전체 10% 회복',heal:'쓰러진 아군 20% 부활',buff:'강화 1턴 연장',taunt:'받은 피해의 50% 반사',revive:'부활 체력 50%'};
+const VG_TR5={nuke:'방어를 무시하는 일격',burn:'화상 5턴 지속',stun:'기절 저항 무시',weaken:'약화 3턴 지속',break:'방어 파괴 5턴 지속',shield:'보호막 + 아군 전체 10% 회복',heal:'쓰러진 아군 20% 부활',buff:'강화 1턴 연장',taunt:'받은 피해의 50% 반사',revive:'부활 체력 50%',aegis:'결계 3턴 · 피해 −60%',grove:'숲 4턴 지속',confuse:'실패 확률 70%',rebirth:'부활 체력 60%',combo:'12연격',charge_up:'피해 2.5배',execute:'잃은 체력 18% 비례',lifelink:'오라 4턴 지속'};
 function vgStars(t,cls=''){t=Number(t)||0;return t?`<span class="vg-stars ${cls} ${t>=5?'max':''}">${'★'.repeat(t)}<i>${'★'.repeat(5-t)}</i></span>`:''}
 function vgTrTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal');
   const grades=[1,2,3,4,5,6].filter(g=>items.some(i=>VG.cat[i.item_key].grade===g));if(!grades.includes(F.tg))F.tg=grades[grades.length-1]||1;
@@ -1555,8 +1566,8 @@ async function vgTranscend(){const F=VG.fuse,it=(VG.state.items||[]).find(i=>i.i
 
 /* --- 필살기 연출 --- */
 const VFX={nuke:{c:'#ffe27a',p:['✦','✧','💥']},burn:{c:'#ff7a3d',p:['🔥','🔥','✦']},stun:{c:'#ffe55a',p:['⚡','⚡','💫']},weaken:{c:'#a77cff',p:['⬇️','🌀','✦']},break:{c:'#ff6b8a',p:['💔','✦','◆']},
-  shield:{c:'#6cc4ff',p:['🛡️','✦','◇']},heal:{c:'#6fe08a',p:['✚','💚','✦']},buff:{c:'#ffc63a',p:['⚡','✦','▲']},taunt:{c:'#c9a46a',p:['🪨','✦','◆']},revive:{c:'#fff1a0',p:['🕊️','✨','✦']}};
-const VFX_TARGET_PARTY=['shield','heal','buff','revive','taunt'];
+  shield:{c:'#6cc4ff',p:['🛡️','✦','◇']},heal:{c:'#6fe08a',p:['✚','💚','✦']},buff:{c:'#ffc63a',p:['⚡','✦','▲']},taunt:{c:'#c9a46a',p:['🪨','✦','◆']},aegis:{c:'#ffd34d',p:['🛡️','🔔','✦']},grove:{c:'#6fe08a',p:['🌳','🍃','✚']},confuse:{c:'#b9a6ff',p:['🌙','💫','✦']},rebirth:{c:'#ff8a3d',p:['🔥','🪶','✨']},combo:{c:'#ff5f6d',p:['🦊','🔥','✦']},charge_up:{c:'#5cb8ff',p:['⚡','🐉','✦']},execute:{c:'#a77cff',p:['💀','✦','◆']},lifelink:{c:'#7c6cff',p:['🌌','✨','✦']},revive:{c:'#fff1a0',p:['🕊️','✨','✦']}};
+const VFX_TARGET_PARTY=['shield','heal','buff','revive','taunt','aegis','grove','rebirth','charge_up','lifelink'];
 async function vgSkillFx(e,party){const arena=VD.m&&VD.m.querySelector('.vd-arena');if(!arena)return;const tr=Number(e.tr)||0,fx=VFX[e.skill]||VFX.nuke,mem=party[e.who]||{};
   const ar=arena.getBoundingClientRect(),rel=el=>{if(!el)return {x:ar.width/2,y:ar.height/2,w:100,h:100};const r=el.getBoundingClientRect();return {x:r.left-ar.left+r.width/2,y:r.top-ar.top+r.height/2,w:r.width,h:r.height}};
   // 컷인
@@ -1568,7 +1579,7 @@ async function vgSkillFx(e,party){const arena=VD.m&&VD.m.querySelector('.vd-aren
   const onParty=VFX_TARGET_PARTY.includes(e.skill),tgt=onParty?(e.skill==='taunt'?rel(VD.m.querySelector(`[data-mem="${e.who}"]`)):rel(VD.m.querySelector('.vd-party'))):rel(VD.m.querySelector('.vd-bossart'));
   const layer=document.createElement('div');layer.className=`vd-fx vd-fx-${e.skill}`+(tr>=5?' max':'');layer.style.setProperty('--c',fx.c);layer.style.left=tgt.x+'px';layer.style.top=tgt.y+'px';layer.style.width=Math.max(120,tgt.w*1.1)+'px';layer.style.height=Math.max(120,tgt.h*1.1)+'px';
   let inner='';if(e.skill==='nuke')inner='<i class="sl s1"></i><i class="sl s2"></i>'+(tr>=5?'<i class="sl s3"></i>':'');
-  if(e.skill==='shield')inner='<i class="dome"></i>';if(e.skill==='buff'||e.skill==='weaken')inner='<i class="ring"></i><i class="ring r2"></i>';if(e.skill==='revive')inner='<i class="pillar"></i>';if(e.skill==='break')inner='<i class="crack"></i>';if(e.skill==='stun')inner='<i class="bolt"></i>';if(e.skill==='taunt')inner='<i class="wall"></i>';
+  if(e.skill==='shield'||e.skill==='aegis')inner='<i class="dome"></i>';if(e.skill==='combo')inner='<i class="sl s1"></i><i class="sl s2"></i><i class="sl s3"></i>';if(e.skill==='execute')inner='<i class="sl s3"></i>';if(e.skill==='rebirth'||e.skill==='grove')inner='<i class="pillar"></i>';if(e.skill==='lifelink'||e.skill==='charge_up'||e.skill==='confuse')inner='<i class="ring"></i><i class="ring r2"></i>';if(e.skill==='buff'||e.skill==='weaken')inner='<i class="ring"></i><i class="ring r2"></i>';if(e.skill==='revive')inner='<i class="pillar"></i>';if(e.skill==='break')inner='<i class="crack"></i>';if(e.skill==='stun')inner='<i class="bolt"></i>';if(e.skill==='taunt')inner='<i class="wall"></i>';
   layer.innerHTML=inner;const n=6+tr*3;for(let k=0;k<n;k++){const s=document.createElement('span');s.className='pt';s.textContent=fx.p[k%fx.p.length];s.style.setProperty('--dx',(Math.random()*2-1)*(tgt.w*.7+30)+'px');s.style.setProperty('--dy',(onParty||e.skill==='burn'?-1:Math.random()*2-1)*(60+Math.random()*60)+'px');s.style.left=(40+Math.random()*20)+'%';s.style.top=(40+Math.random()*30)+'%';s.style.animationDelay=(Math.random()*.25)+'s';s.style.fontSize=(14+Math.random()*12+tr*1.5)+'px';layer.appendChild(s)}
   arena.appendChild(layer);if(['nuke','stun','break'].includes(e.skill)||tr>=5){arena.classList.remove('vd-quake');void arena.offsetWidth;arena.classList.add('vd-quake')}
   if(tr>=5){const fl=document.createElement('div');fl.className='vd-flash';arena.appendChild(fl);setTimeout(()=>fl.remove(),700)}
@@ -1625,7 +1636,7 @@ function vgWbLobby(){const st=VD.wb,mine=st.mine,img=(VD.bosses.find(x=>x.floor=
    `<div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b> <small style="font-size:12px;color:#7d7290">— 공격·강화·지속 피해 필살기가 점수에 유리해요</small></div><div class="vd-picks">${pickHtml||'<div class="vg-empty">동물이 없어요.</div>'}</div>
    <button class="vg-btn pink" id="wbGo" style="min-width:240px;margin-top:10px" ${VD.pick.length?'':'disabled'}>🐉 도전하기 (오늘 1회)</button>`}
    <div class="wb-board-h">🏆 오늘의 점수판 <small>${st.board.length}명 참여</small></div><div class="wb-board">${vgWbBoard(st.board||[])}</div>`);
-  VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgWbLobby()});
+  VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgWbLobby()});
   const go=VD.m.querySelector('#wbGo');if(go)go.onclick=async()=>{go.disabled=true;try{VD.battle=await window.fitVillage.wbStart(VD.pick);VD.sel=null;vgBattleView('🐉 심연의 마왕이 나타났다! 10턴 동안 최대한 많은 피해를 주세요.')}catch(e){vgToast(e.message||String(e),true);go.disabled=false}}}
 async function vgWbResult(r){if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
   const acts=VD.m.querySelector('#vdActs'),sc=Number(r.wb_score)||0,why=(r.events||[]).some(e=>e.t==='flee')?'중간에 후퇴했어요.':(r.events||[]).some(e=>e.t==='lose')?'파티가 모두 쓰러졌어요.':'10턴이 끝났어요!';
@@ -1984,6 +1995,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     gift(to,amount){return vrpc('fit_village_gift',{p_to:to,p_amount:amount})},
     giftInbox(){return vrpc('fit_village_gift_inbox')},
     wbStatus(){return vrpc('fit_village_wb_status')},
+    codexList(){return vrpc('fit_village_codex_list')},
     wbStart(ids){return vrpc('fit_village_wb_start',{p_items:ids})},
     dungeonStatus(){return vrpc('fit_village_dungeon_status')},
     dungeonStart(f,ids){return vrpc('fit_village_dungeon_start',{p_floor:f,p_items:ids})},

@@ -557,6 +557,12 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 @keyframes vdFlashA{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
 @media(max-width:760px){.vd-cutin{height:72px;padding:0 12px}.vd-cutin .vd-cutart{width:70px;height:70px}.vd-cutin b{font-size:22px}}
 .vf-grades.g6{grid-template-columns:repeat(6,1fr)}.vf-grades.g6 .vg-grade{font-size:10px;padding:2px 4px}
+/* 선물 */
+.vg-gf-in{display:flex;align-items:center;gap:8px;justify-content:center;margin:10px 0}.vg-gf-in input{width:180px;font-size:22px;font-family:inherit;text-align:right;border:2px solid #eadfcb;border-radius:12px;padding:8px 12px}
+.vg-gf-quick{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.vg-gf-box{font-size:64px;animation:vgPop .6s cubic-bezier(.2,1.6,.4,1)}
+.vg-gf-list{background:#f7f2e7;border-radius:12px;padding:10px;margin:8px 0;font-size:15px;line-height:1.8;max-height:200px;overflow:auto}
+.vd-left{font-style:normal;font-size:10px;font-family:Inter,sans-serif;font-weight:800;color:#6545d1;background:#f1ebff;border-radius:6px;padding:0 5px}.vd-left.none{color:#b6abc4;background:#eee}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1168,6 +1174,7 @@ async function wireCompanion(){
     if(!window.fitVillage)throw new Error('로그인 연결이 아직 준비되지 않았습니다. 잠시 후 다시 열어 주세요.');
     if(!VG.catalog.length){VG.catalog=await window.fitVillage.catalog();VG.cat={};VG.catalog.forEach(c=>VG.cat[c.item_key]=c)}
     vgSetState(await window.fitVillage.init());
+    window.fitVillage.giftInbox().then(l=>{if(l&&l.length)vgGiftArrived(l)}).catch(()=>{});
     VG.ready=true;VG.setup=false;if(vgMob()&&!VG.zoomSet){VG.zoom=.7;VG.zoomSet=true}VG.sheet=false;
     window.fitVillage.likedToday().then(s=>{VG.liked=s}).catch(()=>{});
     vgAll(true);
@@ -1210,13 +1217,13 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
-  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button>`;
+  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요 <button class="vg-btn sm" id="vgCancel">취소 (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
   <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
-  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
@@ -1376,20 +1383,20 @@ async function vgDungeon(){if(VD.m)VD.m.remove();VD.m=vgModal('<div class="vg-em
   if(VD.st.battle&&VD.st.battle.status==='active'&&VD.st.battle.party[0]&&VD.st.battle.party[0].skill){VD.battle=VD.st.battle;VD.sel=null;vgBattleView('진행 중이던 전투를 이어서 합니다.');return}
   VD.floor=Math.min(10,(VD.st.best||0)+1);VD.pick=VD.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));vgLobby()}
 function vgBody(html){const box=VD.m.querySelector('.vg-modal-box');box.innerHTML='<button class="vg-x" title="닫기">✕</button>'+html;box.querySelector('.vg-x').onclick=()=>{if(VD.m.dataset.lock)return;VD.m.remove();VD.m._onclose&&VD.m._onclose()}}
-function vgLobby(){const st=VD.st,left=st.max-st.used,best=st.best||0;
-  const floors=VD.bosses.map(b=>{const lock=b.floor>best+1,clear=b.floor<=best;return `<button class="vd-floor ${VD.floor===b.floor?'on':''} ${lock?'lock':''}" data-floor="${b.floor}" ${lock?'disabled':''}><svg viewBox="-90 -165 180 172" class="vd-fart">${vgBossArt(b.floor,b.image_url)}</svg><b>${b.floor}층</b><small>${lock?'🔒 잠김':esc(b.name)}</small>${clear?'<i class="vd-clear">✓ 클리어</i>':''}</button>`}).join('');
+function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=f=>st.max-(Number(ub[f])||0),left=fl(VD.floor),best=st.best||0;
+  const floors=VD.bosses.map(b=>{const lock=b.floor>best+1,clear=b.floor<=best;return `<button class="vd-floor ${VD.floor===b.floor?'on':''} ${lock?'lock':''}" data-floor="${b.floor}" ${lock?'disabled':''}><svg viewBox="-90 -165 180 172" class="vd-fart">${vgBossArt(b.floor,b.image_url)}</svg><b>${b.floor}층</b>${lock?'':`<em class="vd-left ${fl(b.floor)<=0?'none':''}">${fl(b.floor)}/${st.max}</em>`}<small>${lock?'🔒 잠김':esc(b.name)}</small>${clear?'<i class="vd-clear">✓ 클리어</i>':''}</button>`}).join('');
   const animals=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal').sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||(VG.cat[b.item_key].sort-VG.cat[a.item_key].sort));
   const pickHtml=animals.length?animals.map(i=>{const c=VG.cat[i.item_key],s=(VG_GSTAT[c.grade]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(Number(i.tr)||0)))),on=VD.pick.includes(i.id);return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small><em class="vd-psk" title="${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[1]}">${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[0]} ${esc(vdSkillOf(i.item_key).n)}</em>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join(''):'<div class="vg-empty">동물이 없어요. 상점이나 알 부화로 먼저 데려와 주세요.</div>';
   const b=VD.bosses.find(x=>x.floor===VD.floor)||{};
   const reward=VD.floor>best?`첫 클리어 ${vgN(VD.floor*300)}코인${VD.floor===10?' + 황금 알':VD.floor>=5?' + 신비한 알':''}`:`반복 클리어 ${vgN(VD.floor*60)}코인`;
-  vgBody(`<h3>⚔️ 동굴 던전</h3><p class="vg-mp">최고 기록 <b>${best}층</b> · 오늘 입장 <b>${left}/${st.max}</b>회 남음 · 파티는 최대 3마리</p>
+  vgBody(`<h3>⚔️ 동굴 던전</h3><p class="vg-mp">최고 기록 <b>${best}층</b> · ${VD.floor}층 오늘 입장 <b>${left}/${st.max}</b>회 남음 (층마다 5회) · 파티는 최대 3마리</p>
   <div class="vd-floors">${floors}</div>
   <div class="vd-info"><div><b>${VD.floor}층 · ${esc(b.name||'')}</b> <small>❤${vgN(b.hp)} ⚔${b.atk} 🛡${b.def}</small><div class="vd-pat">행동 패턴 ${(b.pattern||[]).map(a=>`<span title="${(VD_BA[a]||['',a,''])[2]}">${(VD_BA[a]||['❔',a])[0]} ${(VD_BA[a]||['',a])[1]}</span>`).join(' → ')}</div></div><div>🎁 ${reward}</div></div>
   <div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b></div><div class="vd-picks">${pickHtml}</div>
   <button class="vg-btn green" id="vdGo" style="min-width:240px;margin-top:12px" ${!VD.pick.length||left<=0?'disabled':''}>${left<=0?'오늘 입장 횟수를 모두 사용했어요':`${VD.floor}층 입장하기`}</button>`);
   VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
   VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
-  VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used++;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
+  VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used_by_floor[VD.floor]=(Number(VD.st.used_by_floor[VD.floor])||0)+1;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
 const VD_SK={nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활']};
 const VD_BA={bite:['🗡️','물어뜯기','한 명에게 공격'],sweep:['🌀','휩쓸기','아군 전체 공격'],charge:['💢','힘 모으기','다음 턴에 강력한 일격!'],smash:['💥','강력한 일격','전체 큰 피해 — 방어·보호막·기절로 대비하세요!'],poison:['☠️','독안개','전체 피해 + 3턴 독'],curse:['🌑','저주','전체 피해 + 공격력 −30%'],harden:['🪨','단단해지기','다음 턴 받는 피해 −50%'],regen:['💚','재생','체력 8% 회복'],stunhit:['⚡','기절 일격','한 명 피해 + 1턴 기절']};
 function vdSkillOf(key){const c=VG.cat[key]||{};return {s:c.skill||'nuke',n:c.skill_name||'필살 일격'}}
@@ -1557,6 +1564,26 @@ async function vgCommunityLoad(entries){if(!window.fitVillage)return;
   const [fr,en]=await Promise.all([window.fitVillage.friends(),entries?Promise.resolve(entries):(window.fitWorkspace?window.fitWorkspace.listEntries():Promise.resolve([]))]);
   const shares={},vill={};(en||[]).forEach(e=>shares[e.user_id]=(shares[e.user_id]||0)+1);(fr||[]).forEach(v=>vill[v.user_id]=v);
   window.vgCommunity={shares,vill}}
+
+
+/* ===== 코인 선물 ===== */
+async function vgGiftOpen(){const f=VG.friend;if(!f)return;let st={limit:10000,sent_today:0};
+  const m=vgModal(`<h3>🎁 ${esc(f.display_name)}에게 코인 선물</h3><p class="vg-mp" id="vgGfInfo">불러오는 중…</p>
+   <div class="vg-gf-in"><input type="number" id="vgGfAmt" min="1" step="100" placeholder="보낼 코인" inputmode="numeric"><span>코인</span></div>
+   <div class="vg-gf-quick">${[100,500,1000,5000].map(v=>`<button class="vg-btn sm" data-gq="${v}">+${vgN(v)}</button>`).join('')}<button class="vg-btn sm" data-gq="max">최대</button></div>
+   <div id="vgGfMsg" class="vg-result" style="font-size:15px">&nbsp;</div><button class="vg-btn gold" id="vgGfGo" style="min-width:200px">보내기</button>`,'vg-wide');
+  const inp=m.querySelector('#vgGfAmt'),info=m.querySelector('#vgGfInfo'),msg=m.querySelector('#vgGfMsg');
+  const rem=()=>Math.max(0,st.limit-st.sent_today),coins=()=>Number(VG.state.village.coins)||0,maxV=()=>Math.min(rem(),coins());
+  const upd=()=>{info.innerHTML=`내 코인 <b>${vgN(coins())}</b> · 오늘 남은 선물 한도 <b>${vgN(rem())}</b> / ${vgN(st.limit)}`};
+  try{st=await window.fitVillage.giftStatus()}catch(e){if(e.setup){msg.textContent='Supabase에 선물 SQL(fit_village_update8.sql) 실행이 필요합니다.';}}upd();
+  m.querySelectorAll('[data-gq]').forEach(b=>b.onclick=()=>{const v=b.dataset.gq==='max'?maxV():Math.min(maxV(),(Number(inp.value)||0)+Number(b.dataset.gq));inp.value=v||''});
+  m.querySelector('#vgGfGo').onclick=async()=>{const a=Math.floor(Number(inp.value)||0);if(a<1){msg.textContent='보낼 코인을 입력해 주세요.';return}if(a>maxV()){msg.textContent=a>coins()?'코인이 부족해요.':`오늘 남은 한도는 ${vgN(rem())}코인이에요.`;return}
+    if(!window.confirm(`${f.display_name}에게 ${vgN(a)}코인을 보낼까요?`))return;const btn=m.querySelector('#vgGfGo');btn.disabled=true;
+    try{const r=await window.fitVillage.gift(f.user_id,a);vgSetState(r);vgRenderHud();vgTick();st.sent_today=st.limit-(Number(r.remaining)||0);upd();inp.value='';msg.innerHTML=`<span class="vg-pop" style="display:inline-block">🎁 ${vgN(a)}코인을 보냈어요!</span>`;vgToast(`${f.display_name}에게 ${vgN(a)}코인을 선물했어요 🎁`)}
+    catch(e){msg.textContent=e.setup?'Supabase에 선물 SQL(fit_village_update8.sql) 실행이 필요합니다.':(e.message||String(e))}finally{btn.disabled=false}}}
+function vgGiftArrived(list){const total=list.reduce((s,g)=>s+(Number(g.amount)||0),0);
+  const m=vgModal(`<div class="vg-gf-box">🎁</div><h3>선물이 도착했어요!</h3><div class="vg-gf-list">${list.map(g=>`<div><b>${esc(g.from)}</b>님이 <b>${vgN(g.amount)}</b>코인을 보냈어요</div>`).join('')}</div><p class="vg-mp">총 ${vgCoinIcon(14)} <b>${vgN(total)}</b>코인이 이미 지갑에 들어왔어요.</p><button class="vg-btn gold" id="vgGfOk">고마워요!</button>`);
+  m.querySelector('#vgGfOk').onclick=()=>m.remove()}
 
 
 function daily(){
@@ -1905,6 +1932,9 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     roulette(){return vrpc('fit_village_roulette')},
     fuse(a,b){return vrpc('fit_village_fuse',{p_a:a,p_b:b})},
     transcend(id){return vrpc('fit_village_transcend',{p_item:id})},
+    giftStatus(){return vrpc('fit_village_gift_status')},
+    gift(to,amount){return vrpc('fit_village_gift',{p_to:to,p_amount:amount})},
+    giftInbox(){return vrpc('fit_village_gift_inbox')},
     dungeonStatus(){return vrpc('fit_village_dungeon_status')},
     dungeonStart(f,ids){return vrpc('fit_village_dungeon_start',{p_floor:f,p_items:ids})},
     dungeonAct(id,a){return vrpc('fit_village_dungeon_act',{p_battle:id,p_actions:a})},

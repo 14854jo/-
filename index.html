@@ -1142,6 +1142,7 @@ function vgArtSvg(key,cls='vg-art',vb){vb=vb||VG_VB[key]||'-48 -96 96 102';retur
 
 /* ===== 동물 마을: 화면 · 동작 ===== */
 const VG={catalog:[],cat:{},state:null,off:0,view:'mine',friend:null,friendState:null,mode:null,sel:null,tab:'shop',shopCat:'animal',zoom:1,ticker:null,friends:null,liked:new Set(),drag:null,moved:false,ready:false,setup:false,err:''};
+const VG_DSCALE={stone_path:.7,fence:.8,bush:.72,flower:.82,flower_bed:.72,tree:1.1,lamp:.8,crystal_lantern:1.05,crystal_obelisk:.95,mushroom_house:1.35,fountain:1.25,crystal_tree:1.6};
 const VG_EXPAND=[0,2000,6000,18000];
 const vgMob=()=>window.matchMedia('(max-width:760px)').matches;
 const vgN=v=>Math.floor(Number(v)||0).toLocaleString();
@@ -1201,7 +1202,7 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
   t+=`<polygon points="${T} ${R} ${B} ${L}" fill="#8fd46c" stroke="#7cc95e" stroke-width="2"/>`;
   for(let x=0;x<N;x++)for(let y=0;y<N;y++){const [cx,cy]=G.c(x,y),h=(x*7+y*13)%5;t+=`<polygon class="vg-tile" data-tile="${x},${y}" points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a4e080':'#98d975'}" stroke="#8acd69" stroke-width=".8"/>`;if(h===0)t+=`<path d="M${cx-8},${cy+4} l2,-6 l2,6 M${cx+10},${cy-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`}
   const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N).sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.x-b.x);
-  items.forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(i.item_key==='windmill'?1.05:1);
+  items.forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
     t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${sc})">${vgArt(i.item_key,c.kind)}</g>${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
   t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
   return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
@@ -1237,7 +1238,7 @@ function vgOcc(exceptId){const m=new Set();(VG.state.items||[]).forEach(i=>{if(i
 function vgGhostAt(tile){const gh=document.getElementById('vgGhost');if(!gh)return;document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.bad').forEach(t=>{t.classList.remove('hl','bad');t.style.fill=''});if(!tile){gh.style.display='none';return}
   const [x,y]=tile.dataset.tile.split(',').map(Number),G=vgGeom(vgSize(VG.state.village.land_level)),[cx,cy]=G.c(x,y),bad=vgOcc(VG.mode.id).has(x+','+y),c=VG.cat[VG.mode.key]||{};
   tile.style.fill=bad?'#ffb3b3':'#e2ffc8';tile.classList.add(bad?'bad':'hl');
-  if(gh.dataset.key!==VG.mode.key){gh.innerHTML=`<g transform="scale(${c.kind==='animal'?.86:1})">${vgArt(VG.mode.key,c.kind)}</g>`;gh.dataset.key=VG.mode.key}
+  if(gh.dataset.key!==VG.mode.key){gh.innerHTML=`<g transform="scale(${c.kind==='animal'?.86:(c.image_url?(VG_DSCALE[VG.mode.key]||1):1)})">${vgArt(VG.mode.key,c.kind)}</g>`;gh.dataset.key=VG.mode.key}
   gh.setAttribute('transform',`translate(${cx},${cy+4})`);gh.style.display='';gh.style.opacity=bad?.35:.8}
 function vgStartPlace(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;VG.sheet=false;VG.mode={id,key:it.item_key};VG.sel=null;if(VG.view!=='mine'){VG.view='mine';VG.friend=null}vgRenderStage();vgRenderSide()}
 function vgCancelMode(){VG.mode=null;vgRenderStage();vgRenderSide()}

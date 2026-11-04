@@ -477,6 +477,34 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 }
 @media(max-width:760px){body > #vgSide{font-family:'Jua','Inter','Malgun Gothic',sans-serif;color:#3a2f4a;--vg-line:#eadfcb;--vg-panel:#fffdf8;background:#fffdf8}
  body > #vgSide button{font-family:inherit}.vg-tab{white-space:nowrap}}
+/* 조합 */
+.vg-tabs{grid-template-columns:repeat(7,1fr)}.vg-tab{font-size:12px}
+.vg-g6{background:linear-gradient(90deg,#0fb59a,#7ad94a,#b04ef0)}.vg-card.g6{border-color:#9fe8d0;box-shadow:0 0 0 2px #e3fbf3}
+.vf-grades{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
+.vf-grades button{border:2px solid #eadfcb;background:#fff;border-radius:10px;padding:5px 2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:inherit}
+.vf-grades button.on{border-color:#8f6bff;background:#f1ebff}.vf-grades small{font-size:11px;color:#7d7290;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.vf-slots{display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.vf-slot{flex:1;min-width:0;aspect-ratio:1/1.1;border:2px dashed #d9ccb4;border-radius:14px;background:#fffaf0;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;color:#9a8fab;padding:4px}
+.vf-slot.on{border-style:solid;border-color:#8f6bff;background:#fff;color:#3a2f4a}.vf-slot .vg-art{width:100%;height:auto;max-height:64px}.vf-slot b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.vf-slot span{font-size:24px}.vf-slot small{font-size:11px;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.vf-slot.res{cursor:default;border-color:#f2cf6b;background:#fff7dc;color:#b07a00}
+.vf-plus{font-size:18px;color:#b6abc4}
+.vf-info{background:#f7f2e7;border-radius:12px;padding:8px 10px;font-size:13.5px;line-height:1.6;margin-bottom:8px}.vf-info small{color:#0fb59a;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.vf-list{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.vf-pick{position:relative;border:2px solid #eadfcb;background:#fff;border-radius:12px;padding:4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;color:#3a2f4a}
+.vf-pick .vg-art{width:60px;height:60px}.vf-pick b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.vf-pick i{position:absolute;left:4px;top:3px;font-style:normal;font-size:10px;background:#e5f7dc;color:#3f8a30;border-radius:6px;padding:0 5px;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.vf-pick em{position:absolute;right:4px;top:3px;font-style:normal;background:#8f6bff;color:#fff;border-radius:50%;width:18px;height:18px;display:grid;place-items:center;font-size:11px}
+.vf-pick.on{border-color:#8f6bff;background:#f1ebff}
+.vf-anim{position:relative;height:190px;display:flex;align-items:center;justify-content:center}
+.vf-anim .vg-art{width:110px;height:110px}
+.vf-l{animation:vfL 1.9s ease-in forwards}.vf-r{animation:vfR 1.9s ease-in forwards}
+@keyframes vfL{0%{transform:translateX(-30px)}70%{transform:translateX(55px) rotate(20deg) scale(.7);opacity:1}100%{transform:translateX(55px) scale(.2);opacity:0}}
+@keyframes vfR{0%{transform:translateX(30px)}70%{transform:translateX(-55px) rotate(-20deg) scale(.7);opacity:1}100%{transform:translateX(-55px) scale(.2);opacity:0}}
+.vf-flash{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px;border-radius:50%;background:radial-gradient(#fff,#d6c4ff 50%,transparent 70%);animation:vfFlash 1.9s ease-in forwards}
+@keyframes vfFlash{0%,60%{transform:scale(.2);opacity:0}85%{transform:scale(5);opacity:1}100%{transform:scale(8);opacity:0}}
+.vf-mutant{box-shadow:0 0 0 4px #0fb59a,0 0 40px #7ad94a !important}
+@media(max-width:760px){.vg-tab{font-size:10.5px}.vg-tab span{font-size:16px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1183,18 +1211,19 @@ function vgCard(c,btn){const g=VG_GRADE[c.grade]||VG_GRADE[1];return `<div class
 function vgSelCard(){const it=(VG.state.items||[]).find(i=>i.id===VG.sel);if(!it)return '';const c=VG.cat[it.item_key]||{},g=VG_GRADE[c.grade]||VG_GRADE[1];
   return `<div class="vg-sel">${vgArtSvg(it.item_key)}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b><div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate)} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">↔ 이동</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button></div></div></div>`}
 function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null);
-  const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['game','🎮','게임'],['friends','👫','친구']];
+  const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['fuse','🧬','조합'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['game','🎮','게임'],['friends','👫','친구']];
   let body='';
   if(VG.tab==='shop'){const list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat);
     body=`<div class="vg-subtabs"><button data-sc="animal" class="${VG.shopCat==='animal'?'on':''}">🐾 동물</button><button data-sc="deco" class="${VG.shopCat==='deco'?'on':''}">🌳 장식</button></div><p class="vg-note">${VG.shopCat==='animal'?'동물은 시간마다 코인을 만들어요. 영웅 이상 등급은 <b>알 부화</b>로만 만날 수 있어요.':'장식은 매력도를 올려 마을 전체 생산량을 최대 +100%까지 늘려 줘요.'}</p><div class="vg-cards">${list.map(c=>vgCard(c,`<button class="vg-btn sm gold full" data-buy="${c.item_key}" ${coins<c.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(c.price)}</button>`)).join('')}</div>`}
-  if(VG.tab==='egg'){const eggs=VG.catalog.filter(c=>c.kind==='egg'),odds={egg_basic:[85,13,2],egg_gold:[30,55,15]},pool=VG.catalog.filter(c=>c.kind==='animal'&&!c.shop);
+  if(VG.tab==='egg'){const eggs=VG.catalog.filter(c=>c.kind==='egg'),odds={egg_basic:[85,13,2],egg_gold:[30,55,15]},pool=VG.catalog.filter(c=>c.kind==='animal'&&!c.shop&&c.grade>=3&&c.grade<=5);
     body=`<p class="vg-note">알에서는 <b style="color:#9b5cff">영웅</b>·<b style="color:#ff9a1f">전설</b>·<b style="color:#ff4f8b">신화</b> 등급 친구들만 태어나요. 상점 동물보다 훨씬 많은 코인을 만들어요!</p>${eggs.map(e=>{const o=odds[e.item_key]||[0,0,0];return `<div class="vg-egg-card">${vgArtSvg(e.item_key,'vg-art','-40 -74 80 80')}<div style="flex:1"><b style="font-size:17px">${esc(e.name)}</b><div class="vg-odds"><i style="color:#9b5cff">영웅 ${o[0]}%</i> · <i style="color:#ff9a1f">전설 ${o[1]}%</i> · <i style="color:#ff4f8b">신화 ${o[2]}%</i></div><button class="vg-btn purple sm full" data-hatch="${e.item_key}" ${coins<e.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(e.price)} · 부화하기</button></div></div>`}).join('')}
     <b style="display:block;margin:6px 0 8px">태어날 수 있는 친구들</b><div class="vg-codex">${pool.map(c=>`<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(c.item_key)}<b style="font-size:13px">${esc(c.name)}</b><div class="vg-meta">+${vgN(c.rate)}/h</div></div>`).join('')}</div>`}
   if(VG.tab==='inv'){const grp={};inv.forEach(i=>(grp[i.item_key]=grp[i.item_key]||[]).push(i.id));const keys=Object.keys(grp).sort((a,b)=>(VG.cat[a]?.sort||0)-(VG.cat[b]?.sort||0));
     body=keys.length?`<p class="vg-note">보관함의 개체는 코인을 만들지 않아요. 마을에 배치해 주세요!</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button><button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>'}
   if(VG.tab==='codex'){const seen=vgSeen(),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
-    body=`<p class="vg-note">만난 친구 <b>${got}</b> / ${an.length}</p>${[1,2,3,4,5].map(gr=>{const l=an.filter(c=>c.grade===gr);if(!l.length)return '';return `<b style="display:block;margin:10px 0 6px;color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(c.item_key)}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
+    body=`<p class="vg-note">만난 친구 <b>${got}</b> / ${an.length}</p>${[1,2,3,4,5,6].map(gr=>{const l=an.filter(c=>c.grade===gr);if(!l.length)return '';return `<b style="display:block;margin:10px 0 6px;color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(c.item_key)}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':c.grade===6?'조합':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
   if(VG.tab==='game')body=vgGameTab();
+  if(VG.tab==='fuse')body=vgFuseTab();
   if(VG.tab==='friends'){if(!VG.friends){body='<div class="vg-empty">친구 마을을 불러오는 중…</div>';window.fitVillage.friends().then(l=>{VG.friends=l;if(VG.tab==='friends')vgRenderSide()}).catch(e=>{VG.friends=[];vgToast(e.message||String(e),true)})}
     else{const me=window.fitVillage.me(),l=VG.friends.filter(f=>f.user_id!==me);body=`<p class="vg-note">친구 마을을 방문해 좋아요를 눌러 주세요. 하루에 한 번, 나는 <b>+10</b>, 친구는 <b>+20</b> 코인을 받아요.</p><div style="text-align:right;margin:-4px 0 8px"><button class="vg-btn sm" id="vgFrRefresh">↻ 새로고침</button></div>${l.length?l.map(f=>`<div class="vg-list-row"><svg class="vg-art" viewBox="-48 -96 96 102">${vgArt(f.top_key||'pebble_golem')}</svg><div class="grow"><b>${esc(f.display_name)}</b><span style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">동물 ${f.animals}마리 · 땅 ${vgSize(f.land_level)}×${vgSize(f.land_level)} · 💗 ${vgN(f.likes_received)}</span></div>${VG.liked.has(f.user_id)?'<span title="오늘 좋아요 완료">💗</span>':''}<button class="vg-btn sm pink" data-visit="${f.user_id}">방문</button></div>`).join(''):'<div class="vg-empty">아직 마을을 만든 친구가 없어요.</div>'}`}}
   side.classList.toggle('open',!!VG.sheet);side.innerHTML=`<div class="vg-handle" id="vgHandle"><span></span></div><div class="vg-tabs">${tabs.map(([k,ic,l])=>`<button class="vg-tab ${VG.tab===k?'on':''}" data-tab="${k}"><span>${ic}</span>${l}</button>`).join('')}</div><div class="vg-side-body">${VG.sel&&VG.view==='mine'?vgSelCard():''}${body}</div>`;
@@ -1206,6 +1235,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>vgStartPlace(b.dataset.mv));
   side.querySelectorAll('[data-keep]').forEach(b=>b.onclick=()=>vgPlace(b.dataset.keep,null,null));
   side.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>vgSell(b.dataset.sell));
+  if(VG.tab==='fuse')vgFuseBind(side);
   side.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>b.dataset.game==='spot'?vgSpotGame():vgRoulette());
   side.querySelectorAll('[data-visit]').forEach(b=>b.onclick=()=>vgVisit(b.dataset.visit));
   $('#vgFrRefresh')&&($('#vgFrRefresh').onclick=()=>{VG.friends=null;window.fitVillage.likedToday().then(s=>VG.liked=s).catch(()=>{});vgRenderSide()})}
@@ -1366,6 +1396,41 @@ async function vgAct(actions){if(VD.busy)return;if(actions[0]==='flee'&&!window.
   acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 승리! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어 보상)</small>':''}`:`💤 패배… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="vdBack">던전으로 돌아가기</button></div>`;
   acts.querySelector('#vdBack').onclick=()=>{VD.battle=null;VD.sel=null;vgLobby()};
   if(won&&r.hatched_key){await vdSleep(1400);const holder=document.createElement('div');holder.className='vg-modal';holder.innerHTML='<div class="vg-modal-box"></div>';document.body.appendChild(holder);vgReveal(holder,r,'보상 알에서 ')}}
+
+
+/* ===== 캐릭터 조합 ===== */
+VG_GRADE[6]={name:'돌연변이',color:'#0fb59a'};
+VG_GSTAT[6]=[680,110,33];
+const VG_FUSE={rate:[0,60,45,30,15,8],fee:[0,100,300,800,2000,5000]};
+VG.fuse={g:1,a:null,b:null};
+function vgFuseTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal');
+  const cnt=g=>items.filter(i=>VG.cat[i.item_key].grade===g).length;
+  if(F.a&&!items.some(i=>i.id===F.a))F.a=null;if(F.b&&!items.some(i=>i.id===F.b))F.b=null;
+  const list=items.filter(i=>VG.cat[i.item_key].grade===F.g).sort((a,b)=>(VG.cat[a.item_key].sort-VG.cat[b.item_key].sort));
+  const slot=(id,n)=>{const it=id&&items.find(i=>i.id===id);return `<button class="vf-slot ${it?'on':''}" data-fslot="${n}">${it?vgArtSvg(it.item_key)+`<b>${esc(VG.cat[it.item_key].name)}</b>`:`<span>＋</span><small>재료 ${n}</small>`}</button>`};
+  const next=F.g===5?'돌연변이':VG_GRADE[F.g+1].name,rate=VG_FUSE.rate[F.g],fee=VG_FUSE.fee[F.g],ready=F.a&&F.b;
+  return `<p class="vg-note">같은 등급 2마리를 합치면 확률적으로 <b>상위 등급</b>이 태어나요. 실패하면 같은 등급 1마리가 나와요. 성공하면 <b style="color:#0fb59a">5% 확률로 돌연변이</b>!</p>
+  <div class="vf-grades">${[1,2,3,4,5].map(g=>`<button class="${F.g===g?'on':''}" data-fg="${g}"><span class="vg-grade vg-g${g}" style="position:static">${VG_GRADE[g].name}</span><small>${cnt(g)}마리</small></button>`).join('')}</div>
+  <div class="vf-slots">${slot(F.a,1)}<div class="vf-plus">＋</div>${slot(F.b,2)}<div class="vf-plus">→</div><div class="vf-slot res"><span>?</span><small>${next}</small></div></div>
+  <div class="vf-info"><div>성공 확률 <b>${rate}%</b> → <b>${next}</b>${F.g<5?` <small>(그중 5% 돌연변이)</small>`:''}</div><div>실패 시 <b>${VG_GRADE[F.g].name}</b> 1마리 · 비용 ${vgCoinIcon(13)} <b>${vgN(fee)}</b></div></div>
+  <button class="vg-btn purple full" id="vfGo" ${!ready||coins<fee?'disabled':''}>${!ready?'재료 2마리를 골라 주세요':coins<fee?'코인이 부족해요':`🧬 조합하기 (${vgN(fee)}코인)`}</button>
+  <b style="display:block;margin:14px 0 8px">내 ${VG_GRADE[F.g].name} 캐릭터</b>
+  ${list.length?`<div class="vf-list">${list.map(i=>{const c=VG.cat[i.item_key],on=F.a===i.id||F.b===i.id;return `<button class="vf-pick ${on?'on':''}" data-fp="${i.id}">${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${i.x!=null?'<i>배치중</i>':''}${on?'<em>✓</em>':''}</button>`}).join('')}</div>`:'<div class="vg-empty">이 등급의 캐릭터가 없어요.</div>'}`}
+function vgFuseBind(side){const F=VG.fuse;
+  side.querySelectorAll('[data-fg]').forEach(b=>b.onclick=()=>{F.g=Number(b.dataset.fg);F.a=F.b=null;vgRenderSide()});
+  side.querySelectorAll('[data-fslot]').forEach(b=>b.onclick=()=>{if(b.dataset.fslot==='1')F.a=null;else F.b=null;vgRenderSide()});
+  side.querySelectorAll('[data-fp]').forEach(b=>b.onclick=()=>{const id=b.dataset.fp;if(F.a===id)F.a=null;else if(F.b===id)F.b=null;else if(!F.a)F.a=id;else if(!F.b)F.b=id;else F.b=id;vgRenderSide()});
+  const go=side.querySelector('#vfGo');if(go)go.onclick=vgFuse}
+async function vgFuse(){const F=VG.fuse,A=(VG.state.items||[]).find(i=>i.id===F.a),B=(VG.state.items||[]).find(i=>i.id===F.b);if(!A||!B)return;
+  if(!window.confirm(`${VG.cat[A.item_key].name} + ${VG.cat[B.item_key].name}을(를) 조합할까요?\n재료 2마리는 사라집니다. (비용 ${vgN(VG_FUSE.fee[F.g])}코인)`))return;
+  const m=document.createElement('div');m.className='vg-modal';m.innerHTML=`<div class="vg-modal-box"><div class="vf-anim"><div class="vf-l">${vgArtSvg(A.item_key)}</div><div class="vf-flash"></div><div class="vf-r">${vgArtSvg(B.item_key)}</div></div><h3>🧬 조합 중…</h3><p class="vg-mp">두 캐릭터의 힘이 하나로 모이고 있어요</p></div>`;document.body.appendChild(m);
+  const t0=Date.now();let r=null,err=null;try{r=await window.fitVillage.fuse(F.a,F.b)}catch(e){err=e}await new Promise(res=>setTimeout(res,Math.max(0,1900-(Date.now()-t0))));
+  if(err||!r){m.remove();vgToast(err?.setup?'Supabase에 조합 SQL(fit_village_update5.sql) 실행이 필요합니다.':(err?.message||'조합에 실패했어요.'),true);return}
+  F.a=F.b=null;vgSetState(r);vgRenderHud();vgRenderStage();
+  const t={success:'🎉 조합 성공! ',mutant:'🧬 돌연변이 등장! ',recipe:'✨ 특별 조합! ',fail:'조합 실패… '}[r.result]||'';
+  vgReveal(m,r,t);if(r.result==='fail'){const h=m.querySelector('h3');if(h)h.innerHTML=`조합 실패… <small style="display:block;font-size:15px;color:#8b7f99">${esc(VG.cat[r.hatched_key]?.name||'')}이(가) 나왔어요</small>`;m.querySelector('.vg-rays')?.remove()}
+  if(r.result==='mutant')m.querySelector('.vg-modal-box')?.classList.add('vf-mutant');
+  vgRenderSide()}
 
 
 function daily(){
@@ -1712,6 +1777,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     gameStatus(){return vrpc('fit_village_game_status')},
     spotReward(found,secs){return vrpc('fit_village_spot_reward',{p_found:found,p_secs:secs})},
     roulette(){return vrpc('fit_village_roulette')},
+    fuse(a,b){return vrpc('fit_village_fuse',{p_a:a,p_b:b})},
     dungeonStatus(){return vrpc('fit_village_dungeon_status')},
     dungeonStart(f,ids){return vrpc('fit_village_dungeon_start',{p_floor:f,p_items:ids})},
     dungeonAct(id,a){return vrpc('fit_village_dungeon_act',{p_battle:id,p_actions:a})},

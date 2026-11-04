@@ -1668,7 +1668,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     roulette(){return vrpc('fit_village_roulette')},
     dungeonStatus(){return vrpc('fit_village_dungeon_status')},
     dungeonStart(f,ids){return vrpc('fit_village_dungeon_start',{p_floor:f,p_items:ids})},
-    dungeonAct(id,a){return vrpc('fit_village_dungeon_act',{p_battle:id,p_action:a})},
+    dungeonAct(id,a){return vrpc('fit_village_dungeon_act',{p_battle:id,p_actions:a})},
     async bosses(){vNeed();const {data,error}=await supa.from('fit_village_bosses').select('*').order('floor');if(error)throw vErr(error);return data||[]},
     async villageOf(uid){vNeed();const [v,i]=await Promise.all([supa.from('fit_village').select('*').eq('user_id',uid).maybeSingle(),supa.from('fit_village_items').select('id,item_key,x,y').eq('user_id',uid).not('x','is',null)]);if(v.error)throw vErr(v.error);if(i.error)throw vErr(i.error);return {village:v.data,items:i.data||[],server_time:new Date().toISOString()}},
     async friends(){vNeed();const [v,p,i,c]=await Promise.all([supa.from('fit_village').select('user_id,land_level,likes_received'),supa.from('fit_workspace_profiles').select('user_id,display_name'),supa.from('fit_village_items').select('user_id,item_key').not('x','is',null),supa.from('fit_village_catalog').select('item_key,kind,grade,rate')]);

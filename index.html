@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FIT 건강관리 포털</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:light dark;--bg:light-dark(#f4f6fa,#111827);--surface:light-dark(#fff,#1f2937);--surface2:light-dark(#f8fafc,#273449);--text:light-dark(#172033,#f3f4f6);--muted:light-dark(#64748b,#aab6c8);--border:light-dark(#e2e8f0,#3b4658);--accent:light-dark(#2457c5,#8db2ff);--accentbg:light-dark(#eaf0ff,#243b64);--green:light-dark(#16845b,#5ed6a5);--amber:light-dark(#a8650b,#f5bd62);--red:light-dark(#b83c45,#ff8e96)}
 *{box-sizing:border-box}
@@ -236,6 +237,129 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .routine-entry-main{min-width:0;display:grid;gap:3px}.routine-entry-main b{overflow-wrap:anywhere}.routine-entry-main span{color:var(--muted);font-size:12px}
 @media(max-width:700px){.routine-category-grid{grid-template-columns:1fr}.routine-quick-actions button{min-width:100%}}
 
+
+/* ===== 동물 마을 (village game) ===== */
+.vg-root{--vg-ink:#3a2f4a;--vg-cream:#fffaf0;--vg-gold:#ffbf2e;--vg-gold-d:#d98a00;--vg-sky1:#c9ecff;--vg-sky2:#eaf7ff;--vg-panel:#fffdf8;--vg-line:#eadfcb;font-family:'Jua','Inter','Malgun Gothic',sans-serif;color:var(--vg-ink)}
+.vg-root button{font-family:inherit}
+.vg-hud{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin-bottom:14px}
+.vg-chip{display:flex;align-items:center;gap:8px;background:var(--vg-panel);border:2px solid var(--vg-line);border-radius:16px;padding:8px 11px;box-shadow:0 3px 0 var(--vg-line);min-width:0}
+.vg-chip-ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:#fff3d6;flex:0 0 34px}
+.vg-chip small{display:block;font-size:11px;color:#8b7f99;font-family:Inter,'Malgun Gothic',sans-serif;font-weight:700}
+.vg-chip b{font-size:19px;letter-spacing:-.02em}
+.vg-collect{margin-left:auto;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#fff6db,#ffe9a8);border:2px solid #f2cf6b;border-radius:18px;padding:8px 10px 8px 14px;box-shadow:0 3px 0 #e6b84a}
+.vg-collect-info{min-width:118px}
+.vg-collect-info small{font-size:11px;color:#9a7417;font-weight:800;font-family:Inter,'Malgun Gothic',sans-serif}
+.vg-collect-info b{display:block;font-size:20px;color:#7a5600}
+.vg-store-bar{height:8px;border-radius:99px;background:#fff;border:1px solid #f0d27c;overflow:hidden;margin-top:4px}
+.vg-store-bar span{display:block;height:100%;background:linear-gradient(90deg,#ffd34d,#ff9f1a);border-radius:99px;transition:width .6s}
+.vg-btn{border:0;border-radius:14px;padding:10px 16px;font-size:15px;font-weight:700;cursor:pointer;background:#fff;color:var(--vg-ink);box-shadow:0 3px 0 #d9ccb4,inset 0 0 0 2px #eadfcb;transition:transform .12s,box-shadow .12s,filter .12s}
+.vg-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+.vg-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #d9ccb4,inset 0 0 0 2px #eadfcb}
+.vg-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.vg-btn.gold{background:linear-gradient(180deg,#ffd75a,#ffb21f);color:#5a3a00;box-shadow:0 3px 0 #c98400}
+.vg-btn.green{background:linear-gradient(180deg,#8fe08a,#4fbf5f);color:#fff;box-shadow:0 3px 0 #2f9145;text-shadow:0 1px 0 #2f914588}
+.vg-btn.pink{background:linear-gradient(180deg,#ffa6c4,#ff6f9d);color:#fff;box-shadow:0 3px 0 #d64a7a;text-shadow:0 1px 0 #d64a7a88}
+.vg-btn.purple{background:linear-gradient(180deg,#c3a6ff,#8f6bff);color:#fff;box-shadow:0 3px 0 #6545d1}
+.vg-btn.sm{padding:6px 11px;font-size:13px;border-radius:11px}
+.vg-btn.full{width:100%}
+.vg-layout{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:14px;align-items:start}
+.vg-stage{position:relative;border-radius:22px;overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 2px var(--vg-line),0 10px 30px rgba(60,40,90,.12);background:linear-gradient(180deg,var(--vg-sky1) 0%,var(--vg-sky2) 55%,#f4fbe9 100%)}
+.vg-stage-top{position:absolute;left:12px;right:12px;top:12px;display:flex;align-items:center;gap:8px;z-index:3;pointer-events:none}
+.vg-stage-top>*{pointer-events:auto}
+.vg-banner{background:rgba(255,253,248,.94);border:2px solid var(--vg-line);border-radius:14px;padding:7px 13px;font-size:16px;box-shadow:0 3px 0 var(--vg-line)}
+.vg-banner small{font-family:Inter,'Malgun Gothic',sans-serif;font-size:11px;color:#8b7f99;font-weight:700;margin-left:6px}
+.vg-zoom{margin-left:auto;display:flex;gap:6px}
+.vg-zoom .vg-btn{width:38px;height:38px;padding:0}
+.vg-scroll{height:600px;overflow:auto;position:relative;cursor:grab}
+.vg-scroll.dragging{cursor:grabbing}
+.vg-scroll::-webkit-scrollbar{height:10px;width:10px}.vg-scroll::-webkit-scrollbar-thumb{background:#c9dfe9;border-radius:9px}
+.vg-cloud{position:absolute;background:#fff;border-radius:99px;opacity:.85;pointer-events:none;animation:vgCloud linear infinite}
+.vg-cloud:before,.vg-cloud:after{content:'';position:absolute;background:#fff;border-radius:50%}
+.vg-cloud:before{width:55%;height:150%;left:15%;top:-70%}.vg-cloud:after{width:40%;height:120%;right:12%;top:-45%}
+@keyframes vgCloud{from{transform:translateX(-200px)}to{transform:translateX(1400px)}}
+.vg-map{display:block;margin:0 auto}
+.vg-tile{transition:fill .15s}
+.vg-tile.hl{fill:#d6ffb7}
+.vg-item{cursor:pointer}
+.vg-item .vg-sel-ring{opacity:0}
+.vg-item.sel .vg-sel-ring{opacity:1;animation:vgPulse 1.2s ease-in-out infinite}
+@keyframes vgPulse{50%{opacity:.35}}
+.vg-bob{transform-box:fill-box;transform-origin:50% 100%;animation:vgBob 2.4s ease-in-out infinite}
+@keyframes vgBob{0%,100%{transform:translateY(0) scale(1,1)}40%{transform:translateY(-3px) scale(.98,1.03)}55%{transform:translateY(0) scale(1.04,.96)}}
+.vg-hop{animation:vgHop .7s ease}
+@keyframes vgHop{30%{transform:translateY(-14px) scale(.95,1.06)}60%{transform:translateY(0) scale(1.08,.92)}}
+.vg-coin{opacity:0;transition:opacity .3s;pointer-events:none}
+.vg-has-pending .vg-coin{opacity:1}
+.vg-coin g{animation:vgCoin 1.6s ease-in-out infinite}
+@keyframes vgCoin{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.vg-spin{transform-box:fill-box;transform-origin:center;animation:vgSpin 6s linear infinite}
+@keyframes vgSpin{to{transform:rotate(360deg)}}
+.vg-flicker{transform-box:fill-box;transform-origin:50% 100%;animation:vgFlick .5s ease-in-out infinite alternate}
+@keyframes vgFlick{to{transform:scale(1.1,1.18) skewX(4deg)}}
+.vg-twinkle{animation:vgTw 1.8s ease-in-out infinite}
+@keyframes vgTw{50%{opacity:.2}}
+.vg-glow{animation:vgTw 2.6s ease-in-out infinite}
+.vg-aura{transform-box:fill-box;transform-origin:center;animation:vgAura 3s ease-in-out infinite}
+@keyframes vgAura{50%{transform:scale(1.12);opacity:.7}}
+.vg-water{animation:vgTw 1.4s ease-in-out infinite}
+.vg-ghost{pointer-events:none;opacity:.75}
+.vg-hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;background:#3a2f4aee;color:#fff;border-radius:14px;padding:9px 14px;font-size:14px;display:flex;align-items:center;gap:10px;box-shadow:0 6px 18px #0003;white-space:nowrap}
+.vg-float{position:absolute;z-index:5;pointer-events:none;font-size:22px;font-weight:700;color:#e08a00;text-shadow:0 2px 0 #fff,0 0 8px #fff;animation:vgFloat 1.3s ease-out forwards}
+@keyframes vgFloat{from{opacity:0;transform:translate(-50%,10px) scale(.7)}20%{opacity:1;transform:translate(-50%,-6px) scale(1.1)}to{opacity:0;transform:translate(-50%,-60px) scale(1)}}
+.vg-side{background:var(--vg-panel);border:2px solid var(--vg-line);border-radius:22px;box-shadow:0 4px 0 var(--vg-line);overflow:hidden}
+.vg-tabs{display:grid;grid-template-columns:repeat(5,1fr);background:#f7efdf;border-bottom:2px solid var(--vg-line)}
+.vg-tab{border:0;background:transparent;padding:11px 2px 9px;font-size:14px;cursor:pointer;color:#8b7f99;border-bottom:3px solid transparent;display:flex;flex-direction:column;align-items:center;gap:2px}
+.vg-tab span{font-size:20px}
+.vg-tab.on{color:var(--vg-ink);background:var(--vg-panel);border-bottom-color:#ffb21f}
+.vg-side-body{padding:14px;max-height:600px;overflow:auto}
+.vg-subtabs{display:flex;gap:6px;margin-bottom:12px}
+.vg-subtabs button{flex:1;border:2px solid var(--vg-line);background:#fff;border-radius:11px;padding:7px;font-size:14px;cursor:pointer;color:#8b7f99}
+.vg-subtabs button.on{background:#fff3d6;border-color:#f2cf6b;color:#7a5600}
+.vg-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.vg-card{position:relative;background:#fff;border:2px solid var(--vg-line);border-radius:16px;padding:8px 8px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.vg-card .vg-art{width:84px;height:84px;background:radial-gradient(circle at 50% 70%,#f3f9e9,#fff 70%);border-radius:14px}
+.vg-card b{font-size:15px}
+.vg-card .vg-meta{font-family:Inter,'Malgun Gothic',sans-serif;font-size:11.5px;color:#7d7290;font-weight:600}
+.vg-grade{position:absolute;left:7px;top:7px;font-size:11px;font-weight:800;color:#fff;border-radius:7px;padding:2px 7px;font-family:Inter,'Malgun Gothic',sans-serif}
+.vg-g1{background:#9aa6ba}.vg-g2{background:#3b8cff}.vg-g3{background:#9b5cff}.vg-g4{background:linear-gradient(90deg,#ffb21f,#ff7b1a)}.vg-g5{background:linear-gradient(90deg,#ff5f8f,#a35cff,#3bb3ff)}
+.vg-card.g4{border-color:#ffd48a;box-shadow:0 0 0 2px #fff3d6}.vg-card.g5{border-color:#e5c3ff;box-shadow:0 0 0 2px #f5e8ff}
+.vg-price{display:inline-flex;align-items:center;gap:4px}
+.vg-egg-card{display:flex;gap:12px;align-items:center;background:#fff;border:2px solid var(--vg-line);border-radius:18px;padding:12px;margin-bottom:12px}
+.vg-egg-card .vg-art{width:92px;height:92px;flex:0 0 92px}
+.vg-odds{font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#6d6280;line-height:1.7;margin:4px 0 8px}
+.vg-odds i{font-style:normal;font-weight:800}
+.vg-sel{background:linear-gradient(180deg,#fff9e8,#fff);border:2px solid #f2cf6b;border-radius:18px;padding:12px;margin-bottom:12px;display:flex;gap:12px;align-items:center}
+.vg-sel .vg-art{width:76px;height:76px;flex:0 0 76px}
+.vg-sel-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.vg-list-row{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--vg-line);border-radius:14px;padding:8px 10px;margin-bottom:8px}
+.vg-list-row .vg-art{width:48px;height:48px;flex:0 0 48px}
+.vg-list-row .grow{flex:1;min-width:0}
+.vg-list-row .grow b{display:block;font-size:15px}
+.vg-codex{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vg-codex .vg-card{padding:6px}
+.vg-codex .vg-art{width:70px;height:70px}
+.vg-codex .locked .vg-art{filter:brightness(0) opacity(.18)}
+.vg-codex .locked b{color:#b6abc4}
+.vg-note{font-family:Inter,'Malgun Gothic',sans-serif;font-size:12.5px;line-height:1.6;color:#7d7290;background:#f7f2e7;border-radius:12px;padding:9px 11px;margin:0 0 12px}
+.vg-empty{text-align:center;color:#9a8fab;padding:24px 8px;font-size:15px}
+.vg-modal{position:fixed;inset:0;z-index:9000;background:rgba(40,25,60,.55);display:grid;place-items:center;backdrop-filter:blur(3px)}
+.vg-modal-box{width:min(92vw,380px);background:#fffdf8;border-radius:26px;border:3px solid #fff;box-shadow:0 20px 60px #0004;padding:22px;text-align:center;font-family:'Jua','Malgun Gothic',sans-serif;color:#3a2f4a;position:relative;overflow:hidden}
+.vg-modal-box h3{font-size:24px;margin:6px 0 2px}
+.vg-modal-art{width:190px;height:190px;margin:4px auto}
+.vg-rays{position:absolute;left:50%;top:125px;width:340px;height:340px;margin:-170px 0 0 -170px;background:repeating-conic-gradient(from 0deg,#ffe27a55 0 10deg,transparent 10deg 20deg);border-radius:50%;animation:vgSpin 12s linear infinite;pointer-events:none}
+.vg-egg-shake{animation:vgShake .35s ease-in-out infinite}
+@keyframes vgShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.vg-pop{animation:vgPop .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes vgPop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+.vg-toast{position:fixed;left:50%;top:86px;transform:translateX(-50%);z-index:9500;background:#3a2f4a;color:#fff;border-radius:14px;padding:10px 16px;font-size:15px;box-shadow:0 8px 24px #0003;font-family:'Jua','Malgun Gothic',sans-serif;animation:vgPop .35s ease}
+.vg-toast.err{background:#d64a5f}
+.vg-setup{background:#fff;border:2px dashed #f2cf6b;border-radius:18px;padding:18px;line-height:1.7}
+@media(max-width:1180px){.vg-layout{grid-template-columns:1fr}.vg-side-body{max-height:none}.vg-scroll{height:480px}}
+@media(max-width:700px){.vg-collect{margin-left:0;width:100%}.vg-scroll{height:380px}.vg-cards{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){.vg-bob,.vg-spin,.vg-flicker,.vg-twinkle,.vg-aura,.vg-cloud,.vg-coin g,.vg-rays{animation:none!important}}
+.vg-modal-box h3,.vg-modal-box p{position:relative;background:#fffdf8;border-radius:10px}
+.vg-map.placing .vg-item{pointer-events:none}
+.vg-map.placing .vg-tile{cursor:pointer}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -258,7 +382,7 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
       <button class="nav" data-page="inbody">📈 인바디 분석·추이</button>
       <div class="navlabel">COMMUNITY</div>
       <button class="nav" data-page="workspace">👥 운동 공유 워크스페이스</button>
-      <button class="nav" data-page="companion">🐾 포인트 · 동물 키우기</button>
+      <button class="nav" data-page="companion">🏡 동물 마을</button>
       <div class="navlabel">DATA MANAGEMENT</div>
       <button class="nav" data-page="reports">⇩ 실적·엑셀 다운로드</button>
       <button class="nav" data-page="settings">⚙ 기본 정보·목표 설정</button>
@@ -471,7 +595,7 @@ function dashboard(){
   </div>
   <section class="panel day-today-preview"><div class="panelhead"><h2>📅 오늘의 식단 · 운동 한눈에 보기</h2><button data-open-day="${todayISO()}">오늘 상세 보기 →</button></div>${dayQuickSummaryHtml(todayISO())}</section>
   <section class="panel weekly-workout-panel"><div class="panelhead"><h2>🏋️ 이번 주 운동 기록</h2><span class="pill">${s.days}/7일</span></div>${weeklyExerciseSummaryHTML(ds)}</section>
-  <section class="panel community-preview"><div class="panelhead"><h2>🏆 운동 공유 랭킹</h2><button data-go="workspace">워크스페이스 열기 →</button></div><p class="mini-note">공유를 선택한 운동만 순위와 피드에 반영됩니다. 체중·체지방은 별도 동의가 있어야 표시됩니다.</p><div id="dashboardRanks"><div class="empty">랭킹을 불러오는 중…</div></div><div class="actions"><button data-go="companion">🐾 내 동물과 포인트 확인</button></div></section>
+  <section class="panel community-preview"><div class="panelhead"><h2>🏆 운동 공유 랭킹</h2><button data-go="workspace">워크스페이스 열기 →</button></div><p class="mini-note">공유를 선택한 운동만 순위와 피드에 반영됩니다. 체중·체지방은 별도 동의가 있어야 표시됩니다.</p><div id="dashboardRanks"><div class="empty">랭킹을 불러오는 중…</div></div><div class="actions"><button data-go="companion">🏡 내 마을 가기</button></div></section>
   <section class="panel"><div class="panelhead"><h2>📈 최근 인바디</h2><button data-go="inbody">인바디 분석 열기 →</button></div>${inbodySummary()}</section>
   <section class="panel"><div class="panelhead"><h2>최근 기록</h2><button data-go="reports">전체 기록 조회 →</button></div>${recentActivitySummary()}</section>`
 }
@@ -733,29 +857,234 @@ function wireWorkspace(){
     const cardio=(db.cardioLogs||{})[dateValue]||[];const duration=cardio.reduce((a,x)=>a+(Number(x.minutes)||0),0)+(Number(r.duration)||0);
     if(st)st.textContent='운동 기록을 공유하는 중…';
     await window.fitWorkspace.publishEntry({entry_date:dateValue,title,workout_summary:summary,duration_minutes:duration,weight_kg:weight,body_fat_rate:fat});
-    if(st)st.textContent='공유 완료! 20P와 친밀도 5점을 받았습니다. 🐾';await loadWorkspaceData();
+    if(st)st.textContent='공유 완료! 마을 코인 +100을 받았습니다. 🏡';await loadWorkspaceData();
   }catch(e){if(st)st.textContent=e.message||String(e)}});
   async function loadMealFeed(){const box=$('#mealShareFeed'),st=$('#mealShareStatus');try{const [meals,profiles]=await Promise.all([window.fitWorkspace.listMealEntries(),window.fitWorkspace.listProfiles()]);if(box)box.innerHTML=groupedDailyMealFeedHtml(meals,profiles);if(st)st.textContent=`공유된 하루 식단 ${new Set((meals||[]).map(m=>`${m.user_id}|${m.meal_date}`)).size}일분`;}catch(e){if(box)box.innerHTML='<div class="notice">식단 공유 테이블 설정 또는 로그인 상태를 확인해 주세요.</div>';if(st)st.textContent=e.message||String(e)}}
   const shareDate=$('#mealShareDate');const refreshMealPreview=()=>renderMealSharePreview(shareDate?.value||todayISO());$('#mealShareLoad')?.addEventListener('click',refreshMealPreview);shareDate?.addEventListener('change',refreshMealPreview);
   $('#mealSharePublish')?.addEventListener('click',async()=>{const st=$('#mealShareStatus'),btn=$('#mealSharePublish');try{btn.disabled=true;if(!window.fitWorkspace)throw new Error('먼저 로그인해 주세요.');const dateValue=shareDate?.value||todayISO(),data=dailyMealShareData(dateValue);if(!data.hasFood)throw new Error('공유할 음식이 없어요. 해당 날짜의 식단을 먼저 등록해 주세요.');if(st)st.textContent='하루 전체 식단을 공유하는 중…';await window.fitWorkspace.publishMeal({meal_date:dateValue,meal_type:'하루 전체',food_name:'하루 전체 식단',calories:data.calories,protein_g:data.protein,memo:data.memo});if(st)st.textContent=`${dateValue} 하루 전체 식단을 공유했어요.`;await loadMealFeed()}catch(e){if(st)st.textContent=e.message||String(e)}finally{btn.disabled=false}});$('#mealShareRefresh')?.addEventListener('click',loadMealFeed);
   updateSummary();loadWorkspaceData();loadMealFeed();refreshMealPreview();
 }
-function companionPage(){const p=wsProfile||{},animalId=p.animal_type||'cat',a=animalInfo(animalId),intimacy=Number(p.intimacy)||0,stages=animalGrowthStages(animalId),level=Math.min(stages.length,Math.floor(intimacy/50)+1),progress=level>=stages.length?50:intimacy%50,petName=p.pet_name||'콩이';return `${head('포인트 · 동물 키우기','운동을 공유해 포인트를 모으고, 포인트로 간식을 주면 동물이 단계별로 성장합니다.',`<button data-go="workspace">운동 공유하러 가기 →</button>`)}
-  <section class="panel companion-hero"><div class="companion-art" id="companionAnimal">${petArtHtml(p.animal_type||'cat',level)}</div><div class="companion-info"><span class="pill">나의 파트너 · ${a.name}</span><h2 id="companionName">${esc(petName)}</h2><div class="companion-level" id="companionLevel">${animalLevelLabel(animalId,level)} · ${stages[level-1].name}</div><p class="muted">포인트로 간식을 주고 친밀도를 올려 보세요. 단계가 올라갈 때 캐릭터 모습과 성장 배지가 바뀝니다.</p><div class="bar affinity-bar"><span id="affinityFill" style="width:${progress/50*100}%"></span></div><div class="affinity-caption"><span id="affinityText">${level>=stages.length?`친밀도 ${intimacy} · 최고 성장 단계!`:`친밀도 ${intimacy} · 다음 레벨까지 ${50-progress}점`}</span><span class="goal-chip" id="companionStage">${stages[level-1].name}</span></div><div id="companionGrowth">${growthPathHtml(animalId,level)}</div></div></section>
-  <section class="panel section animal-switch-panel"><div class="panelhead"><h2>🔄 동물 교체</h2><span class="pill">새 파트너</span></div><p class="mini-note">동물을 교체하면 새 동물은 Lv.1·친밀도 0부터 다시 시작합니다. 보유 포인트와 운동·인바디 기록은 유지되며, 현재 동물의 성장도는 복구할 수 없습니다.</p><div class="fieldgrid"><div class="field"><label for="replaceAnimalSelect">새 동물 선택</label><select id="replaceAnimalSelect"><option value="">새 동물 선택</option>${animalOptions('')}</select></div><div class="field" style="display:flex;align-items:end"><button class="primary" id="replaceAnimalBtn" type="button">동물 교체하기</button></div></div><div id="replaceAnimalStatus" class="mini-note" role="status" aria-live="polite" style="margin-top:10px"></div></section>
-  <section class="panel pet-play-panel section"><div class="pet-play-top"><div><h2>💗 교감하기</h2><p class="muted">쓰다듬기·놀아주기·간식에 맞춰 SD 캐릭터가 움직이고 반응해요. 성장할 때는 축하 애니메이션이 나타납니다.</p></div><div class="pet-interaction-count">오늘 교감 <b id="petInteractionCount">${db.profile?.petInteractionDate===todayISO()?(Number(db.profile?.petInteractionCount)||0):0}</b>회</div></div><div class="pet-bubble" id="petReaction" role="status" aria-live="polite">${esc(petName)}가 당신을 기다리고 있어요. 먼저 인사해 보세요!</div><div class="pet-actions"><button id="petStroke" class="primary">🤚 쓰다듬기</button><button id="petPlay">🧸 놀아주기</button></div><div class="mini-note">쓰다듬기와 놀아주기는 교감 연출이며 포인트를 소비하지 않아요. 간식은 10P를 사용하고, 새 단계에 도달하면 레벨업 애니메이션이 재생됩니다.</div></section>
-  <div class="cards companion-cards"><div class="card"><div class="metric-label">보유 포인트</div><div class="metric" id="companionPoints">${Number(p.points)||0}<small> P</small></div><div class="hint">운동 공유 1회당 +20P</div></div><div class="card"><div class="metric-label">친밀도</div><div class="metric" id="companionIntimacy">${intimacy}<small> 점</small></div><div class="hint">공유 운동 +5 · 간식 +10</div></div><div class="card"><div class="metric-label">캐릭터 레벨</div><div class="metric" id="companionLevelMetric">${level}</div><div class="hint">친밀도 50점마다 성장 단계 상승</div></div></div>
-  <section class="panel section"><h2>✍️ 동물 이름 설정</h2><p class="mini-note">내 동물에게 이름을 붙여 주세요. 이름과 캐릭터는 계정에 저장되어 다른 기기에서도 유지됩니다.</p><div class="pet-name-form"><div class="field"><label for="companionPetName">동물 이름 (최대 16자)</label><input id="companionPetName" maxlength="16" value="${esc(petName)}" placeholder="예: 오리콩"></div><button class="primary" id="savePetName">이름 저장</button></div></section>
-  <section class="panel section"><div class="panelhead"><h2>🍪 간식 주고 성장시키기</h2><span class="pill">10P 사용</span></div><p>포인트 10P를 사용해 간식을 주면 친밀도가 10점 올라갑니다. 친밀도 50점마다 성장 단계가 바뀌며, 포인트가 부족하면 사용할 수 없습니다.</p><button class="primary" id="feedCompanion">🍪 간식 주기 · 10P</button><div id="companionStatus" class="mini-note" style="margin-top:12px">동물 정보를 불러오는 중…</div></section>
-  <section class="panel section"><h2>포인트 적립 방법</h2><div class="statline"><span>운동 기록을 워크스페이스에 공유</span><b>+20P / 하루 1회</b></div><div class="statline"><span>공유 운동으로 오르는 친밀도</span><b>+5점</b></div><div class="statline"><span>간식 주기</span><b>−10P · 친밀도 +10</b></div></section>`}
-function renderCompanionStats(p){if(!p)return;wsProfile=p;const a=animalInfo(p.animal_type),intimacy=Number(p.intimacy)||0,stages=animalGrowthStages(p.animal_type),level=Math.min(stages.length,Math.floor(intimacy/50)+1),progress=level>=stages.length?50:intimacy%50,petName=p.pet_name||'콩이',stageName=stages[level-1].name,levelLabel=animalLevelLabel(p.animal_type,level);const set=(id,v)=>{const el=$('#'+id);if(el)el.innerHTML=v};set('companionAnimal',petArtHtml(p.animal_type,level));set('companionName',esc(petName));set('companionLevel',`${levelLabel} · ${esc(stageName)}`);set('companionPoints',`${Number(p.points)||0}<small> P</small>`);set('companionIntimacy',`${intimacy}<small> 점</small>`);set('companionLevelMetric',levelLabel.replace(/^Lv\./,'Lv.'));set('growthLevelBadge',levelLabel);set('companionStage',stageName);const fill=$('#affinityFill');if(fill)fill.style.width=(progress/50*100)+'%';set('affinityText',level>=stages.length?`친밀도 ${intimacy} · 최고 성장 단계!`:`친밀도 ${intimacy} · 다음 레벨까지 ${50-progress}점`);const art=$('#companionAnimal');if(art)art.setAttribute('aria-label',`${a.name} ${stageName} 캐릭터`);const growth=$('#companionGrowth');if(growth)growth.innerHTML=growthPathHtml(p.animal_type,level);const nameInput=$('#companionPetName');if(nameInput)nameInput.value=petName;const wsName=$('#wsPetName');if(wsName)wsName.value=petName;const wsAnimal=$('#wsAnimal');if(wsAnimal)wsAnimal.value=p.animal_type}
-async function wireCompanion(){const status=$('#companionStatus');try{if(!window.fitWorkspace)throw new Error('로그인 연결이 준비되지 않았습니다.');wsProfile=await window.fitWorkspace.ensureProfile();renderCompanionStats(wsProfile);if(status)status.textContent='운동 기록을 공유하면 포인트를 적립할 수 있습니다.'}catch(e){if(status)status.textContent='워크스페이스 설정이 필요합니다: '+(e.message||e)}
-  $('#savePetName')?.addEventListener('click',async()=>{const btn=$('#savePetName'),name=$('#companionPetName')?.value.trim();try{if(!name||name.length>16)throw new Error('동물 이름을 1~16자로 입력해 주세요.');if(btn)btn.disabled=true;const current=wsProfile||await window.fitWorkspace.ensureProfile();wsProfile=await window.fitWorkspace.saveProfile(current.display_name||'FIT 러너',current.animal_type||'cat',name);renderCompanionStats(wsProfile);if(status)status.textContent=`${name}의 이름을 저장했어요!`;}catch(e){if(status)status.textContent=e.message||String(e)}finally{if(btn)btn.disabled=false}});
-  $('#replaceAnimalBtn')?.addEventListener('click',async()=>{const btn=$('#replaceAnimalBtn'),select=$('#replaceAnimalSelect'),switchStatus=$('#replaceAnimalStatus'),nextId=select?.value;if(!nextId){if(switchStatus)switchStatus.textContent='먼저 교체할 동물을 선택해 주세요.';return}try{const current=wsProfile||await window.fitWorkspace.ensureProfile();if(nextId===current.animal_type)throw new Error('현재 키우는 동물과 다른 동물을 선택해 주세요.');const next=animalInfo(nextId),currentAnimal=animalInfo(current.animal_type);const ok=window.confirm(`${current.pet_name||currentAnimal.name}와 작별하고 ${next.name}을(를) 새로 키울까요?\n새 동물은 Lv.1·친밀도 0부터 시작합니다. 보유 포인트와 운동·인바디 기록은 유지됩니다.`);if(!ok)return;if(btn)btn.disabled=true;if(switchStatus)switchStatus.textContent='새 동물을 데려오는 중…';wsProfile=await window.fitWorkspace.switchAnimal(nextId);renderCompanionStats(wsProfile);playPetAnimation('arrival');if(select)select.value='';const reaction=$('#petReaction');if(reaction)reaction.textContent=`새 가족 ${wsProfile.pet_name}가 왔어요! 함께 천천히 키워 봐요. 🐾`;if(switchStatus)switchStatus.textContent=`${next.name}로 교체했어요. Lv.1·친밀도 0부터 다시 시작합니다. 포인트는 그대로예요.`;if(status)status.textContent='새 동물과 함께 시작해 보세요!'}catch(e){if(switchStatus)switchStatus.textContent=e.message||String(e)}finally{if(btn)btn.disabled=false}});
-  $('#feedCompanion')?.addEventListener('click',async()=>{const btn=$('#feedCompanion'),before=wsProfile||{};if(btn)btn.disabled=true;try{const beforeLevel=Math.min(animalGrowthStages(before.animal_type||'cat').length,Math.floor((Number(before.intimacy)||0)/50)+1);const updated=await window.fitWorkspace.feedCompanion();const afterLevel=Math.min(animalGrowthStages(updated.animal_type||'cat').length,Math.floor((Number(updated.intimacy)||0)/50)+1);renderCompanionStats(updated);playPetAnimation(afterLevel>beforeLevel?'level':'feed');const reaction=$('#petReaction');if(reaction)reaction.textContent=afterLevel>beforeLevel?`${updated.pet_name||'우리 동물'}가 새로운 성장 단계에 도달했어요! 반짝반짝 레벨 업! ✨`:`냠냠! ${updated.pet_name||'우리 동물'}가 맛있게 간식을 먹었어요. 친밀도 +10 💗`;if(status)status.textContent=afterLevel>beforeLevel?'레벨 업! 새로운 모습으로 성장했어요. ✨':'간식을 줬어요! 친밀도가 10점 올랐습니다. 🍪'}catch(e){if(status)status.textContent=e.message||String(e)}finally{if(btn)btn.disabled=false}});
-  const petAction=(kind)=>{const p=db.profile||(db.profile={});if(p.petInteractionDate!==todayISO()){p.petInteractionDate=todayISO();p.petInteractionCount=0}p.petInteractionCount=(Number(p.petInteractionCount)||0)+1;save();const cnt=$('#petInteractionCount');if(cnt)cnt.textContent=p.petInteractionCount;const a=animalInfo(wsProfile?.animal_type||'cat'),name=wsProfile?.pet_name||p.petName||'콩이';const lines=kind==='stroke'?[`${name}가 기분 좋게 눈을 감았어요. 😌`,`쓰담쓰담! ${name}가 꼬리를 흔들어요. 💗`,`${name}가 당신에게 몸을 기대요. 🥰`,`기분이 좋아진 ${name}가 반짝반짝 빛나요. ✨`]:[`${name}와 신나게 놀았어요! 🎉`,`${name}가 폴짝 뛰며 즐거워해요. 🐾`,`${name}가 장난감을 물고 돌아왔어요. 🧸`,`${name}가 더 놀자고 조르는 중이에요! 💕`];const box=$('#petReaction');if(box)box.textContent=lines[Math.floor(Math.random()*lines.length)];playPetAnimation(kind==='stroke'?'stroke':'play');const panel=$('.pet-play-panel');if(panel){panel.classList.remove('pet-heart-pop');void panel.offsetWidth;panel.classList.add('pet-heart-pop');setTimeout(()=>panel.classList.remove('pet-heart-pop'),700)}};
-  $('#petStroke')?.addEventListener('click',()=>petAction('stroke'));$('#petPlay')?.addEventListener('click',()=>petAction('play'));
+
+/* ===== 동물 마을: 오리지널 캐릭터 · 장식 아트 ===== */
+const VG_GRADE={1:{name:'일반',color:'#8a97ad'},2:{name:'희귀',color:'#3b8cff'},3:{name:'영웅',color:'#9b5cff'},4:{name:'전설',color:'#ff9a1f'},5:{name:'신화',color:'#ff4f8b'}};
+const VG_OL='#3b2417';
+const VG_PAL={rock:['#e4eaef','#a3b2bf','#66798c'],moss:['#cdf08f','#7fc451','#468a30'],mole:['#dcae84','#a8724a','#6a4126'],cream:['#fffaea','#f2dfbf','#c9ad82'],capblue:['#c2b2ff','#7d62e0','#47349e'],honey:['#fff09a','#ffc93c','#d48a12'],cactus:['#bdec92','#6fbf55','#3a8236'],shell:['#e0b077','#a8723e','#6a4222'],turtle:['#eaf2a6','#b5cf5c','#78962f'],imp:['#ffa286','#f0553a','#a42c1c'],flame:['#fff6b0','#ffb43a','#ff6a2a'],pumpkin:['#ffcf85','#ff922e','#cc5a14'],wing:['#c2aee6','#7e5fb8','#4c3680'],whale:['#dcf1ff','#86c1f0','#4a88c9'],slime:['#d6fff7','#6fe0cf','#279c93'],crystal:['#ffe6ff','#d18cff','#8a4ad0'],golem:['#c4bed3','#857c9c','#4f4a64'],owl:['#86addf','#4a6fb0','#2b4174'],mane:['#9af4de','#3fbfa8','#1f7a6a'],gold:['#fff5cc','#ffd77a','#dc9e36'],dragon:['#a8f4c8','#45c487','#20825555'],fox:['#ffffff','#eeeafc','#b4aae4'],phoenix:['#fff4a8','#ff9f3a','#e3402a'],ivory:['#ffffff','#fff1d0','#d9bf86']};
+VG_PAL.dragon=['#a8f4c8','#45c487','#208255'];
+const VG_AURA={baby_haetae:'#bff7ea',baby_dragon:'#c4ffd9',moon_kitsune:'#cfc8ff',rainbow_phoenix:'#ffe08a'};
+const VG_CRE_KEYS=['pebble_golem','dirt_mole','mushroom_kid','honey_bee','cactus_buddy','moss_turtle','ember_imp','pumpkin_bat','jelly_slime','crystal_golem','cloud_whale','wisp_owl','baby_haetae','baby_dragon','moon_kitsune','rainbow_phoenix'];
+function vgDefs(){let g='';for(const k in VG_PAL){const c=VG_PAL[k];g+=`<radialGradient id="vgp-${k}" cx="36%" cy="28%" r="78%"><stop offset="0" stop-color="${c[0]}"/><stop offset=".5" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></radialGradient>`}
+  for(const k in VG_AURA)g+=`<radialGradient id="vga-${k}"><stop offset="0" stop-color="${VG_AURA[k]}" stop-opacity=".95"/><stop offset="1" stop-color="${VG_AURA[k]}" stop-opacity="0"/></radialGradient>`;
+  g+=`<linearGradient id="vg-rainbow" x1="0" x2="1"><stop offset="0" stop-color="#ff6f9a"/><stop offset=".25" stop-color="#ffc35a"/><stop offset=".5" stop-color="#7fdc6a"/><stop offset=".75" stop-color="#5cb8ff"/><stop offset="1" stop-color="#a77cff"/></linearGradient>
+  <radialGradient id="vg-coin"><stop offset="0" stop-color="#fff2a8"/><stop offset=".6" stop-color="#ffcc33"/><stop offset="1" stop-color="#e09a00"/></radialGradient>
+  <linearGradient id="vg-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9be3ff"/><stop offset="1" stop-color="#4fb6ec"/></linearGradient>
+  <radialGradient id="vg-egg1" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fffdf5"/><stop offset=".6" stop-color="#e9dcff"/><stop offset="1" stop-color="#a98ad8"/></radialGradient>
+  <radialGradient id="vg-egg2" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff8cf"/><stop offset=".55" stop-color="#ffd24d"/><stop offset="1" stop-color="#c98000"/></radialGradient>
+  <radialGradient id="vg-leaf" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#c3f290"/><stop offset=".6" stop-color="#6cc957"/><stop offset="1" stop-color="#3a8a3c"/></radialGradient>
+  <radialGradient id="vg-glow"><stop offset="0" stop-color="#bff6ff"/><stop offset="1" stop-color="#bff6ff" stop-opacity="0"/></radialGradient>`;
+  return `<svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true"><defs>${g}</defs></svg>`}
+function vgCoinIcon(sz=18){return `<svg width="${sz}" height="${sz}" viewBox="-10 -10 20 20" style="vertical-align:-3px"><circle r="9" fill="url(#vg-coin)" stroke="#a86b00" stroke-width="1.6"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+/* --- 그리기 도구 (굵은 외곽선 + 입체 음영) --- */
+const VOL=(w=2.6)=>`stroke="${VG_OL}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const vP=(d,f,w,x='')=>`<path d="${d}" fill="${f}" ${VOL(w)} ${x}/>`;
+const vE=(cx,cy,rx,ry,f,w,x='')=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${f}" ${VOL(w)} ${x}/>`;
+const vU=k=>`url(#vgp-${k})`;
+const vHL=(cx,cy,rx,ry,r=-30,o=.55)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#fff" opacity="${o}" transform="rotate(${r} ${cx} ${cy})"/>`;
+const vLine=(d,w=2.4,c=VG_OL)=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+function vFur(cx,cy,rx,ry,n,j,f,w){let d='';for(let k=0;k<n;k++){const a0=k/n*Math.PI*2-Math.PI/2,a1=(k+.5)/n*Math.PI*2-Math.PI/2,a2=(k+1)/n*Math.PI*2-Math.PI/2;const p0=[cx+Math.cos(a0)*rx,cy+Math.sin(a0)*ry],c=[cx+Math.cos(a1)*rx*(1+j*2),cy+Math.sin(a1)*ry*(1+j*2)],p2=[cx+Math.cos(a2)*rx,cy+Math.sin(a2)*ry];if(!k)d+=`M${p0[0].toFixed(1)},${p0[1].toFixed(1)}`;d+=` Q${c[0].toFixed(1)},${c[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`}return vP(d+'Z',f,w)}
+function vEye(x,y,r,o={}){const lx=o.lx||0,ly=o.ly==null?.12:o.ly,px=x+lx*r*.38,py=y+ly*r;let s=vE(x,y,r,r*1.12,o.sc||'#fff',2.2)+`<circle cx="${px}" cy="${py}" r="${r*.6}" fill="${o.pc||'#1e130e'}"/><circle cx="${px-r*.2}" cy="${py-r*.22}" r="${r*.24}" fill="#fff"/>`;if(o.lid)s+=vP(`M${x-r*1.06},${y-r*.05} A${r*1.06},${r*1.15} 0 0 1 ${x+r*1.06},${y-r*.05} Z`,o.lid,2.2);return s}
+const vShut=(x,y,r,up=1)=>vLine(`M${x-r},${y} Q${x},${y-r*1.1*up} ${x+r},${y}`,2.8);
+const vCheek=(x,y,rx=4.5)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${rx*.6}" fill="#ff7f6e" opacity=".45"/>`;
+const vMouth=(x,y,w,h,tongue=true)=>vP(`M${x-w},${y} Q${x},${y+h*2.2} ${x+w},${y} Q${x},${y+h*.5} ${x-w},${y}Z`,'#6e1f1f',2.2)+(tongue?`<ellipse cx="${x+w*.15}" cy="${y+h*1.05}" rx="${w*.42}" ry="${h*.42}" fill="#ff8c8c"/>`:'');
+const vFang=(x,y,s=1)=>`<path d="M${x-2*s},${y} L${x},${y+4*s} L${x+2*s},${y}Z" fill="#fff" stroke="${VG_OL}" stroke-width="1.2" stroke-linejoin="round"/>`;
+const vSpark=(x,y,s=1,d=0)=>`<g class="vg-twinkle" style="animation-delay:${d}s"><path d="M${x},${y-6*s} L${x+1.6*s},${y-1.6*s} L${x+6*s},${y} L${x+1.6*s},${y+1.6*s} L${x},${y+6*s} L${x-1.6*s},${y+1.6*s} L${x-6*s},${y} L${x-1.6*s},${y-1.6*s}Z" fill="#fff7b0" stroke="#e6b422" stroke-width="1"/></g>`;
+const vWisp=(x,y,s=1,c='#8fe3ff',d=0)=>`<g class="vg-flicker" style="animation-delay:${d}s"><circle cx="${x}" cy="${y-4*s}" r="${9*s}" fill="url(#vg-glow)" opacity=".7"/><path d="M${x},${y} C${x-6*s},${y-2*s} ${x-6*s},${y-9*s} ${x},${y-15*s} C${x+1*s},${y-9*s} ${x+6*s},${y-8*s} ${x+5*s},${y-3*s} C${x+4*s},${y} ${x+2*s},${y} ${x},${y}Z" fill="${c}" stroke="#2b6f99" stroke-width="1.4"/></g>`;
+const vFeet=(xs,y,f,rx=7,ry=4.5)=>xs.map(x=>vE(x,y,rx,ry,f,2.4)).join('');
+/* --- 캐릭터 16종 (오리지널 디자인) --- */
+const VG_CRE={
+ pebble_golem(){const R=vU('rock');return vE(-31,-17,7,9,R,2.6)+vE(31,-19,7,9,R,2.6)+vP('M-30,-4 C-35,-20 -30,-40 -18,-48 C-6,-56 12,-54 22,-46 C32,-38 35,-20 30,-4 C20,2 -20,2 -30,-4Z',R)+vLine('M-22,-12 l5,-4 l-2,-6',1.8)+vLine('M20,-32 l-4,3 l3,5',1.8)+vHL(-16,-38,7,3.5)+vFur(0,-49,20,7,9,.32,vU('moss'),2.4)+`<g transform="translate(8,-60)">${[0,72,144,216,288].map(a=>`<ellipse cy="-3" rx="2.4" ry="3.4" fill="#ffe36b" transform="rotate(${a})"/>`).join('')}<circle r="1.8" fill="#ff8a3d"/></g>`+vEye(-10,-29,7,{lid:R,ly:.25})+vEye(10,-29,7,{lid:R,ly:.25})+vLine('M-4,-16 Q0,-13 4,-16',2.4)+vCheek(-19,-19)+vCheek(19,-19)},
+ dirt_mole(){const M=vU('mole');return vFeet([-11,11],-2,M)+vFur(0,-30,26,28,15,.16,M)+`<ellipse cx="0" cy="-17" rx="15" ry="12" fill="#f0d0a6" opacity=".9"/>`+vHL(-12,-44,6,3)+vP('M0,-55 C-10,-66 -19,-61 -17,-54 C-11,-51 -5,-53 0,-55Z','url(#vg-leaf)',2.2)+vP('M0,-55 C8,-68 18,-64 16,-57 C10,-53 5,-54 0,-55Z','url(#vg-leaf)',2.2)+vShut(-12,-37,5)+vShut(12,-37,5)+vE(0,-30,8,6,'#ff9aa8',2.4)+vHL(-2,-32,2.5,1.4,0,.8)+vLine('M-5,-21 Q0,-17 5,-21',2.4)+`<rect x="-2.6" y="-20.5" width="5.2" height="4.5" rx="1" fill="#fff" stroke="${VG_OL}" stroke-width="1.3"/>`+vE(-21,-11,9,6,'#f6dfc0',2.4)+vE(21,-11,9,6,'#f6dfc0',2.4)+vLine('M-26,-9 l-2,3 M-21,-7 l-1,4 M26,-9 l2,3 M21,-7 l1,4',1.6)+vCheek(-19,-27)+vCheek(19,-27)},
+ mushroom_kid(){const C=vU('cream');return vFeet([-8,8],-2,C,6,4)+vE(-18,-18,4.5,7,C,2.4,'transform="rotate(25 -18 -18)"')+vE(18,-18,4.5,7,C,2.4,'transform="rotate(-25 18 -18)"')+vP('M-16,-2 C-20,-20 -18,-34 -14,-40 L14,-40 C18,-34 20,-20 16,-2 C8,2 -8,2 -16,-2Z',C)+vP('M-34,-38 C-36,-62 -18,-80 0,-80 C18,-80 36,-62 34,-38 C24,-32 -24,-32 -34,-38Z',vU('capblue'))+vP('M-30,-38 C-20,-34 20,-34 30,-38 C20,-42 -20,-42 -30,-38Z','#e8d6b8',1.8)+[[-18,-57,5.5],[4,-69,6],[21,-51,4.2],[-4,-50,3.4],[14,-64,3]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#ffe58a"/>`).join('')+vHL(-16,-66,8,4)+vEye(-7,-24,5.5,{ly:-.25})+vEye(7,-24,5.5,{ly:-.25})+vE(0,-12,3,3.6,'#6e1f1f',2)+vCheek(-12,-16,3.5)+vCheek(12,-16,3.5)},
+ honey_bee(){const H=vU('honey');return vE(-17,-54,11,15,'#e8f6ffcc',2.2,'transform="rotate(-35 -17 -54)"')+vE(17,-54,11,15,'#e8f6ffcc',2.2,'transform="rotate(35 17 -54)"')+vFeet([-9,9],-2,'#6b4320',5,3.5)+vFur(0,-29,26,26,16,.1,H)+vP('M-24,-23 Q0,-15 24,-23 L22,-16 Q0,-8 -22,-16Z','#6b4320',0,'stroke="none"')+vP('M-15,-10 Q0,-5 15,-10 L12,-5 Q0,-1 -12,-5Z','#6b4320',0,'stroke="none"')+vHL(-12,-44,6,3)+vLine('M-6,-53 Q-10,-65 -16,-68')+vLine('M6,-53 Q10,-65 16,-68')+`<circle cx="-16" cy="-68" r="3.6" fill="#6b4320" stroke="${VG_OL}" stroke-width="1.8"/><circle cx="16" cy="-68" r="3.6" fill="#6b4320" stroke="${VG_OL}" stroke-width="1.8"/>`+vEye(-9,-37,7,{lx:.3})+vEye(9,-37,7,{lx:.3})+vMouth(0,-28,5,3)+vCheek(-18,-29)+vCheek(18,-29)},
+ cactus_buddy(){const G=vU('cactus');return vE(0,-1,22,6,'#ecd096',2.4)+vP('M-16,-30 C-26,-30 -29,-38 -29,-46 C-29,-53 -20,-53 -20,-46 C-20,-41 -18,-38 -15,-38Z',G)+vP('M16,-22 C26,-22 29,-30 29,-37 C29,-44 20,-44 20,-37 C20,-33 18,-30 15,-30Z',G)+vP('M-17,-3 C-19,-30 -18,-56 0,-62 C18,-56 19,-30 17,-3 C8,0 -8,0 -17,-3Z',G)+vLine('M-7,-6 C-9,-30 -8,-48 -4,-57',1.6,'#3a8236')+vLine('M7,-6 C9,-30 8,-48 4,-57',1.6,'#3a8236')+[[-12,-20],[-12,-46],[12,-16],[13,-44],[0,-10],[-24,-44],[25,-35]].map(([x,y])=>`<path d="M${x-2},${y} l2,-2 l2,2" fill="none" stroke="#fff6cc" stroke-width="1.3"/>`).join('')+vHL(-9,-50,4,6,-10)+`<g transform="translate(0,-64)">${[0,72,144,216,288].map(a=>`<ellipse cy="-5" rx="4" ry="5.5" fill="#ff7fb0" stroke="${VG_OL}" stroke-width="1.6" transform="rotate(${a})"/>`).join('')}<circle r="3" fill="#ffe36b" stroke="${VG_OL}" stroke-width="1.4"/></g>`+vEye(-7,-38,5.5,{ly:.3})+vEye(7,-38,5.5,{ly:.3})+vLine('M-13,-47 L-3,-44',3)+vLine('M13,-47 L3,-44',3)+vLine('M-5,-27 Q-2,-30 0,-27 Q2,-24 5,-27',2.2)+vCheek(-12,-30,3.5)+vCheek(12,-30,3.5)},
+ moss_turtle(){const T=vU('turtle');return vE(-16,-4,6,5,T,2.4)+vE(20,-4,6,5,T,2.4)+vP('M33,-10 L42,-8 L34,-4Z',T,2.2)+vE(-28,-22,13,12,T)+vHL(-32,-28,4,2.4)+vEye(-33,-25,5,{lx:-.3})+vEye(-22,-26,5,{lx:-.3})+vLine('M-34,-15 Q-29,-11 -24,-15',2.2)+vCheek(-37,-17,3)+vP('M-20,-10 C-22,-34 -8,-46 8,-46 C26,-46 37,-32 35,-10 C22,-4 -10,-4 -20,-10Z',vU('shell'))+vLine('M-6,-12 L-2,-26 L12,-28 L20,-14 M-2,-26 L2,-40 M12,-28 L22,-38 M20,-14 L30,-24',1.6,'#6a4222')+vP('M-22,-10 C-10,-4 22,-4 37,-10 L37,-5 C22,1 -10,1 -22,-5Z','#d9b47a',2.2)+vFur(8,-44,21,7,10,.38,vU('moss'),2.2)+`<rect x="15" y="-62" width="4" height="12" rx="1.5" fill="#8a5a33" stroke="${VG_OL}" stroke-width="1.8"/>`+vFur(17,-65,9,7.5,8,.22,'url(#vg-leaf)',2)+vE(-4,-51,5,3.2,'#ff6a5a',1.8)+`<rect x="-5.2" y="-51" width="2.4" height="4" fill="#fff4e0"/>`},
+ ember_imp(){const I=vU('imp');return vFeet([-10,10],-2,I)+vP('M-14,-48 C-17,-60 -9,-63 -7,-72 C-2,-63 2,-66 4,-77 C9,-66 15,-63 14,-50Z',vU('flame'),2.4,'class="vg-flicker"')+vP('M-24,-22 C-26,-44 -14,-55 0,-55 C14,-55 26,-44 24,-22 C24,-6 14,0 0,0 C-14,0 -24,-6 -24,-22Z',I)+vP('M-4,-53 L0,-68 L4,-53Z',vU('ivory'),2.2)+vP('M-23,-13 C-12,-7 12,-7 23,-13 C21,-4 12,0 0,0 C-12,0 -21,-4 -23,-13Z','#ffcf4a',2.4)+vLine('M-14,-9 l2,6 M-4,-8 l1,7 M6,-8 l-1,7 M15,-10 l-2,6',2,'#3b2417')+vHL(-12,-42,6,3)+vEye(-9,-34,6.5,{lx:.2})+vEye(9,-34,6.5,{lx:.2})+vLine('M-15,-43 L-5,-41',2.8)+vLine('M15,-43 L5,-41',2.8)+vP('M-11,-22 Q0,-11 11,-22Z','#6e1f1f',2.2)+vFang(-6,-22)+vFang(6,-22)+vCheek(-17,-24)+vCheek(17,-24)+vP('M22,-14 L33,-42 L37,-40 L27,-12Z','#a0703f',2.2)+vE(36,-46,7,10,'#c58a4f',2.4,'transform="rotate(20 36 -46)"')+`<circle cx="34" cy="-50" r="1.6" fill="#fff4cc"/><circle cx="39" cy="-44" r="1.6" fill="#fff4cc"/>`+vE(22,-16,5,5,I,2.2)},
+ pumpkin_bat(){const P=vU('pumpkin'),W=vU('wing');return vP('M-18,-34 C-32,-48 -46,-46 -46,-30 C-40,-34 -36,-28 -32,-30 C-30,-24 -24,-24 -18,-24Z',W)+vP('M18,-34 C32,-48 46,-46 46,-30 C40,-34 36,-28 32,-30 C30,-24 24,-24 18,-24Z',W)+vP('M-16,-38 L-14,-54 L-6,-44Z',W,2.2)+vP('M16,-38 L14,-54 L6,-44Z',W,2.2)+vFeet([-8,8],-1,'#4c3680',5,3.5)+vE(-12,-23,14,21,P)+vE(12,-23,14,21,P)+vE(0,-23,15,23,P)+vHL(-6,-36,4,6,-10,.45)+vP('M-2,-45 C-2,-53 2,-56 5,-56 C5,-52 3,-48 3,-45Z','#5aa847',2.2)+vP('M4,-52 C10,-58 16,-54 12,-50 C9,-49 6,-50 4,-52Z','url(#vg-leaf)',1.8)+vEye(-8,-28,6,{lx:-.25})+vEye(8,-28,6,{lx:-.25})+vLine('M-9,-16 Q0,-9 9,-16',2.4)+vFang(-4.5,-14,.9)+vFang(4.5,-14,.9)+vCheek(-15,-19)+vCheek(15,-19)},
+ jelly_slime(){const S=vU('slime');return `<ellipse cx="-24" cy="-1" rx="4" ry="2.5" fill="#6fe0cf" stroke="${VG_OL}" stroke-width="1.6"/><ellipse cx="27" cy="-2" rx="3" ry="2" fill="#6fe0cf" stroke="${VG_OL}" stroke-width="1.6"/>`+vP('M-29,-2 C-31,-30 -18,-50 0,-52 C9,-52 13,-58 19,-61 C17,-55 19,-50 23,-44 C29,-34 31,-18 29,-2 C18,2 -18,2 -29,-2Z',S,2.6,'opacity=".95"')+`<circle cx="12" cy="-13" r="5.5" fill="#ff6f8a" opacity=".75"/><path d="M12,-18 q2,-5 6,-6" stroke="#3a8236" stroke-width="1.6" fill="none" opacity=".8"/><circle cx="-18" cy="-12" r="2.4" fill="#fff" opacity=".6"/><circle cx="20" cy="-30" r="1.8" fill="#fff" opacity=".6"/>`+vHL(-15,-39,8,4,-35,.75)+vEye(-10,-28,8,{lx:.15})+vEye(10,-28,8,{lx:.15})+vMouth(0,-16,5,3)+vCheek(-21,-19)+vCheek(21,-19)+vSpark(-30,-46,.9)},
+ crystal_golem(){const G=vU('golem'),C=vU('crystal');return vP('M-15,-44 L-11,-72 L-4,-46Z',C,2.2)+vP('M-3,-50 L4,-84 L11,-49Z',C,2.4)+vP('M10,-44 L22,-68 L23,-42Z',C,2.2)+vLine('M4,-80 L5,-54',1.4,'#fff')+vLine('M-11,-68 L-9,-50',1.2,'#fff')+vE(-33,-12,10,9,G)+vE(33,-12,10,9,G)+vP('M-28,-4 C-34,-22 -30,-42 -16,-48 C-4,-54 14,-52 24,-44 C33,-36 34,-20 28,-4 C18,2 -18,2 -28,-4Z',G)+vLine('M-20,-12 l6,-5 l-1,-7',1.8,'#d18cff')+vLine('M18,-30 l-5,4 l4,6',1.8,'#d18cff')+vHL(-16,-38,6,3,-30,.45)+`<circle cx="-9" cy="-30" r="9" fill="url(#vg-glow)" class="vg-glow"/><circle cx="9" cy="-30" r="9" fill="url(#vg-glow)" class="vg-glow"/>`+vE(-9,-30,4.5,5.5,'#b9fbff',2.2)+vE(9,-30,4.5,5.5,'#b9fbff',2.2)+vLine('M-6,-17 L6,-17',2.4)+vP('M-38,-14 L-34,-24 L-30,-14Z',C,1.8)},
+ cloud_whale(){const W=vU('whale');return vP('M24,-24 C33,-31 41,-42 45,-36 C48,-28 40,-20 28,-15Z',W)+vP('M-34,-24 C-34,-46 -14,-56 4,-54 C24,-52 32,-38 30,-20 C28,-6 14,0 -2,0 C-22,0 -34,-8 -34,-24Z',W)+vP('M-29,-14 C-18,-3 14,-3 25,-12 C15,-6 -16,-6 -29,-14Z','#eef8ff',1.8)+vLine('M-14,-7 l1,-4 M-4,-6 l0,-4 M6,-6 l0,-4',1.4,'#86c1f0')+vHL(-16,-42,9,4,-20)+`<g class="vg-water">${vLine('M2,-54 C-3,-64 -10,-66 -14,-62',3,'#5cb8ff')}${vLine('M2,-54 C7,-64 14,-66 18,-62',3,'#5cb8ff')}${vLine('M2,-54 L2,-68',3,'#5cb8ff')}<circle cx="-14" cy="-61" r="2.6" fill="#cfefff"/><circle cx="18" cy="-61" r="2.6" fill="#cfefff"/></g>`+vEye(-15,-29,6.5,{lx:.3})+vEye(4,-29,6.5,{lx:.3})+vLine('M-20,-17 Q-6,-9 10,-17',2.4)+vCheek(-24,-20)+vCheek(14,-20)+[[-26,-2,9,6],[-12,2,10,6],[14,2,10,6],[27,-2,8,5]].map(a=>vE(...a,'#fff',2.2)).join('')+vSpark(30,-48,.8)},
+ wisp_owl(){const O=vU('owl');return vP('M-17,-50 L-25,-68 L-7,-55Z',O,2.4)+vP('M17,-50 L25,-68 L7,-55Z',O,2.4)+vP('M-22,-6 C-27,-30 -20,-57 0,-59 C20,-57 27,-30 22,-6 C14,0 -14,0 -22,-6Z',O)+vE(-23,-22,6,13,O,2.4,'transform="rotate(12 -23 -22)"')+vE(23,-22,6,13,O,2.4,'transform="rotate(-12 23 -22)"')+`<ellipse cx="0" cy="-17" rx="12" ry="11" fill="#cfe0f5" opacity=".9"/>`+vLine('M-6,-20 l2,2 l2,-2 M2,-20 l2,2 l2,-2 M-3,-13 l2,2 l2,-2',1.4,'#4a6fb0')+`<ellipse cx="-9" cy="-38" rx="11" ry="11" fill="#e9eef7"/><ellipse cx="9" cy="-38" rx="11" ry="11" fill="#e9eef7"/>`+vHL(-13,-50,5,2.5)+vEye(-9,-38,7.5,{sc:'#ffd94a'})+vEye(9,-38,7.5,{sc:'#ffd94a'})+vP('M-3,-31 L0,-25 L3,-31Z','#ff9a3a',1.8)+vFeet([-7,7],-1,'#ff9a3a',5,3)+vWisp(-32,-44,.9,'#8fe3ff',0)+vWisp(33,-56,.8,'#8fe3ff',.3)+vWisp(32,-12,.7,'#b0f0ff',.6)},
+ baby_haetae(){const M=vU('mane'),Gd=vU('gold');return `<ellipse class="vg-aura" cx="0" cy="-38" rx="46" ry="44" fill="url(#vga-baby_haetae)"/>`+vP('M16,-12 C30,-12 34,-26 28,-34 C24,-38 18,-34 22,-30',`none`,2.6)+vFur(29,-36,6,6,6,.25,M,2)+vFur(0,-44,30,28,16,.2,M)+vFeet([-11,11],-2,Gd)+vE(0,-17,17,14,Gd)+vE(0,-44,20,18,Gd)+vHL(-9,-54,6,3)+vP('M-3,-60 L0,-74 L3,-60Z',vU('ivory'),2.2)+vEye(-8,-47,6.5,{lx:.15})+vEye(8,-47,6.5,{lx:.15})+vLine('M-14,-55 Q-8,-58 -3,-55',2.6)+vLine('M14,-55 Q8,-58 3,-55',2.6)+vE(0,-38,6,4,'#e07a5a',2.2)+vP('M-9,-33 Q0,-25 9,-33Z','#6e1f1f',2.2)+vFang(-5,-33,.9)+vFang(5,-33,.9)+vCheek(-15,-37)+vCheek(15,-37)+vP('M-14,-28 Q0,-23 14,-28 L13,-25 Q0,-20 -13,-25Z','#e8455a',1.8)+vE(0,-21,4.5,4.5,Gd,2)+vSpark(-34,-62,1)+vSpark(34,-70,.8,.8)},
+ baby_dragon(){const D=vU('dragon');return `<ellipse class="vg-aura" cx="0" cy="-38" rx="46" ry="44" fill="url(#vga-baby_dragon)"/>`+vP('M-14,-30 C-34,-50 -45,-40 -43,-30 C-37,-34 -34,-26 -28,-28 C-26,-22 -20,-22 -14,-22Z',D)+vP('M14,-30 C34,-50 45,-40 43,-30 C37,-34 34,-26 28,-28 C26,-22 20,-22 14,-22Z',D)+vP('M12,-8 C26,-4 34,-14 38,-26 L44,-24 L39,-33 C36,-22 26,-14 13,-16Z',D,2.4)+vFeet([-10,10],-2,D)+vE(0,-17,17,15,D)+`<ellipse cx="0" cy="-14" rx="10" ry="10" fill="#fff0b8"/>`+vLine('M-7,-18 L7,-18 M-8,-12 L8,-12',1.3,'#e0b860')+[-12,-4,4,12].map((x,i)=>vP(`M${x-3},-60 L${x},-${66+(i%3?2:0)} L${x+3},-60Z`,'#ffcf4a',1.6)).join('')+vP('M-12,-58 C-15,-68 -12,-74 -8,-78 C-8,-70 -6,-64 -5,-60Z',vU('ivory'),2.2)+vP('M12,-58 C15,-68 12,-74 8,-78 C8,-70 6,-64 5,-60Z',vU('ivory'),2.2)+vE(0,-44,22,19,D)+vHL(-10,-55,7,3.5)+vE(0,-35,12,8,'#c9f5d9',2.2)+`<ellipse cx="-4" cy="-37" rx="1.6" ry="1.2" fill="${VG_OL}"/><ellipse cx="4" cy="-37" rx="1.6" ry="1.2" fill="${VG_OL}"/>`+vEye(-10,-48,6.5,{lx:.2})+vEye(10,-48,6.5,{lx:.2})+vLine('M-5,-31 Q0,-28 5,-31',2.2)+vFang(3,-30.5,.7)+vCheek(-17,-38)+vCheek(17,-38)+vSpark(-33,-62,1)+vSpark(32,-72,.8,.9)},
+ moon_kitsune(){const F=vU('fox');let t='';for(let i=0;i<9;i++){const a=-168+i*19.5,r=a*Math.PI/180,cx=(Math.cos(r)*30).toFixed(1),cy=(-26+Math.sin(r)*26).toFixed(1);t+=`<g transform="translate(${cx},${cy}) rotate(${(a+90).toFixed(1)})">${vE(0,0,8,19,F,2.2)}<path d="M-6,-10 C-4,-20 4,-20 6,-10 C3,-14 -3,-14 -6,-10Z" fill="#8fd8ff"/></g>`}
+   return `<ellipse class="vg-aura" cx="0" cy="-38" rx="48" ry="46" fill="url(#vga-moon_kitsune)"/>`+t+vFeet([-9,9],-2,F,6,4)+vE(0,-18,16,15,F)+vP('M-21,-52 L-17,-77 L-4,-61Z',F,2.4)+vP('M-16,-57 L-15,-70 L-9,-61Z','#ffb8d0',0,'stroke="none"')+vP('M21,-52 L17,-77 L4,-61Z',F,2.4)+vP('M16,-57 L15,-70 L9,-61Z','#ffb8d0',0,'stroke="none"')+vE(0,-44,23,19,F)+vHL(-10,-54,7,3.5)+vP('M3,-60 A6,6 0 1,1 -3,-52 A4.6,4.6 0 1,0 3,-60Z','#ffcf3a',1.4)+vLine('M-15,-46 Q-10,-50 -4,-46',2.8)+vLine('M15,-46 Q10,-50 4,-46',2.8)+`<path d="M-16,-44 l-3,2 M16,-44 l3,2" stroke="#e8455a" stroke-width="2" stroke-linecap="round"/>`+`<ellipse cx="0" cy="-38" rx="2.4" ry="1.7" fill="${VG_OL}"/>`+vLine('M-4,-34 Q-2,-32 0,-34 Q2,-32 4,-34',2)+vCheek(-14,-37)+vCheek(14,-37)+vWisp(-38,-64,.8,'#8fd8ff',0)+vWisp(38,-58,.8,'#8fd8ff',.4)+vSpark(0,-86,.9,.6)},
+ rainbow_phoenix(){const P=vU('phoenix');return `<ellipse class="vg-aura" cx="0" cy="-38" rx="50" ry="46" fill="url(#vga-rainbow_phoenix)"/>`+[[-150,'#ff6f9a'],[-125,'#ffc35a'],[-100,'#7fdc6a'],[-75,'#5cb8ff'],[-50,'#a77cff']].map(([a,c],i)=>{const r=a*Math.PI/180;return `<g transform="translate(${(Math.cos(r)*22).toFixed(1)},${(-18+Math.sin(r)*16).toFixed(1)}) rotate(${a+90})">${vE(0,-10,6.5,18,c,2.2)}<circle cx="0" cy="-20" r="3" fill="#fff6c0"/></g>`}).join('')+vP('M-16,-28 C-38,-38 -46,-56 -40,-64 C-38,-54 -30,-50 -26,-52 C-28,-44 -22,-40 -18,-42 C-20,-36 -16,-32 -12,-32Z','url(#vg-rainbow)')+vP('M16,-28 C38,-38 46,-56 40,-64 C38,-54 30,-50 26,-52 C28,-44 22,-40 18,-42 C20,-36 16,-32 12,-32Z','url(#vg-rainbow)')+vFeet([-7,7],-1,'#ff9a3a',5,3)+vP('M-21,-30 C-24,-50 -12,-60 0,-60 C12,-60 24,-50 21,-30 C20,-10 10,0 0,0 C-10,0 -20,-10 -21,-30Z',P)+`<ellipse cx="0" cy="-16" rx="11" ry="12" fill="#fff1c8" opacity=".9"/>`+vP('M-2,-59 C-8,-70 -4,-80 0,-83 C0,-75 4,-73 7,-79 C11,-72 8,-64 3,-59Z',vU('flame'),2.2,'class="vg-flicker"')+vHL(-10,-48,6,3)+vEye(-8,-40,6.5,{lx:.2})+vEye(8,-40,6.5,{lx:.2})+vP('M-4,-32 Q0,-29 4,-32 L0,-25Z','#ffb02e',1.8)+vCheek(-14,-31)+vCheek(14,-31)+vSpark(-34,-74,1)+vSpark(36,-70,.8,.7)}
+};
+function vgCreature(key){const f=VG_CRE[key];return f?`<g>${f()}</g>`:''}
+function vgEgg(key){const g=key==='egg_gold';return `<g><ellipse cx="0" cy="-1" rx="20" ry="5" fill="#0002"/><path d="M0,-62 C16,-62 24,-34 24,-22 C24,-6 13,0 0,0 C-13,0 -24,-6 -24,-22 C-24,-34 -16,-62 0,-62Z" fill="url(#${g?'vg-egg2':'vg-egg1'})" stroke="${VG_OL}" stroke-width="2.6"/>${g?`<path d="M-22,-26 L-14,-32 L-6,-24 L2,-32 L10,-24 L18,-32 L23,-27" fill="none" stroke="#fff3b0" stroke-width="3" stroke-linejoin="round"/><path d="M0,-46 l2,-5 l2,5 l5,2 l-5,2 l-2,5 l-2,-5 l-5,-2Z" fill="#fff" class="vg-twinkle"/>`:`<circle cx="-8" cy="-36" r="5" fill="#b58cf0" opacity=".7"/><circle cx="9" cy="-22" r="6.5" fill="#8fd3ff" opacity=".7"/><circle cx="6" cy="-46" r="3.5" fill="#ff9fc4" opacity=".75"/><circle cx="-10" cy="-14" r="3" fill="#ffd36b" opacity=".8"/>`}<ellipse cx="-9" cy="-46" rx="5" ry="8" fill="#fff" opacity=".55" transform="rotate(20 -9 -46)"/></g>`}
+function vgDeco(key){const st=`stroke="${VG_OL}" stroke-width="2.2" stroke-linejoin="round"`;switch(key){
+  case 'tree':return `<g><ellipse cx="0" cy="0" rx="20" ry="7" fill="#0002"/><path d="M-5,0 L-4,-24 L4,-24 L5,0Z" fill="#a7744a" ${st}/><circle cx="-12" cy="-36" r="15" fill="url(#vg-leaf)" ${st}/><circle cx="12" cy="-38" r="15" fill="url(#vg-leaf)" ${st}/><circle cx="0" cy="-54" r="17" fill="url(#vg-leaf)" ${st}/><circle cx="-7" cy="-58" r="5" fill="#d7ffb2" opacity=".7"/><circle cx="8" cy="-40" r="3" fill="#ff7a8a"/><circle cx="-12" cy="-30" r="3" fill="#ff7a8a"/></g>`;
+  case 'flower':{let f='';[[-14,-6,'#ff8fb1'],[0,-10,'#ffd34d'],[13,-4,'#b48cff'],[-4,2,'#7fc8ff'],[8,6,'#ff8fb1'],[-16,6,'#ffd34d']].forEach(([x,y,c])=>{f+=`<path d="M${x},${y} l0,-8" stroke="#4fa94a" stroke-width="2"/><g transform="translate(${x},${y-10})">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-3.2" rx="2.6" ry="3.6" fill="${c}" transform="rotate(${a})"/>`).join('')}<circle r="2" fill="#fff6b0"/></g>`});return `<g><ellipse cx="0" cy="2" rx="26" ry="10" fill="#7cc95e" opacity=".85"/>${f}</g>`}
+  case 'bush':return `<g><ellipse cx="0" cy="0" rx="22" ry="7" fill="#0002"/><circle cx="-11" cy="-10" r="11" fill="url(#vg-leaf)" ${st}/><circle cx="11" cy="-10" r="11" fill="url(#vg-leaf)" ${st}/><circle cx="0" cy="-18" r="13" fill="url(#vg-leaf)" ${st}/>${[[-8,-18],[6,-22],[12,-8],[-14,-6],[2,-10]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#ff5f7e"/>`).join('')}</g>`;
+  case 'fence':return `<g>${[-26,-9,9,26].map((x,i)=>`<path d="M${x-4},${-4+x*.5} L${x-4},${-26+x*.5} L${x},${-31+x*.5} L${x+4},${-26+x*.5} L${x+4},${-4+x*.5}Z" fill="#e8b878" ${st}/>`).join('')}<path d="M-30,-14 L30,16 L30,10 L-30,-20Z" fill="#d49a5a" ${st}/><path d="M-30,-4 L30,26 L30,20 L-30,-10Z" fill="#d49a5a" ${st}/></g>`;
+  case 'lamp':return `<g><ellipse cx="0" cy="0" rx="10" ry="4" fill="#0002"/><rect x="-2.5" y="-50" width="5" height="50" rx="2" fill="#5a5470" ${st}/><circle class="vg-glow" cx="0" cy="-58" r="16" fill="#fff3a0" opacity=".45"/><path d="M-9,-52 L9,-52 L7,-66 L-7,-66Z" fill="#fff6c2" ${st}/><path d="M-11,-66 L11,-66 L0,-74Z" fill="#5a5470" ${st}/></g>`;
+  case 'bench':return `<g><ellipse cx="0" cy="2" rx="26" ry="7" fill="#0002"/><path d="M-26,-14 L22,10 L26,6 L-22,-18Z" fill="#c98a52" ${st}/><path d="M-24,-20 L22,3 L22,-7 L-24,-30Z" fill="#e0a468" ${st}/><path d="M-22,-14 L-22,-2 M20,8 L20,18 M-14,-20 L-14,-8 M26,6 L26,14" stroke="#7a5a3a" stroke-width="3"/></g>`;
+  case 'pond':return `<g><path d="M-32,0 C-30,-12 -10,-16 0,-15 C16,-14 32,-10 32,0 C32,10 14,15 0,15 C-16,15 -34,10 -32,0Z" fill="#c9b796" ${st}/><path d="M-26,0 C-24,-9 -8,-11 0,-11 C14,-10 26,-7 26,0 C26,7 12,10 0,10 C-14,10 -28,7 -26,0Z" fill="url(#vg-water)"/><ellipse class="vg-water" cx="-6" cy="-3" rx="8" ry="2" fill="#fff" opacity=".6"/><ellipse cx="12" cy="3" rx="6" ry="3" fill="#7ccf63"/><path d="M12,3 L17,1" stroke="#4fa94a" stroke-width="1.5"/><circle cx="10" cy="1" r="2" fill="#ffb3cf"/></g>`;
+  case 'mushroom_house':return `<g><ellipse cx="0" cy="0" rx="28" ry="9" fill="#0002"/><path d="M-18,0 L-16,-34 L16,-34 L18,0Z" fill="#fff4e2" ${st}/><path d="M-6,0 L-6,-16 Q0,-22 6,-16 L6,0Z" fill="#b97a4a" ${st}/><circle cx="3.5" cy="-8" r="1.2" fill="#ffd34d"/><rect x="8" y="-26" width="7" height="7" rx="2" fill="#9fd8ff" ${st}/><path d="M-34,-32 C-34,-60 -14,-72 0,-72 C14,-72 34,-60 34,-32 C20,-26 -20,-26 -34,-32Z" fill="#ff6a6a" ${st}/><circle cx="-16" cy="-50" r="6" fill="#fff"/><circle cx="6" cy="-60" r="5" fill="#fff"/><circle cx="20" cy="-42" r="4.5" fill="#fff"/><circle cx="-4" cy="-40" r="3.5" fill="#fff"/></g>`;
+  case 'windmill':return `<g><ellipse cx="0" cy="0" rx="26" ry="8" fill="#0002"/><path d="M-16,0 L-10,-62 L10,-62 L16,0Z" fill="#fff1dc" ${st}/><path d="M-14,-62 L0,-80 L14,-62Z" fill="#e0785a" ${st}/><path d="M-5,0 L-5,-14 Q0,-19 5,-14 L5,0Z" fill="#b97a4a"/><circle cx="0" cy="-36" r="4" fill="#9fd8ff" ${st}/><g transform="translate(0,-62)"><g class="vg-spin">${[0,90,180,270].map(a=>`<g transform="rotate(${a})"><rect x="-1.5" y="-38" width="3" height="36" fill="#8a6238"/><rect x="1.5" y="-36" width="10" height="28" rx="2" fill="#fff" ${st}/></g>`).join('')}<circle r="4.5" fill="#8a6238" ${st}/></g></g></g>`;
+  case 'fountain':return `<g><ellipse cx="0" cy="0" rx="30" ry="10" fill="#0002"/><path d="M-30,-6 L-30,0 C-30,8 30,8 30,0 L30,-6Z" fill="#c9c3d8" ${st}/><ellipse cx="0" cy="-6" rx="30" ry="10" fill="#e2dcf0" ${st}/><ellipse cx="0" cy="-6" rx="25" ry="7.5" fill="url(#vg-water)"/><rect x="-4" y="-34" width="8" height="28" fill="#e2dcf0" ${st}/><ellipse cx="0" cy="-34" rx="13" ry="4.5" fill="#e2dcf0" ${st}/><ellipse cx="0" cy="-35" rx="10" ry="3" fill="url(#vg-water)"/><g class="vg-water"><path d="M0,-36 C-2,-48 -10,-50 -14,-38 M0,-36 C2,-48 10,-50 14,-38 M0,-36 L0,-52" fill="none" stroke="#9be3ff" stroke-width="3" stroke-linecap="round"/></g><circle cx="0" cy="-54" r="2.6" fill="#d8f4ff"/></g>`;
+  case 'stone_path':return `<g><ellipse cx="-12" cy="-2" rx="9" ry="4.5" fill="#d8d2c4" ${st}/><ellipse cx="6" cy="-6" rx="8" ry="4" fill="#cfc8b8" ${st}/><ellipse cx="14" cy="5" rx="9" ry="4.5" fill="#d8d2c4" ${st}/><ellipse cx="-4" cy="7" rx="7" ry="3.5" fill="#cfc8b8" ${st}/></g>`;
+  default:return ''}}
+function vgArt(key,kind){const im=(typeof VG!=='undefined'&&VG.cat[key]&&VG.cat[key].image_url)||'';if(im){const u=String(im).replace(/["<>&]/g,'');return `<g class="${VG.cat[key].kind==='animal'?'vg-bob':''}"><image href="${u}" x="-44" y="-92" width="88" height="94" preserveAspectRatio="xMidYMax meet"/></g>`}if(kind==='egg'||key.startsWith('egg_'))return vgEgg(key);if(VG_CRE[key])return `<g class="vg-bob">${vgCreature(key)}</g>`;return vgDeco(key)}
+const VG_VB={windmill:'-52 -112 104 120',pond:'-40 -40 80 64',stone_path:'-30 -30 60 46',flower:'-32 -40 64 54',fence:'-36 -48 72 80',bench:'-34 -44 68 62',bush:'-30 -44 60 54'};
+function vgArtSvg(key,cls='vg-art',vb){vb=vb||VG_VB[key]||'-48 -96 96 102';return `<svg class="${cls}" viewBox="${vb}" aria-hidden="true">${vgArt(key)}</svg>`}
+
+
+/* ===== 동물 마을: 화면 · 동작 ===== */
+const VG={catalog:[],cat:{},state:null,off:0,view:'mine',friend:null,friendState:null,mode:null,sel:null,tab:'shop',shopCat:'animal',zoom:1,ticker:null,friends:null,liked:new Set(),drag:null,moved:false,ready:false,setup:false,err:''};
+const VG_EXPAND=[0,2000,6000,18000];
+const vgN=v=>Math.floor(Number(v)||0).toLocaleString();
+function vgToast(msg,err){document.querySelectorAll('.vg-toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='vg-toast'+(err?' err':'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function vgSeen(){try{const uid=window.fitVillage?.me()||'x';return new Set(JSON.parse(localStorage.getItem('fitVgSeen_'+uid)||'[]'))}catch(e){return new Set()}}
+function vgMarkSeen(keys){try{const uid=window.fitVillage?.me()||'x',s=vgSeen();keys.forEach(k=>s.add(k));localStorage.setItem('fitVgSeen_'+uid,JSON.stringify([...s]))}catch(e){}}
+function vgSetState(st){if(!st)return;VG.state=st;VG.off=new Date(st.server_time).getTime()-Date.now();vgMarkSeen((st.items||[]).map(i=>i.item_key))}
+function vgSize(level){return 6+2*(Number(level)||1)}
+function vgEcon(items){let r=0,ch=0;(items||[]).forEach(i=>{if(i.x==null)return;const c=VG.cat[i.item_key];if(!c)return;if(c.kind==='animal')r+=Number(c.rate)||0;else if(c.kind==='deco')ch+=Number(c.charm)||0});const mult=1+Math.min(ch,300)/300;return {rate:r,charm:ch,mult,hour:r*mult,cap:r*mult*12}}
+function vgLive(){const st=VG.state;if(!st?.village)return {pending:0,cap:0};const e=vgEcon(st.items),v=st.village,p=Number(v.pending)||0,hrs=Math.max(0,(Date.now()+VG.off-new Date(v.last_collect).getTime())/36e5);return {pending:Math.max(p,Math.min(e.cap,p+e.hour*hrs)),cap:e.cap,e}}
+
+function companionPage(){return `${head('🏡 동물 마을','동물을 배치하면 시간이 지날수록 코인이 쌓여요. 코인으로 친구들을 데려오고 마을을 꾸며 보세요.',`<button data-go="workspace">운동 공유하고 +100 코인 →</button>`)}
+  <div class="vg-root" id="vgRoot">${vgDefs()}<div class="vg-hud" id="vgHud"></div>
+  <div class="vg-layout"><div class="vg-stage" id="vgStage"><div class="vg-empty" style="padding:120px 0">마을을 불러오는 중…</div></div><aside class="vg-side" id="vgSide"></aside></div></div>`}
+
+async function wireCompanion(){
+  if(VG.ticker){clearInterval(VG.ticker);VG.ticker=null}
+  VG.view='mine';VG.mode=null;VG.sel=null;VG.friend=null;
+  vgBindOnce();
+  const stage=$('#vgStage');
+  try{
+    if(!window.fitVillage)throw new Error('로그인 연결이 아직 준비되지 않았습니다. 잠시 후 다시 열어 주세요.');
+    if(!VG.catalog.length){VG.catalog=await window.fitVillage.catalog();VG.cat={};VG.catalog.forEach(c=>VG.cat[c.item_key]=c)}
+    vgSetState(await window.fitVillage.init());
+    VG.ready=true;VG.setup=false;
+    window.fitVillage.likedToday().then(s=>{VG.liked=s}).catch(()=>{});
+    vgAll(true);
+    VG.ticker=setInterval(vgTick,1000);
+  }catch(e){
+    VG.ready=false;
+    if(e.setup){stage.innerHTML=`<div style="padding:28px"><div class="vg-setup"><b style="font-size:18px">🛠 마을 데이터베이스 설정이 필요합니다</b><br>Supabase → SQL Editor에서 <b>fit_village_setup.sql</b>을 한 번 실행한 뒤 이 페이지를 새로고침해 주세요.</div></div>`}
+    else stage.innerHTML=`<div style="padding:28px"><div class="vg-setup"><b style="font-size:18px">마을을 열 수 없어요</b><br>${esc(e.message||String(e))}<br><button class="vg-btn gold sm" id="vgRetry" style="margin-top:10px">다시 불러오기</button></div></div>`;
+    $('#vgRetry')?.addEventListener('click',wireCompanion);
+  }
 }
+function vgAll(center){vgRenderHud();vgRenderStage(center);vgRenderSide()}
+function vgTick(){if(!document.getElementById('vgRoot')){clearInterval(VG.ticker);VG.ticker=null;return}const L=vgLive(),pe=$('#vgPending'),bar=$('#vgBar');if(pe)pe.textContent=vgN(L.pending);if(bar)bar.style.width=(L.cap?Math.min(100,L.pending/L.cap*100):0)+'%';const full=$('#vgFull');if(full)full.textContent=L.cap&&L.pending>=L.cap-0.01?'창고 가득! 수확해 주세요':`최대 ${vgN(L.cap)} (12시간분)`;const map=$('#vgMap');if(map&&VG.view==='mine')map.classList.toggle('vg-has-pending',L.pending>=1);const cb=$('#vgCollect');if(cb)cb.disabled=L.pending<1}
+
+function vgRenderHud(){const st=VG.state;if(!st?.village)return;const v=st.village,L=vgLive(),e=L.e,lvl=Number(v.land_level)||1,N=vgSize(lvl),next=VG_EXPAND[lvl];
+  $('#vgHud').innerHTML=`
+  <div class="vg-chip"><div class="vg-chip-ic">${vgCoinIcon(24)}</div><div><small>보유 코인</small><b id="vgCoins">${vgN(v.coins)}</b></div></div>
+  <div class="vg-chip"><div class="vg-chip-ic" style="background:#e5f7dc">⏱</div><div><small>시간당 생산</small><b>${vgN(e.hour)}</b></div></div>
+  <div class="vg-chip"><div class="vg-chip-ic" style="background:#ffe8f1">✨</div><div><small>매력도 보너스</small><b>+${Math.round((e.mult-1)*100)}%</b> <small style="display:inline">(${e.charm}/300)</small></div></div>
+  <div class="vg-chip"><div class="vg-chip-ic" style="background:#e8f0ff">🗺</div><div><small>마을 땅</small><b>${N}×${N}</b></div>${next?`<button class="vg-btn sm" id="vgExpand" title="땅을 넓혀요">확장 ${vgCoinIcon(14)} ${vgN(next)}</button>`:'<small style="display:inline">최대</small>'}</div>
+  <div class="vg-chip"><div class="vg-chip-ic" style="background:#fff0f5">💗</div><div><small>받은 좋아요</small><b>${vgN(v.likes_received)}</b></div></div>
+  <div class="vg-collect"><div class="vg-collect-info"><small>쌓인 코인</small><b>${vgCoinIcon(18)} <span id="vgPending">${vgN(L.pending)}</span></b><div class="vg-store-bar"><span id="vgBar" style="width:${L.cap?Math.min(100,L.pending/L.cap*100):0}%"></span></div><small id="vgFull" style="font-weight:600">최대 ${vgN(L.cap)} (12시간분)</small></div><button class="vg-btn gold" id="vgCollect" ${L.pending<1?'disabled':''}>수확하기</button></div>`;
+  $('#vgCollect').onclick=vgCollect;$('#vgExpand')&&($('#vgExpand').onclick=vgExpand)}
+
+function vgGeom(N){const top=130,W=N*72+170,H=N*36+top+70,ox=W/2;return {N,top,W,H,ox,c:(x,y)=>[(x-y)*36+ox,(x+y)*18+18+top]}}
+function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeom(N),D=24;let t='';
+  const L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18],T=[G.ox,G.top];
+  t+=`<ellipse cx="${G.ox}" cy="${B[1]+D+16}" rx="${N*30}" ry="${N*5}" fill="#5a8ab0" opacity=".12"/>`;
+  t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+D} ${L[0]},${L[1]+D}" fill="#c58f5c"/><polygon points="${B} ${R} ${R[0]},${R[1]+D} ${B[0]},${B[1]+D}" fill="#a87346"/>`;
+  t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+7} ${L[0]},${L[1]+7}" fill="#6fbf55"/><polygon points="${B} ${R} ${R[0]},${R[1]+7} ${B[0]},${B[1]+7}" fill="#5aa847"/>`;
+  for(let i=1;i<N;i+=2){const a=[(i-N)*36+G.ox,(i+N)*18+G.top],b=[(N-i)*36+G.ox,(N+i)*18+G.top];t+=`<circle cx="${a[0]}" cy="${a[1]+15}" r="2.5" fill="#e3b27f"/><circle cx="${b[0]}" cy="${b[1]+17}" r="2" fill="#d19b66"/>`}
+  t+=`<polygon points="${T} ${R} ${B} ${L}" fill="#8fd46c" stroke="#7cc95e" stroke-width="2"/>`;
+  for(let x=0;x<N;x++)for(let y=0;y<N;y++){const [cx,cy]=G.c(x,y),h=(x*7+y*13)%5;t+=`<polygon class="vg-tile" data-tile="${x},${y}" points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a4e080':'#98d975'}" stroke="#8acd69" stroke-width=".8"/>`;if(h===0)t+=`<path d="M${cx-8},${cy+4} l2,-6 l2,6 M${cx+10},${cy-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`}
+  const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N).sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.x-b.x);
+  items.forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(i.item_key==='windmill'?1.05:1);
+    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${sc})">${vgArt(i.item_key,c.kind)}</g>${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
+  t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
+  return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
+
+function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
+  const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
+  const liked=friend&&VG.liked.has(VG.friend.user_id);
+  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div>`;
+  const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요 <button class="vg-btn sm" id="vgCancel">취소 (Esc)</button></div>`:'';
+  stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
+  <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
+  <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
+  const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);
+  stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
+  vgTick()}
+
+function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&VG.mode&&document.getElementById('vgRoot'))vgCancelMode()});
+  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0)return;VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
+  document.addEventListener('pointermove',e=>{const d=VG.drag;if(d){const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!VG.moved&&Math.hypot(dx,dy)>6){VG.moved=true;d.sc.classList.add('dragging')}if(VG.moved){d.sc.scrollLeft=d.l-dx;d.sc.scrollTop=d.t-dy}}
+    if(VG.mode&&!VG.moved){const tile=e.target.closest&&e.target.closest('[data-tile]');vgGhostAt(tile)}});
+  document.addEventListener('pointerup',()=>{if(VG.drag){VG.drag.sc.classList.remove('dragging');VG.drag=null}});
+  document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#vgScroll'))return;if(VG.moved){VG.moved=false;return}
+    const it=e.target.closest('[data-item]'),tile=e.target.closest('[data-tile]');
+    if(VG.view==='friend'){if(it)vgHop(it);return}
+    if(VG.mode){if(tile){const [x,y]=tile.dataset.tile.split(',').map(Number);vgPlace(VG.mode.id,x,y)}return}
+    if(it){const id=it.dataset.item;VG.sel=VG.sel===id?null:id;document.querySelectorAll('#vgMap .vg-item').forEach(g=>g.classList.toggle('sel',g.dataset.item===VG.sel));if(VG.sel)vgHop(it);vgRenderSide();return}
+    if(VG.sel){VG.sel=null;document.querySelectorAll('#vgMap .vg-item.sel').forEach(g=>g.classList.remove('sel'));vgRenderSide()}},true);
+}
+function vgHop(g){const inner=g.querySelector('.vg-bob');if(!inner)return;inner.classList.remove('vg-hop');void inner.getBBox();inner.classList.add('vg-hop');setTimeout(()=>inner.classList.remove('vg-hop'),700)}
+function vgOcc(exceptId){const m=new Set();(VG.state.items||[]).forEach(i=>{if(i.x!=null&&i.id!==exceptId)m.add(i.x+','+i.y)});return m}
+function vgGhostAt(tile){const gh=document.getElementById('vgGhost');if(!gh)return;document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.bad').forEach(t=>{t.classList.remove('hl','bad');t.style.fill=''});if(!tile){gh.style.display='none';return}
+  const [x,y]=tile.dataset.tile.split(',').map(Number),G=vgGeom(vgSize(VG.state.village.land_level)),[cx,cy]=G.c(x,y),bad=vgOcc(VG.mode.id).has(x+','+y),c=VG.cat[VG.mode.key]||{};
+  tile.style.fill=bad?'#ffb3b3':'#e2ffc8';tile.classList.add(bad?'bad':'hl');
+  if(gh.dataset.key!==VG.mode.key){gh.innerHTML=`<g transform="scale(${c.kind==='animal'?.86:1})">${vgArt(VG.mode.key,c.kind)}</g>`;gh.dataset.key=VG.mode.key}
+  gh.setAttribute('transform',`translate(${cx},${cy+4})`);gh.style.display='';gh.style.opacity=bad?.35:.8}
+function vgStartPlace(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;VG.mode={id,key:it.item_key};VG.sel=null;if(VG.view!=='mine'){VG.view='mine';VG.friend=null}vgRenderStage();vgRenderSide()}
+function vgCancelMode(){VG.mode=null;vgRenderStage();vgRenderSide()}
+
+async function vgRun(fn,okMsg){try{const r=await fn();return r}catch(e){vgToast(e.setup?'Supabase에 마을 SQL 설정이 필요합니다.':(e.message||String(e)),true);return null}}
+async function vgCollect(){const btn=$('#vgCollect');if(btn)btn.disabled=true;const r=await vgRun(()=>window.fitVillage.collect());if(!r){vgTick();return}vgSetState(r);vgRenderHud();vgTick();const g=Number(r.gained)||0;
+  const box=$('#vgCollect')?.getBoundingClientRect();if(box&&g>0){const f=document.createElement('div');f.className='vg-float';f.style.position='fixed';f.style.left=(box.left+box.width/2)+'px';f.style.top=(box.top-6)+'px';f.innerHTML=`+${vgN(g)} ${vgCoinIcon(20)}`;document.body.appendChild(f);setTimeout(()=>f.remove(),1400)}
+  vgToast(g>0?`코인 ${vgN(g)}개를 수확했어요!`:'아직 수확할 코인이 없어요.');vgRenderSide()}
+async function vgPlace(id,x,y){if(x!=null&&vgOcc(id).has(x+','+y)){vgToast('그 자리에는 이미 다른 개체가 있어요.',true);return}const r=await vgRun(()=>window.fitVillage.place(id,x,y));if(!r)return;vgSetState(r);VG.mode=null;VG.sel=null;vgAll();vgToast(x==null?'보관함으로 옮겼어요.':'배치 완료!')}
+async function vgBuy(key){const c=VG.cat[key];const r=await vgRun(()=>window.fitVillage.buy(key));if(!r)return;vgSetState(r);vgRenderHud();vgToast(`${c.name}을(를) 데려왔어요! 놓을 칸을 골라 주세요.`);vgStartPlace(r.new_item)}
+async function vgSell(id){const it=(VG.state.items||[]).find(i=>i.id===id),c=VG.cat[it?.item_key]||{};if(!it)return;if(!window.confirm(`${c.name}을(를) ${vgN(c.sell)} 코인에 판매할까요?${c.kind==='animal'&&c.grade>=3?'\n부화로만 얻을 수 있는 개체입니다!':''}`))return;const r=await vgRun(()=>window.fitVillage.sell(id));if(!r)return;vgSetState(r);VG.sel=null;vgAll();vgToast(`${vgN(r.gained||c.sell)} 코인을 받았어요.`)}
+async function vgExpand(){const lvl=Number(VG.state.village.land_level)||1,cost=VG_EXPAND[lvl];if(!cost)return;if(!window.confirm(`${vgN(cost)} 코인으로 땅을 ${vgSize(lvl+1)}×${vgSize(lvl+1)}로 넓힐까요?`))return;const r=await vgRun(()=>window.fitVillage.expand());if(!r)return;vgSetState(r);vgAll(true);vgToast('마을 땅이 넓어졌어요! 🎉')}
+async function vgLike(){const f=VG.friend;if(!f)return;const r=await vgRun(()=>window.fitVillage.like(f.user_id));if(!r)return;vgSetState(r);VG.liked.add(f.user_id);if(VG.friendState?.village)VG.friendState.village.likes_received=(Number(VG.friendState.village.likes_received)||0)+1;if(VG.friends){const fr=VG.friends.find(x=>x.user_id===f.user_id);if(fr)fr.likes_received=(Number(fr.likes_received)||0)+1}vgRenderHud();vgRenderStage();vgRenderSide();vgToast('좋아요를 보냈어요! 나 +10, 친구 +20 코인 💗')}
+async function vgVisit(uid){const f=(VG.friends||[]).find(x=>x.user_id===uid);if(!f)return;const r=await vgRun(()=>window.fitVillage.villageOf(uid));if(!r)return;VG.friend=f;VG.friendState=r;VG.view='friend';VG.mode=null;VG.sel=null;vgRenderStage(true);vgRenderSide()}
+async function vgHatch(egg){const ec=VG.cat[egg];if((Number(VG.state.village.coins)||0)<ec.price){vgToast('코인이 부족합니다.',true);return}
+  const m=document.createElement('div');m.className='vg-modal';m.innerHTML=`<div class="vg-modal-box"><div class="vg-modal-art vg-egg-shake">${vgArtSvg(egg,'','-40 -74 80 80')}</div><h3>두근두근… 부화 중!</h3><p style="color:#8b7f99;margin:0">무엇이 나올까요?</p></div>`;document.body.appendChild(m);
+  const t0=Date.now();let r=null,err=null;try{r=await window.fitVillage.hatch(egg)}catch(e){err=e}await new Promise(res=>setTimeout(res,Math.max(0,1700-(Date.now()-t0))));
+  if(err||!r){m.remove();vgToast(err?.setup?'Supabase에 마을 SQL 설정이 필요합니다.':(err?.message||'부화에 실패했어요.'),true);return}
+  vgSetState(r);vgRenderHud();const k=r.hatched_key,c=VG.cat[k]||{},g=VG_GRADE[c.grade]||VG_GRADE[3];
+  m.querySelector('.vg-modal-box').innerHTML=`<div class="vg-rays"></div><div style="position:relative"><span class="vg-grade vg-g${c.grade}" style="position:static;font-size:13px">${g.name}</span><div class="vg-modal-art vg-pop">${vgArtSvg(k)}</div><h3>${esc(c.name)} 탄생!</h3><p style="color:#8b7f99;margin:2px 0 14px;font-family:Inter,'Malgun Gothic',sans-serif;font-size:13px;font-weight:600">시간당 +${vgN(c.rate)} 코인 생산</p><div style="display:flex;gap:8px;justify-content:center"><button class="vg-btn green" data-act="place">바로 배치하기</button><button class="vg-btn" data-act="keep">보관함에 두기</button></div></div>`;
+  m.querySelector('[data-act=place]').onclick=()=>{m.remove();vgStartPlace(r.new_item)};m.querySelector('[data-act=keep]').onclick=()=>{m.remove();vgRenderSide()}}
+
+function vgCard(c,btn){const g=VG_GRADE[c.grade]||VG_GRADE[1];return `<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${g.name}</span>${vgArtSvg(c.item_key)}<b>${esc(c.name)}</b><div class="vg-meta">${c.kind==='animal'?`⏱ 시간당 +${vgN(c.rate)}`:`✨ 매력 +${vgN(c.charm)}`}</div>${btn||''}</div>`}
+function vgSelCard(){const it=(VG.state.items||[]).find(i=>i.id===VG.sel);if(!it)return '';const c=VG.cat[it.item_key]||{},g=VG_GRADE[c.grade]||VG_GRADE[1];
+  return `<div class="vg-sel">${vgArtSvg(it.item_key)}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b><div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate)} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">↔ 이동</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button></div></div></div>`}
+function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null);
+  const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['friends','👫','친구']];
+  let body='';
+  if(VG.tab==='shop'){const list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat);
+    body=`<div class="vg-subtabs"><button data-sc="animal" class="${VG.shopCat==='animal'?'on':''}">🐾 동물</button><button data-sc="deco" class="${VG.shopCat==='deco'?'on':''}">🌳 장식</button></div><p class="vg-note">${VG.shopCat==='animal'?'동물은 시간마다 코인을 만들어요. 영웅 이상 등급은 <b>알 부화</b>로만 만날 수 있어요.':'장식은 매력도를 올려 마을 전체 생산량을 최대 +100%까지 늘려 줘요.'}</p><div class="vg-cards">${list.map(c=>vgCard(c,`<button class="vg-btn sm gold full" data-buy="${c.item_key}" ${coins<c.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(c.price)}</button>`)).join('')}</div>`}
+  if(VG.tab==='egg'){const eggs=VG.catalog.filter(c=>c.kind==='egg'),odds={egg_basic:[85,13,2],egg_gold:[50,40,10]},pool=VG.catalog.filter(c=>c.kind==='animal'&&!c.shop);
+    body=`<p class="vg-note">알에서는 <b style="color:#9b5cff">영웅</b>·<b style="color:#ff9a1f">전설</b>·<b style="color:#ff4f8b">신화</b> 등급 친구들만 태어나요. 상점 동물보다 훨씬 많은 코인을 만들어요!</p>${eggs.map(e=>{const o=odds[e.item_key]||[0,0,0];return `<div class="vg-egg-card">${vgArtSvg(e.item_key,'vg-art','-40 -74 80 80')}<div style="flex:1"><b style="font-size:17px">${esc(e.name)}</b><div class="vg-odds"><i style="color:#9b5cff">영웅 ${o[0]}%</i> · <i style="color:#ff9a1f">전설 ${o[1]}%</i> · <i style="color:#ff4f8b">신화 ${o[2]}%</i></div><button class="vg-btn purple sm full" data-hatch="${e.item_key}" ${coins<e.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(e.price)} · 부화하기</button></div></div>`}).join('')}
+    <b style="display:block;margin:6px 0 8px">태어날 수 있는 친구들</b><div class="vg-codex">${pool.map(c=>`<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(c.item_key)}<b style="font-size:13px">${esc(c.name)}</b><div class="vg-meta">+${vgN(c.rate)}/h</div></div>`).join('')}</div>`}
+  if(VG.tab==='inv'){const grp={};inv.forEach(i=>(grp[i.item_key]=grp[i.item_key]||[]).push(i.id));const keys=Object.keys(grp).sort((a,b)=>(VG.cat[a]?.sort||0)-(VG.cat[b]?.sort||0));
+    body=keys.length?`<p class="vg-note">보관함의 개체는 코인을 만들지 않아요. 마을에 배치해 주세요!</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button><button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>'}
+  if(VG.tab==='codex'){const seen=vgSeen(),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
+    body=`<p class="vg-note">만난 친구 <b>${got}</b> / ${an.length}</p>${[1,2,3,4,5].map(gr=>{const l=an.filter(c=>c.grade===gr);if(!l.length)return '';return `<b style="display:block;margin:10px 0 6px;color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(c.item_key)}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
+  if(VG.tab==='friends'){if(!VG.friends){body='<div class="vg-empty">친구 마을을 불러오는 중…</div>';window.fitVillage.friends().then(l=>{VG.friends=l;if(VG.tab==='friends')vgRenderSide()}).catch(e=>{VG.friends=[];vgToast(e.message||String(e),true)})}
+    else{const me=window.fitVillage.me(),l=VG.friends.filter(f=>f.user_id!==me);body=`<p class="vg-note">친구 마을을 방문해 좋아요를 눌러 주세요. 하루에 한 번, 나는 <b>+10</b>, 친구는 <b>+20</b> 코인을 받아요.</p><div style="text-align:right;margin:-4px 0 8px"><button class="vg-btn sm" id="vgFrRefresh">↻ 새로고침</button></div>${l.length?l.map(f=>`<div class="vg-list-row"><svg class="vg-art" viewBox="-48 -96 96 102">${vgArt(f.top_key||'pebble_golem')}</svg><div class="grow"><b>${esc(f.display_name)}</b><span style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">동물 ${f.animals}마리 · 땅 ${vgSize(f.land_level)}×${vgSize(f.land_level)} · 💗 ${vgN(f.likes_received)}</span></div>${VG.liked.has(f.user_id)?'<span title="오늘 좋아요 완료">💗</span>':''}<button class="vg-btn sm pink" data-visit="${f.user_id}">방문</button></div>`).join(''):'<div class="vg-empty">아직 마을을 만든 친구가 없어요.</div>'}`}}
+  side.innerHTML=`<div class="vg-tabs">${tabs.map(([k,ic,l])=>`<button class="vg-tab ${VG.tab===k?'on':''}" data-tab="${k}"><span>${ic}</span>${l}</button>`).join('')}</div><div class="vg-side-body">${VG.sel&&VG.view==='mine'?vgSelCard():''}${body}</div>`;
+  side.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{VG.tab=b.dataset.tab;vgRenderSide()});
+  side.querySelectorAll('[data-sc]').forEach(b=>b.onclick=()=>{VG.shopCat=b.dataset.sc;vgRenderSide()});
+  side.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{b.disabled=true;vgBuy(b.dataset.buy)});
+  side.querySelectorAll('[data-hatch]').forEach(b=>b.onclick=()=>vgHatch(b.dataset.hatch));
+  side.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>vgStartPlace(b.dataset.mv));
+  side.querySelectorAll('[data-keep]').forEach(b=>b.onclick=()=>vgPlace(b.dataset.keep,null,null));
+  side.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>vgSell(b.dataset.sell));
+  side.querySelectorAll('[data-visit]').forEach(b=>b.onclick=()=>vgVisit(b.dataset.visit));
+  $('#vgFrRefresh')&&($('#vgFrRefresh').onclick=()=>{VG.friends=null;window.fitVillage.likedToday().then(s=>VG.liked=s).catch(()=>{});vgRenderSide()})}
+
 
 function daily(){
   let r=rec(selectedDate), totals=calcMealTotals(selectedDate), calGoal=n(db.profile.calorieTarget)||1720, proteinGoal=n(db.profile.proteinTarget)||138;
@@ -1082,6 +1411,30 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     async publishMeal(payload){if(!supa||!user)throw new Error('먼저 로그인해 주세요.');await ensureWorkspaceProfile();const food=String(payload.food_name||'').trim();if(!food)throw new Error('음식 이름을 입력해 주세요.');const {data,error}=await supa.from('fit_workspace_meals').insert({user_id:user.id,meal_date:payload.meal_date,meal_type:String(payload.meal_type||'식사'),food_name:food.slice(0,120),calories:payload.calories==null?null:Number(payload.calories),protein_g:payload.protein_g==null?null:Number(payload.protein_g),memo:String(payload.memo||'').slice(0,1200)}).select('id,user_id,meal_date,meal_type,food_name,calories,protein_g,memo,created_at').single();if(error)throw error;return data},
     async feedCompanion(){if(!supa||!user)throw new Error('먼저 로그인해 주세요.');await ensureWorkspaceProfile();const {data,error}=await supa.rpc('fit_feed_companion');if(error)throw error;return data}
   };
+
+  // ===== 동물 마을 API (모든 변경은 서버 함수로만 처리) =====
+  function vErr(e){const msg=String(e&&e.message||e||'');if(e&&(e.code==='PGRST202'||e.code==='PGRST205'||e.code==='42883'||e.code==='42P01')||/Could not find the (function|table)|does not exist|schema cache/i.test(msg)){const er=new Error('Supabase에 마을 SQL 설정이 필요합니다.');er.setup=true;return er}return new Error(msg||'요청을 처리하지 못했습니다.')}
+  function vNeed(){if(!supa||!user)throw new Error('먼저 로그인해 주세요.')}
+  async function vrpc(name,args){vNeed();const {data,error}=await supa.rpc(name,args||{});if(error)throw vErr(error);return data}
+  window.fitVillage={
+    me(){return user?user.id:null},
+    async catalog(){vNeed();const {data,error}=await supa.from('fit_village_catalog').select('*').order('sort');if(error)throw vErr(error);return (data||[]).map(c=>({...c,grade:Number(c.grade),price:Number(c.price),sell:Number(c.sell),rate:Number(c.rate),charm:Number(c.charm)}))},
+    init(){return vrpc('fit_village_init')},
+    collect(){return vrpc('fit_village_collect')},
+    buy(k){return vrpc('fit_village_buy',{p_key:k})},
+    hatch(k){return vrpc('fit_village_hatch',{p_egg:k})},
+    place(id,x,y){return vrpc('fit_village_place',{p_item:id,p_x:x,p_y:y})},
+    sell(id){return vrpc('fit_village_sell',{p_item:id})},
+    expand(){return vrpc('fit_village_expand')},
+    like(to){return vrpc('fit_village_like',{p_to:to})},
+    async villageOf(uid){vNeed();const [v,i]=await Promise.all([supa.from('fit_village').select('*').eq('user_id',uid).maybeSingle(),supa.from('fit_village_items').select('id,item_key,x,y').eq('user_id',uid).not('x','is',null)]);if(v.error)throw vErr(v.error);if(i.error)throw vErr(i.error);return {village:v.data,items:i.data||[],server_time:new Date().toISOString()}},
+    async friends(){vNeed();const [v,p,i,c]=await Promise.all([supa.from('fit_village').select('user_id,land_level,likes_received'),supa.from('fit_workspace_profiles').select('user_id,display_name'),supa.from('fit_village_items').select('user_id,item_key').not('x','is',null),supa.from('fit_village_catalog').select('item_key,kind,grade,rate')]);
+      for(const r of [v,p,i,c])if(r.error)throw vErr(r.error);
+      const names={},cat={};(p.data||[]).forEach(r=>names[r.user_id]=r.display_name);(c.data||[]).forEach(r=>cat[r.item_key]=r);
+      return (v.data||[]).map(r=>{const mine=(i.data||[]).filter(x=>x.user_id===r.user_id&&cat[x.item_key]?.kind==='animal');let top=null;mine.forEach(x=>{if(!top||Number(cat[x.item_key].rate)>Number(cat[top].rate))top=x.item_key});return {...r,display_name:names[r.user_id]||'이름 없는 마을',animals:mine.length,top_key:top}}).sort((a,b)=>(Number(b.likes_received)||0)-(Number(a.likes_received)||0))},
+    async likedToday(){vNeed();const d=new Date(Date.now()+9*36e5).toISOString().slice(0,10);const {data,error}=await supa.from('fit_village_likes').select('to_user').eq('from_user',user.id).eq('like_date',d);if(error)throw vErr(error);return new Set((data||[]).map(r=>r.to_user))}
+  };
+
 
   async function getRow(){
     const {data,error} = await supa.from('fit_manager_data').select('data').eq('user_id', user.id).maybeSingle();

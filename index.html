@@ -371,6 +371,48 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vg-miss{position:fixed;z-index:9600;transform:translate(-50%,-50%);color:#ff4f6d;font-size:30px;font-weight:900;pointer-events:none;animation:vgFloat .6s ease-out forwards;text-shadow:0 0 4px #fff}
 #vgWheel{transform-origin:0 0}
 @media(max-width:700px){.vg-spot-wrap{grid-template-columns:1fr}}
+/* 던전 */
+.vg-modal-box.vg-dungeon{width:min(96vw,920px);max-height:94vh;overflow:auto}
+.vd-floors{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.vd-floor{position:relative;border:2px solid #eadfcb;background:#fff;border-radius:14px;padding:6px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:inherit;color:#3a2f4a}
+.vd-floor.on{border-color:#8f6bff;box-shadow:0 0 0 3px #e5dbff}.vd-floor.lock{opacity:.45;cursor:not-allowed}.vd-floor.lock .vd-fart{filter:brightness(0) opacity(.3)}
+.vd-floor small{font-size:11px;color:#7d7290;font-family:Inter,'Malgun Gothic',sans-serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.vd-fart{width:62px;height:58px}
+.vd-clear{position:absolute;right:5px;top:4px;font-style:normal;font-size:10px;background:#4fbf5f;color:#fff;border-radius:6px;padding:1px 5px;font-family:Inter,sans-serif;font-weight:800}
+.vd-info{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;background:#f7f2e7;border-radius:12px;padding:9px 12px;font-size:15px;text-align:left}
+.vd-info small{font-family:Inter,'Malgun Gothic',sans-serif;color:#7d7290;font-weight:700;margin-left:6px}
+.vd-sub{text-align:left;margin:12px 0 6px;font-size:16px}
+.vd-picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;max-height:300px;overflow:auto;padding:2px}
+.vd-pick{position:relative;border:2px solid #eadfcb;background:#fff;border-radius:14px;padding:6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;color:#3a2f4a}
+.vd-pick .vg-art{width:64px;height:64px}.vd-pick b{font-size:13px}.vd-pick small{font-size:11px;color:#7d7290;font-family:Inter,sans-serif;font-weight:700}
+.vd-pick.on{border-color:#4fbf5f;background:#f0fbe9}.vd-chk{position:absolute;right:6px;top:5px;font-style:normal;background:#4fbf5f;color:#fff;border-radius:50%;width:20px;height:20px;display:grid;place-items:center;font-size:12px}
+.vd-top{display:flex;justify-content:space-between;align-items:center;font-size:18px;padding:0 40px 8px 4px}
+.vd-arena{position:relative;height:370px;border-radius:18px;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;padding:14px 18px;background:radial-gradient(ellipse at 70% 100%,#5b4a78 0%,#2c2340 55%,#18122a 100%)}
+.vd-cave{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 70%,#3d3052 70%,#2a2140 100%),repeating-linear-gradient(90deg,transparent 0 60px,#ffffff06 60px 62px)}
+.vd-cave:before{content:'';position:absolute;left:0;right:0;top:0;height:46px;background:radial-gradient(circle at 20px -10px,#18122a 26px,transparent 27px) 0 0/70px 46px repeat-x}
+.vd-cave:after{content:'';position:absolute;left:8%;top:30%;width:6px;height:6px;border-radius:50%;background:#9fe8ff;box-shadow:120px 40px 0 #c9a6ff,320px -10px 0 #9fe8ff,520px 60px 0 #ffe27a,700px 10px 0 #9fe8ff;opacity:.6}
+.vd-party{position:relative;display:flex;gap:10px;align-items:flex-end;z-index:1}
+.vd-mem{width:112px;background:#ffffffe6;border-radius:14px;padding:4px 6px 6px;text-align:center;transition:opacity .3s}
+.vd-mem.dead{opacity:.35;filter:grayscale(1)}
+.vd-memart{width:84px;height:84px}.vd-memname{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vd-hp{height:9px;border-radius:9px;background:#f3d6d6;overflow:hidden;margin-top:2px}.vd-hp span{display:block;height:100%;background:linear-gradient(90deg,#5fd35f,#3fae4a);transition:width .35s}
+.vd-hpt{font-size:11px;color:#6d6280;font-family:Inter,sans-serif;font-weight:700}
+.vd-boss{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:300px}
+.vd-bossart{width:300px;height:250px;overflow:visible}
+.vd-bhp{position:relative;width:260px;height:18px;border-radius:10px;background:#3a1f2a;border:2px solid #fff;overflow:hidden}.vd-bhp span{display:block;height:100%;background:linear-gradient(90deg,#ff5f6d,#ff9a3d);transition:width .4s}
+.vd-bhp em{position:absolute;inset:0;font-style:normal;color:#fff;font-size:12px;line-height:14px;font-family:Inter,sans-serif;font-weight:800;text-shadow:0 1px 2px #000}
+.vd-charge{position:absolute;top:-6px;background:#ff4f6d;color:#fff;border-radius:10px;padding:4px 10px;font-size:13px;animation:vgTw 1s infinite;white-space:nowrap}
+.vd-log{min-height:64px;background:#f7f2e7;border-radius:12px;margin:10px 0;padding:8px 12px;text-align:left;font-size:14px;line-height:1.5;font-family:'Malgun Gothic',sans-serif}
+.vd-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center}
+.vd-result{width:100%;font-size:22px;margin-bottom:6px}.vd-result.win{color:#d98a00}.vd-result.lose{color:#7d7290}
+.vd-num{position:fixed;z-index:9700;transform:translate(-50%,0);font-family:Jua,'Malgun Gothic',sans-serif;font-size:26px;font-weight:900;color:#fff;text-shadow:0 0 3px #000,0 2px 0 #000;pointer-events:none;animation:vgFloat 1.1s ease-out forwards}
+.vd-num.big{font-size:36px;color:#ffd34d}.vd-num.crit{color:#ffb21f}.vd-num.hurt{color:#ff5f6d}.vd-num.heal{color:#7dff8a}
+.vd-shake{animation:vdShake .35s}@keyframes vdShake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+.vd-lunge{animation:vdLunge .35s}@keyframes vdLunge{50%{transform:translateX(26px) scale(1.05)}}
+.vd-lungeL{animation:vdLungeL .35s}@keyframes vdLungeL{50%{transform:translateX(-30px) scale(1.04)}}
+.vd-glow .vd-bossart{filter:drop-shadow(0 0 14px #ff4f6d)}
+.vd-dead .vd-bossart{transition:all .8s;opacity:0;transform:scale(.6) translateY(30px)}
+@media(max-width:760px){.vd-floors{grid-template-columns:repeat(5,1fr)}.vd-arena{flex-direction:column-reverse;height:auto;align-items:center;gap:8px}.vd-boss{width:auto}.vd-mem{width:92px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1019,13 +1061,13 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
-  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div>`;
+  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요 <button class="vg-btn sm" id="vgCancel">취소 (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
   <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
-  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
@@ -1156,6 +1198,83 @@ function vgSpotGame(){const g=VG.games||{};if((g.spot_max||3)-(g.spot_used||0)<=
     vgSetState(r);vgRenderHud();vgTick();if(VG.games)VG.games.spot_used=(VG.games.spot_used||0)+1;delete m.dataset.lock;m._onclose=()=>vgRenderSide();
     msg.innerHTML=`<span class="vg-pop" style="display:inline-block">${found>=5?'🎉 모두 찾았어요!':`⏰ ${found}개 찾았어요`} <b>+${vgN(r.gained)}</b> 코인</span>`;
     if(r.hatched_key){setTimeout(()=>{const box=m.querySelector('.vg-modal-box');box.classList.remove('vg-xwide');vgReveal(m,r,'보너스 알에서 ');m._onclose=null},1500)}}}
+
+
+/* ===== 동굴 던전 (턴제 보스전) ===== */
+const VG_BOSS_COL=[['#8b6fb8','#5a3f85'],['#7fc451','#3f8a30'],['#a39a8c','#5f574b'],['#c46fb0','#7a2f6e'],['#7fd8e8','#2f8aa0'],['#ff7a3d','#a83a1a'],['#bfe6ff','#5a9ac8'],['#5a5a72','#2a2a3a'],['#d8d0c0','#7a7060'],['#3a2f4a','#140f1f']];
+function vgBossArt(f,img){if(img)return `<image href="${String(img).replace(/["<>&]/g,'')}" x="-100" y="-168" width="200" height="172" preserveAspectRatio="xMidYMax meet"/>`;
+  const [c1,c2]=VG_BOSS_COL[(f-1)%10],O=VG_OL,ol=`stroke="${O}" stroke-width="3.2" stroke-linejoin="round"`;let back='',front='';
+  if([1,8,10].includes(f))back+=`<path d="M-40,-80 C-80,-120 -110,-100 -108,-70 C-96,-80 -88,-66 -78,-70 C-74,-58 -60,-58 -48,-60Z" fill="${c2}" ${ol}/><path d="M40,-80 C80,-120 110,-100 108,-70 C96,-80 88,-66 78,-70 C74,-58 60,-58 48,-60Z" fill="${c2}" ${ol}/>`;
+  if([5,7].includes(f))back+=`<path d="M-30,-110 L-22,-150 L-10,-112Z M8,-116 L18,-160 L28,-114Z M30,-100 L48,-132 L46,-96Z" fill="${f===5?'#d18cff':'#e8f6ff'}" ${ol}/>`;
+  const body=`<path d="M-62,-10 C-72,-60 -52,-118 0,-120 C52,-118 72,-60 62,-10 C40,2 -40,2 -62,-10Z" fill="${c1}" ${ol}/><ellipse cx="-20" cy="-92" rx="16" ry="8" fill="#fff" opacity=".35" transform="rotate(-25 -20 -92)"/><path d="M-40,-14 C-30,-4 30,-4 40,-14" fill="none" stroke="${c2}" stroke-width="6" opacity=".5"/>`;
+  if(f!==9)front+=`<path d="M-34,-108 C-42,-130 -36,-142 -26,-148 C-26,-134 -20,-124 -16,-114Z" fill="#fff1d0" ${ol}/><path d="M34,-108 C42,-130 36,-142 26,-148 C26,-134 20,-124 16,-114Z" fill="#fff1d0" ${ol}/>`;
+  if(f===2)front+=`<path d="M-26,-118 l8,-16 l8,12 l10,-18 l10,18 l8,-12 l8,16Z" fill="#ffd34d" ${ol}/>`;
+  if(f===3)front+=`<path d="M-40,-50 l12,-8 l-4,-14 M30,-80 l-10,6 l6,12" fill="none" stroke="${O}" stroke-width="3"/>`;
+  if(f===4)front+=`<path d="M-58,-100 C-58,-140 58,-140 58,-100 C30,-90 -30,-90 -58,-100Z" fill="#c43a5a" ${ol}/><circle cx="-24" cy="-118" r="7" fill="#fff"/><circle cx="16" cy="-124" r="6" fill="#fff"/><circle cx="36" cy="-108" r="4" fill="#fff"/>`;
+  if(f===6)front+=`<circle cx="-36" cy="-40" r="7" fill="#ffd34d" opacity=".8"/><circle cx="40" cy="-58" r="6" fill="#ffd34d" opacity=".8"/><circle cx="20" cy="-24" r="5" fill="#ffd34d" opacity=".8"/>`;
+  if(f===9)front+=`<path d="M-50,-90 C-50,-130 50,-130 50,-90 L46,-76 L-46,-76Z" fill="#e8e2d4" ${ol}/><path d="M-6,-128 L0,-142 L6,-128" fill="#c43a5a" ${ol}/>`;
+  const face=`<ellipse cx="-22" cy="-66" rx="13" ry="11" fill="#fff" ${ol}/><ellipse cx="22" cy="-66" rx="13" ry="11" fill="#fff" ${ol}/><circle cx="-19" cy="-64" r="6" fill="#e8253a"/><circle cx="19" cy="-64" r="6" fill="#e8253a"/><circle cx="-21" cy="-66" r="2" fill="#fff"/><circle cx="17" cy="-66" r="2" fill="#fff"/><path d="M-40,-82 L-10,-74 M40,-82 L10,-74" stroke="${O}" stroke-width="5" stroke-linecap="round"/><path d="M-26,-40 Q0,-24 26,-40 Q0,-32 -26,-40Z" fill="#5a1414" ${ol}/><path d="M-16,-38 l4,8 l4,-7 M8,-37 l4,7 l4,-8" fill="#fff" stroke="${O}" stroke-width="1.6"/>`;
+  const arms=`<ellipse cx="-62" cy="-36" rx="12" ry="16" fill="${c1}" ${ol}/><ellipse cx="62" cy="-36" rx="12" ry="16" fill="${c1}" ${ol}/><ellipse cx="-28" cy="-4" rx="16" ry="8" fill="${c2}" ${ol}/><ellipse cx="28" cy="-4" rx="16" ry="8" fill="${c2}" ${ol}/>`;
+  return `<g>${back}${arms}${body}${front}${face}</g>`}
+const VG_GSTAT={1:[120,18,6],2:[200,30,10],3:[320,50,16],4:[520,85,26],5:[850,140,40]};
+const VD={st:null,bosses:[],floor:1,pick:[],m:null,battle:null,busy:false};
+async function vgDungeon(){if(VD.m)VD.m.remove();VD.m=vgModal('<div class="vg-empty">던전 정보를 불러오는 중…</div>','vg-xwide vg-dungeon');VD.m._onclose=()=>{VD.m=null;vgRenderHud();vgRenderSide()};
+  try{const [st,bs]=await Promise.all([window.fitVillage.dungeonStatus(),VD.bosses.length?VD.bosses:window.fitVillage.bosses()]);VD.st=st;VD.bosses=bs;}catch(e){VD.m.querySelector('.vg-empty').outerHTML=`<div class="vg-setup">${esc(e.setup?'Supabase에 던전 SQL(fit_village_update3.sql) 실행이 필요합니다.':(e.message||String(e)))}</div>`;return}
+  if(VD.st.battle&&VD.st.battle.status==='active'){VD.battle=VD.st.battle;vgBattleView();return}
+  VD.floor=Math.min(10,(VD.st.best||0)+1);VD.pick=VD.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));vgLobby()}
+function vgBody(html){const box=VD.m.querySelector('.vg-modal-box');box.innerHTML='<button class="vg-x" title="닫기">✕</button>'+html;box.querySelector('.vg-x').onclick=()=>{if(VD.m.dataset.lock)return;VD.m.remove();VD.m._onclose&&VD.m._onclose()}}
+function vgLobby(){const st=VD.st,left=st.max-st.used,best=st.best||0;
+  const floors=VD.bosses.map(b=>{const lock=b.floor>best+1,clear=b.floor<=best;return `<button class="vd-floor ${VD.floor===b.floor?'on':''} ${lock?'lock':''}" data-floor="${b.floor}" ${lock?'disabled':''}><svg viewBox="-90 -165 180 172" class="vd-fart">${vgBossArt(b.floor,b.image_url)}</svg><b>${b.floor}층</b><small>${lock?'🔒 잠김':esc(b.name)}</small>${clear?'<i class="vd-clear">✓ 클리어</i>':''}</button>`}).join('');
+  const animals=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal').sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||(VG.cat[b.item_key].sort-VG.cat[a.item_key].sort));
+  const pickHtml=animals.length?animals.map(i=>{const c=VG.cat[i.item_key],s=VG_GSTAT[c.grade],on=VD.pick.includes(i.id);return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b><small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join(''):'<div class="vg-empty">동물이 없어요. 상점이나 알 부화로 먼저 데려와 주세요.</div>';
+  const b=VD.bosses.find(x=>x.floor===VD.floor)||{};
+  const reward=VD.floor>best?`첫 클리어 ${vgN(VD.floor*300)}코인${VD.floor===10?' + 황금 알':VD.floor>=5?' + 신비한 알':''}`:`반복 클리어 ${vgN(VD.floor*60)}코인`;
+  vgBody(`<h3>⚔️ 동굴 던전</h3><p class="vg-mp">최고 기록 <b>${best}층</b> · 오늘 입장 <b>${left}/${st.max}</b>회 남음 · 파티는 최대 3마리</p>
+  <div class="vd-floors">${floors}</div>
+  <div class="vd-info"><div><b>${VD.floor}층 · ${esc(b.name||'')}</b> <small>❤${vgN(b.hp)} ⚔${b.atk} 🛡${b.def}</small></div><div>🎁 ${reward}</div></div>
+  <div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b></div><div class="vd-picks">${pickHtml}</div>
+  <button class="vg-btn green" id="vdGo" style="min-width:240px;margin-top:12px" ${!VD.pick.length||left<=0?'disabled':''}>${left<=0?'오늘 입장 횟수를 모두 사용했어요':`${VD.floor}층 입장하기`}</button>`);
+  VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
+  VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
+  VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.st.used++;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
+function vgBattleView(){const bt=VD.battle,bs=VD.bosses.find(x=>x.floor===bt.floor)||{},b=bt.boss;
+  const party=bt.party.map((p,i)=>`<div class="vd-mem ${p.hp<=0?'dead':''}" data-mem="${i}"><svg viewBox="-48 -96 96 102" class="vd-memart">${vgArt(p.key)}</svg><div class="vd-memname">${esc(p.name)}</div><div class="vd-hp"><span style="width:${p.hp/p.max*100}%"></span></div><small class="vd-hpt">${p.hp}/${p.max}</small></div>`).join('');
+  vgBody(`<div class="vd-top"><b>${bt.floor}층 · ${esc(b.name)}</b><span>턴 <b id="vdTurn">${bt.turn}</b>/${bt.max_turn}</span></div>
+  <div class="vd-arena"><div class="vd-cave"></div><div class="vd-party">${party}</div>
+   <div class="vd-boss" id="vdBoss"><div class="vd-charge" id="vdCharge" style="display:${b.charging?'':'none'}">💢 힘을 모으는 중! 다음 턴 강공격 — 방어하세요</div><svg viewBox="-120 -170 240 178" class="vd-bossart">${vgBossArt(bt.floor,bs.image_url)}</svg><div class="vd-bhp"><span id="vdBhp" style="width:${b.hp/b.max*100}%"></span><em id="vdBhpT">${vgN(b.hp)} / ${vgN(b.max)}</em></div></div></div>
+  <div class="vd-log" id="vdLog">${bt.turn===1?'보스가 나타났다! 행동을 골라 주세요.':'전투를 이어서 진행합니다.'}</div>
+  <div class="vd-acts" id="vdActs"></div>`);
+  vgActs()}
+function vgActs(){const bt=VD.battle,el=VD.m.querySelector('#vdActs');if(!el)return;
+  if(bt.status!=='active'){return}
+  el.innerHTML=`<button class="vg-btn" data-act="attack">⚔️ 공격</button><button class="vg-btn purple" data-act="skill" ${bt.skill_cd>0?'disabled':''}>💥 필살기${bt.skill_cd>0?` (${bt.skill_cd})`:''}</button><button class="vg-btn" data-act="guard">🛡️ 방어</button><button class="vg-btn green" data-act="heal" ${bt.heal_cd>0?'disabled':''}>💚 회복${bt.heal_cd>0?` (${bt.heal_cd})`:''}</button><button class="vg-btn sm" data-act="flee" style="margin-left:auto">🏳️ 후퇴</button>`;
+  el.querySelectorAll('[data-act]').forEach(x=>x.onclick=()=>vgAct(x.dataset.act))}
+function vdPop(target,text,cls){const r=target.getBoundingClientRect(),f=document.createElement('div');f.className='vd-num '+(cls||'');f.textContent=text;f.style.left=(r.left+r.width/2+(Math.random()*30-15))+'px';f.style.top=(r.top+r.height*.3)+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1100)}
+function vdShake(el,cls='vd-shake'){el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
+const vdSleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function vgAct(act){if(VD.busy)return;if(act==='flee'&&!window.confirm('후퇴하면 이번 입장은 패배로 처리돼요. 후퇴할까요?'))return;VD.busy=true;VD.m.dataset.lock='1';VD.m.querySelectorAll('#vdActs button').forEach(b=>b.disabled=true);
+  let r;try{r=await window.fitVillage.dungeonAct(VD.battle.id,act)}catch(e){vgToast(e.message||String(e),true);VD.busy=false;delete VD.m.dataset.lock;vgActs();return}
+  const boss=VD.m.querySelector('#vdBoss'),log=VD.m.querySelector('#vdLog'),mem=i=>VD.m.querySelector(`[data-mem="${i}"]`),nm=i=>esc(VD.battle.party[i]?.name||''),lines=[];
+  let bhp=VD.battle.boss.hp;const php=VD.battle.party.map(p=>p.hp);
+  const setHp=(i)=>{const m=mem(i),p=VD.battle.party[i];if(!m)return;m.querySelector('.vd-hp span').style.width=(php[i]/p.max*100)+'%';m.querySelector('.vd-hpt').textContent=`${php[i]}/${p.max}`;m.classList.toggle('dead',php[i]<=0)};
+  const setB=()=>{VD.m.querySelector('#vdBhp').style.width=(bhp/VD.battle.boss.max*100)+'%';VD.m.querySelector('#vdBhpT').textContent=`${vgN(bhp)} / ${vgN(VD.battle.boss.max)}`};
+  for(const e of r.events||[]){
+    if(e.t==='hit'||e.t==='skill'){vdShake(mem(e.who),'vd-lunge');await vdSleep(160);vdShake(boss);bhp=Math.max(0,bhp-e.dmg);setB();vdPop(boss,(e.crit?'치명타! ':'')+'-'+e.dmg,e.t==='skill'?'big':e.crit?'crit':'');lines.push(`${nm(e.who)}의 ${e.t==='skill'?'필살기':'공격'}! ${e.dmg} 피해${e.crit?' (치명타)':''}`)}
+    else if(e.t==='heal'||e.t==='guard'){php[e.who]+=e.amt;setHp(e.who);vdPop(mem(e.who),e.t==='guard'?'🛡 +'+e.amt:'+'+e.amt,'heal');if(e.t==='heal')lines.push(`${nm(e.who)} 체력 ${e.amt} 회복`)}
+    else if(e.t==='charge'){VD.m.querySelector('#vdCharge').style.display='';vdShake(boss,'vd-glow');lines.push('💢 보스가 힘을 모으고 있다! 다음 턴에 방어하세요.')}
+    else if(e.t==='bite'||e.t==='smash'){if(e.t==='smash')VD.m.querySelector('#vdCharge').style.display='none';vdShake(boss,'vd-lungeL');await vdSleep(140);php[e.who]=Math.max(0,php[e.who]-e.dmg);setHp(e.who);vdShake(mem(e.who));vdPop(mem(e.who),'-'+e.dmg,'hurt');lines.push(`${e.t==='smash'?'보스의 강공격!':'보스의 공격!'} ${nm(e.who)} ${e.dmg} 피해`)}
+    else if(e.t==='guard'){}
+    await vdSleep(e.t==='hit'||e.t==='skill'?260:200)}
+  if((r.events||[]).some(e=>e.t==='guard'))lines.unshift('🛡 방어 태세! 받는 피해가 줄어듭니다.');
+  log.innerHTML=lines.slice(-4).map(l=>`<div>${l}</div>`).join('')||'&nbsp;';
+  VD.battle=r;VD.m.querySelector('#vdTurn').textContent=Math.min(r.turn,r.max_turn);VD.busy=false;delete VD.m.dataset.lock;
+  if(r.status==='active'){vgActs();return}
+  if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
+  if(r.status==='won'){VD.st.best=Math.max(VD.st.best||0,r.floor);boss.classList.add('vd-dead')}
+  const acts=VD.m.querySelector('#vdActs'),won=r.status==='won',why=(r.events||[]).some(e=>e.t==='timeout')?'제한 턴(25턴)을 넘겼어요.':(r.events||[]).some(e=>e.t==='flee')?'던전에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
+  acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 승리! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어 보상)</small>':''}`:`💤 패배… ${why}`}</div><button class="vg-btn gold" id="vdBack">던전으로 돌아가기</button>`;
+  acts.querySelector('#vdBack').onclick=()=>{VD.battle=null;vgLobby()};
+  if(won&&r.hatched_key){await vdSleep(1400);const holder=document.createElement('div');holder.className='vg-modal';holder.innerHTML='<div class="vg-modal-box"></div>';document.body.appendChild(holder);vgReveal(holder,r,'보상 알에서 ')}}
 
 
 function daily(){
@@ -1502,6 +1621,10 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     gameStatus(){return vrpc('fit_village_game_status')},
     spotReward(found,secs){return vrpc('fit_village_spot_reward',{p_found:found,p_secs:secs})},
     roulette(){return vrpc('fit_village_roulette')},
+    dungeonStatus(){return vrpc('fit_village_dungeon_status')},
+    dungeonStart(f,ids){return vrpc('fit_village_dungeon_start',{p_floor:f,p_items:ids})},
+    dungeonAct(id,a){return vrpc('fit_village_dungeon_act',{p_battle:id,p_action:a})},
+    async bosses(){vNeed();const {data,error}=await supa.from('fit_village_bosses').select('*').order('floor');if(error)throw vErr(error);return data||[]},
     async villageOf(uid){vNeed();const [v,i]=await Promise.all([supa.from('fit_village').select('*').eq('user_id',uid).maybeSingle(),supa.from('fit_village_items').select('id,item_key,x,y').eq('user_id',uid).not('x','is',null)]);if(v.error)throw vErr(v.error);if(i.error)throw vErr(i.error);return {village:v.data,items:i.data||[],server_time:new Date().toISOString()}},
     async friends(){vNeed();const [v,p,i,c]=await Promise.all([supa.from('fit_village').select('user_id,land_level,likes_received'),supa.from('fit_workspace_profiles').select('user_id,display_name'),supa.from('fit_village_items').select('user_id,item_key').not('x','is',null),supa.from('fit_village_catalog').select('item_key,kind,grade,rate')]);
       for(const r of [v,p,i,c])if(r.error)throw vErr(r.error);

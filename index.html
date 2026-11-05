@@ -1626,17 +1626,17 @@ async function vgCommunityLoad(entries){if(!window.fitVillage)return;
 
 
 /* ===== 코인 선물 ===== */
-async function vgGiftOpen(){const f=VG.friend;if(!f)return;let st={limit:10000,sent_today:0};
+async function vgGiftOpen(){const f=VG.friend;if(!f)return;let st={limit:20000,sent_today:0};
   const m=vgModal(`<h3>🎁 ${esc(f.display_name)}에게 코인 선물</h3><p class="vg-mp" id="vgGfInfo">불러오는 중…</p>
    <div class="vg-gf-in"><input type="number" id="vgGfAmt" min="1" step="100" placeholder="보낼 코인" inputmode="numeric"><span>코인</span></div>
-   <div class="vg-gf-quick">${[100,500,1000,5000].map(v=>`<button class="vg-btn sm" data-gq="${v}">+${vgN(v)}</button>`).join('')}<button class="vg-btn sm" data-gq="max">최대</button></div>
+   <div class="vg-gf-quick">${[1000,5000,10000].map(v=>`<button class="vg-btn sm" data-gq="${v}">+${vgN(v)}</button>`).join('')}<button class="vg-btn sm" data-gq="max">최대</button></div>
    <div id="vgGfMsg" class="vg-result" style="font-size:15px">&nbsp;</div><button class="vg-btn gold" id="vgGfGo" style="min-width:200px">보내기</button>`,'vg-wide');
   const inp=m.querySelector('#vgGfAmt'),info=m.querySelector('#vgGfInfo'),msg=m.querySelector('#vgGfMsg');
   const rem=()=>Math.max(0,st.limit-st.sent_today),coins=()=>Number(VG.state.village.coins)||0,maxV=()=>Math.min(rem(),coins());
-  const upd=()=>{info.innerHTML=`내 코인 <b>${vgN(coins())}</b> · 오늘 남은 선물 한도 <b>${vgN(rem())}</b> / ${vgN(st.limit)}`};
-  try{st=await window.fitVillage.giftStatus()}catch(e){if(e.setup){msg.textContent='Supabase에 선물 SQL(fit_village_update8.sql) 실행이 필요합니다.';}}upd();
+  const upd=()=>{info.innerHTML=`내 코인 <b>${vgN(coins())}</b> · 이 친구에게 오늘 남은 한도 <b>${vgN(rem())}</b> / ${vgN(st.limit)}`};
+  try{st=await window.fitVillage.giftStatus(f.user_id)}catch(e){if(e.setup){msg.textContent='Supabase에 선물 SQL(fit_village_update8.sql) 실행이 필요합니다.';}}upd();
   m.querySelectorAll('[data-gq]').forEach(b=>b.onclick=()=>{const v=b.dataset.gq==='max'?maxV():Math.min(maxV(),(Number(inp.value)||0)+Number(b.dataset.gq));inp.value=v||''});
-  m.querySelector('#vgGfGo').onclick=async()=>{const a=Math.floor(Number(inp.value)||0);if(a<1){msg.textContent='보낼 코인을 입력해 주세요.';return}if(a>maxV()){msg.textContent=a>coins()?'코인이 부족해요.':`오늘 남은 한도는 ${vgN(rem())}코인이에요.`;return}
+  m.querySelector('#vgGfGo').onclick=async()=>{const a=Math.floor(Number(inp.value)||0);if(a<1){msg.textContent='보낼 코인을 입력해 주세요.';return}if(a>maxV()){msg.textContent=a>coins()?'코인이 부족해요.':`이 친구에게 오늘 남은 한도는 ${vgN(rem())}코인이에요.`;return}
     if(!window.confirm(`${f.display_name}에게 ${vgN(a)}코인을 보낼까요?`))return;const btn=m.querySelector('#vgGfGo');btn.disabled=true;
     try{const r=await window.fitVillage.gift(f.user_id,a);vgSetState(r);vgRenderHud();vgTick();st.sent_today=st.limit-(Number(r.remaining)||0);upd();inp.value='';msg.innerHTML=`<span class="vg-pop" style="display:inline-block">🎁 ${vgN(a)}코인을 보냈어요!</span>`;vgToast(`${f.display_name}에게 ${vgN(a)}코인을 선물했어요 🎁`)}
     catch(e){msg.textContent=e.setup?'Supabase에 선물 SQL(fit_village_update8.sql) 실행이 필요합니다.':(e.message||String(e))}finally{btn.disabled=false}}}
@@ -2043,7 +2043,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     roulette(){return vrpc('fit_village_roulette')},
     fuse(a,b){return vrpc('fit_village_fuse',{p_a:a,p_b:b})},
     transcend(id){return vrpc('fit_village_transcend',{p_item:id})},
-    giftStatus(){return vrpc('fit_village_gift_status')},
+    giftStatus(to){return vrpc('fit_village_gift_status',{p_to:to})},
     gift(to,amount){return vrpc('fit_village_gift',{p_to:to,p_amount:amount})},
     giftInbox(){return vrpc('fit_village_gift_inbox')},
     wbStatus(){return vrpc('fit_village_wb_status')},

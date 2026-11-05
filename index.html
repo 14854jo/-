@@ -634,6 +634,10 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vg-bosseggs{background:linear-gradient(180deg,#f1ebff,#fff);border:2px solid #c9a6ff;border-radius:16px;padding:10px;margin-bottom:12px}.vg-bosseggs>b{display:block;margin-bottom:6px}
 .vg-egg-card.boss .vg-art{background:radial-gradient(circle,#3a2a5a,#1c1530);border-radius:12px}
 .vd-bossegg{font-size:16px;color:#6a3df0;margin-top:4px}.vd-bossegg small{display:block;font-size:12px;color:#7d7290;font-family:'Malgun Gothic',sans-serif}
+.vc-tg{display:inline-flex;gap:4px;vertical-align:middle}.vc-tg button{border:2px solid #d9ccb4;background:#eee;color:#9a8fab;border-radius:9px;padding:2px 7px;font-size:11.5px;font-family:inherit;cursor:pointer}
+.vc-tg button.on{background:#f1ebff;border-color:#8f6bff;color:#6545d1}
+.wb-info .vc-tg button{background:#ffffff22;border-color:#ffffff44;color:#ccc}.wb-info .vc-tg button.on{background:#ffd34d;border-color:#ffd34d;color:#3a2f4a}
+@media(max-width:760px){.vd-top{flex-wrap:wrap;gap:4px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1471,12 +1475,12 @@ function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=
   const pickHtml=animals.length?animals.map(i=>{const c=VG.cat[i.item_key],s=(VG_GSTAT[c.stat_grade||c.grade]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(Number(i.tr)||0)))),on=VD.pick.includes(i.id);return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small><em class="vd-psk" title="${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[1]}">${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[0]} ${esc(vdSkillOf(i.item_key).n)}</em>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join(''):'<div class="vg-empty">동물이 없어요. 상점이나 알 부화로 먼저 데려와 주세요.</div>';
   const b=VD.bosses.find(x=>x.floor===VD.floor)||{};
   const reward=VD.floor>best?`첫 클리어 ${vgN(VD.floor*300)}코인${VD.floor===10?' + 황금 알':VD.floor>=5?' + 신비한 알':''}`:`반복 클리어 ${vgN(VD.floor*60)}코인`;
-  vgBody(`<h3>⚔️ 동굴 던전</h3><p class="vg-mp">최고 기록 <b>${best}층</b> · ${VD.floor}층 오늘 입장 <b>${left}/${st.max}</b>회 남음 (층마다 5회) · 파티는 최대 3마리</p>
+  vgBody(`<h3>⚔️ 동굴 던전</h3><div style="margin:2px 0 4px">${vgCutToggles()}</div><p class="vg-mp">최고 기록 <b>${best}층</b> · ${VD.floor}층 오늘 입장 <b>${left}/${st.max}</b>회 남음 (층마다 5회) · 파티는 최대 3마리</p>
   <div class="vd-floors">${floors}</div>
   <div class="vd-info"><div><b>${VD.floor}층 · ${esc(b.name||'')}</b> <small>❤${vgN(b.hp)} ⚔${b.atk} 🛡${b.def}</small><div class="vd-pat">행동 패턴 ${(b.pattern||[]).map(a=>`<span title="${(VD_BA[a]||['',a,''])[2]}">${(VD_BA[a]||['❔',a])[0]} ${(VD_BA[a]||['',a])[1]}</span>`).join(' → ')}</div></div><div>🎁 ${reward}</div></div>
   <div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b></div><div class="vd-picks">${pickHtml}</div>
   <button class="vg-btn green" id="vdGo" style="min-width:240px;margin-top:12px" ${!VD.pick.length||left<=0?'disabled':''}>${left<=0?'오늘 입장 횟수를 모두 사용했어요':`${VD.floor}층 입장하기`}</button>`);
-  VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
+  vgCutBind(VD.m);VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
   VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
   VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used_by_floor[VD.floor]=(Number(VD.st.used_by_floor[VD.floor])||0)+1;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
 const VD_SK={nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 1.5배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 25%만큼 아군 회복 (신화 전용)'],counter:['🪓','룬 반격: 2턴간 보스 공격을 대신 받고 맞을 때마다 1.5배 반격 (돌연변이 전용)'],timestop:['🌌','성운 붕괴: 피해 + 보스 2턴 행동 봉인 (돌연변이 전용)'],overdrive:['⚙️','증기 과부하: 3턴간 일반 공격 2회 (돌연변이 전용)'],web:['🕸️','거미줄 속박: 3턴간 보스 공격력 −25% + 받는 피해 +20% (돌연변이 전용)'],cleanse:['💎','수정의 빛: 전체 30% 회복 + 2턴간 독·저주·기절 면역 (돌연변이 전용)'],meteor:['☄️','용암 운석: 공격력 4배 + 강한 화상 3턴 (돌연변이 전용)'],dodge:['🌪️','질풍의 날개: 2턴간 아군이 50% 확률로 보스 공격 회피 (돌연변이 전용)'],drain:['🌀','심해 흡수: 피해 + 보스 공격력 영구 −10% (최대 −30%) (돌연변이 전용)']};
@@ -1489,12 +1493,12 @@ function vgBattleView(logHtml){const bt=VD.battle,bs=bt.floor===0?(VD.bosses.fin
   const bt_tags=[];if(b.conf>0)bt_tags.push(`🌙혼란 ${b.conf}`);if(b.burn>0)bt_tags.push(`🔥화상 ${b.burn}`);if(b.weak>0)bt_tags.push(`⬇️약화 ${b.weak}`);if(b.brk>0)bt_tags.push(`💔방어파괴 ${b.brk}`);if(b.harden>0)bt_tags.push('🪨단단함');if(b.stunimm>0)bt_tags.push(`기절저항 ${b.stunimm}`);if(en)bt_tags.push('😡분노');
   const pt=[];const cx=fx.codex||{};const cxn=Object.keys(cx).filter(k=>cx[k]).length;if(cxn)pt.push(`📖 도감 보너스 ${cxn}`);if(fx.dr>0)pt.push(`🛡️ 결계 ${fx.dr}`);if(fx.grove>0)pt.push(`🌳 생명의 숲 ${fx.grove}`);if(fx.rebirth>0)pt.push(`🔥 불사 ${fx.rebirth}`);if(fx.ll>0)pt.push(`🌌 흡혈 오라 ${fx.ll}`);if(fx.buff>0)pt.push('⚡ 공격력 강화');if(fx.curse>0)pt.push('🌑 저주 (공격력 −30%)');if(fx.poison>0)pt.push(`☠️ 독 ${fx.poison}턴`);
   const nx=VD_BA[b.next]||['❔',b.next,''];
-  vgBody(`<div class="vd-top"><b>${bt.floor?`${bt.floor}층`:'🐉 월드 보스'} · ${esc(b.name)}</b><span>턴 <b>${Math.min(bt.turn,bt.max_turn)}</b>/${bt.max_turn}</span></div>
+  vgBody(`<div class="vd-top"><b>${bt.floor?`${bt.floor}층`:'🐉 월드 보스'} · ${esc(b.name)}</b><span>${vgCutToggles()} 턴 <b>${Math.min(bt.turn,bt.max_turn)}</b>/${bt.max_turn}</span></div>
   <div class="vd-arena"><div class="vd-cave"></div><div class="vd-pside"><div class="vd-pfx">${pt.map(t=>`<span>${t}</span>`).join('')}</div><div class="vd-party">${party}</div></div>
    <div class="vd-boss" id="vdBoss"><div class="vd-intent ${b.next==='smash'||b.next==='charge'?'warn':''}">다음 행동 ${nx[0]} <b>${nx[1]}</b><small>${nx[2]}</small></div><svg viewBox="-120 -170 240 178" class="vd-bossart">${vgBossArt(bt.floor||10,bs.image_url)}</svg><div class="vd-btags">${bt_tags.map(t=>`<span>${t}</span>`).join('')}</div><div class="vd-bhp ${bt.floor===0?'wb':''}"><span id="vdBhp" style="width:${bt.floor===0?100:b.hp/b.max*100}%"></span><em id="vdBhpT">${bt.floor===0?`🏆 점수 ${vgN(b.max-b.hp)}`:`${vgN(b.hp)} / ${vgN(b.max)}`}</em></div></div></div>
   <div class="vd-log" id="vdLog">${logHtml||'보스가 나타났다! 각 캐릭터의 행동을 고른 뒤 [턴 진행]을 누르세요.'}</div>
   <div id="vdActs"></div>`);
-  vgActs()}
+  vgCutBind(VD.m);vgActs()}
 function vgActs(){const bt=VD.battle,el=VD.m.querySelector('#vdActs');if(!el||bt.status!=='active')return;
   const rows=bt.party.map((p,i)=>{if(p.hp<=0)return `<div class="vd-cmd dead"><b>${esc(p.name)}</b><span>쓰러짐</span></div>`;if(p.stun>0)return `<div class="vd-cmd dead"><b>${esc(p.name)}</b><span>💫 기절 — 이번 턴 행동 불가</span></div>`;
     const sk=VD_SK[p.skill]||VD_SK.nuke,sel=VD.sel[i];
@@ -1690,14 +1694,14 @@ function vgWbLobby(){const st=VD.wb,mine=st.mine,img=(VD.bosses.find(x=>x.floor=
   const animals=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal').sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||((b.tr||0)-(a.tr||0)));
   const pickHtml=animals.map(i=>{const c=VG.cat[i.item_key],s=(VG_GSTAT[c.stat_grade||c.grade]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(Number(i.tr)||0)))),on=VD.pick.includes(i.id),sk=VD_SK[c.skill||'nuke']||VD_SK.nuke;
     return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small><em class="vd-psk">${sk[0]} ${esc(c.skill_name||'필살기')}</em>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join('');
-  vgBody(`<div class="wb-hero"><svg viewBox="-120 -170 240 178" class="wb-art">${vgBossArt(10,img)}</svg><div class="wb-info"><span class="wb-tag">🐉 월드 보스 · 하루 1회</span><h3>심연의 마왕</h3>
+  vgBody(`<div class="wb-hero"><svg viewBox="-120 -170 240 178" class="wb-art">${vgBossArt(10,img)}</svg><div class="wb-info"><span class="wb-tag">🐉 월드 보스 · 하루 1회</span> ${vgCutToggles()}<h3>심연의 마왕</h3>
     <p>10턴 동안 보스에게 준 <b>피해량이 점수</b>가 돼요. 보스는 쓰러지지 않으니 최대한 많이 때리세요! 파티가 모두 쓰러지면 그 자리에서 끝나요.</p>
     <div class="wb-tiers"><span>점수 1점 = ${vgCoinIcon(12)}1</span>${VG_WB_TIERS.map(([s,b])=>`<span>${vgN(s)}점 <b>+${vgN(b)}</b></span>`).join('')}<span class="egg">10,000점 🥚 신비한 알</span></div></div></div>
    ${mine?`<div class="wb-done">✅ 오늘 도전 완료 · <b>${vgN(mine.score)}점</b> · ${vgCoinIcon(14)} ${vgN(mine.coins)} + 추가 ${vgN(mine.bonus)} 획득 <small>내일 다시 도전할 수 있어요</small></div>`:
    `<div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b> <small style="font-size:12px;color:#7d7290">— 공격·강화·지속 피해 필살기가 점수에 유리해요</small></div><div class="vd-picks">${pickHtml||'<div class="vg-empty">동물이 없어요.</div>'}</div>
    <button class="vg-btn pink" id="wbGo" style="min-width:240px;margin-top:10px" ${VD.pick.length?'':'disabled'}>🐉 도전하기 (오늘 1회)</button>`}
    <div class="wb-board-h">🏆 오늘의 점수판 <small>${st.board.length}명 참여</small></div><div class="wb-board">${vgWbBoard(st.board||[])}</div>`);
-  VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgWbLobby()});
+  vgCutBind(VD.m);VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgWbLobby()});
   const go=VD.m.querySelector('#wbGo');if(go)go.onclick=async()=>{go.disabled=true;try{VD.battle=await window.fitVillage.wbStart(VD.pick);VD.sel=null;vgBattleView('🐉 심연의 마왕이 나타났다! 10턴 동안 최대한 많은 피해를 주세요.')}catch(e){vgToast(e.message||String(e),true);go.disabled=false}}}
 async function vgWbResult(r){if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
   const acts=VD.m.querySelector('#vdActs'),sc=Number(r.wb_score)||0,why=(r.events||[]).some(e=>e.t==='flee')?'중간에 후퇴했어요.':(r.events||[]).some(e=>e.t==='lose')?'파티가 모두 쓰러졌어요.':'10턴이 끝났어요!';
@@ -1708,6 +1712,11 @@ async function vgWbResult(r){if(r.state){vgSetState(r.state);vgRenderHud();vgTic
 
 /* ===== 컷신 (보스 필살기 · 신화/돌연변이 필살기) ===== */
 // 나중에 영상이 생기면 여기에 경로만 추가: 'boss:smash':'videos/boss_smash.mp4', 'char:abyss_reaper':'videos/reaper.mp4'
+// 컷신 보기 설정 (기기별 저장)
+function vgCutPref(){let d={ally:true,enemy:true};try{Object.assign(d,JSON.parse(localStorage.getItem('fitVgCut')||'{}'))}catch(e){}return d}
+function vgCutSet(k,v){const d=vgCutPref();d[k]=v;try{localStorage.setItem('fitVgCut',JSON.stringify(d))}catch(e){}VG.cutPref=d}
+function vgCutToggles(){const d=vgCutPref();return `<span class="vc-tg"><button data-cut="ally" class="${d.ally?'on':''}" title="아군 필살기 컷신 켜기/끄기">🎬 아군 ${d.ally?'ON':'OFF'}</button><button data-cut="enemy" class="${d.enemy?'on':''}" title="보스 필살기 컷신 켜기/끄기">👹 적 ${d.enemy?'ON':'OFF'}</button></span>`}
+function vgCutBind(root){root.querySelectorAll('[data-cut]').forEach(b=>b.onclick=e=>{e.stopPropagation();const k=b.dataset.cut,v=!vgCutPref()[k];vgCutSet(k,v);root.querySelectorAll(`[data-cut="${k}"]`).forEach(x=>{x.classList.toggle('on',v);x.textContent=(k==='ally'?'🎬 아군 ':'👹 적 ')+(v?'ON':'OFF')});vgToast(`${k==='ally'?'아군':'적'} 컷신을 ${v?'켰어요':'껐어요'}`)})}
 const VG_CUT_VIDEO={}; // 기본 규칙: images/bosses/boss{층}.mp4 · images/chars/{캐릭터키}.mp4 (파일만 올리면 자동 적용)
 const VG_BOSS_CUT={smash:{t:'파멸의 일격',c:'#ff3b5c',sub:'전체에 막대한 피해!'},poison:{t:'죽음의 독안개',c:'#7dff6a',sub:'아군 전체 3턴 중독'},stunhit:{t:'혼절의 일격',c:'#ffe55a',sub:'한 명을 기절시킨다'},sweep:{t:'그림자 습격',c:'#b06bff',sub:'아군 전체를 휩쓴다!'}};
 const VG_BIG=['smash','poison','stunhit'];
@@ -1727,7 +1736,7 @@ function vgCutVideo(key,host,over){const src=vgCutPath(key);if(!src||VG_VID_MISS
   v.onended=()=>end(started);v.onerror=()=>end(false);setTimeout(()=>{if(!started)end(false)},2500);
   host.appendChild(v);v.src=src;v.play().catch(()=>{if(!started)end(false)})})}
 function vgCutHost(){const h=document.createElement('div');h.className='vc-host';document.body.appendChild(h);return h}
-async function vgBossCut(act,bt){const cfg=VG_BOSS_CUT[act];if(!cfg)return;const host=vgCutHost();host.style.setProperty('--c',cfg.c);
+async function vgBossCut(act,bt){const cfg=VG_BOSS_CUT[act];if(!cfg||!vgCutPref().enemy)return;const host=vgCutHost();host.style.setProperty('--c',cfg.c);
   const over=`<div class="vc-bars"></div><div class="vc-text v"><small>${esc(bt.boss.name)}</small><b>${cfg.t}</b><span>${cfg.sub}</span></div>`;
   if(await vgCutVideo('boss'+(bt.floor||10),host,over)){host.classList.add('out');await vdSleep(250);host.remove();const ar=VD.m&&VD.m.querySelector('.vd-arena');if(ar){ar.classList.remove('vd-quake');void ar.offsetWidth;ar.classList.add('vd-quake')}return}
   const bs=bt.floor===0?(VD.bosses.find(x=>x.floor===10)||{image_url:'images/bosses/boss10.webp'}):(VD.bosses.find(x=>x.floor===bt.floor)||{});
@@ -1736,7 +1745,7 @@ async function vgBossCut(act,bt){const cfg=VG_BOSS_CUT[act];if(!cfg)return;const
    <div class="vc-text"><small>${esc(bt.boss.name)}</small><b>${cfg.t}</b><span>${cfg.sub}</span></div><div class="vc-warn">⚠ WARNING ⚠</div>`;
   await vdSleep(1700);host.classList.add('out');await vdSleep(300);host.remove();
   const ar=VD.m&&VD.m.querySelector('.vd-arena');if(ar){ar.classList.remove('vd-quake');void ar.offsetWidth;ar.classList.add('vd-quake');const fl=document.createElement('div');fl.className='vd-flash red';ar.appendChild(fl);setTimeout(()=>fl.remove(),700)}}
-async function vgHeroCut(e,mem){const c=VG.cat[mem.key]||{};if((c.grade||0)<5)return false;const host=vgCutHost(),fx=(typeof VFX!=='undefined'&&VFX[e.skill])||{c:'#ffd34d'};host.style.setProperty('--c',fx.c);
+async function vgHeroCut(e,mem){const c=VG.cat[mem.key]||{};if((c.grade||0)<5||!vgCutPref().ally)return false;const host=vgCutHost(),fx=(typeof VFX!=='undefined'&&VFX[e.skill])||{c:'#ffd34d'};host.style.setProperty('--c',fx.c);
   if(await vgCutVideo('char:'+mem.key,host)){host.remove();return true}
   const tr=Number(e.tr)||0,g=VG_GRADE[c.grade]||{name:''};host.classList.add('hero');
   host.innerHTML=`<div class="vc-rays"></div><div class="vc-speed"></div><svg viewBox="-48 -96 96 102" class="vc-char">${vgArt(mem.key)}</svg>

@@ -617,6 +617,18 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vc-text.v{z-index:4;top:auto;bottom:15%;transform:none;animation:vcTextV 3.4s ease forwards}
 @keyframes vcTextV{0%,15%{opacity:0;transform:translateX(-30px)}25%{opacity:1;transform:none}90%{opacity:1}100%{opacity:0}}
 .vc-over{position:absolute;inset:0;z-index:3}
+/* 영상 타격 이펙트 */
+.vc-impact{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.vi-flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#fff,var(--c) 35%,transparent 70%);mix-blend-mode:screen;animation:viFlash .55s ease-out forwards}
+@keyframes viFlash{0%{opacity:0}15%{opacity:.95}100%{opacity:0}}
+.vi-slash{position:absolute;left:-10%;width:120%;height:14px;border-radius:50%;background:linear-gradient(90deg,transparent,var(--c) 20%,#fff 50%,var(--c) 80%,transparent);box-shadow:0 0 24px var(--c),0 0 60px var(--c);transform:rotate(var(--r)) scaleX(0);animation:viSlash .5s cubic-bezier(.2,.9,.2,1) var(--d) forwards;mix-blend-mode:screen}
+@keyframes viSlash{0%{transform:rotate(var(--r)) scaleX(0);opacity:1}45%{transform:rotate(var(--r)) scaleX(1);opacity:1}100%{transform:rotate(var(--r)) scaleX(1.05) scaleY(.2);opacity:0}}
+.vi-ring{position:absolute;left:50%;top:50%;width:20vmin;height:20vmin;margin:-10vmin;border-radius:50%;border:6px solid var(--c);box-shadow:0 0 30px var(--c);animation:viRing .7s ease-out forwards;mix-blend-mode:screen}.vi-ring.r2{animation-delay:.12s;border-width:3px}
+@keyframes viRing{from{transform:scale(.2);opacity:1}to{transform:scale(6);opacity:0}}
+.vi-shard{position:absolute;left:50%;top:50%;width:4px;height:22px;background:linear-gradient(#fff,var(--c));border-radius:3px;box-shadow:0 0 10px var(--c);transform:rotate(var(--a)) translateY(0);animation:viShard .8s ease-out var(--d) forwards;opacity:0}
+@keyframes viShard{0%{opacity:1;transform:rotate(var(--a)) translateY(0)}100%{opacity:0;transform:rotate(var(--a)) translateY(calc(var(--l) * -1))}}
+.vc-shake .vc-video{animation:viShake .45s}
+@keyframes viShake{15%{transform:translate(-14px,6px) scale(1.04)}30%{transform:translate(12px,-8px) scale(1.04)}50%{transform:translate(-8px,4px) scale(1.02)}70%{transform:translate(5px,-2px)}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1685,9 +1697,16 @@ const VG_BOSS_CUT={smash:{t:'파멸의 일격',c:'#ff3b5c',sub:'전체에 막대
 const VG_BIG=['smash','poison','stunhit'];
 function vgIsBossCut(act,bt){if(VG_BIG.includes(act))return true;const pat=(bt.boss&&bt.boss.pat)||[];return act==='sweep'&&!VG_VID_MISS.has(vgCutPath('boss'+(bt.floor||10)))&&!pat.some(a=>VG_BIG.includes(a)||a==='charge')}
 const VG_VID_MISS=new Set();
+// 영상 위에 덧입히는 타격 이펙트: at=영상 몇 초에 터질지, c=색
+const VG_CUT_FX={'char:abyss_reaper':{at:2.7,c:'#c08bff',n:3},'boss5':{at:1.4,c:'#ff7a3d',n:2},'char:flame_gumiho':{at:1.3,c:'#ff8a3d',n:3},'boss1':{at:1.0,c:'#b06bff',n:2}};
+function vgCutImpact(host,cfg){const L=document.createElement('div');L.className='vc-impact';L.style.setProperty('--c',cfg.c);
+  let h='<i class="vi-flash"></i><i class="vi-ring"></i><i class="vi-ring r2"></i>';for(let k=0;k<(cfg.n||3);k++)h+=`<i class="vi-slash" style="--r:${-28+k*24}deg;--d:${k*.09}s;top:${38+k*9}%"></i>`;
+  for(let k=0;k<18;k++)h+=`<i class="vi-shard" style="--a:${Math.random()*360}deg;--l:${30+Math.random()*30}vmin;--d:${Math.random()*.15}s"></i>`;
+  L.innerHTML=h;host.appendChild(L);host.classList.remove('vc-shake');void host.offsetWidth;host.classList.add('vc-shake');setTimeout(()=>L.remove(),1200)}
 function vgCutPath(key){if(VG_CUT_VIDEO[key])return VG_CUT_VIDEO[key];let m=key.match(/^boss(\d+)$/);if(m)return `images/bosses/boss${m[1]}.mp4`;m=key.match(/^char:(.+)$/);if(m)return `images/chars/${m[1]}.mp4`;return null}
 function vgCutVideo(key,host,over){const src=vgCutPath(key);if(!src||VG_VID_MISS.has(src))return Promise.resolve(false);return new Promise(res=>{let started=false,fin=false;const v=document.createElement('video');v.className='vc-video';v.muted=true;v.playsInline=true;v.preload='auto';
   const end=ok=>{if(fin)return;fin=true;if(!ok){VG_VID_MISS.add(src);v.remove();host.querySelectorAll('.vc-over').forEach(e=>e.remove())}res(ok)};
+  const fxc=VG_CUT_FX[key];let fxd=false;if(fxc)v.ontimeupdate=()=>{if(!fxd&&v.currentTime>=fxc.at){fxd=true;vgCutImpact(host,fxc)}};
   v.onplaying=()=>{if(started)return;started=true;if(over){const o=document.createElement('div');o.className='vc-over';o.innerHTML=over;host.appendChild(o)}setTimeout(()=>end(true),4500)};
   v.onended=()=>end(started);v.onerror=()=>end(false);setTimeout(()=>{if(!started)end(false)},2500);
   host.appendChild(v);v.src=src;v.play().catch(()=>{if(!started)end(false)})})}

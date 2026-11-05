@@ -772,6 +772,66 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .lb-have{font-size:13.5px;margin:6px 0;color:#a3420c}.lb-have small{font-family:'Malgun Gothic',sans-serif;font-size:11px;color:#9a8fab;font-weight:700}
 .lb-panel #lbGo{margin-top:4px}
 .lb-big{font-size:28px;color:#d64a7a;text-shadow:0 0 12px #ffc38a;margin:4px 0}
+/* ===== 탑 전투 가독성 : 행동 배너 · 적 행동 예고 · 전투 기록 ===== */
+.tw-arena{position:relative}
+.tw-banner{position:absolute;left:50%;top:12px;transform:translate(-50%,-8px);z-index:8;min-width:260px;max-width:86%;padding:8px 18px;border-radius:14px;text-align:center;color:#fff;pointer-events:none;opacity:0;box-shadow:0 6px 20px #0006}
+.tw-banner b{display:block;font-size:22px;line-height:1.2;text-shadow:0 2px 0 #0005}.tw-banner small{display:block;font-family:'Malgun Gothic',sans-serif;font-size:12.5px;font-weight:700;opacity:.95;margin-top:2px}
+.tw-banner.a{background:linear-gradient(90deg,#3b6fd8,#6b5cff);border:2px solid #b8c8ff}
+.tw-banner.e{background:linear-gradient(90deg,#c0304a,#e0603a);border:2px solid #ffc0c8}.tw-banner.e.boss{background:linear-gradient(90deg,#7a1030,#d0304a);border-color:#ffd34d}
+.tw-banner.u{background:linear-gradient(90deg,#c27a00,#ff7ab0);border:2px solid #fff3b0}
+.tw-banner.s{background:linear-gradient(90deg,#3a2f4a,#6a5a8a);border:2px solid #d8c9ff}
+.tw-banner.show{animation:twBan 1.6s ease forwards}
+@keyframes twBan{0%{opacity:0;transform:translate(-50%,-14px) scale(.9)}12%{opacity:1;transform:translate(-50%,0) scale(1.04)}20%{transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,0)}}
+.tw-acting{outline:3px solid #ffd34d;outline-offset:2px;box-shadow:0 0 18px #ffd34d;z-index:3}
+.tw-intent{font-size:12.5px!important;padding:2px 8px!important;box-shadow:0 2px 6px #0004}
+.tw-next{margin:10px 0 0;background:#2a1f3a;border-radius:12px;padding:8px 10px;color:#fff;text-align:left}
+.tw-next-h{font-size:14px;color:#ffd34d;margin-bottom:4px}.tw-next-h small{font-family:'Malgun Gothic',sans-serif;font-size:11px;color:#c8b8e8;font-weight:700}
+.tn{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:4px 8px;border-radius:9px;background:#ffffff10;margin-top:4px;font-size:13.5px}
+.tn>b{min-width:96px}.tn span{font-family:'Malgun Gothic',sans-serif;font-size:12.5px;font-weight:700;color:#e8e0f8}.tn span b{color:#fff}.tn s{opacity:.6}
+.tn.warn{background:#d0304a33;box-shadow:inset 3px 0 0 #ff5f6d}.tn.warn span b{color:#ffb0b8}
+.tn.boss>b{color:#ffd34d}.tn em{font-style:normal;font-family:'Malgun Gothic',sans-serif;font-size:11px;color:#ffb38a;font-weight:700;width:100%}
+.tw-log{max-height:170px;overflow:auto;padding:6px 8px!important;font-size:13px!important}
+.tl-turn{font-size:11px;color:#9a8fab;font-weight:800;margin-bottom:2px}
+.tl{padding:3px 8px;border-radius:7px;margin:2px 0;border-left:4px solid #c8bfd6;background:#fff8}
+.tl small{display:block;font-size:11px;color:#8a7f9a;font-weight:700}
+.tl.a{border-left-color:#5b7cff;background:#eef2ff}.tl.e{border-left-color:#e0485e;background:#fff0f2}.tl.u{border-left-color:#ffb020;background:#fff6dc}.tl.s{border-left-color:#9a8fab;background:#f4f0f8}
+.tw-ptb{display:inline-flex;gap:6px;margin-left:8px;vertical-align:middle}
+/* ===== 마을 파티 편성 ===== */
+.pt-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pt-head h3{margin:0}
+.pt-pow{background:linear-gradient(90deg,#ffd34d,#ff9a1f);border-radius:10px;padding:2px 10px;font-size:14px;color:#5a3d10}.pt-cnt{font-size:14px;color:#7d7290}
+.pt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:8px;max-height:62vh;overflow:auto;padding:2px}
+.pt-card{position:relative;display:grid;grid-template-columns:170px 1fr;gap:10px;border:2px solid #eadfcb;border-radius:16px;background:#fff;padding:10px;text-align:left}
+.pt-card.g4{border-color:#ffc27a}.pt-card.g5{border-color:#ff9ac0}.pt-card.g6{border-color:#7fdcc8}.pt-card.g7{border-color:#b9a0ff}
+.pt-card.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;border-style:dashed;background:#fffaf0;cursor:pointer;font-family:inherit;color:#7d7290}
+.pt-card.empty:hover{border-color:#8f6bff;background:#f6f1ff}.pt-plus{font-size:40px;color:#b9a8d8;line-height:1}.pt-card.empty small{font-family:'Malgun Gothic',sans-serif;font-size:11.5px;font-weight:700;color:#9a8fab}
+.pt-row{position:absolute;top:-9px;left:12px;background:#9a8fab;color:#fff;border-radius:8px;padding:0 8px;font-size:11.5px;z-index:2}.pt-row.f{background:#e0603a}
+.pt-por{position:relative;border-radius:14px;background:radial-gradient(circle at 50% 40%,#fffdf5,#f1e8d6);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 6px 8px;min-height:230px}
+.pt-card.g4 .pt-por{background:radial-gradient(circle at 50% 40%,#fff7e6,#ffd9a8)}.pt-card.g5 .pt-por{background:radial-gradient(circle at 50% 40%,#fff0f6,#ffc2d9)}.pt-card.g6 .pt-por{background:radial-gradient(circle at 50% 40%,#effff9,#b8eedf)}.pt-card.g7 .pt-por{background:radial-gradient(circle at 50% 40%,#f5f0ff,#d4c4ff)}
+.pt-por .vg-grade{top:8px;left:8px}
+.pt-art{width:150px!important;height:150px!important;filter:drop-shadow(0 6px 6px #0002)}
+.pt-stars{display:flex;align-items:center;gap:3px;margin-top:4px;min-height:18px}.pt-nostar{font-size:11px;color:#9a8fab}
+.pt-cbtn{display:flex;gap:4px;margin-top:6px}
+.pt-info{display:flex;flex-direction:column;gap:3px;min-width:0}
+.pt-name{font-size:19px}
+.pt-stat{display:flex;flex-wrap:wrap;gap:4px}.pt-stat span{background:#f7f2e7;border-radius:8px;padding:1px 7px;font-size:12.5px}.pt-stat b{font-family:Inter,sans-serif;font-weight:800}
+.pt-lbl{font-size:11.5px;color:#9a8fab;margin-top:4px}
+.pt-eqs{display:flex;flex-direction:column;gap:4px}
+.pt-eq{display:flex;align-items:center;gap:7px;border:2px solid #eadfcb;border-left:5px solid var(--g,#d9ccb4);border-radius:10px;background:#fff;padding:3px 7px;cursor:pointer;font-family:inherit;color:#3a2f4a;text-align:left;width:100%}
+.pt-eq:hover{background:#f6f1ff}.pt-eq.none{border-style:dashed;border-left-width:2px;color:#9a8fab}
+.pt-eqic{position:relative;font-size:20px;width:28px;text-align:center;flex:none}.pt-eqic i{position:absolute;right:-6px;bottom:-4px;font-style:normal;font-size:10px;background:#3a2f4a;color:#fff;border-radius:6px;padding:0 3px;font-family:Inter,sans-serif}
+.pt-eq>span:last-child{display:flex;flex-direction:column;min-width:0}.pt-eq b{font-size:13px}.pt-eq small{font-family:'Malgun Gothic',sans-serif;font-size:11px;color:#7d7290;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt-aw{border-radius:10px;padding:5px 8px;background:#f4f0f8;display:flex;flex-direction:column;gap:2px}.pt-aw b{font-size:13px}.pt-aw small{font-family:'Malgun Gothic',sans-serif;font-size:11px;color:#7d7290;font-weight:700}
+.pt-aw.on{background:linear-gradient(90deg,#fff4c9,#ffe0f0);box-shadow:inset 0 0 0 2px #ffc94d}.pt-aw.on b{color:#a2551a}
+.pt-aw.lb{background:#fff3e6;box-shadow:inset 0 0 0 2px #ffc38a}.pt-aw.lb b{color:#a3420c}.pt-aw.off{opacity:.75}
+.pt-aw .vg-btn{align-self:flex-start;margin-top:2px}
+.pt-sk{border-radius:10px;padding:5px 8px;background:#eef6ff}.pt-sk b{font-size:13px;display:block}.pt-sk small{font-family:'Malgun Gothic',sans-serif;font-size:11px;color:#5a6a8a;font-weight:700}
+.pt-mile{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}.pt-mile span{font-size:10.5px;border-radius:6px;padding:0 6px;background:#e3e0ea;color:#9a8fab;font-family:'Malgun Gothic',sans-serif;font-weight:700}.pt-mile span.on{background:#8f6bff;color:#fff}
+.pt-foot{display:flex;justify-content:center;margin-top:10px}
+.pt-cur{background:#f7f2e7;border-radius:12px;padding:6px;margin-bottom:6px}.pt-cur small{font-size:12px;color:#7d7290}
+.pt-eqlist{display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow:auto}
+.pt-eqpick{border:none;background:none;padding:0;cursor:pointer;text-align:left;font-family:inherit;border-radius:14px}.pt-eqpick:hover .eq-card{border-color:#8f6bff;background:#f6f1ff}
+@media(max-width:860px){.pt-grid{grid-template-columns:1fr;max-height:66vh}}
+@media(max-width:520px){.pt-card{grid-template-columns:110px 1fr;gap:8px;padding:8px}.pt-por{min-height:170px;padding-top:12px}.pt-art{width:96px!important;height:96px!important}.pt-cbtn{flex-direction:column}.pt-name{font-size:17px}.tw-banner b{font-size:17px}.tw-banner{min-width:200px}.tn>b{min-width:0}.tw-ptb{display:flex;margin:6px 0 0}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1427,13 +1487,13 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
-  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button>`;
+  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요 <button class="vg-btn sm" id="vgCancel">취소 (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
   <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
-  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
@@ -1952,7 +2012,7 @@ async function vgTower(){if(TW.m)TW.m.remove();eqLoad();TW.m=vgModal('<div class
   try{TW.st=await window.fitVillage.twStatus();if(!VD.bosses.length)VD.bosses=await window.fitVillage.bosses();await awLoad(true)}catch(e){TW.m.querySelector('.vg-empty').outerHTML=`<div class="vg-setup">${esc(e.setup?'Supabase에 심연의 탑 SQL(fit_village_update16.sql) 실행이 필요합니다.':(e.message||String(e)))}</div>`;return}
   if(!TW.st.open){twBody(`<div class="tw-lock"><div style="font-size:56px">🗼🔒</div><h3>심연의 탑</h3><p class="vg-mp">동굴 던전 <b>10층</b>을 클리어하면 열려요.</p></div>`);return}
   if(TW.st.battle&&TW.st.battle.status==='active'){TW.battle=TW.st.battle;TW.order=[];TW.uq=null;twBattle('진행 중이던 탑 전투를 이어서 합니다.');return}
-  TW.floor=Math.min(20,(TW.st.best||0)+1);TW.pick=TW.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));twLobby()}
+  TW.floor=Math.min(20,(TW.st.best||0)+1);{const sp=ptSaved();if(sp.ids.length){TW.pick=sp.ids.slice();TW.form=sp.form}}TW.pick=TW.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));twLobby()}
 function twTickets(){const s=TW.st;return `<div class="tw-tix"><span>🎟️ 입장권 <b>${s.tickets}</b>장</span><span class="${s.free?'on':''}">${s.free?'🎁 오늘 무료 1장 남음':'오늘 무료 입장 사용함'}</span><button class="vg-btn sm gold" data-twbuy="1">${vgCoinIcon(13)} 10,000 · 1장 구매</button><span class="tw-stone">💠 각성석 <b>${s.stones||0}</b>개</span><span class="tw-stone lb">🔶 돌파석 <b>${s.lbstones||0}</b>개</span><button class="vg-btn sm purple" data-awopen="1">🌟 각성</button></div>`}
 function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
   const floors=Array.from({length:20},(_,k)=>k+1).map(f=>{const lock=f>best+1,clear=f<=best,c=Number((s.clears||{})[f])||0;return `<button class="tw-fl ${TW.floor===f?'on':''} ${lock?'lock':''} ${f%5===0?'gate':''}" data-twf="${f}" ${lock?'disabled':''}><b>${f}</b>${clear?'<i>✓</i>':''}${c>=s.sweep_need?'<em>⚡</em>':''}</button>`}).join('');
@@ -1965,7 +2025,7 @@ function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
    <div class="tw-floors">${floors}</div>
    <div class="vd-info"><div><b>${TW.floor}층</b> <small>졸개 웨이브 → ${TW.floor%5===0?'<b style="color:#d64a7a">관문 보스</b>':'보스'} 웨이브</small></div><div>🎁 ${first?`첫 클리어 ${vgN(TW.floor*1500)}코인${TW.floor%5===0?' + 보스 알':''}`:`반복 클리어 ${vgN(TW.floor*300)}코인`}</div></div>
    <div class="tw-forms">${Object.entries(TW_FORM).map(([k,v])=>`<button class="${TW.form===k?'on':''}" data-twform="${k}"><b>${v.n}</b><small>${v.d}</small></button>`).join('')}</div>
-   <div class="vd-sub">파티 <b>${TW.pick.length}/5</b> <small style="font-size:12px;color:#7d7290">— 3~5마리 · 고른 순서대로 앞줄부터 배치 · 앞줄이 공격을 더 많이 받아요 · 🌟 각성한 캐릭터는 고유 스킬(파티당 1회) 사용</small></div>
+   <div class="vd-sub">파티 <b>${TW.pick.length}/5</b> <small style="font-size:12px;color:#7d7290">— 3~5마리 · 고른 순서대로 앞줄부터 배치 · 앞줄이 공격을 더 많이 받아요 · 🌟 각성한 캐릭터는 고유 스킬(파티당 1회) 사용</small><span class="tw-ptb"><button class="vg-btn sm purple" id="twParty">🛡️ 파티 편성 · 장비</button><button class="vg-btn sm" id="twSaveP" ${TW.pick.length?'':'disabled'}>💾 이 파티 저장</button></span></div>
    <div class="tw-slots">${slots}</div>
    <div class="vd-picks">${picks}</div>
    <button class="vg-btn green" id="twGo" style="min-width:260px;margin-top:10px" ${TW.pick.length<3||(!s.free&&s.tickets<1)?'disabled':''}>${TW.pick.length<3?'3마리 이상 골라 주세요':(!s.free&&s.tickets<1)?'입장권이 필요해요':`${TW.floor}층 도전 (${s.free?'무료 입장':'입장권 1장'})`}</button>
@@ -1976,6 +2036,7 @@ function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
   TW.m.querySelectorAll('[data-tws]').forEach(b=>b.onclick=()=>{const k=Number(b.dataset.tws);if(TW.pick[k]){TW.pick.splice(k,1);twLobby()}});
   TW.m.querySelectorAll('[data-twp]').forEach(b=>b.onclick=()=>{const id=b.dataset.twp,i=TW.pick.indexOf(id);if(i>=0)TW.pick.splice(i,1);else if(TW.pick.length<5)TW.pick.push(id);else{vgToast('파티는 최대 5마리예요.',true);return}twLobby()});
   TW.m.querySelectorAll('[data-twbuy]').forEach(b=>b.onclick=twBuy);TW.m.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
+  TW.m.querySelector('#twParty').onclick=vgParty;TW.m.querySelector('#twSaveP').onclick=async()=>{try{const r=await window.fitVillage.partySave(TW.pick,TW.form);VG.state.village.party=r.party;VG.state.village.party_form=r.party_form;vgToast('💾 파티를 저장했어요')}catch(e){vgToast(e.setup?'Supabase에 fit_village_update20.sql 실행이 필요합니다.':(e.message||String(e)),true)}};
   const go=TW.m.querySelector('#twGo');if(go)go.onclick=async()=>{go.disabled=true;try{const r=await window.fitVillage.twStart(TW.floor,TW.pick,TW.form);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.battle=r;TW.order=[];TW.uq=null;TW.target=0;twBattle(`🗼 ${TW.floor}층 도전 시작! 1웨이브 — 졸개들이 나타났다.`)}catch(e){vgToast(e.message||String(e),true);go.disabled=false}};
   const sw=TW.m.querySelector('#twSweep');if(sw)sw.onclick=async()=>{try{const r=await window.fitVillage.twSweep(TW.floor);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.st.clears[TW.floor]=(Number(TW.st.clears[TW.floor])||0)+1;vgSetState(r);vgRenderHud();VG.equips=null;vgToast(`⚡ 소탕 완료! +${vgN(r.reward_coins)} 코인${r.equip?` · ${EQ_GR[r.equip.grade][0]} ${EQ_SLOT[r.equip.slot][1]} 획득`:''}${r.stones?` · 💠 각성석 +${r.stones}`:''}${r.lbst?` · 🔶 돌파석 +${r.lbst}`:''}`);if(r.lbst)TW.st.lbstones=(TW.st.lbstones||0)+r.lbst;if(r.stones)TW.st.stones=(TW.st.stones||0)+r.stones;twLobby()}catch(e){vgToast(e.message||String(e),true)}}}
 async function twBuy(){if(!window.confirm('입장권 1장을 10,000코인에 구매할까요?'))return;try{const r=await window.fitVillage.twBuy(1);vgSetState(r);vgRenderHud();if(TW.st)TW.st.tickets+=r.bought;vgToast('🎟️ 입장권을 구매했어요');if(TW.m&&!TW.battle)twLobby();vgRenderSide()}catch(e){vgToast(e.message||String(e),true)}}
@@ -1986,14 +2047,22 @@ function twBattle(log){const b=TW.battle,front=b.party.filter(p=>p.row==='front'
     return `<div class="vd-mem tw-mem ${p.hp<=0?'dead':''}" data-mem="${i}"><div class="vd-tags">${tags.map(t=>`<span>${t}</span>`).join('')}</div><svg viewBox="-48 -96 96 102" class="vd-memart">${vgArt(p.key)}</svg><div class="vd-memname">${esc(p.name)}</div><div class="vd-hp"><span style="width:${Math.max(0,p.hp)/p.max*100}%"></span></div><small class="vd-hpt">${Math.max(0,p.hp)}/${p.max}</small></div>`};
   let pt=[];if(fx.buff>0)pt.push('⚡ 강화');if(fx.curse>0)pt.push('🌑 저주');if(fx.poison>0)pt.push(`☠️ 독 ${fx.poison}`);if(fx.dr>0)pt.push('🛡️ 결계');if(fx.grove>0)pt.push('🌳 숲');if(fx.rebirth>0)pt.push('🔥 불사');if(fx.ll>0)pt.push('🌌 흡혈');if(fx.dodge>0)pt.push('🌪️ 회피');if(fx.immune>0)pt.push('💎 면역');if(fx.counter>0)pt.push('🪓 반격');pt.push(fx.uqused?'🌟 고유 스킬 사용함':b.party.some(p=>p.uq)?'🌟 고유 스킬 1회 남음':'');
   const ens=b.enemies.map((e,j)=>{const nx=VD_BA[e.next]||['❔',e.next],tags=[];if(e.burn>0)tags.push('🔥');if(e.weak>0)tags.push('⬇️');if(e.brk>0)tags.push('💔');if(e.harden>0)tags.push('🪨');if(e.seal>0)tags.push('🌌');if(e.conf>0)tags.push('🌙');if(e.phase===2)tags.push('😡');
-    return `<div class="tw-en ${e.boss?'boss':''} ${e.hp<=0?'dead':''} ${TW.target===j?'tgt':''}" data-en="${j}">${e.hp>0?`<div class="tw-intent ${e.next==='smash'||e.next==='charge'?'warn':''}">${nx[0]} ${nx[1]}</div>`:''}<svg viewBox="-120 -170 240 178" class="tw-enart">${twEnemyArt(e)}</svg><div class="vd-btags">${tags.map(t=>`<span>${t}</span>`).join('')}</div><b>${esc(e.name)}</b><div class="vd-bhp"><span style="width:${Math.max(0,e.hp)/e.max*100}%"></span><em>${vgN(Math.max(0,e.hp))}</em></div>${TW.target===j&&e.hp>0?'<i class="tw-aim">🎯</i>':''}</div>`}).join('');
+    return `<div class="tw-en ${e.boss?'boss':''} ${e.hp<=0?'dead':''} ${TW.target===j?'tgt':''}" data-en="${j}">${e.hp>0?`<div class="tw-intent ${TW_WARN.includes(e.next)?'warn':''}" title="${esc(TW_BA[e.next]||nx[2]||'')}">${nx[0]} ${nx[1]}</div>`:''}<svg viewBox="-120 -170 240 178" class="tw-enart">${twEnemyArt(e)}</svg><div class="vd-btags">${tags.map(t=>`<span>${t}</span>`).join('')}</div><b>${esc(e.name)}</b><div class="vd-bhp"><span style="width:${Math.max(0,e.hp)/e.max*100}%"></span><em>${vgN(Math.max(0,e.hp))}</em></div>${TW.target===j&&e.hp>0?'<i class="tw-aim">🎯</i>':''}</div>`}).join('');
   twBody(`<div class="vd-top"><b>🗼 ${b.floor}층 · ${b.wave+1}/${b.waves} 웨이브</b><span>${vgCutToggles()} 턴 <b>${Math.min(b.turn,b.max_turn)}</b>/${b.max_turn}</span></div>
    <div class="vd-arena tw-arena"><div class="vd-cave"></div>
     <div class="tw-side"><div class="vd-pfx">${pt.filter(Boolean).map(t=>`<span>${t}</span>`).join('')}</div><div class="tw-rows"><div class="tw-row back">${back.map(mem).join('')}</div><div class="tw-row front">${front.map(mem).join('')}</div></div></div>
-    <div class="tw-ens">${ens}</div></div>
-   <div class="vd-log" id="twLog">${log||'적을 눌러 대상을 고르고, 아래에서 필살기를 쓸 순서대로 누른 뒤 [턴 진행]을 누르세요.'}</div><div id="twActs"></div>`);
+    <div class="tw-ens">${ens}</div><div class="tw-banner" id="twBan"></div></div>
+   ${twNextHtml(b)}<div class="vd-log tw-log" id="twLog">${log||'적을 눌러 대상을 고르고, 아래에서 필살기를 쓸 순서대로 누른 뒤 [턴 진행]을 누르세요.'}</div><div id="twActs"></div>`);
   vgCutBind(TW.m);TW.m.querySelectorAll('[data-en]').forEach(x=>x.onclick=()=>{const j=Number(x.dataset.en);if(b.enemies[j].hp>0){TW.target=j;twBattle(TW.m.querySelector('#twLog').innerHTML)}});
   twActs()}
+const TW_BA={bite:'한 명 공격 (앞줄을 주로 노려요)',sweep:'아군 전체 공격 (0.6배)',charge:'힘을 모아요 → 다음 턴 💥 강력한 일격!',smash:'아군 전체 1.8배 큰 피해! 보호막·결계·기절·봉인으로 대비하세요',poison:'아군 전체 약한 피해 + 3턴 독 (매 턴 최대 체력 5%)',curse:'아군 전체 약한 피해 + 2턴간 아군 공격력 −30%',harden:'2턴간 받는 피해 −50%',regen:'체력 6% 회복',stunhit:'한 명 공격 (1.1배) + 1턴 기절'};
+const TW_BA_X={poison:'☠️ 3턴 독',curse:'🌑 2턴 공격력 −30%',charge:'⚠ 다음 턴 강력한 일격!',harden:'🪨 2턴 받는 피해 −50%'};
+const TW_WARN=['smash','charge','poison','curse','stunhit'];
+function twBanner(c,h){const b=TW.m&&TW.m.querySelector('#twBan');if(!b)return;b.className='tw-banner '+c;b.innerHTML=h;void b.offsetWidth;b.classList.add('show')}
+function twNextHtml(b){const al=b.enemies.map((e,j)=>({e,j})).filter(x=>x.e.hp>0);if(!al.length)return '';
+  return `<div class="tw-next"><div class="tw-next-h">⚠ 적의 다음 행동 <small>— 미리 보고 방어·기절·봉인으로 대비하세요</small></div>${al.map(({e})=>{const ba=VD_BA[e.next]||['❔',e.next],warn=TW_WARN.includes(e.next);
+    const stop=e.seal>0?'🌌 봉인 — 행동 못 함':e.stun>0?'💫 기절 — 행동 못 함':'';const conf=e.conf>0?` · 🌙 혼란 (${Math.round((e.confp||.5)*100)}% 실패)`:'';
+    return `<div class="tn ${warn&&!stop?'warn':''} ${e.boss?'boss':''}"><b>${e.boss?'👑 ':''}${esc(e.name)}</b><span>${stop?`<s>${ba[0]} ${ba[1]}</s> ${stop}`:`${ba[0]} <b>${ba[1]}</b> — ${esc(TW_BA[e.next]||ba[2]||'')}${conf}`}</span>${e.boss&&e.phase!==2?'<em>체력 50% 이하 → 분노(공격력 +25%)</em>':''}</div>`}).join('')}</div>`}
 function twCanAuto(){return !!TW.battle&&TW.battle.floor<=((TW.st&&TW.st.best)||0)}
 function twUqCan(i){const b=TW.battle,p=b&&b.party[i];return !!(p&&p.uq&&!(b.fx||{}).uqused&&p.hp>0&&!(p.stun>0))}
 function twOrderOut(){return (TW.uq!=null&&twUqCan(TW.uq)?[100+TW.uq]:[]).concat(TW.order.filter(i=>i!==TW.uq))}
@@ -2023,38 +2092,48 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
   const php=old.party.map(p=>p.hp),ehp=old.enemies.map(e=>e.hp);
   const setP=i=>{const el=M(i),p=old.party[i];if(!el)return;el.querySelector('.vd-hp span').style.width=(Math.max(0,php[i])/p.max*100)+'%';el.querySelector('.vd-hpt').textContent=`${Math.max(0,php[i])}/${p.max}`;el.classList.toggle('dead',php[i]<=0)};
   const setE=j=>{const el=EN(j),e=old.enemies[j];if(!el||!e)return;el.querySelector('.vd-bhp span').style.width=(Math.max(0,ehp[j])/e.max*100)+'%';el.querySelector('.vd-bhp em').textContent=vgN(Math.max(0,ehp[j]))};
-  let waved=false;
+  let waved=false,cur=null,hitSum=0,burnSum=0,poiSum=0;const L=(c,h)=>lines.push({c,h});
+  const act=el=>{if(!el)return;el.classList.add('tw-acting');setTimeout(()=>el.classList.remove('tw-acting'),650)};
+  const flushA=()=>{if(hitSum)L('a',`⚔️ 일반 공격 총 <b>${vgN(hitSum)}</b> 피해`);if(burnSum)L('a',`🔥 화상 피해 총 <b>${vgN(burnSum)}</b>`);hitSum=0;burnSum=0};
+  const flushE=()=>{if(!cur)return;const c=cur,ba=VD_BA[c.act]||['❔',c.act],n=c.hits.size;cur=null;
+    const tg=n===1&&c.dmg>0?`<b>${nm([...c.hits][0])}</b>에게 ${vgN(c.dmg)} 피해`:n>1?`아군 ${n}명 · 총 <b>${vgN(c.dmg)}</b> 피해`:'';
+    L('e',`${ba[0]} <b>${en(c.e)}</b>의 <b>${ba[1]}</b>${tg?' → '+tg:''}${c.dodge?` · 💨 회피 ${c.dodge}`:''}${c.abs?` · 🛡️ 보호막 흡수 ${vgN(c.abs)}`:''}${c.stun?` · 💫 ${c.stun} 기절`:''}${c.heal?` · 💚 ${vgN(c.heal)} 회복`:''}${TW_BA_X[c.act]?` · ${TW_BA_X[c.act]}`:''}`)};
   for(const e of r.events||[]){let w=200;if(waved&&!['win','lose','timeout'].includes(e.t))continue;
-    if(e.t==='hit'||e.t==='extra'){vdShake(M(e.who),'vd-lunge');ehp[e.e]-=e.dmg;setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),(e.t==='extra'?'📖 ':'')+(e.crit?'치명타 ':'')+'-'+e.dmg,e.crit?'crit':'');w=150}
-    else if(e.t==='skill'){const s=VD_SK[e.skill]||['✨',''];vdShake(M(e.who),'vd-lunge');const big=false; /* 탑에서는 일반 필살기 컷신 없음 (고유스킬 전용) */if(!big)vdPop(M(e.who),`${s[0]} ${e.name}!`,'sk');await vdSleep(big?100:320);
+    if(e.t==='hit'||e.t==='extra'){vdShake(M(e.who),'vd-lunge');ehp[e.e]-=e.dmg;setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),(e.t==='extra'?'📖 ':'')+(e.crit?'치명타 ':'')+'-'+e.dmg,e.crit?'crit':'');hitSum+=e.dmg;w=150}
+    else if(e.t==='skill'){const s=VD_SK[e.skill]||['✨',''];act(M(e.who));vdShake(M(e.who),'vd-lunge');
+      twBanner('a',`<b>${s[0]} ${esc(e.name)}</b><small>${nm(e.who)} · ${esc(s[1])}</small>`);vdPop(M(e.who),`${s[0]} ${e.name}!`,'sk');await vdSleep(420);
       if(e.dmg!=null&&e.e!=null){ehp[e.e]-=e.dmg;setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),'-'+e.dmg,'big')}
       if(['heal','cleanse','revive','rebirth','shield','aegis','grove','buff','lifelink','dodge','counter','taunt'].includes(e.skill))old.party.forEach((p,j)=>{if(php[j]>0||e.skill==='revive')vdPop(M(j),s[0],'heal')});
-      lines.push(`✨ ${nm(e.who)}의 <b>${esc(e.name)}</b>!${e.dmg!=null?` ${e.dmg} 피해`:''}`);w=380}
+      L('a',`✨ <b>${nm(e.who)}</b> — ${s[0]} <b>${esc(e.name)}</b>${e.dmg!=null?` · ${vgN(e.dmg)} 피해`:''}<small>${esc(s[1])}</small>`);w=420}
     else if(e.t==='ehit'){ehp[e.e]-=e.dmg;setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),'-'+e.dmg,'crit');w=110}
-    else if(e.t==='edie'){const el=EN(e.e);if(el)el.classList.add('dead');lines.push(`💀 ${en(e.e)} 쓰러짐!`)}
-    else if(e.t==='burn'){ehp[e.e]-=e.dmg;setE(e.e);vdPop(EN(e.e),'🔥-'+e.dmg,'crit');w=120}
-    else if(e.t==='estun'){vdPop(EN(e.e),'💫 기절!','big');lines.push(`💫 ${en(e.e)} 기절!`)}
-    else if(e.t==='eresist'){vdPop(EN(e.e),'기절 저항','')}
-    else if(e.t==='stunned'){vdPop(M(e.who),'💫','hurt');lines.push(`${nm(e.who)} 기절해서 행동 불가`)}
-    else if(e.t==='lifelink'){old.party.forEach((p,j)=>{if(php[j]>0){php[j]=Math.min(p.max,php[j]+e.amt);setP(j)}});lines.push(`🌌 흡혈 오라로 아군 ${e.amt}씩 회복`)}
-    else if(e.t==='wave'){waved=true;lines.push(`⚔️ <b>${e.wave}웨이브</b> — 보스가 나타났다!`);vgToast(`⚔️ ${e.wave}웨이브! 보스 등장`);w=600}
-    else if(e.t==='phase2'){vdShake(EN(e.e));vdPop(EN(e.e),'😡 2페이즈!','big');lines.push(`😡 ${en(e.e)}이(가) 분노했다! 패턴이 바뀐다`);w=500}
-    else if(e.t==='eseal'){vdPop(EN(e.e),'🌌 봉인','big');lines.push(`🌌 ${en(e.e)} 봉인되어 행동 불가`)}
-    else if(e.t==='eskip'){vdPop(EN(e.e),'💫','big')}
-    else if(e.t==='econf'){vdPop(EN(e.e),'🌙 혼란!','big');lines.push(`🌙 ${en(e.e)} 혼란에 빠져 행동 실패`)}
-    else if(e.t==='eact'){const oe=old.enemies[e.e];if(e.boss&&oe&&vgIsBossCut(e.act,{floor:oe.art,boss:{pat:oe.pat||[]}}))await vgBossCut(e.act,{floor:oe.art,boss:{name:oe.name,pat:oe.pat||[]}});const ba=VD_BA[e.act]||['❔',e.act];vdShake(EN(e.e),'vd-lungeL');vdPop(EN(e.e),`${ba[0]} ${ba[1]}`,'sk');if(e.boss||['smash','sweep','poison','curse'].includes(e.act))lines.push(`${ba[0]} ${en(e.e)}의 <b>${ba[1]}</b>!`);w=300}
-    else if(e.t==='pdmg'){if(e.dmg===0&&!e.abs){vdPop(M(e.who),'💨 회피','heal')}else{php[e.who]-=e.dmg;setP(e.who);vdShake(M(e.who));vdPop(M(e.who),(e.abs>0?`🛡️${e.abs} `:'')+'-'+e.dmg,'hurt')}w=120}
-    else if(e.t==='pstun'){vdPop(M(e.who),'💫 기절','hurt')}
-    else if(e.t==='eheal'){ehp[e.e]+=e.amt;setE(e.e);vdPop(EN(e.e),'+'+e.amt,'heal')}
-    else if(e.t==='ptick'){php[e.who]-=e.dmg;setP(e.who);vdPop(M(e.who),'☠️-'+e.dmg,'hurt');w=80}
-    else if(e.t==='unique'){const mem=old.party[e.who]||{};vdShake(M(e.who),'vd-lunge');await vgUniqueCut(e,mem);
+    else if(e.t==='edie'){const el=EN(e.e);if(el)el.classList.add('dead');L('a',`💀 <b>${en(e.e)}</b> 쓰러짐!`)}
+    else if(e.t==='burn'){ehp[e.e]-=e.dmg;setE(e.e);vdPop(EN(e.e),'🔥-'+e.dmg,'crit');burnSum+=e.dmg;w=120}
+    else if(e.t==='estun'){vdPop(EN(e.e),'💫 기절!','big');L('a',`💫 <b>${en(e.e)}</b> 기절! (다음 행동 취소)`)}
+    else if(e.t==='eresist'){vdPop(EN(e.e),'기절 저항','');L('s',`🛡️ ${en(e.e)}이(가) 기절에 저항했어요 (연속 기절 면역)`)}
+    else if(e.t==='stunned'){vdPop(M(e.who),'💫','hurt');L('e',`💫 ${nm(e.who)} 기절해서 행동 불가`)}
+    else if(e.t==='lifelink'){old.party.forEach((p,j)=>{if(php[j]>0){php[j]=Math.min(p.max,php[j]+e.amt);setP(j)}});L('a',`🌌 흡혈로 아군 ${vgN(e.amt)}씩 회복`)}
+    else if(e.t==='wave'){flushA();flushE();waved=true;L('s',`⚔️ <b>${e.wave}웨이브</b> — 보스가 나타났다!`);vgToast(`⚔️ ${e.wave}웨이브! 보스 등장`);twBanner('s',`<b>⚔️ ${e.wave}웨이브</b><small>보스가 나타났다!</small>`);w=700}
+    else if(e.t==='phase2'){flushA();flushE();vdShake(EN(e.e));vdPop(EN(e.e),'😡 2페이즈!','big');L('e',`😡 <b>${en(e.e)}</b> 분노! 공격력 +25% · 💢 힘 모으기 패턴 추가`);twBanner('e',`<b>😡 ${en(e.e)} 분노!</b><small>체력 50% 이하 — 공격력 +25%, 강력한 일격을 준비해요</small>`);w=700}
+    else if(e.t==='eseal'){flushA();flushE();vdPop(EN(e.e),'🌌 봉인','big');L('a',`🌌 <b>${en(e.e)}</b> 봉인되어 행동 불가`)}
+    else if(e.t==='eskip'){flushA();flushE();vdPop(EN(e.e),'💫','big');L('a',`💫 <b>${en(e.e)}</b> 기절해서 ${(VD_BA[e.act]||['',''])[1]||'행동'} 취소!`)}
+    else if(e.t==='econf'){flushA();flushE();vdPop(EN(e.e),'🌙 혼란!','big');L('a',`🌙 <b>${en(e.e)}</b> 혼란에 빠져 ${(VD_BA[e.act]||['',''])[1]||'행동'} 실패`)}
+    else if(e.t==='eact'){flushA();flushE();const oe=old.enemies[e.e];if(e.boss&&oe&&vgIsBossCut(e.act,{floor:oe.art,boss:{pat:oe.pat||[]}}))await vgBossCut(e.act,{floor:oe.art,boss:{name:oe.name,pat:oe.pat||[]}});
+      const ba=VD_BA[e.act]||['❔',e.act];cur={e:e.e,act:e.act,dmg:0,abs:0,dodge:0,hits:new Set(),stun:'',heal:0};act(EN(e.e));
+      twBanner(e.boss?'e boss':'e',`<b>${ba[0]} ${ba[1]}</b><small>${en(e.e)} · ${TW_BA[e.act]||ba[2]||''}</small>`);vdShake(EN(e.e),'vd-lungeL');vdPop(EN(e.e),`${ba[0]} ${ba[1]}`,'sk');w=e.boss?520:380}
+    else if(e.t==='pdmg'){if(e.dmg===0&&!e.abs){vdPop(M(e.who),'💨 회피','heal');if(cur){cur.dodge++;cur.hits.add(e.who)}}else{php[e.who]-=e.dmg;setP(e.who);vdShake(M(e.who));vdPop(M(e.who),(e.abs>0?`🛡️${e.abs} `:'')+'-'+e.dmg,'hurt');if(cur){cur.dmg+=e.dmg;cur.abs+=e.abs||0;cur.hits.add(e.who)}}w=120}
+    else if(e.t==='pstun'){vdPop(M(e.who),'💫 기절','hurt');if(cur)cur.stun=nm(e.who)}
+    else if(e.t==='eheal'){ehp[e.e]+=e.amt;setE(e.e);vdPop(EN(e.e),'+'+e.amt,'heal');if(cur)cur.heal+=e.amt}
+    else if(e.t==='ptick'){flushE();php[e.who]-=e.dmg;setP(e.who);vdPop(M(e.who),'☠️-'+e.dmg,'hurt');poiSum+=e.dmg;w=80}
+    else if(e.t==='unique'){flushA();const mem=old.party[e.who]||{};vdShake(M(e.who),'vd-lunge');await vgUniqueCut(e,mem);
       const ar=TW.m&&TW.m.querySelector('.vd-arena');if(ar){ar.classList.remove('vd-quake');void ar.offsetWidth;ar.classList.add('vd-quake');const fl=document.createElement('div');fl.className='vd-flash gold';ar.appendChild(fl);setTimeout(()=>fl.remove(),700)}
+      const ud=(awOf(mem.key)||{}).descr||'';twBanner('u',`<b>🌟 ${esc(e.emoji||'')} ${esc(e.name)}</b><small>${nm(e.who)} · 고유 스킬${ud?' · '+esc(ud):''}</small>`);act(M(e.who));
       vdPop(M(e.who),`🌟 ${e.emoji||''} ${e.name}!`,'sk');if(e.sup)old.party.forEach((p,j)=>vdPop(M(j),e.emoji||'✨','heal'));
-      if(old.fx)old.fx.uqused=true;lines.push(`🌟 ${nm(e.who)}의 고유 스킬 <b>${esc(e.emoji||'')} ${esc(e.name)}</b>!`);w=350}
-    else if(e.t==='uend'){if(e.dmg>0)lines.push(`🌟 고유 스킬 총 피해 <b>${vgN(e.dmg)}</b>`)}
-    else if(e.t==='rebirth'){vdPop(M(e.who),'🔥 부활!','heal');lines.push(`🔥 ${nm(e.who)} 부활!`)}
+      if(old.fx)old.fx.uqused=true;L('u',`🌟 <b>${nm(e.who)}</b>의 고유 스킬 <b>${esc(e.emoji||'')} ${esc(e.name)}</b>${ud?`<small>${esc(ud)}</small>`:''}`);w=450}
+    else if(e.t==='uend'){if(e.dmg>0)L('u',`🌟 고유 스킬 총 피해 <b>${vgN(e.dmg)}</b>`)}
+    else if(e.t==='rebirth'){vdPop(M(e.who),'🔥 부활!','heal');L('a',`🔥 <b>${nm(e.who)}</b> 부활!`)}
     await vdSleep(w)}
-  TW.battle=r;TW.busy=false;delete TW.m.dataset.lock;const logHtml=lines.slice(-6).map(l=>`<div>${l}</div>`).join('')||'&nbsp;';
+  flushA();flushE();if(poiSum)L('e',`☠️ 독 피해 총 <b>${vgN(poiSum)}</b>`);
+  TW.battle=r;TW.busy=false;delete TW.m.dataset.lock;const logHtml=`<div class="tl-turn">턴 ${old.turn} 기록</div>`+(lines.map(l=>`<div class="tl ${l.c}">${l.h}</div>`).join('')||'<div class="tl s">아무 일도 없었어요</div>');
   if(r.status==='active'){await vdSleep(250);twBattle(logHtml);return}
   TW.auto=false;if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
   const won=r.status==='won';if(won){VG.equips=null;TW.st.best=Math.max(TW.st.best||0,r.floor);TW.st.clears[r.floor]=(Number(TW.st.clears[r.floor])||0)+1;if(r.boss_egg)VG.bossEggs=null}
@@ -2171,6 +2250,68 @@ async function vgLimitBreak(){const F=VG.fuse,it=(VG.state.items||[]).find(i=>i.
 // 보관함(소모품)에서 바로 한계돌파 화면으로
 function vgLbOpen(){const c=(VG.state.items||[]).filter(i=>vgLbOk(i)&&(i.tr||0)>=5).sort((a,b)=>(b.lb||0)-(a.lb||0))[0]||(VG.state.items||[]).filter(i=>vgLbOk(i)).sort((a,b)=>(b.tr||0)-(a.tr||0))[0];
   if(!c){vgToast('한계돌파할 일반·희귀·영웅 캐릭터가 없어요.',true);return}vgOpenTr(c.id)}
+
+
+/* ===== 마을 파티 편성 (파티원별 장비 · 각성 · 스킬 정보) ===== */
+const PT={m:null,ids:[],form:'bal'};
+function ptSaved(){const v=(VG.state&&VG.state.village)||{},have=new Set((VG.state.items||[]).map(i=>i.id));return {ids:(v.party||[]).filter(id=>have.has(id)).slice(0,5),form:v.party_form||'bal'}}
+function ptItem(id){return (VG.state.items||[]).find(i=>i.id===id)}
+// 탑 기준 능력치 (초월 · 한계돌파 · 장비 포함)
+function ptStat(it){const b=vgTwStat(it),a={hp:0,atk:0,def:0},p={hp:0,atk:0,def:0,crit:0,skill:0};
+  (VG.equips||[]).filter(e=>e.item_id===it.id).forEach(e=>{const v=eqMain(e.slot,e.grade,e.lvl);if(e.slot==='weapon')a.atk+=v;else if(e.slot==='armor')a.hp+=v;else a.def+=v;(e.subs||[]).forEach(x=>p[x.k]=(p[x.k]||0)+x.v/100)});
+  return {hp:Math.round((b[0]+a.hp)*(1+p.hp)),atk:Math.round((b[1]+a.atk)*(1+p.atk)),def:Math.round((b[2]+a.def)*(1+p.def)),crit:12+Math.round(p.crit*100)+((Number(it.lb)||0)>=5?10:0),skill:(it.tr||0)*12+(Number(it.lb)||0)*6+Math.round(p.skill*100),b}}
+async function vgParty(){if(PT.m)PT.m.remove();const sp=ptSaved();PT.ids=sp.ids;PT.form=sp.form;
+  PT.m=vgModal('<div class="vg-empty">파티 정보를 불러오는 중…</div>','vg-xwide pt-modal');PT.m._onclose=()=>{PT.m=null;if(TW.m&&!TW.battle){const s=ptSaved();if(s.ids.length){TW.pick=s.ids;TW.form=s.form}twLobby()}};
+  await Promise.all([eqLoad(true),awLoad()]);if(PT.m)ptRender()}
+function ptCard(id,k){const front=k<TW_FORM[PT.form].front,row=`<span class="pt-row ${front?'f':''}">${k+1} · ${front?'앞줄':'뒷줄'}</span>`;
+  const it=id&&ptItem(id);if(!it)return `<button class="pt-card empty" data-ptadd="${k}">${row}<span class="pt-plus">＋</span><b>동물 넣기</b><small>${front?'앞줄은 공격을 더 많이 받아요':'뒷줄은 비교적 안전해요'}</small></button>`;
+  const c=VG.cat[it.item_key],g=VG_GRADE[c.grade]||{name:''},st=ptStat(it),t=it.tr||0,l=Number(it.lb)||0,sk=VD_SK[c.skill||'nuke']||VD_SK.nuke;
+  const eqs=['weapon','armor','acc'].map(sl=>{const e=(VG.equips||[]).find(x=>x.item_id===it.id&&x.slot===sl),S=EQ_SLOT[sl];
+    if(!e)return `<button class="pt-eq none" data-pteq="${sl}" data-pti="${it.id}"><span class="pt-eqic">${S[0]}</span><span><b>${S[1]} 비어 있음</b><small>눌러서 장착</small></span></button>`;
+    const G=EQ_GR[e.grade];return `<button class="pt-eq g${e.grade}" data-pteq="${sl}" data-pti="${it.id}" style="--g:${G[1]}"><span class="pt-eqic">${S[0]}<i>+${e.lvl}</i></span><span><b style="color:${G[1]}">${G[0]} ${S[1]}</b><small>${S[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${(e.subs||[]).length?' · '+e.subs.map(x=>`${EQ_SUB[x.k]||x.k} +${x.v}%`).join(' · '):''}</small></span></button>`}).join('');
+  let aw;if(c.grade>=4){const u=awOf(it.item_key);aw=!u?'<div class="pt-aw off">🌟 고유 스킬 정보 없음</div>':awOn(it.item_key)?`<div class="pt-aw on"><b>🌟 각성 완료 · ${esc(u.emoji)} ${esc(u.name)}</b><small>${esc(u.descr)} · 탑에서 파티당 1회</small></div>`:`<div class="pt-aw"><b>🌟 미각성 · ${esc(u.emoji)} ${esc(u.name)}</b><small>${esc(u.descr)}</small><button class="vg-btn sm purple" data-awopen="1">💠${u.cost} 각성</button></div>`}
+  else aw=t<5?`<div class="pt-aw off"><b>🔓 한계돌파 잠김</b><small>★5 초월 후 돌파석으로 탑 능력치를 올릴 수 있어요</small></div>`:`<div class="pt-aw lb"><b>🔓 한계돌파 +${l} / 5</b><small>탑 능력치 +${Math.round((LB_RATE[c.grade]||0)*100*l)}% · 필살기 +${l*6}%${l>=5?' · 치명타 +10%':''}</small>${l<5?`<button class="vg-btn sm" data-ptlb="${it.id}">돌파하기</button>`:''}</div>`;
+  return `<div class="pt-card g${c.grade}">${row}
+   <div class="pt-por"><span class="vg-grade vg-g${c.grade}">${g.name}</span>${vgArtSvg(it.item_key,'vg-art pt-art')}<div class="pt-stars">${vgStars(t,'sm')||'<span class="pt-nostar">초월 없음</span>'}${vgLbBadge(it,'sm')}</div>
+    <div class="pt-cbtn"><button class="vg-btn sm" data-ptswap="${k}">교체</button><button class="vg-btn sm" data-ptrm="${k}">빼기</button></div></div>
+   <div class="pt-info"><div class="pt-name">${esc(c.name)}</div>
+    <div class="pt-stat"><span>❤ <b>${vgN(st.hp)}</b></span><span>⚔ <b>${vgN(st.atk)}</b></span><span>🛡 <b>${vgN(st.def)}</b></span><span>🎯 <b>${st.crit}%</b></span><span>✨ <b>+${st.skill}%</b></span></div>
+    <div class="pt-lbl">장비</div><div class="pt-eqs">${eqs}</div>
+    <div class="pt-lbl">${c.grade>=4?'각성':'한계돌파'}</div>${aw}
+    <div class="pt-lbl">필살기</div><div class="pt-sk"><b>${sk[0]} ${esc(c.skill_name||'필살기')}</b><small>${esc(sk[1])}</small>
+     <div class="pt-mile"><span class="${t>=3?'on':''}">★3 쿨타임 −1</span><span class="${t>=5?'on':''}">★5 ${esc((VG_TR5||{})[c.skill||'nuke']||'초월 각성')}</span></div></div></div></div>`}
+function ptRender(){const box=PT.m.querySelector('.vg-modal-box'),n=PT.ids.length;
+  const tot=PT.ids.map(ptItem).filter(Boolean).reduce((s,it)=>{const x=ptStat(it);return s+x.hp/10+x.atk*2+x.def},0);
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pt-head"><h3>🛡️ 파티 편성</h3><span class="pt-pow">⚡ 전투력 <b>${vgN(Math.round(tot))}</b></span><span class="pt-cnt">파티 <b>${n}</b>/5</span></div>
+   <p class="vg-mp">여기서 저장한 파티와 진형이 <b>심연의 탑</b>에 자동으로 들어가요. 능력치는 탑 기준(초월·한계돌파·장비 포함)이에요.</p>
+   <div class="tw-forms">${Object.entries(TW_FORM).map(([k,v])=>`<button class="${PT.form===k?'on':''}" data-ptform="${k}"><b>${v.n}</b><small>${v.d}</small></button>`).join('')}</div>
+   <div class="pt-grid">${Array.from({length:5},(_,k)=>ptCard(PT.ids[k],k)).join('')}</div>
+   <div class="pt-foot"><button class="vg-btn gold" id="ptTower">🗼 이 파티로 심연의 탑 가기</button></div>`;
+  box.querySelector('.vg-x').onclick=()=>{PT.m.remove();PT.m._onclose()};
+  box.querySelectorAll('[data-ptform]').forEach(b=>b.onclick=()=>{PT.form=b.dataset.ptform;ptSave()});
+  box.querySelectorAll('[data-ptadd]').forEach(b=>b.onclick=()=>ptPickMember(null));
+  box.querySelectorAll('[data-ptswap]').forEach(b=>b.onclick=()=>ptPickMember(Number(b.dataset.ptswap)));
+  box.querySelectorAll('[data-ptrm]').forEach(b=>b.onclick=()=>{PT.ids.splice(Number(b.dataset.ptrm),1);ptSave()});
+  box.querySelectorAll('[data-pteq]').forEach(b=>b.onclick=()=>ptPickEquip(b.dataset.pti,b.dataset.pteq));
+  box.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=async()=>{await vgAwaken();const w=document.querySelector('.aw-modal');if(w){const mo=new MutationObserver(()=>{if(!w.isConnected){mo.disconnect();if(PT.m)ptRender()}});mo.observe(document.body,{childList:true})}});
+  box.querySelectorAll('[data-ptlb]').forEach(b=>b.onclick=()=>{const id=b.dataset.ptlb;PT.m.remove();PT.m=null;if(TW.m){TW.m.remove();TW.m=null}vgOpenTr(id)});
+  box.querySelector('#ptTower').onclick=()=>{const m=PT.m;PT.m=null;m.remove();if(TW.m&&!TW.battle){const s=ptSaved();TW.pick=s.ids;TW.form=s.form;twLobby()}else if(!TW.m){TW.pick=[];vgTower()}}}
+async function ptSave(){const ids=PT.ids.slice(0,5),form=PT.form;try{const r=await window.fitVillage.partySave(ids,form);VG.state.village.party=r.party;VG.state.village.party_form=r.party_form}
+  catch(e){vgToast(e.setup?'Supabase에 파티 편성 SQL(fit_village_update20.sql) 실행이 필요합니다.':(e.message||String(e)),true);const s=ptSaved();PT.ids=s.ids;PT.form=s.form}if(PT.m)ptRender()}
+function ptPickMember(slot){const cur=slot==null?null:PT.ids[slot],used=new Set(PT.ids.filter(x=>x!==cur).map(id=>(ptItem(id)||{}).item_key));
+  const list=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!used.has(i.item_key))).map(i=>({i,s:ptStat(i)})).sort((a,b)=>(b.s.hp/10+b.s.atk*2+b.s.def)-(a.s.hp/10+a.s.atk*2+a.s.def));
+  const m=vgModal(`<h3>${slot==null?'파티에 넣을 동물':'교체할 동물'} 고르기</h3><p class="vg-mp">탑 기준 전투력이 높은 순서예요. 같은 종류는 한 마리만 넣을 수 있어요.</p>
+   <div class="vd-picks" style="max-height:60vh">${list.map(({i,s})=>{const c=VG.cat[i.item_key];return `<button class="vd-pick ${i.id===cur?'on':''}" data-ptto="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${vgLbBadge(i,'sm')}${eqBadge(i.id)}${awBadge(i.item_key)}<small>❤${vgN(s.hp)} ⚔${vgN(s.atk)} 🛡${vgN(s.def)}</small></button>`}).join('')||'<div class="vg-empty">넣을 수 있는 동물이 없어요.</div>'}</div>`,'vg-wide');
+  m.querySelectorAll('[data-ptto]').forEach(b=>b.onclick=()=>{const id=b.dataset.ptto;if(slot==null){if(PT.ids.length>=5){vgToast('파티는 최대 5마리예요.',true);return}PT.ids.push(id)}else PT.ids[slot]=id;m.remove();ptSave()})}
+function ptPickEquip(itemId,slot){const it=ptItem(itemId),c=VG.cat[it.item_key],cur=(VG.equips||[]).find(e=>e.item_id===itemId&&e.slot===slot);
+  const list=(VG.equips||[]).filter(e=>e.slot===slot&&e.id!==(cur&&cur.id)).sort((a,b)=>(!!a.item_id-!!b.item_id)||(b.grade-a.grade)||(b.lvl-a.lvl));
+  const m=vgModal(`<h3>${EQ_SLOT[slot][0]} ${esc(c.name)}의 ${EQ_SLOT[slot][1]}</h3>
+   ${cur?`<div class="pt-cur"><small>지금 장착 중</small>${eqCard(cur,false)}<button class="vg-btn sm" id="ptUnEq">해제하기</button></div>`:''}
+   <p class="vg-mp">${list.length?'다른 동물이 끼고 있는 장비를 고르면 그 동물에게서 빠져서 옮겨 와요.':'이 칸에 끼울 장비가 없어요. 심연의 탑을 클리어하면 장비가 나와요.'}</p>
+   <div class="pt-eqlist">${list.map(e=>`<button class="pt-eqpick" data-pteqto="${e.id}">${eqCard(e,false)}</button>`).join('')}</div>`,'vg-wide eq-modal');
+  const done=async(eid,to)=>{try{await window.fitVillage.eqEquip(eid,to);await eqLoad(true);m.remove();if(PT.m)ptRender();vgToast(to?'⚔️ 장착 완료!':'장비를 해제했어요')}catch(x){vgToast(x.message||String(x),true)}};
+  const un=m.querySelector('#ptUnEq');if(un)un.onclick=()=>done(cur.id,null);
+  m.querySelectorAll('[data-pteqto]').forEach(b=>b.onclick=()=>done(b.dataset.pteqto,itemId))}
 
 
 function daily(){
@@ -2540,6 +2681,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     awList(){return vrpc('fit_aw_list')},
     awUnlock(k){return vrpc('fit_aw_unlock',{p_key:k})},
     lbUp(id){return vrpc('fit_lb_up',{p_item:id})},
+    partySave(ids,form){return vrpc('fit_party_save',{p_items:ids,p_form:form})},
     bossHatch(id){return vrpc('fit_village_boss_hatch',{p_egg:id})},
     async bossEggs(){vNeed();const {data,error}=await supa.from('fit_village_boss_eggs').select('id,floor,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     wbStart(ids){return vrpc('fit_village_wb_start',{p_items:ids})},

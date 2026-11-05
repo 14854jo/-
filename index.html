@@ -584,6 +584,35 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vc-head{display:flex;align-items:center;gap:8px;margin:12px 0 4px}.vc-head span{font-size:12px;color:#7d7290;font-family:Inter,sans-serif;font-weight:800}
 .vc-bar{flex:1;height:7px;border-radius:9px;background:#eee;overflow:hidden}.vc-bar span{display:block;height:100%;background:linear-gradient(90deg,#8fe08a,#4fbf5f)}
 .vc-bonus{font-size:12px;font-family:'Malgun Gothic',sans-serif;font-weight:700;color:#9a8fab;background:#f7f2e7;border-radius:9px;padding:4px 8px;margin-bottom:6px}.vc-bonus.on{color:#3f8a30;background:#e5f7dc}
+/* 컷신 */
+.vc-host{position:fixed;inset:0;z-index:9800;pointer-events:none;overflow:hidden;font-family:'Jua','Malgun Gothic',sans-serif;animation:vcIn .25s ease-out}
+.vc-host.out{animation:vcOut .3s ease-in forwards}
+@keyframes vcIn{from{opacity:0}to{opacity:1}}@keyframes vcOut{to{opacity:0;transform:scale(1.05)}}
+.vc-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.vc-host.boss{background:radial-gradient(ellipse at 60% 50%,color-mix(in srgb,var(--c) 35%,#000) 0%,#0b0612 70%)}
+.vc-bars:before,.vc-bars:after{content:'';position:absolute;left:0;right:0;height:13%;background:#000;z-index:3;animation:vcBar .35s ease-out}
+.vc-bars:before{top:0}.vc-bars:after{bottom:0}@keyframes vcBar{from{height:0}}
+.vc-glow{position:absolute;inset:0;background:radial-gradient(circle at 62% 50%,var(--c),transparent 45%);opacity:.35;animation:vcPulse .5s ease-in-out infinite alternate}
+@keyframes vcPulse{to{opacity:.6}}
+.vc-boss{position:absolute;right:4%;top:50%;width:min(62vw,620px);height:auto;transform:translateY(-50%);overflow:visible;filter:drop-shadow(0 0 30px var(--c));animation:vcZoom 1.8s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes vcZoom{0%{transform:translate(30%,-50%) scale(.7);opacity:0}20%{transform:translate(0,-50%) scale(1);opacity:1}100%{transform:translate(-3%,-50%) scale(1.12)}}
+.vc-eyes{position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 40px,#ffffff08 40px 42px)}
+.vc-text{position:absolute;left:6%;top:50%;transform:translateY(-50%);z-index:4;color:#fff;animation:vcText 1.8s cubic-bezier(.2,.9,.2,1) forwards}
+.vc-text small{display:block;font-size:clamp(14px,2vw,20px);opacity:.85}
+.vc-text b{display:block;font-size:clamp(34px,6vw,72px);line-height:1.05;letter-spacing:-1px;text-shadow:0 0 18px var(--c),0 4px 0 #000}
+.vc-text span{display:block;font-size:clamp(14px,2vw,22px);color:var(--c);margin-top:6px;text-shadow:0 2px 0 #000}
+@keyframes vcText{0%{transform:translate(-40px,-50%);opacity:0}18%{transform:translate(0,-50%);opacity:1}85%{opacity:1}100%{opacity:.8}}
+.vc-warn{position:absolute;left:0;right:0;top:15%;z-index:4;text-align:center;color:var(--c);font-size:clamp(16px,2.4vw,26px);letter-spacing:8px;animation:vgTw .4s infinite}
+.vc-host.hero{background:linear-gradient(115deg,#120a24 0%,color-mix(in srgb,var(--c) 45%,#120a24) 60%,color-mix(in srgb,var(--c) 70%,#fff) 100%)}
+.vc-text small .vg-grade{display:inline-block;width:auto;font-size:12px}
+.vc-rays{position:absolute;left:30%;top:50%;width:160vmax;height:160vmax;margin:-80vmax 0 0 -80vmax;background:repeating-conic-gradient(from 0deg,#ffffff22 0 6deg,transparent 6deg 14deg);animation:vgSpin 8s linear infinite}
+.vc-speed{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 22px,#ffffff18 22px 24px);animation:vcSpeed .3s linear infinite}
+@keyframes vcSpeed{from{transform:translateX(0)}to{transform:translateX(-120px)}}
+.vc-char{position:absolute;left:8%;top:50%;width:min(48vw,460px);height:auto;transform:translateY(-50%);filter:drop-shadow(0 0 26px var(--c)) drop-shadow(0 10px 10px #0008);animation:vcHero 1.5s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes vcHero{0%{transform:translate(-40%,-50%) scale(.8);opacity:0}22%{transform:translate(0,-50%) scale(1);opacity:1}100%{transform:translate(4%,-50%) scale(1.08)}}
+.vc-text.r{left:auto;right:6%;text-align:right}
+.vd-flash.red{background:radial-gradient(circle,#ffd0d6,#ff3b5c66 60%,transparent)}
+@media(max-width:760px){.vc-boss{right:-10%;width:95vw;opacity:.85}.vc-char{left:-6%;width:80vw;opacity:.9}.vc-text{top:auto;bottom:16%;transform:none;left:5%;right:5%}.vc-text.r{text-align:left}@keyframes vcText{0%{opacity:0}18%{opacity:1}}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1466,7 +1495,7 @@ async function vgAct(actions){if(VD.busy)return;if(actions[0]==='flee'&&!window.
     else if(e.t==='burn'){bhp-=e.dmg;setB();vdPop(boss,'🔥-'+e.dmg,'crit');lines.push(`🔥 화상 피해 ${e.dmg}`)}
     else if(e.t==='bstun'){vdShake(boss);vdPop(boss,'💫 기절!','big');lines.push(`💫 보스가 기절해 ${(VD_BA[e.act]||['',e.act])[1]}을(를) 하지 못했다!`);w=420}
     else if(e.t==='bresist'){vdPop(boss,'기절 저항','');lines.push('보스가 기절에 저항했다! (기절 저항 중)')}
-    else if(e.t==='bact'){const ba=VD_BA[e.act]||['❔',e.act];vdShake(boss,'vd-lungeL');vdPop(boss,`${ba[0]} ${ba[1]}`,'sk');lines.push(`${ba[0]} 보스의 <b>${ba[1]}</b>!${e.enraged?' (분노)':''}`);w=360}
+    else if(e.t==='bact'){if(VG_BOSS_CUT[e.act])await vgBossCut(e.act,old);const ba=VD_BA[e.act]||['❔',e.act];vdShake(boss,'vd-lungeL');vdPop(boss,`${ba[0]} ${ba[1]}`,'sk');lines.push(`${ba[0]} 보스의 <b>${ba[1]}</b>!${e.enraged?' (분노)':''}`);w=360}
     else if(e.t==='bdmg'){php[e.who]-=e.dmg;setHp(e.who);vdShake(mem(e.who));vdPop(mem(e.who),(e.abs>0?`🛡️${e.abs} `:'')+'-'+e.dmg,'hurt');lines.push(`→ ${nm(e.who)} ${e.dmg} 피해${e.abs>0?` (보호막 ${e.abs} 흡수)`:''}`);w=160}
     else if(e.t==='pstun'){vdPop(mem(e.who),'💫 기절','hurt');lines.push(`→ ${nm(e.who)} 기절! 다음 턴 행동 불가`)}
     else if(e.t==='bheal'){bhp+=e.amt;setB();vdPop(boss,'+'+e.amt,'heal');lines.push(`💚 보스 체력 ${e.amt} 회복`)}
@@ -1569,12 +1598,12 @@ const VFX={nuke:{c:'#ffe27a',p:['✦','✧','💥']},burn:{c:'#ff7a3d',p:['🔥'
   shield:{c:'#6cc4ff',p:['🛡️','✦','◇']},heal:{c:'#6fe08a',p:['✚','💚','✦']},buff:{c:'#ffc63a',p:['⚡','✦','▲']},taunt:{c:'#c9a46a',p:['🪨','✦','◆']},aegis:{c:'#ffd34d',p:['🛡️','🔔','✦']},grove:{c:'#6fe08a',p:['🌳','🍃','✚']},confuse:{c:'#b9a6ff',p:['🌙','💫','✦']},rebirth:{c:'#ff8a3d',p:['🔥','🪶','✨']},combo:{c:'#ff5f6d',p:['🦊','🔥','✦']},charge_up:{c:'#5cb8ff',p:['⚡','🐉','✦']},execute:{c:'#a77cff',p:['💀','✦','◆']},lifelink:{c:'#7c6cff',p:['🌌','✨','✦']},revive:{c:'#fff1a0',p:['🕊️','✨','✦']}};
 const VFX_TARGET_PARTY=['shield','heal','buff','revive','taunt','aegis','grove','rebirth','charge_up','lifelink'];
 async function vgSkillFx(e,party){const arena=VD.m&&VD.m.querySelector('.vd-arena');if(!arena)return;const tr=Number(e.tr)||0,fx=VFX[e.skill]||VFX.nuke,mem=party[e.who]||{};
+  const big=await vgHeroCut(e,mem);
   const ar=arena.getBoundingClientRect(),rel=el=>{if(!el)return {x:ar.width/2,y:ar.height/2,w:100,h:100};const r=el.getBoundingClientRect();return {x:r.left-ar.left+r.width/2,y:r.top-ar.top+r.height/2,w:r.width,h:r.height}};
   // 컷인
   const cut=document.createElement('div');cut.className='vd-cutin'+(tr>=5?' max':tr>=3?' awake':'');cut.style.setProperty('--c',fx.c);
   cut.innerHTML=`<svg viewBox="-48 -96 96 102" class="vd-cutart">${vgArt(mem.key)}</svg><div><b>${esc(e.name||'필살기')}</b>${tr?`<span>${'★'.repeat(tr)}${tr>=5?' 초월 각성!':tr>=3?' 각성!':''}</span>`:''}</div>`;
-  arena.appendChild(cut);setTimeout(()=>cut.remove(),1100);
-  await vdSleep(380);
+  if(!big){arena.appendChild(cut);setTimeout(()=>cut.remove(),1100);await vdSleep(380)}
   // 타입별 효과
   const onParty=VFX_TARGET_PARTY.includes(e.skill),tgt=onParty?(e.skill==='taunt'?rel(VD.m.querySelector(`[data-mem="${e.who}"]`)):rel(VD.m.querySelector('.vd-party'))):rel(VD.m.querySelector('.vd-bossart'));
   const layer=document.createElement('div');layer.className=`vd-fx vd-fx-${e.skill}`+(tr>=5?' max':'');layer.style.setProperty('--c',fx.c);layer.style.left=tgt.x+'px';layer.style.top=tgt.y+'px';layer.style.width=Math.max(120,tgt.w*1.1)+'px';layer.style.height=Math.max(120,tgt.h*1.1)+'px';
@@ -1643,6 +1672,29 @@ async function vgWbResult(r){if(r.state){vgSetState(r.state);vgRenderHud();vgTic
   acts.innerHTML=`<div class="vd-result win">🏆 ${why} 최종 점수 <b>${vgN(sc)}점</b></div><div class="wb-reward">${vgCoinIcon(16)} 점수 보상 <b>+${vgN(r.reward_coins)}</b> · 추가 보상 <b>+${vgN(r.wb_bonus)}</b>${r.hatched_key?' · 🥚 신비한 알!':''}</div><div class="vd-acts"><button class="vg-btn gold" id="wbBoard">점수판 보기</button></div>`;
   acts.querySelector('#wbBoard').onclick=async()=>{VD.battle=null;VD.sel=null;try{VD.wb=await window.fitVillage.wbStatus()}catch(e){}vgWbLobby()};
   if(r.hatched_key){await vdSleep(1400);const holder=document.createElement('div');holder.className='vg-modal';holder.innerHTML='<div class="vg-modal-box"></div>';document.body.appendChild(holder);vgReveal(holder,r,'월드 보스 보상 알에서 ')}}
+
+
+/* ===== 컷신 (보스 필살기 · 신화/돌연변이 필살기) ===== */
+// 나중에 영상이 생기면 여기에 경로만 추가: 'boss:smash':'videos/boss_smash.mp4', 'char:abyss_reaper':'videos/reaper.mp4'
+const VG_CUT_VIDEO={};
+const VG_BOSS_CUT={smash:{t:'파멸의 일격',c:'#ff3b5c',sub:'전체에 막대한 피해!'},poison:{t:'죽음의 독안개',c:'#7dff6a',sub:'아군 전체 3턴 중독'},stunhit:{t:'혼절의 일격',c:'#ffe55a',sub:'한 명을 기절시킨다'}};
+function vgCutVideo(key,host){const src=VG_CUT_VIDEO[key];if(!src)return null;return new Promise(res=>{const v=document.createElement('video');v.className='vc-video';v.src=src;v.muted=true;v.playsInline=true;v.autoplay=true;host.appendChild(v);
+  const done=()=>{v.remove();res(true)};v.onended=done;v.onerror=done;setTimeout(done,4500);v.play().catch(done)})}
+function vgCutHost(){const h=document.createElement('div');h.className='vc-host';document.body.appendChild(h);return h}
+async function vgBossCut(act,bt){const cfg=VG_BOSS_CUT[act];if(!cfg)return;const host=vgCutHost();host.style.setProperty('--c',cfg.c);
+  if(await vgCutVideo('boss:'+act,host)){host.remove();return}
+  const bs=bt.floor===0?(VD.bosses.find(x=>x.floor===10)||{image_url:'images/bosses/boss10.webp'}):(VD.bosses.find(x=>x.floor===bt.floor)||{});
+  host.classList.add('boss');
+  host.innerHTML=`<div class="vc-bars"></div><div class="vc-glow"></div><svg viewBox="-120 -170 240 178" class="vc-boss">${vgBossArt(bt.floor||10,bs.image_url)}</svg><div class="vc-eyes"></div>
+   <div class="vc-text"><small>${esc(bt.boss.name)}</small><b>${cfg.t}</b><span>${cfg.sub}</span></div><div class="vc-warn">⚠ WARNING ⚠</div>`;
+  await vdSleep(1700);host.classList.add('out');await vdSleep(300);host.remove();
+  const ar=VD.m&&VD.m.querySelector('.vd-arena');if(ar){ar.classList.remove('vd-quake');void ar.offsetWidth;ar.classList.add('vd-quake');const fl=document.createElement('div');fl.className='vd-flash red';ar.appendChild(fl);setTimeout(()=>fl.remove(),700)}}
+async function vgHeroCut(e,mem){const c=VG.cat[mem.key]||{};if((c.grade||0)<5)return false;const host=vgCutHost(),fx=(typeof VFX!=='undefined'&&VFX[e.skill])||{c:'#ffd34d'};host.style.setProperty('--c',fx.c);
+  if(await vgCutVideo('char:'+mem.key,host)){host.remove();return true}
+  const tr=Number(e.tr)||0,g=VG_GRADE[c.grade]||{name:''};host.classList.add('hero');
+  host.innerHTML=`<div class="vc-rays"></div><div class="vc-speed"></div><svg viewBox="-48 -96 96 102" class="vc-char">${vgArt(mem.key)}</svg>
+   <div class="vc-text r"><small><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> ${esc(c.name)}${tr?` ${'★'.repeat(tr)}`:''}</small><b>${esc(e.name||'필살기')}</b><span>${tr>=5?'초월 각성!':''}</span></div>`;
+  await vdSleep(1500);host.classList.add('out');await vdSleep(280);host.remove();return true}
 
 
 function daily(){

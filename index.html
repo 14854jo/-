@@ -642,6 +642,32 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vd-sweep.lock{background:#f3f0ea;border-color:#e4dccb;color:#9a8fab;font-size:13px}
 .vd-autolock{font-size:11.5px;color:#9a8fab;font-family:'Malgun Gothic',sans-serif}
 .vd-swp{position:absolute;left:5px;top:3px;font-style:normal;font-size:12px}
+/* 펫 하우스 */
+.vh-box{background:linear-gradient(180deg,#fff1ea,#fff);border:2px solid #ffb59e;border-radius:16px;padding:10px;margin-bottom:12px}
+.vh-head{display:flex;justify-content:space-between;align-items:center;font-size:16px;margin-bottom:6px}.vh-head small{font-size:12px;color:#7d7290;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.vh-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.vh-cell{position:relative;background:#fff;border:2px solid #f3dccf;border-radius:12px;padding:5px;text-align:center}.vh-cell .vg-art{width:56px;height:56px}.vh-cell b{display:block;font-size:12.5px}
+.vh-cell em{position:absolute;right:6px;top:4px;font-style:normal;font-size:13px;color:#d9572e;font-weight:800}.vh-cell div{display:flex;gap:3px;justify-content:center;margin-top:3px}.vh-cell .vg-btn.sm{padding:3px 7px;font-size:11px}
+/* 일괄 조합 */
+.vb-box{margin-top:8px;background:#fff7dc;border:2px solid #f2cf6b;border-radius:12px;padding:8px}.vb-box small{display:block;font-size:11.5px;color:#7d7290;font-family:'Malgun Gothic',sans-serif;font-weight:600;margin:2px 0 6px}
+.vb-modal{width:min(96vw,560px)!important}
+.vb-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0}
+.vb-chest{position:relative;aspect-ratio:1/1.15;border:0;background:none;cursor:pointer;padding:0;font-family:inherit;perspective:400px}
+.vb-body{position:absolute;left:6%;right:6%;bottom:4%;height:62%;border-radius:8px;border:3px solid #3b2417;background:linear-gradient(180deg,#c98a52,#8a5a2b)}
+.vb-lid{position:absolute;left:3%;right:3%;top:16%;height:28%;border-radius:10px 10px 4px 4px;border:3px solid #3b2417;background:linear-gradient(180deg,#e0a468,#b97a4a);z-index:2;transform-origin:50% 0;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .4s}
+.vb-body:before{content:'';position:absolute;left:42%;top:-12%;width:16%;height:30%;background:#ffd34d;border:2px solid #3b2417;border-radius:3px}
+.vb-chest.gold .vb-body,.vb-chest.gold .vb-lid{background:linear-gradient(180deg,#ffe27a,#d9a400)}
+.vb-chest.rainbow .vb-body,.vb-chest.rainbow .vb-lid{background:linear-gradient(135deg,#ff6f9a,#ffc35a,#7fdc6a,#5cb8ff,#a77cff)}
+.vb-chest.rainbow:not(.open){animation:vbGlow 1.2s ease-in-out infinite}
+@keyframes vbGlow{50%{filter:drop-shadow(0 0 10px #ff9ad1) drop-shadow(0 0 16px #7fdcff)}}
+.vb-chest:not(.open):hover{transform:translateY(-3px) rotate(-2deg)}
+.vb-in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:scale(.4);transition:all .4s .15s cubic-bezier(.2,1.6,.4,1);z-index:3}
+.vb-in .vg-art{width:70%;height:auto}.vb-in b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.vb-in .vg-grade{font-size:9px;padding:1px 4px}
+.vb-chest.open .vb-lid{transform:rotateX(-110deg) translateY(-20%);opacity:0}.vb-chest.open .vb-body{opacity:.15;transition:opacity .4s}.vb-chest.open .vb-in{opacity:1;transform:none}
+.vb-chest.open.rainbow{background:radial-gradient(circle,#fff6,transparent 70%)}
+.vb-sum{font-size:16px;margin:4px 0 10px;min-height:22px}
+@media(max-width:760px){.vb-grid{grid-template-columns:repeat(4,1fr)}}
+.vb-chest.win.open{background:radial-gradient(circle,#ffe27a88,transparent 70%)}.vb-chest.win.open .vb-in b{color:#b07a00}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1218,6 +1244,7 @@ function vgDeco(key){const st=`stroke="${VG_OL}" stroke-width="2.2" stroke-linej
   case 'mushroom_house':return `<g><ellipse cx="0" cy="0" rx="28" ry="9" fill="#0002"/><path d="M-18,0 L-16,-34 L16,-34 L18,0Z" fill="#fff4e2" ${st}/><path d="M-6,0 L-6,-16 Q0,-22 6,-16 L6,0Z" fill="#b97a4a" ${st}/><circle cx="3.5" cy="-8" r="1.2" fill="#ffd34d"/><rect x="8" y="-26" width="7" height="7" rx="2" fill="#9fd8ff" ${st}/><path d="M-34,-32 C-34,-60 -14,-72 0,-72 C14,-72 34,-60 34,-32 C20,-26 -20,-26 -34,-32Z" fill="#ff6a6a" ${st}/><circle cx="-16" cy="-50" r="6" fill="#fff"/><circle cx="6" cy="-60" r="5" fill="#fff"/><circle cx="20" cy="-42" r="4.5" fill="#fff"/><circle cx="-4" cy="-40" r="3.5" fill="#fff"/></g>`;
   case 'windmill':return `<g><ellipse cx="0" cy="0" rx="26" ry="8" fill="#0002"/><path d="M-16,0 L-10,-62 L10,-62 L16,0Z" fill="#fff1dc" ${st}/><path d="M-14,-62 L0,-80 L14,-62Z" fill="#e0785a" ${st}/><path d="M-5,0 L-5,-14 Q0,-19 5,-14 L5,0Z" fill="#b97a4a"/><circle cx="0" cy="-36" r="4" fill="#9fd8ff" ${st}/><g transform="translate(0,-62)"><g class="vg-spin">${[0,90,180,270].map(a=>`<g transform="rotate(${a})"><rect x="-1.5" y="-38" width="3" height="36" fill="#8a6238"/><rect x="1.5" y="-36" width="10" height="28" rx="2" fill="#fff" ${st}/></g>`).join('')}<circle r="4.5" fill="#8a6238" ${st}/></g></g></g>`;
   case 'fountain':return `<g><ellipse cx="0" cy="0" rx="30" ry="10" fill="#0002"/><path d="M-30,-6 L-30,0 C-30,8 30,8 30,0 L30,-6Z" fill="#c9c3d8" ${st}/><ellipse cx="0" cy="-6" rx="30" ry="10" fill="#e2dcf0" ${st}/><ellipse cx="0" cy="-6" rx="25" ry="7.5" fill="url(#vg-water)"/><rect x="-4" y="-34" width="8" height="28" fill="#e2dcf0" ${st}/><ellipse cx="0" cy="-34" rx="13" ry="4.5" fill="#e2dcf0" ${st}/><ellipse cx="0" cy="-35" rx="10" ry="3" fill="url(#vg-water)"/><g class="vg-water"><path d="M0,-36 C-2,-48 -10,-50 -14,-38 M0,-36 C2,-48 10,-50 14,-38 M0,-36 L0,-52" fill="none" stroke="#9be3ff" stroke-width="3" stroke-linecap="round"/></g><circle cx="0" cy="-54" r="2.6" fill="#d8f4ff"/></g>`;
+  case 'pet_house':return `<g><ellipse cx="0" cy="2" rx="34" ry="10" fill="#0003"/><path d="M-28,0 L-28,-34 L28,-34 L28,0Z" fill="#ffe7c2" stroke="#3b2417" stroke-width="2.6" stroke-linejoin="round"/><path d="M-36,-30 L0,-62 L36,-30Z" fill="#ff8a6b" stroke="#3b2417" stroke-width="2.6" stroke-linejoin="round"/><path d="M-30,-36 L0,-58 L30,-36" fill="none" stroke="#ffb59e" stroke-width="3"/><path d="M-10,0 L-10,-18 Q0,-28 10,-18 L10,0Z" fill="#7a4a2b" stroke="#3b2417" stroke-width="2.2"/><circle cx="0" cy="-45" r="8" fill="#fff" stroke="#3b2417" stroke-width="2"/><g fill="#ff8a6b"><circle cx="0" cy="-43" r="2.6"/><circle cx="-3.5" cy="-48" r="1.5"/><circle cx="0" cy="-49.5" r="1.5"/><circle cx="3.5" cy="-48" r="1.5"/></g><rect x="14" y="-24" width="9" height="9" rx="2" fill="#9fd8ff" stroke="#3b2417" stroke-width="1.8"/><rect x="-23" y="-24" width="9" height="9" rx="2" fill="#9fd8ff" stroke="#3b2417" stroke-width="1.8"/></g>`;
   case 'stone_path':return `<g><ellipse cx="-12" cy="-2" rx="9" ry="4.5" fill="#d8d2c4" ${st}/><ellipse cx="6" cy="-6" rx="8" ry="4" fill="#cfc8b8" ${st}/><ellipse cx="14" cy="5" rx="9" ry="4.5" fill="#d8d2c4" ${st}/><ellipse cx="-4" cy="7" rx="7" ry="3.5" fill="#cfc8b8" ${st}/></g>`;
   default:return ''}}
 function vgArt(key,kind){const im=(typeof VG!=='undefined'&&VG.cat[key]&&VG.cat[key].image_url)||'';if(im){const u=String(im).replace(/["<>&]/g,'');return `<g class="${VG.cat[key].kind==='animal'?'vg-bob':''}"><image href="${u}" x="-44" y="-92" width="88" height="94" preserveAspectRatio="xMidYMax meet"/></g>`}if(kind==='egg'||key.startsWith('egg_'))return vgEgg(key);if(VG_CRE[key])return `<g class="vg-bob">${vgCreature(key)}</g>`;return vgDeco(key)}
@@ -1228,7 +1255,7 @@ function vgArtSvg(key,cls='vg-art',vb){vb=vb||VG_VB[key]||'-48 -96 96 102';retur
 /* ===== 동물 마을: 화면 · 동작 ===== */
 const VG={catalog:[],cat:{},state:null,off:0,view:'mine',friend:null,friendState:null,mode:null,sel:null,tab:'shop',shopCat:'animal',zoom:1,ticker:null,friends:null,liked:new Set(),drag:null,moved:false,ready:false,setup:false,err:''};
 const VG_DSCALE={stone_path:.7,fence:.8,bush:.72,flower:.82,flower_bed:.72,tree:1.1,lamp:.8,crystal_lantern:1.05,crystal_obelisk:.95,mushroom_house:1.35,fountain:1.25,crystal_tree:1.6};
-const VG_EXPAND=[0,2000,6000,18000];
+const VG_EXPAND=[0,2000,6000,18000,50000,120000];
 const vgMob=()=>window.matchMedia('(max-width:760px)').matches;
 const vgN=v=>Math.floor(Number(v)||0).toLocaleString();
 function vgToast(msg,err){document.querySelectorAll('.vg-toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='vg-toast'+(err?' err':'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
@@ -1236,7 +1263,7 @@ function vgSeen(){try{const uid=window.fitVillage?.me()||'x';return new Set(JSON
 function vgMarkSeen(keys){try{const uid=window.fitVillage?.me()||'x',s=vgSeen();keys.forEach(k=>s.add(k));localStorage.setItem('fitVgSeen_'+uid,JSON.stringify([...s]))}catch(e){}}
 function vgSetState(st){if(!st)return;if(VG.codex&&st.items)st.items.forEach(i=>{if(!VG.codex.keys.includes(i.item_key))VG.codex.keys.push(i.item_key)});VG.state=st;VG.off=new Date(st.server_time).getTime()-Date.now();vgMarkSeen((st.items||[]).map(i=>i.item_key))}
 function vgSize(level){return 6+2*(Number(level)||1)}
-function vgEcon(items){let r=0,ch=0;(items||[]).forEach(i=>{if(i.x==null)return;const c=VG.cat[i.item_key];if(!c)return;if(c.kind==='animal')r+=(Number(c.rate)||0)*(1+.05*(Number(i.tr)||0));else if(c.kind==='deco')ch+=Number(c.charm)||0});const mult=(1+Math.min(ch,300)/300)*(Number(VG.state&&VG.state.prod_bonus)||1);return {rate:r,charm:ch,mult,hour:r*mult,cap:r*mult*12}}
+function vgEcon(items){let r=0,ch=0;(items||[]).forEach(i=>{if(i.x==null&&!i.h)return;const c=VG.cat[i.item_key];if(!c)return;if(i.h&&c.kind!=='animal')return;if(c.kind==='animal')r+=(Number(c.rate)||0)*(1+.05*(Number(i.tr)||0));else if(c.kind==='deco')ch+=Number(c.charm)||0});const mult=(1+Math.min(ch,300)/300)*(Number(VG.state&&VG.state.prod_bonus)||1);return {rate:r,charm:ch,mult,hour:r*mult,cap:r*mult*12}}
 function vgLive(){const st=VG.state;if(!st?.village)return {pending:0,cap:0};const e=vgEcon(st.items),v=st.village,p=Number(v.pending)||0,hrs=Math.max(0,(Date.now()+VG.off-new Date(v.last_collect).getTime())/36e5);return {pending:Math.max(p,Math.min(e.cap,p+e.hour*hrs)),cap:e.cap,e}}
 
 function companionPage(){return `${head('🏡 동물 마을','동물을 배치하면 시간이 지날수록 코인이 쌓여요. 코인으로 친구들을 데려오고 마을을 꾸며 보세요.',`<button data-go="workspace">운동 공유하고 +100 코인 →</button>`)}
@@ -1289,7 +1316,7 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
   for(let x=0;x<N;x++)for(let y=0;y<N;y++){const [cx,cy]=G.c(x,y),h=(x*7+y*13)%5;t+=`<polygon class="vg-tile" data-tile="${x},${y}" points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a4e080':'#98d975'}" stroke="#8acd69" stroke-width=".8"/>`;if(h===0)t+=`<path d="M${cx-8},${cy+4} l2,-6 l2,6 M${cx+10},${cy-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`}
   const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N).sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.x-b.x);
   items.forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
-    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${sc})">${vgArt(i.item_key,c.kind)}</g>${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
+    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${sc})">${vgArt(i.item_key,c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
   t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
   return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
 
@@ -1355,8 +1382,8 @@ function vgReveal(m,r,title){const k=r.hatched_key,c=VG.cat[k]||{},g=VG_GRADE[c.
 
 function vgCard(c,btn){const g=VG_GRADE[c.grade]||VG_GRADE[1];return `<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${g.name}</span>${vgArtSvg(c.item_key)}<b>${esc(c.name)}</b><div class="vg-meta">${c.kind==='animal'?`⏱ 시간당 +${vgN(c.rate)}`:`✨ 매력 +${vgN(c.charm)}`}</div>${btn||''}</div>`}
 function vgSelCard(){const it=(VG.state.items||[]).find(i=>i.id===VG.sel);if(!it)return '';const c=VG.cat[it.item_key]||{},g=VG_GRADE[c.grade]||VG_GRADE[1];
-  return `<div class="vg-sel">${vgArtSvg(it.item_key)}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">↔ 이동</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}</div></div></div>`}
-function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null);
+  return `<div class="vg-sel">${vgArtSvg(it.item_key)}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">↔ 이동</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}${it.item_key==='pet_house'?`<button class="vg-btn sm purple" data-hopen="1">🏠 하우스 열기</button>`:''}</div></div></div>`}
+function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null&&!i.h);
   const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['fuse','🧬','조합'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['game','🎮','게임'],['friends','👫','친구']];
   let body='';
   if(VG.tab==='shop'){const list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat);
@@ -1367,7 +1394,8 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
     body=BE+`<p class="vg-note">알에서는 <b style="color:#9b5cff">영웅</b>·<b style="color:#ff9a1f">전설</b>·<b style="color:#ff4f8b">신화</b> 등급 친구들만 태어나요. 상점 동물보다 훨씬 많은 코인을 만들어요!</p>${eggs.map(e=>{const o=odds[e.item_key]||[0,0,0];return `<div class="vg-egg-card">${vgArtSvg(e.item_key,'vg-art','-40 -74 80 80')}<div style="flex:1"><b style="font-size:17px">${esc(e.name)}</b><div class="vg-odds"><i style="color:#9b5cff">영웅 ${o[0]}%</i> · <i style="color:#ff9a1f">전설 ${o[1]}%</i> · <i style="color:#ff4f8b">신화 ${o[2]}%</i></div><button class="vg-btn purple sm full" data-hatch="${e.item_key}" ${coins<e.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(e.price)} · 부화하기</button></div></div>`}).join('')}
     <b style="display:block;margin:6px 0 8px">태어날 수 있는 친구들</b><div class="vg-codex">${pool.map(c=>`<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(c.item_key)}<b style="font-size:13px">${esc(c.name)}</b><div class="vg-meta">+${vgN(c.rate)}/h</div></div>`).join('')}</div>`}
   if(VG.tab==='inv'){const grp={};inv.forEach(i=>(grp[i.item_key]=grp[i.item_key]||[]).push(i.id));const keys=Object.keys(grp).sort((a,b)=>(VG.cat[a]?.sort||0)-(VG.cat[b]?.sort||0));
-    body=keys.length?`<p class="vg-note">보관함의 개체는 코인을 만들지 않아요. 마을에 배치해 주세요!</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button><button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>'}
+    const hasHouse=(st.items||[]).some(i=>i.item_key==='pet_house');
+    body=vgHouseHtml(hasHouse)+(keys.length?`<p class="vg-note">보관함의 개체는 코인을 만들지 않아요. 마을에 배치하거나 펫 하우스에 넣어 주세요!</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button>${hasHouse&&c.kind==='animal'?`<button class="vg-btn sm purple" data-hput="${k}" title="보관함의 이 동물 전부를 펫 하우스로">🏠 넣기</button>`:''}<button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>')}
   if(VG.tab==='codex'){if(!VG.codex){VG.codex={keys:[...vgSeen()],flags:{}};window.fitVillage.codexList().then(d=>{VG.codex={keys:d.keys||[],flags:d.flags||{}};vgMarkSeen(VG.codex.keys);if(VG.tab==='codex')vgRenderSide()}).catch(()=>{})}
     const seen=new Set([...VG.codex.keys,...vgSeen()]),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
     const CB={1:'공격 시 3% 확률로 추가 공격',2:'전투 시작 시 보호막 (최대 체력 8%)',3:'받는 피해 −3%',4:'필살기 피해 +5%',5:'매 턴 체력 2% 회복',6:'모든 능력치 +5%',7:'마을 코인 생산 +5%'};
@@ -1389,6 +1417,9 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>vgSell(b.dataset.sell));
   if(VG.tab==='fuse')vgFuseBind(side);
   side.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>b.dataset.game==='spot'?vgSpotGame():vgRoulette());
+  side.querySelectorAll('[data-hput]').forEach(b=>b.onclick=()=>vgHousePut(b.dataset.hput));
+  side.querySelectorAll('[data-htake]').forEach(b=>b.onclick=()=>vgHouseTake(b.dataset.htake,Number(b.dataset.n)));
+  side.querySelectorAll('[data-hopen]').forEach(b=>b.onclick=()=>{VG.tab='inv';VG.sel=null;vgRenderSide()});
   side.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>vgOpenTr(b.dataset.tr));
   side.querySelectorAll('[data-visit]').forEach(b=>b.onclick=()=>vgVisit(b.dataset.visit));
   $('#vgFrRefresh')&&($('#vgFrRefresh').onclick=()=>{VG.friends=null;window.fitVillage.likedToday().then(s=>VG.liked=s).catch(()=>{});vgRenderSide()})}
@@ -1475,7 +1506,7 @@ async function vgDungeon(){if(VD.m)VD.m.remove();VD.m=vgModal('<div class="vg-em
 function vgBody(html){const box=VD.m.querySelector('.vg-modal-box');box.innerHTML='<button class="vg-x" title="닫기">✕</button>'+html;box.querySelector('.vg-x').onclick=()=>{if(VD.m.dataset.lock)return;VD.m.remove();VD.m._onclose&&VD.m._onclose()}}
 function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=f=>st.max-(Number(ub[f])||0),left=fl(VD.floor),best=st.best||0;
   const floors=VD.bosses.map(b=>{const lock=b.floor>best+1,clear=b.floor<=best;return `<button class="vd-floor ${VD.floor===b.floor?'on':''} ${lock?'lock':''}" data-floor="${b.floor}" ${lock?'disabled':''}><svg viewBox="-90 -165 180 172" class="vd-fart">${vgBossArt(b.floor,b.image_url)}</svg><b>${b.floor}층</b>${lock?'':`<em class="vd-left ${fl(b.floor)<=0?'none':''}">${fl(b.floor)}/${st.max}</em>`}${clear&&(Number((st.clears||{})[b.floor])||0)>=(st.sweep_need||5)?'<i class="vd-swp">⚡</i>':''}<small>${lock?'🔒 잠김':esc(b.name)}</small>${clear?'<i class="vd-clear">✓ 클리어</i>':''}</button>`}).join('');
-  const animals=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal').sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||(VG.cat[b.item_key].sort-VG.cat[a.item_key].sort));
+  const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||(VG.cat[b.item_key].sort-VG.cat[a.item_key].sort));
   const pickHtml=animals.length?animals.map(i=>{const c=VG.cat[i.item_key],s=(VG_GSTAT[c.stat_grade||c.grade]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(Number(i.tr)||0)))),on=VD.pick.includes(i.id);return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small><em class="vd-psk" title="${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[1]}">${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[0]} ${esc(vdSkillOf(i.item_key).n)}</em>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join(''):'<div class="vg-empty">동물이 없어요. 상점이나 알 부화로 먼저 데려와 주세요.</div>';
   const b=VD.bosses.find(x=>x.floor===VD.floor)||{};
   const reward=VD.floor>best?`첫 클리어 ${vgN(VD.floor*300)}코인${VD.floor===10?' + 황금 알':VD.floor>=5?' + 신비한 알':''}`:`반복 클리어 ${vgN(VD.floor*60)}코인`;
@@ -1601,7 +1632,7 @@ function vgFuseTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,ite
   <div class="vf-grades">${[1,2,3,4,5].map(g=>`<button class="${F.g===g?'on':''}" data-fg="${g}"><span class="vg-grade vg-g${g}" style="position:static">${VG_GRADE[g].name}</span><small>${cnt(g)}마리</small></button>`).join('')}</div>
   <div class="vf-slots">${slot(F.a,1)}<div class="vf-plus">＋</div>${slot(F.b,2)}<div class="vf-plus">→</div><div class="vf-slot res"><span>?</span><small>${next}</small></div></div>
   <div class="vf-info"><div>성공 확률 <b>${rate}%</b> → <b>${next}</b>${F.g<5?` <small>(그중 5% 돌연변이)</small>`:''}</div><div>실패 시 <b>${VG_GRADE[F.g].name}</b> 1마리 · 비용 ${vgCoinIcon(13)} <b>${vgN(fee)}</b></div></div>
-  <button class="vg-btn purple full" id="vfGo" ${!ready||coins<fee?'disabled':''}>${!ready?'재료 2마리를 골라 주세요':coins<fee?'코인이 부족해요':`🧬 조합하기 (${vgN(fee)}코인)`}</button>
+  <button class="vg-btn purple full" id="vfGo" ${!ready||coins<fee?'disabled':''}>${!ready?'재료 2마리를 골라 주세요':coins<fee?'코인이 부족해요':`🧬 조합하기 (${vgN(fee)}코인)`}</button>${vgBatchHtml(F.g)}
   <b style="display:block;margin:14px 0 8px">내 ${VG_GRADE[F.g].name} 캐릭터</b>
   ${list.length?`<div class="vf-list">${list.map(i=>{const c=VG.cat[i.item_key],on=F.a===i.id||F.b===i.id;return `<button class="vf-pick ${on?'on':''}" data-fp="${i.id}">${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${i.x!=null?'<i>배치중</i>':''}${on?'<em>✓</em>':''}</button>`}).join('')}</div>`:'<div class="vg-empty">이 등급의 캐릭터가 없어요.</div>'}`}
 function vgFuseBind(side){const F=VG.fuse;
@@ -1609,7 +1640,7 @@ function vgFuseBind(side){const F=VG.fuse;
   side.querySelectorAll('[data-fg]').forEach(b=>b.onclick=()=>{F.g=Number(b.dataset.fg);F.a=F.b=null;vgRenderSide()});
   side.querySelectorAll('[data-fslot]').forEach(b=>b.onclick=()=>{if(b.dataset.fslot==='1')F.a=null;else F.b=null;vgRenderSide()});
   side.querySelectorAll('[data-fp]').forEach(b=>b.onclick=()=>{const id=b.dataset.fp;if(F.a===id)F.a=null;else if(F.b===id)F.b=null;else if(!F.a)F.a=id;else if(!F.b)F.b=id;else F.b=id;vgRenderSide()});
-  const go=side.querySelector('#vfGo');if(go)go.onclick=vgFuse}
+  const go=side.querySelector('#vfGo');if(go)go.onclick=vgFuse;const bg=side.querySelector('#vbGo');if(bg)bg.onclick=vgBatchFuse}
 async function vgFuse(){const F=VG.fuse,A=(VG.state.items||[]).find(i=>i.id===F.a),B=(VG.state.items||[]).find(i=>i.id===F.b);if(!A||!B)return;
   if(!window.confirm(`${(A.tr||B.tr)?'⚠ 초월한 캐릭터가 포함되어 있어요! 초월 단계는 사라집니다.\n':''}${VG.cat[A.item_key].name} + ${VG.cat[B.item_key].name}을(를) 조합할까요?\n재료 2마리는 사라집니다. (비용 ${vgN(VG_FUSE.fee[F.g])}코인)`))return;
   const m=document.createElement('div');m.className='vg-modal';m.innerHTML=`<div class="vg-modal-box"><div class="vf-anim"><div class="vf-l">${vgArtSvg(A.item_key)}</div><div class="vf-flash"></div><div class="vf-r">${vgArtSvg(B.item_key)}</div></div><h3>🧬 조합 중…</h3><p class="vg-mp">두 캐릭터의 힘이 하나로 모이고 있어요</p></div>`;document.body.appendChild(m);
@@ -1718,7 +1749,7 @@ async function vgWorldBoss(){if(VD.m)VD.m.remove();VD.m=vgModal('<div class="vg-
 function vgWbBoard(board){const me=window.fitVillage.me();if(!board.length)return '<div class="vg-empty">아직 오늘 도전한 사람이 없어요. 첫 번째 도전자가 되어 보세요!</div>';
   return board.map((r,i)=>`<div class="wb-row ${r.user_id===me?'me':''}"><span class="wb-rank r${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</span><span class="wb-party">${(r.party||[]).slice(0,3).map(k=>`<svg viewBox="-48 -96 96 102">${vgArt(k)}</svg>`).join('')}</span><b class="wb-name">${esc(r.name)}${r.user_id===me?' <small>(나)</small>':''}</b><span class="wb-score">${vgN(r.score)}<small>점</small></span><span class="wb-coin">${vgCoinIcon(12)} ${vgN(r.coins)}</span></div>`).join('')}
 function vgWbLobby(){const st=VD.wb,mine=st.mine,img=(VD.bosses.find(x=>x.floor===10)||{}).image_url||'images/bosses/boss10.webp';
-  const animals=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal').sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||((b.tr||0)-(a.tr||0)));
+  const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||((b.tr||0)-(a.tr||0)));
   const pickHtml=animals.map(i=>{const c=VG.cat[i.item_key],s=(VG_GSTAT[c.stat_grade||c.grade]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(Number(i.tr)||0)))),on=VD.pick.includes(i.id),sk=VD_SK[c.skill||'nuke']||VD_SK.nuke;
     return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small><em class="vd-psk">${sk[0]} ${esc(c.skill_name||'필살기')}</em>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join('');
   vgBody(`<div class="wb-hero"><svg viewBox="-120 -170 240 178" class="wb-art">${vgBossArt(10,img)}</svg><div class="wb-info"><span class="wb-tag">🐉 월드 보스 · 하루 1회</span> ${vgCutToggles()}<h3>심연의 마왕</h3>
@@ -1778,6 +1809,32 @@ async function vgHeroCut(e,mem){const c=VG.cat[mem.key]||{};if((c.grade||0)<5||!
   host.innerHTML=`<div class="vc-rays"></div><div class="vc-speed"></div><svg viewBox="-48 -96 96 102" class="vc-char">${vgArt(mem.key)}</svg>
    <div class="vc-text r"><small><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> ${esc(c.name)}${tr?` ${'★'.repeat(tr)}`:''}</small><b>${esc(e.name||'필살기')}</b><span>${tr>=5?'초월 각성!':''}</span></div>`;
   await vdSleep(1500);host.classList.add('out');await vdSleep(280);host.remove();return true}
+
+
+/* ===== 펫 하우스 · 일괄 조합 ===== */
+function vgBestOf(list){const m={};list.forEach(i=>{const b=m[i.item_key];if(!b||(i.tr||0)>(b.tr||0))m[i.item_key]=i});return Object.values(m)}
+function vgHouseGroups(){const g={};(VG.state.items||[]).forEach(i=>{if(i.h)(g[i.item_key]=g[i.item_key]||[]).push(i)});return g}
+function vgHouseHtml(has){if(!has)return '<p class="vg-note">🏠 <b>펫 하우스</b>를 상점(장식)에서 사면 중복 동물을 최대 <b>10종 · 종류별 99마리</b>까지 넣을 수 있어요. 자리를 차지하지 않고 코인은 그대로 만들어요.</p>';
+  const g=vgHouseGroups(),keys=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);let rate=0;keys.forEach(k=>g[k].forEach(i=>rate+=(VG.cat[k]?.rate||0)*(1+.05*(i.tr||0))));
+  return `<div class="vh-box"><div class="vh-head"><span>🏠 펫 하우스</span><small>${keys.length}/10종 · 시간당 +${vgN(rate)}</small></div>${keys.length?`<div class="vh-grid">${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vh-cell">${vgArtSvg(k)}<b>${esc(c.name)}</b><em>×${g[k].length}</em><div><button class="vg-btn sm" data-htake="${k}" data-n="1">1 꺼내기</button><button class="vg-btn sm" data-htake="${k}" data-n="99">모두</button></div></div>`}).join('')}</div>`:'<div class="vg-empty" style="padding:10px">아래 보관함 목록의 🏠 넣기 버튼으로 동물을 넣어 보세요.</div>'}</div>`}
+async function vgHousePut(k){const r=await vgRun(()=>window.fitVillage.housePut(k,99));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`🏠 ${VG.cat[k]?.name||''} ${r.moved}마리를 하우스에 넣었어요`)}
+async function vgHouseTake(k,n){const r=await vgRun(()=>window.fitVillage.houseTake(k,n));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`📦 ${r.moved}마리를 보관함으로 꺼냈어요`)}
+/* 일괄 조합 */
+function vgBatchCount(g){return (VG.state.items||[]).filter(i=>i.x==null&&!i.h&&!(i.tr>0)&&VG.cat[i.item_key]?.kind==='animal'&&VG.cat[i.item_key].grade===g).length}
+function vgBatchHtml(g){if(g>2)return '';const n=vgBatchCount(g),times=Math.min(10,Math.floor(n/2)),fee=VG_FUSE.fee[g];
+  return `<div class="vb-box"><b>⚡ 일괄 조합</b><small>보관함의 ${VG_GRADE[g].name} ${n}마리 (배치·하우스·초월 동물 제외)</small><button class="vg-btn gold full" id="vbGo" ${times<1?'disabled':''}>${times<1?'재료가 부족해요 (2마리 이상)':`${times}회 한 번에 조합 · ${vgN(fee*times)}코인`}</button></div>`}
+async function vgBatchFuse(){const g=VG.fuse.g,n=Math.min(10,Math.floor(vgBatchCount(g)/2));if(n<1)return;
+  if(!window.confirm(`보관함의 ${VG_GRADE[g].name} 동물 ${n*2}마리로 ${n}회 조합할까요?\n(비용 ${vgN(VG_FUSE.fee[g]*n)}코인 · 재료는 사라집니다)`))return;
+  let r;try{r=await window.fitVillage.fuseBatch(g,n)}catch(e){vgToast(e.setup?'Supabase에 업데이트 SQL(fit_village_update15.sql) 실행이 필요합니다.':(e.message||String(e)),true);return}
+  vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();const R=r.results||[];
+  const m=vgModal(`<h3>📦 일괄 조합 결과</h3><p class="vg-mp">상자를 눌러 열어 보세요!</p><div class="vb-grid">${R.map((x,i)=>{const c=VG.cat[x.key]||{},cls=x.result==='mutant'?'rainbow':x.result==='success'||x.result==='recipe'?'plain win':'plain';return `<button class="vb-chest ${cls}" data-i="${i}"><div class="vb-lid"></div><div class="vb-body"></div><div class="vb-in">${vgArtSvg(x.key)}<b>${esc(c.name||'')}</b><span class="vg-grade vg-g${c.grade}" style="position:static">${(VG_GRADE[c.grade]||{}).name||''}</span></div></button>`}).join('')}</div>
+   <div class="vb-sum" id="vbSum">&nbsp;</div><div style="display:flex;gap:8px;justify-content:center"><button class="vg-btn purple" id="vbAll">모두 열기</button></div>`,'vg-wide vb-modal');
+  const open=b=>{if(b.classList.contains('open'))return;b.classList.add('open');if(b.classList.contains('rainbow'))vgToast('🌈 돌연변이 등장!')};
+  const sum=()=>{const s=R.filter(x=>x.result==='success'||x.result==='recipe').length,mu=R.filter(x=>x.result==='mutant').length;m.querySelector('#vbSum').innerHTML=`성공 <b>${s}</b> · 돌연변이 <b style="color:#0fb59a">${mu}</b> · 실패 <b>${R.length-s-mu}</b>`};
+  m.querySelectorAll('.vb-chest').forEach(b=>b.onclick=()=>{open(b);if(m.querySelectorAll('.vb-chest:not(.open)').length===0)sum()});
+  m.querySelector('#vbAll').onclick=async()=>{for(const b of m.querySelectorAll('.vb-chest:not(.open)')){open(b);await vdSleep(120)}sum()};m._onclose=()=>vgRenderSide()}
+function vgHousePeek(st){const g={};(st.items||[]).forEach(i=>{if(i.h)g[i.item_key]=(g[i.item_key]||0)+1});const ks=Object.keys(g).sort((a,b)=>g[b]-g[a]);if(!ks.length)return '';const tot=ks.reduce((s,k)=>s+g[k],0);
+  return `<g transform="translate(26,4) scale(.5)">${vgArt(ks[0])}</g><g transform="translate(0,-74)"><rect x="-20" y="-11" width="40" height="18" rx="9" fill="#ff8a6b" stroke="#3b2417" stroke-width="2"/><text x="0" y="3" text-anchor="middle" font-size="12" font-weight="800" fill="#fff" font-family="Inter,sans-serif">×${tot}</text></g>`}
 
 
 function daily(){
@@ -2132,6 +2189,9 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     wbStatus(){return vrpc('fit_village_wb_status')},
     codexList(){return vrpc('fit_village_codex_list')},
     dungeonSweep(f,n){return vrpc('fit_village_dungeon_sweep',{p_floor:f,p_times:n})},
+    fuseBatch(g,n){return vrpc('fit_village_fuse_batch',{p_grade:g,p_times:n})},
+    housePut(k,n){return vrpc('fit_village_house_put',{p_key:k,p_n:n})},
+    houseTake(k,n){return vrpc('fit_village_house_take',{p_key:k,p_n:n})},
     bossHatch(id){return vrpc('fit_village_boss_hatch',{p_egg:id})},
     async bossEggs(){vNeed();const {data,error}=await supa.from('fit_village_boss_eggs').select('id,floor,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     wbStart(ids){return vrpc('fit_village_wb_start',{p_items:ids})},

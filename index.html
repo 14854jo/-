@@ -717,6 +717,45 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .eq-badge{font-size:10px;background:#fff1c9;color:#b07a00;border-radius:6px;padding:0 4px;font-family:Inter,sans-serif;font-weight:800}
 .eq-drop{margin-top:8px;text-align:left}.eq-drop>small{display:block;font-size:13px;margin-bottom:4px}
 .eq-modal{width:min(96vw,640px)!important}.eq-modal .eq-card{text-align:left}
+/* ===== 심연의 탑 3단계 : 고유 스킬 · 각성 ===== */
+.tw-stone{color:#3b6fd8}.tw-stone b{color:#2a52b0}
+.aw-badge{position:absolute;right:4px;top:4px;font-size:14px;filter:drop-shadow(0 0 4px #ffd34d)}
+.tw-slot,.vd-pick{position:relative}.vd-pick .aw-badge{top:28px;right:7px}
+.vd-psk.aw-psk{background:linear-gradient(90deg,#fff4c9,#ffe0f0);color:#a2551a;border:1px solid #ffc94d}
+.tw-uqbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px;padding:6px 8px;border-radius:14px;background:linear-gradient(90deg,#2a1748,#4a2a7a);box-shadow:inset 0 0 0 2px #ffd34d55}
+.tw-uqbar.used{filter:grayscale(.7);opacity:.75}
+.tw-uqlbl{color:#ffd34d;font-size:14px;display:flex;flex-direction:column;line-height:1.15;margin-right:4px}.tw-uqlbl small{color:#d8c9ff;font-size:11px;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.tw-uq{display:flex;align-items:center;gap:4px;border:2px solid #ffd34d88;background:#ffffff14;color:#fff;border-radius:12px;padding:3px 9px 3px 3px;cursor:pointer;font-family:inherit;text-align:left;max-width:100%}
+.tw-uq svg{width:36px;height:36px;flex:none}.tw-uq span{display:flex;flex-direction:column;min-width:0}.tw-uq b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tw-uq small{font-size:10.5px;color:#d8c9ff;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.tw-uq.on{background:linear-gradient(90deg,#ffd34d,#ff9a1f);border-color:#fff;color:#3a2f4a;box-shadow:0 0 14px #ffd34d;animation:awGlow 1s ease-in-out infinite alternate}.tw-uq.on small{color:#5a3d10}
+.tw-uq:disabled{opacity:.45;cursor:not-allowed}
+@keyframes awGlow{from{box-shadow:0 0 6px #ffd34d}to{box-shadow:0 0 18px #ffd34d}}
+.tw-sk.uqon{border-color:#ffc94d;background:#fff6d6;opacity:1!important}
+.vg-btn.tw-uqgo{background:linear-gradient(90deg,#ffd34d,#ff7ab0)!important}
+.aw-drop{margin-top:8px;font-size:15px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}.aw-drop b{color:#3b6fd8}
+.aw-modal h3{margin:0 0 6px}
+.aw-head{display:flex;flex-direction:column;align-items:center;gap:2px;background:#eef3ff;border-radius:12px;padding:8px;margin-bottom:6px}
+.aw-head small{font-family:'Malgun Gothic',sans-serif;font-size:11.5px;color:#6a7a9a;font-weight:700;text-align:center}
+.aw-stone{font-size:17px;color:#3b6fd8}.aw-stone b{font-size:20px}
+.aw-list{display:flex;flex-direction:column;gap:6px;max-height:58vh;overflow:auto;padding-right:2px}
+.aw-card{display:flex;align-items:center;gap:8px;border:2px solid #eadfcb;border-radius:14px;padding:6px 8px;background:#fff}
+.aw-card.on{border-color:#ffc94d;background:linear-gradient(90deg,#fffaf0,#fff2d0)}
+.aw-card.no{opacity:.6}
+.aw-art{position:relative;width:58px;height:58px;flex:none}.aw-art .vg-art{width:58px;height:58px}.aw-art .vg-grade{position:absolute;left:-2px;top:auto;bottom:-4px;font-size:10px;padding:1px 5px}
+.aw-cn{font-size:15px}.aw-sk{font-size:14px;color:#a2551a}.aw-d{display:block;font-family:'Malgun Gothic',sans-serif;font-size:11.5px;color:#7d7290;font-weight:700;line-height:1.35}
+.aw-btn{flex:none;text-align:center}.aw-done{color:#c27a00;font-size:13px}.aw-need{font-size:13px;color:#9a8fab;line-height:1.1}
+.aw-ic{background:#e6efff!important}
+/* 고유 스킬 컷신 */
+.vc-host.uq{background:radial-gradient(ellipse at 30% 50%,color-mix(in srgb,var(--c) 55%,#fff) 0%,color-mix(in srgb,var(--c) 40%,#1a0d33) 35%,#0b0618 75%)}
+.vc-host.uq .vc-bars{position:absolute;inset:0;z-index:3}
+.vc-host.uq .vc-char{filter:drop-shadow(0 0 30px #ffd34d) drop-shadow(0 0 60px var(--c)) drop-shadow(0 10px 10px #0008)}
+.vc-host.uq .vc-text b{text-shadow:0 0 22px #ffd34d,0 0 40px var(--c),0 4px 0 #000}
+.vc-host.uq .vc-text span{color:#ffd34d}
+.vc-uqring{position:absolute;left:30%;top:50%;width:70vmin;height:70vmin;margin:-35vmin 0 0 -35vmin;border-radius:50%;border:6px solid #ffd34d;box-shadow:0 0 40px #ffd34d,inset 0 0 40px #ffd34d;opacity:0;animation:vcUqRing 1.9s ease-out forwards}
+@keyframes vcUqRing{0%{transform:scale(.2);opacity:0}25%{opacity:.95}100%{transform:scale(1.6);opacity:0}}
+.vc-uqtag{position:absolute;right:6%;top:17%;z-index:4;color:#ffd34d;font-size:clamp(22px,4.4vw,52px);letter-spacing:.4em;text-shadow:0 0 18px #ffd34d,0 3px 0 #000;animation:vcUqTag 1.9s cubic-bezier(.2,.9,.2,1) forwards}
+@keyframes vcUqTag{0%{opacity:0;letter-spacing:1.4em}25%{opacity:1;letter-spacing:.4em}85%{opacity:1}100%{opacity:0}}
+@media(max-width:760px){.vc-uqring{left:50%}.vc-uqtag{right:auto;left:5%;top:12%}.tw-uq b{font-size:12px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1468,7 +1507,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>b.dataset.game==='spot'?vgSpotGame():vgRoulette());
   if(VG.tab==='inv'&&VG.invSub==='equip')vgEquipBind(side);
   side.querySelectorAll('[data-isub]').forEach(b=>b.onclick=()=>{VG.invSub=b.dataset.isub;vgRenderSide()});
-  side.querySelectorAll('[data-twbuy]').forEach(b=>b.onclick=twBuy);
+  side.querySelectorAll('[data-twbuy]').forEach(b=>b.onclick=twBuy);side.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
   side.querySelectorAll('[data-hput]').forEach(b=>b.onclick=()=>vgHousePut(b.dataset.hput));
   side.querySelectorAll('[data-htake]').forEach(b=>b.onclick=()=>vgHouseTake(b.dataset.htake,Number(b.dataset.n)));
   side.querySelectorAll('[data-hopen]').forEach(b=>b.onclick=()=>{VG.tab='inv';VG.sel=null;vgRenderSide()});
@@ -1838,7 +1877,7 @@ function vgCutImpact(host,cfg){const L=document.createElement('div');L.className
   let h='<i class="vi-flash"></i><i class="vi-ring"></i><i class="vi-ring r2"></i>';for(let k=0;k<(cfg.n||3);k++)h+=`<i class="vi-slash" style="--r:${-28+k*24}deg;--d:${k*.09}s;top:${38+k*9}%"></i>`;
   for(let k=0;k<18;k++)h+=`<i class="vi-shard" style="--a:${Math.random()*360}deg;--l:${30+Math.random()*30}vmin;--d:${Math.random()*.15}s"></i>`;
   L.innerHTML=h;host.appendChild(L);host.classList.remove('vc-shake');void host.offsetWidth;host.classList.add('vc-shake');setTimeout(()=>L.remove(),1200)}
-function vgCutPath(key){if(VG_CUT_VIDEO[key])return VG_CUT_VIDEO[key];let m=key.match(/^boss(\d+)$/);if(m)return `images/bosses/boss${m[1]}.mp4`;m=key.match(/^char:boss_(\d+)$/);if(m)return `images/bosses/boss${m[1]}.mp4`;m=key.match(/^char:(.+)$/);if(m)return `images/chars/${m[1]}.mp4`;return null}
+function vgCutPath(key){if(VG_CUT_VIDEO[key])return VG_CUT_VIDEO[key];let m=key.match(/^boss(\d+)$/);if(m)return `images/bosses/boss${m[1]}.mp4`;m=key.match(/^char:boss_(\d+)$/);if(m)return `images/bosses/boss${m[1]}.mp4`;m=key.match(/^uq:(.+)$/);if(m)return `images/chars/${m[1]}_unique.mp4`;m=key.match(/^char:(.+)$/);if(m)return `images/chars/${m[1]}.mp4`;return null}
 function vgCutVideo(key,host,over){const src=vgCutPath(key);if(!src||VG_VID_MISS.has(src))return Promise.resolve(false);return new Promise(res=>{let started=false,fin=false;const v=document.createElement('video');v.className='vc-video';v.muted=true;v.playsInline=true;v.preload='auto';
   const end=ok=>{if(fin)return;fin=true;if(!ok){VG_VID_MISS.add(src);v.remove();host.querySelectorAll('.vc-over').forEach(e=>e.remove())}res(ok)};
   const fxc=VG_CUT_FX[key]||VG_CUT_FX[key.replace(/^char:boss_(\d+)$/,'boss$1')];let fxd=false;if(fxc)v.ontimeupdate=()=>{if(!fxd&&v.currentTime>=fxc.at){fxd=true;vgCutImpact(host,fxc)}};
@@ -1890,27 +1929,27 @@ function vgHousePeek(st){const g={};(st.items||[]).forEach(i=>{if(i.h)g[i.item_k
 
 
 /* ===== 심연의 탑 (세븐나이츠식 전투) ===== */
-const TW={m:null,st:null,floor:1,form:'bal',pick:[],battle:null,order:[],target:0,auto:false,busy:false};
+const TW={m:null,st:null,floor:1,form:'bal',pick:[],battle:null,order:[],uq:null,target:0,auto:false,busy:false};
 const TW_FORM={atk:{n:'공격형',d:'앞 3 · 뒤 2 · 아군 공격력 +10%',front:3},bal:{n:'균형형',d:'앞 2 · 뒤 3 · 기본',front:2},def:{n:'수비형',d:'앞 2 · 뒤 3 · 뒷줄 받는 피해 −20%',front:2}};
 function twBody(html){const box=TW.m.querySelector('.vg-modal-box');box.innerHTML='<button class="vg-x" title="닫기">✕</button>'+html;box.querySelector('.vg-x').onclick=()=>{if(TW.m.dataset.lock)return;TW.auto=false;TW.m.remove();TW.m=null;vgRenderHud();vgRenderSide()}}
 async function vgTower(){if(TW.m)TW.m.remove();eqLoad();TW.m=vgModal('<div class="vg-empty">심연의 탑을 불러오는 중…</div>','vg-xwide vg-dungeon tw-modal');TW.m._onclose=()=>{TW.auto=false;TW.m=null;vgRenderHud();vgRenderSide()};
-  try{TW.st=await window.fitVillage.twStatus();if(!VD.bosses.length)VD.bosses=await window.fitVillage.bosses()}catch(e){TW.m.querySelector('.vg-empty').outerHTML=`<div class="vg-setup">${esc(e.setup?'Supabase에 심연의 탑 SQL(fit_village_update16.sql) 실행이 필요합니다.':(e.message||String(e)))}</div>`;return}
+  try{TW.st=await window.fitVillage.twStatus();if(!VD.bosses.length)VD.bosses=await window.fitVillage.bosses();await awLoad(true)}catch(e){TW.m.querySelector('.vg-empty').outerHTML=`<div class="vg-setup">${esc(e.setup?'Supabase에 심연의 탑 SQL(fit_village_update16.sql) 실행이 필요합니다.':(e.message||String(e)))}</div>`;return}
   if(!TW.st.open){twBody(`<div class="tw-lock"><div style="font-size:56px">🗼🔒</div><h3>심연의 탑</h3><p class="vg-mp">동굴 던전 <b>10층</b>을 클리어하면 열려요.</p></div>`);return}
-  if(TW.st.battle&&TW.st.battle.status==='active'){TW.battle=TW.st.battle;TW.order=[];twBattle('진행 중이던 탑 전투를 이어서 합니다.');return}
+  if(TW.st.battle&&TW.st.battle.status==='active'){TW.battle=TW.st.battle;TW.order=[];TW.uq=null;twBattle('진행 중이던 탑 전투를 이어서 합니다.');return}
   TW.floor=Math.min(20,(TW.st.best||0)+1);TW.pick=TW.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));twLobby()}
-function twTickets(){const s=TW.st;return `<div class="tw-tix"><span>🎟️ 입장권 <b>${s.tickets}</b>장</span><span class="${s.free?'on':''}">${s.free?'🎁 오늘 무료 1장 남음':'오늘 무료 입장 사용함'}</span><button class="vg-btn sm gold" data-twbuy="1">${vgCoinIcon(13)} 10,000 · 1장 구매</button></div>`}
+function twTickets(){const s=TW.st;return `<div class="tw-tix"><span>🎟️ 입장권 <b>${s.tickets}</b>장</span><span class="${s.free?'on':''}">${s.free?'🎁 오늘 무료 1장 남음':'오늘 무료 입장 사용함'}</span><button class="vg-btn sm gold" data-twbuy="1">${vgCoinIcon(13)} 10,000 · 1장 구매</button><span class="tw-stone">💠 각성석 <b>${s.stones||0}</b>개</span><button class="vg-btn sm purple" data-awopen="1">🌟 각성</button></div>`}
 function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
   const floors=Array.from({length:20},(_,k)=>k+1).map(f=>{const lock=f>best+1,clear=f<=best,c=Number((s.clears||{})[f])||0;return `<button class="tw-fl ${TW.floor===f?'on':''} ${lock?'lock':''} ${f%5===0?'gate':''}" data-twf="${f}" ${lock?'disabled':''}><b>${f}</b>${clear?'<i>✓</i>':''}${c>=s.sweep_need?'<em>⚡</em>':''}</button>`}).join('');
   const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>((VG.cat[b.item_key].stat_grade||VG.cat[b.item_key].grade)-(VG.cat[a.item_key].stat_grade||VG.cat[a.item_key].grade))||((b.tr||0)-(a.tr||0)));
-  const slots=Array.from({length:5},(_,k)=>{const id=TW.pick[k],it=id&&(VG.state.items||[]).find(i=>i.id===id),c=it&&VG.cat[it.item_key];return `<button class="tw-slot ${k<front?'front':'back'} ${it?'on':''}" data-tws="${k}"><small>${k<front?'앞줄':'뒷줄'}</small>${it?`${vgArtSvg(it.item_key)}<b>${esc(c.name)}</b>${vgStars(it.tr,'sm')}${eqBadge(it.id)}`:'<span>＋</span>'}</button>`}).join('');
+  const slots=Array.from({length:5},(_,k)=>{const id=TW.pick[k],it=id&&(VG.state.items||[]).find(i=>i.id===id),c=it&&VG.cat[it.item_key];return `<button class="tw-slot ${k<front?'front':'back'} ${it?'on':''}" data-tws="${k}"><small>${k<front?'앞줄':'뒷줄'}</small>${it?`${vgArtSvg(it.item_key)}<b>${esc(c.name)}</b>${vgStars(it.tr,'sm')}${eqBadge(it.id)}${awBadge(it.item_key)}`:'<span>＋</span>'}</button>`}).join('');
   const picks=animals.map(i=>{const c=VG.cat[i.item_key],g=c.stat_grade||c.grade,st=(VG_GSTAT[g]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(i.tr||0)))),on=TW.pick.includes(i.id),sk=VD_SK[c.skill||'nuke']||VD_SK.nuke;
-    return `<button class="vd-pick ${on?'on':''}" data-twp="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${eqBadge(i.id)}<small>❤${st[0]} ⚔${st[1]} 🛡${st[2]}</small><em class="vd-psk">${sk[0]} ${esc(c.skill_name||'필살기')}</em>${on?`<i class="vd-chk">${TW.pick.indexOf(i.id)+1}</i>`:''}</button>`}).join('');
+    return `<button class="vd-pick ${on?'on':''}" data-twp="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${eqBadge(i.id)}<small>❤${st[0]} ⚔${st[1]} 🛡${st[2]}</small><em class="vd-psk">${sk[0]} ${esc(c.skill_name||'필살기')}</em>${awOn(i.item_key)?`<em class="vd-psk aw-psk">${esc(awOf(i.item_key).emoji)} ${esc(awOf(i.item_key).name)}</em>`:''}${awBadge(i.item_key)}${on?`<i class="vd-chk">${TW.pick.indexOf(i.id)+1}</i>`:''}</button>`}).join('');
   const c=Number((s.clears||{})[TW.floor])||0,first=TW.floor>best;
-  twBody(`<div class="tw-head"><h3>🗼 심연의 탑</h3><span>최고 <b>${best}층</b> / 20층 ${vgCutToggles('enemy')}</span></div>${twTickets()}
+  twBody(`<div class="tw-head"><h3>🗼 심연의 탑</h3><span>최고 <b>${best}층</b> / 20층 ${vgCutToggles()}</span></div>${twTickets()}
    <div class="tw-floors">${floors}</div>
    <div class="vd-info"><div><b>${TW.floor}층</b> <small>졸개 웨이브 → ${TW.floor%5===0?'<b style="color:#d64a7a">관문 보스</b>':'보스'} 웨이브</small></div><div>🎁 ${first?`첫 클리어 ${vgN(TW.floor*1500)}코인${TW.floor%5===0?' + 보스 알':''}`:`반복 클리어 ${vgN(TW.floor*300)}코인`}</div></div>
    <div class="tw-forms">${Object.entries(TW_FORM).map(([k,v])=>`<button class="${TW.form===k?'on':''}" data-twform="${k}"><b>${v.n}</b><small>${v.d}</small></button>`).join('')}</div>
-   <div class="vd-sub">파티 <b>${TW.pick.length}/5</b> <small style="font-size:12px;color:#7d7290">— 3~5마리 · 고른 순서대로 앞줄부터 배치 · 앞줄이 공격을 더 많이 받아요</small></div>
+   <div class="vd-sub">파티 <b>${TW.pick.length}/5</b> <small style="font-size:12px;color:#7d7290">— 3~5마리 · 고른 순서대로 앞줄부터 배치 · 앞줄이 공격을 더 많이 받아요 · 🌟 각성한 캐릭터는 고유 스킬(파티당 1회) 사용</small></div>
    <div class="tw-slots">${slots}</div>
    <div class="vd-picks">${picks}</div>
    <button class="vg-btn green" id="twGo" style="min-width:260px;margin-top:10px" ${TW.pick.length<3||(!s.free&&s.tickets<1)?'disabled':''}>${TW.pick.length<3?'3마리 이상 골라 주세요':(!s.free&&s.tickets<1)?'입장권이 필요해요':`${TW.floor}층 도전 (${s.free?'무료 입장':'입장권 1장'})`}</button>
@@ -1920,42 +1959,51 @@ function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
   TW.m.querySelectorAll('[data-twform]').forEach(b=>b.onclick=()=>{TW.form=b.dataset.twform;twLobby()});
   TW.m.querySelectorAll('[data-tws]').forEach(b=>b.onclick=()=>{const k=Number(b.dataset.tws);if(TW.pick[k]){TW.pick.splice(k,1);twLobby()}});
   TW.m.querySelectorAll('[data-twp]').forEach(b=>b.onclick=()=>{const id=b.dataset.twp,i=TW.pick.indexOf(id);if(i>=0)TW.pick.splice(i,1);else if(TW.pick.length<5)TW.pick.push(id);else{vgToast('파티는 최대 5마리예요.',true);return}twLobby()});
-  TW.m.querySelectorAll('[data-twbuy]').forEach(b=>b.onclick=twBuy);
-  const go=TW.m.querySelector('#twGo');if(go)go.onclick=async()=>{go.disabled=true;try{const r=await window.fitVillage.twStart(TW.floor,TW.pick,TW.form);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.battle=r;TW.order=[];TW.target=0;twBattle(`🗼 ${TW.floor}층 도전 시작! 1웨이브 — 졸개들이 나타났다.`)}catch(e){vgToast(e.message||String(e),true);go.disabled=false}};
-  const sw=TW.m.querySelector('#twSweep');if(sw)sw.onclick=async()=>{try{const r=await window.fitVillage.twSweep(TW.floor);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.st.clears[TW.floor]=(Number(TW.st.clears[TW.floor])||0)+1;vgSetState(r);vgRenderHud();VG.equips=null;vgToast(`⚡ 소탕 완료! +${vgN(r.reward_coins)} 코인${r.equip?` · ${EQ_GR[r.equip.grade][0]} ${EQ_SLOT[r.equip.slot][1]} 획득`:''}`);twLobby()}catch(e){vgToast(e.message||String(e),true)}}}
+  TW.m.querySelectorAll('[data-twbuy]').forEach(b=>b.onclick=twBuy);TW.m.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
+  const go=TW.m.querySelector('#twGo');if(go)go.onclick=async()=>{go.disabled=true;try{const r=await window.fitVillage.twStart(TW.floor,TW.pick,TW.form);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.battle=r;TW.order=[];TW.uq=null;TW.target=0;twBattle(`🗼 ${TW.floor}층 도전 시작! 1웨이브 — 졸개들이 나타났다.`)}catch(e){vgToast(e.message||String(e),true);go.disabled=false}};
+  const sw=TW.m.querySelector('#twSweep');if(sw)sw.onclick=async()=>{try{const r=await window.fitVillage.twSweep(TW.floor);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.st.clears[TW.floor]=(Number(TW.st.clears[TW.floor])||0)+1;vgSetState(r);vgRenderHud();VG.equips=null;vgToast(`⚡ 소탕 완료! +${vgN(r.reward_coins)} 코인${r.equip?` · ${EQ_GR[r.equip.grade][0]} ${EQ_SLOT[r.equip.slot][1]} 획득`:''}${r.stones?` · 💠 각성석 +${r.stones}`:''}`);if(r.stones)TW.st.stones=(TW.st.stones||0)+r.stones;twLobby()}catch(e){vgToast(e.message||String(e),true)}}}
 async function twBuy(){if(!window.confirm('입장권 1장을 10,000코인에 구매할까요?'))return;try{const r=await window.fitVillage.twBuy(1);vgSetState(r);vgRenderHud();if(TW.st)TW.st.tickets+=r.bought;vgToast('🎟️ 입장권을 구매했어요');if(TW.m&&!TW.battle)twLobby();vgRenderSide()}catch(e){vgToast(e.message||String(e),true)}}
 function twEnemyArt(e){return e.img?vgBossArt(e.art||10,e.img):vgBossArt(e.art||1,null)}
 function twBattle(log){const b=TW.battle,front=b.party.filter(p=>p.row==='front'),back=b.party.filter(p=>p.row!=='front'),fx=b.fx||{};
   if(TW.target>=b.enemies.length||b.enemies[TW.target].hp<=0)TW.target=Math.max(0,b.enemies.findIndex(e=>e.hp>0));
-  const mem=p=>{const i=b.party.indexOf(p),tags=[];if(p.shield>0)tags.push(`🛡️${p.shield}`);if(p.stun>0)tags.push('💫');if(fx.taunt===i&&fx.tauntt>0)tags.push('🪨');if(p.od>0)tags.push('⚙️');
+  const mem=p=>{const i=b.party.indexOf(p),tags=[];if(p.shield>0)tags.push(`🛡️${p.shield}`);if(p.stun>0)tags.push('💫');if(fx.taunt===i&&fx.tauntt>0)tags.push('🪨');if(p.od>0)tags.push('⚙️');if(p.uq&&!fx.uqused)tags.push('🌟');
     return `<div class="vd-mem tw-mem ${p.hp<=0?'dead':''}" data-mem="${i}"><div class="vd-tags">${tags.map(t=>`<span>${t}</span>`).join('')}</div><svg viewBox="-48 -96 96 102" class="vd-memart">${vgArt(p.key)}</svg><div class="vd-memname">${esc(p.name)}</div><div class="vd-hp"><span style="width:${Math.max(0,p.hp)/p.max*100}%"></span></div><small class="vd-hpt">${Math.max(0,p.hp)}/${p.max}</small></div>`};
-  const pt=[];if(fx.buff>0)pt.push('⚡ 강화');if(fx.curse>0)pt.push('🌑 저주');if(fx.poison>0)pt.push(`☠️ 독 ${fx.poison}`);if(fx.dr>0)pt.push('🛡️ 결계');if(fx.grove>0)pt.push('🌳 숲');if(fx.rebirth>0)pt.push('🔥 불사');if(fx.ll>0)pt.push('🌌 흡혈');if(fx.dodge>0)pt.push('🌪️ 회피');if(fx.immune>0)pt.push('💎 면역');
+  let pt=[];if(fx.buff>0)pt.push('⚡ 강화');if(fx.curse>0)pt.push('🌑 저주');if(fx.poison>0)pt.push(`☠️ 독 ${fx.poison}`);if(fx.dr>0)pt.push('🛡️ 결계');if(fx.grove>0)pt.push('🌳 숲');if(fx.rebirth>0)pt.push('🔥 불사');if(fx.ll>0)pt.push('🌌 흡혈');if(fx.dodge>0)pt.push('🌪️ 회피');if(fx.immune>0)pt.push('💎 면역');if(fx.counter>0)pt.push('🪓 반격');pt.push(fx.uqused?'🌟 고유 스킬 사용함':b.party.some(p=>p.uq)?'🌟 고유 스킬 1회 남음':'');
   const ens=b.enemies.map((e,j)=>{const nx=VD_BA[e.next]||['❔',e.next],tags=[];if(e.burn>0)tags.push('🔥');if(e.weak>0)tags.push('⬇️');if(e.brk>0)tags.push('💔');if(e.harden>0)tags.push('🪨');if(e.seal>0)tags.push('🌌');if(e.conf>0)tags.push('🌙');if(e.phase===2)tags.push('😡');
     return `<div class="tw-en ${e.boss?'boss':''} ${e.hp<=0?'dead':''} ${TW.target===j?'tgt':''}" data-en="${j}">${e.hp>0?`<div class="tw-intent ${e.next==='smash'||e.next==='charge'?'warn':''}">${nx[0]} ${nx[1]}</div>`:''}<svg viewBox="-120 -170 240 178" class="tw-enart">${twEnemyArt(e)}</svg><div class="vd-btags">${tags.map(t=>`<span>${t}</span>`).join('')}</div><b>${esc(e.name)}</b><div class="vd-bhp"><span style="width:${Math.max(0,e.hp)/e.max*100}%"></span><em>${vgN(Math.max(0,e.hp))}</em></div>${TW.target===j&&e.hp>0?'<i class="tw-aim">🎯</i>':''}</div>`}).join('');
-  twBody(`<div class="vd-top"><b>🗼 ${b.floor}층 · ${b.wave+1}/${b.waves} 웨이브</b><span>${vgCutToggles('enemy')} 턴 <b>${Math.min(b.turn,b.max_turn)}</b>/${b.max_turn}</span></div>
+  twBody(`<div class="vd-top"><b>🗼 ${b.floor}층 · ${b.wave+1}/${b.waves} 웨이브</b><span>${vgCutToggles()} 턴 <b>${Math.min(b.turn,b.max_turn)}</b>/${b.max_turn}</span></div>
    <div class="vd-arena tw-arena"><div class="vd-cave"></div>
-    <div class="tw-side"><div class="vd-pfx">${pt.map(t=>`<span>${t}</span>`).join('')}</div><div class="tw-rows"><div class="tw-row back">${back.map(mem).join('')}</div><div class="tw-row front">${front.map(mem).join('')}</div></div></div>
+    <div class="tw-side"><div class="vd-pfx">${pt.filter(Boolean).map(t=>`<span>${t}</span>`).join('')}</div><div class="tw-rows"><div class="tw-row back">${back.map(mem).join('')}</div><div class="tw-row front">${front.map(mem).join('')}</div></div></div>
     <div class="tw-ens">${ens}</div></div>
    <div class="vd-log" id="twLog">${log||'적을 눌러 대상을 고르고, 아래에서 필살기를 쓸 순서대로 누른 뒤 [턴 진행]을 누르세요.'}</div><div id="twActs"></div>`);
   vgCutBind(TW.m);TW.m.querySelectorAll('[data-en]').forEach(x=>x.onclick=()=>{const j=Number(x.dataset.en);if(b.enemies[j].hp>0){TW.target=j;twBattle(TW.m.querySelector('#twLog').innerHTML)}});
   twActs()}
 function twCanAuto(){return !!TW.battle&&TW.battle.floor<=((TW.st&&TW.st.best)||0)}
-function twActs(){const b=TW.battle,el=TW.m.querySelector('#twActs');if(!el||b.status!=='active')return;
-  TW.order=TW.order.filter(i=>b.party[i]&&b.party[i].hp>0&&!(b.party[i].cd>0)&&!(b.party[i].stun>0));
-  const sk=b.party.map((p,i)=>{const s=VD_SK[p.skill]||VD_SK.nuke,o=TW.order.indexOf(i),dis=p.hp<=0||p.cd>0||p.stun>0;return `<button class="tw-sk ${o>=0?'on':''}" data-twk="${i}" ${dis?'disabled':''} title="${esc(s[1])}">${o>=0?`<i>${o+1}</i>`:''}<svg viewBox="-48 -96 96 102">${vgArt(p.key)}</svg><b>${s[0]} ${esc(p.skill_name||'필살기')}</b><small>${p.hp<=0?'쓰러짐':p.stun>0?'기절':p.cd>0?`${p.cd}턴 후`:'준비 완료'}</small></button>`}).join('');
-  el.innerHTML=`<div class="tw-skbar">${sk}</div><div class="vd-acts"><button class="vg-btn gold" id="twTurn" style="min-width:200px">▶ 턴 진행 ${TW.order.length?`(필살기 ${TW.order.length}개)`:'(일반 공격)'}</button>${twCanAuto()?`<button class="vg-btn sm ${TW.auto?'purple':''}" id="twAuto">🤖 자동전투 ${TW.auto?'ON':'OFF'}</button>`:'<span class="vd-autolock">🤖 자동전투는 클리어한 층에서 열려요</span>'}<button class="vg-btn sm" id="twFlee" style="margin-left:auto">🏳️ 후퇴</button></div>`;
+function twUqCan(i){const b=TW.battle,p=b&&b.party[i];return !!(p&&p.uq&&!(b.fx||{}).uqused&&p.hp>0&&!(p.stun>0))}
+function twOrderOut(){return (TW.uq!=null&&twUqCan(TW.uq)?[100+TW.uq]:[]).concat(TW.order.filter(i=>i!==TW.uq))}
+function twActs(){const b=TW.battle,el=TW.m.querySelector('#twActs');if(!el||b.status!=='active')return;const fx=b.fx||{};
+  if(TW.uq!=null&&!twUqCan(TW.uq))TW.uq=null;
+  TW.order=TW.order.filter(i=>i!==TW.uq&&b.party[i]&&b.party[i].hp>0&&!(b.party[i].cd>0)&&!(b.party[i].stun>0));
+  const uqs=b.party.map((p,i)=>p.uq?i:-1).filter(i=>i>=0);
+  const uqbar=uqs.length?`<div class="tw-uqbar ${fx.uqused?'used':''}"><span class="tw-uqlbl">🌟 고유 스킬<small>${fx.uqused?'이번 전투에서 사용함':'파티당 1회 · 하나만 선택'}</small></span>${uqs.map(i=>{const p=b.party[i],d=(awOf(p.key)||{}).descr||'';return `<button class="tw-uq ${TW.uq===i?'on':''}" data-twu="${i}" ${twUqCan(i)?'':'disabled'} title="${esc(d)}"><svg viewBox="-48 -96 96 102">${vgArt(p.key)}</svg><span><b>${esc(p.uq.emoji)} ${esc(p.uq.name)}</b><small>${esc(p.name)}${fx.uqused?'':p.hp<=0?' · 쓰러짐':p.stun>0?' · 기절':''}</small></span></button>`}).join('')}</div>`:'';
+  const sk=b.party.map((p,i)=>{const s=VD_SK[p.skill]||VD_SK.nuke,o=TW.order.indexOf(i),u=TW.uq===i,dis=u||p.hp<=0||p.cd>0||p.stun>0;return `<button class="tw-sk ${o>=0?'on':''} ${u?'uqon':''}" data-twk="${i}" ${dis?'disabled':''} title="${esc(s[1])}">${o>=0?`<i>${o+1}</i>`:''}<svg viewBox="-48 -96 96 102">${vgArt(p.key)}</svg><b>${s[0]} ${esc(p.skill_name||'필살기')}</b><small>${u?'🌟 고유 스킬':p.hp<=0?'쓰러짐':p.stun>0?'기절':p.cd>0?`${p.cd}턴 후`:'준비 완료'}</small></button>`}).join('');
+  el.innerHTML=`${uqbar}<div class="tw-skbar">${sk}</div><div class="vd-acts"><button class="vg-btn gold ${TW.uq!=null?'tw-uqgo':''}" id="twTurn" style="min-width:200px">▶ 턴 진행 ${TW.uq!=null?'(🌟 고유 스킬'+(TW.order.length?` + 필살기 ${TW.order.length}개)`:')'):TW.order.length?`(필살기 ${TW.order.length}개)`:'(일반 공격)'}</button>${twCanAuto()?`<button class="vg-btn sm ${TW.auto?'purple':''}" id="twAuto">🤖 자동전투 ${TW.auto?'ON':'OFF'}</button>`:'<span class="vd-autolock">🤖 자동전투는 클리어한 층에서 열려요</span>'}<button class="vg-btn sm" id="twFlee" style="margin-left:auto">🏳️ 후퇴</button></div>`;
   el.querySelectorAll('[data-twk]').forEach(x=>x.onclick=()=>{const i=Number(x.dataset.twk),o=TW.order.indexOf(i);if(o>=0)TW.order.splice(o,1);else TW.order.push(i);twActs()});
-  el.querySelector('#twTurn').onclick=()=>twAct(TW.order.slice());el.querySelector('#twFlee').onclick=()=>{if(!window.confirm('후퇴하면 이번 도전은 실패로 처리돼요. 후퇴할까요?'))return;TW.auto=false;twAct([-1])};
+  el.querySelectorAll('[data-twu]').forEach(x=>x.onclick=()=>{const i=Number(x.dataset.twu);TW.uq=TW.uq===i?null:i;twActs()});
+  el.querySelector('#twTurn').onclick=()=>twAct(twOrderOut());el.querySelector('#twFlee').onclick=()=>{if(!window.confirm('후퇴하면 이번 도전은 실패로 처리돼요. 후퇴할까요?'))return;TW.auto=false;twAct([-1])};
   const au=el.querySelector('#twAuto');if(au)au.onclick=()=>{TW.auto=!TW.auto;twActs()};
   if(TW.auto&&twCanAuto()){clearTimeout(TW.autoT);TW.autoT=setTimeout(()=>{if(TW.auto&&TW.battle&&TW.battle.status==='active'&&!TW.busy&&TW.m)twAct(twAutoPick())},650)}}
 function twAutoPick(){const b=TW.battle,P=b.party,danger=b.enemies.some(e=>e.hp>0&&(e.next==='smash'||e.next==='poison')),low=P.some(p=>p.hp>0&&p.hp<p.max*.55),dead=P.some(p=>p.hp<=0);
   const DEF=['shield','aegis','taunt','counter','dodge'],HEAL=['heal','revive','rebirth','cleanse','grove'],BUFF=['buff','break','web','weaken','charge_up'];const o=[],later=[];
   let lowest=-1;b.enemies.forEach((e,j)=>{if(e.hp>0&&(lowest<0||e.hp<b.enemies[lowest].hp))lowest=j});TW.target=Math.max(0,lowest);
   P.forEach((p,i)=>{if(p.hp<=0||p.cd>0||p.stun>0)return;if(HEAL.includes(p.skill)){if(low||dead)o.unshift(i);return}if(DEF.includes(p.skill)){if(danger)o.unshift(i);return}if(BUFF.includes(p.skill))o.push(i);else later.push(i)});
-  return o.concat(later)}
+  const res=o.concat(later),fx=b.fx||{};
+  if(!fx.uqused&&b.wave>=b.waves-1){const boss=b.enemies.find(e=>e.boss&&e.hp>0),ui=P.findIndex((p,i)=>twUqCan(i));
+    if(ui>=0&&(dead||low||!boss||boss.hp<boss.max*.85))return [100+ui].concat(res.filter(i=>i!==ui))}
+  return res}
 async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1';TW.m.querySelectorAll('#twActs button').forEach(b=>b.disabled=true);
   let r;try{r=await window.fitVillage.twAct(TW.battle.id,order,TW.target)}catch(e){vgToast(e.message||String(e),true);TW.busy=false;delete TW.m.dataset.lock;twActs();return}
-  const old=TW.battle,M=i=>TW.m.querySelector(`[data-mem="${i}"]`),EN=j=>TW.m.querySelector(`[data-en="${j}"]`),nm=i=>esc(old.party[i]?.name||''),en=j=>esc(old.enemies[j]?.name||'적'),lines=[];
+  TW.uq=null;const old=TW.battle,M=i=>TW.m.querySelector(`[data-mem="${i}"]`),EN=j=>TW.m.querySelector(`[data-en="${j}"]`),nm=i=>esc(old.party[i]?.name||''),en=j=>esc(old.enemies[j]?.name||'적'),lines=[];
   const php=old.party.map(p=>p.hp),ehp=old.enemies.map(e=>e.hp);
   const setP=i=>{const el=M(i),p=old.party[i];if(!el)return;el.querySelector('.vd-hp span').style.width=(Math.max(0,php[i])/p.max*100)+'%';el.querySelector('.vd-hpt').textContent=`${Math.max(0,php[i])}/${p.max}`;el.classList.toggle('dead',php[i]<=0)};
   const setE=j=>{const el=EN(j),e=old.enemies[j];if(!el||!e)return;el.querySelector('.vd-bhp span').style.width=(Math.max(0,ehp[j])/e.max*100)+'%';el.querySelector('.vd-bhp em').textContent=vgN(Math.max(0,ehp[j]))};
@@ -1983,6 +2031,11 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
     else if(e.t==='pstun'){vdPop(M(e.who),'💫 기절','hurt')}
     else if(e.t==='eheal'){ehp[e.e]+=e.amt;setE(e.e);vdPop(EN(e.e),'+'+e.amt,'heal')}
     else if(e.t==='ptick'){php[e.who]-=e.dmg;setP(e.who);vdPop(M(e.who),'☠️-'+e.dmg,'hurt');w=80}
+    else if(e.t==='unique'){const mem=old.party[e.who]||{};vdShake(M(e.who),'vd-lunge');await vgUniqueCut(e,mem);
+      const ar=TW.m&&TW.m.querySelector('.vd-arena');if(ar){ar.classList.remove('vd-quake');void ar.offsetWidth;ar.classList.add('vd-quake');const fl=document.createElement('div');fl.className='vd-flash gold';ar.appendChild(fl);setTimeout(()=>fl.remove(),700)}
+      vdPop(M(e.who),`🌟 ${e.emoji||''} ${e.name}!`,'sk');if(e.sup)old.party.forEach((p,j)=>vdPop(M(j),e.emoji||'✨','heal'));
+      if(old.fx)old.fx.uqused=true;lines.push(`🌟 ${nm(e.who)}의 고유 스킬 <b>${esc(e.emoji||'')} ${esc(e.name)}</b>!`);w=350}
+    else if(e.t==='uend'){if(e.dmg>0)lines.push(`🌟 고유 스킬 총 피해 <b>${vgN(e.dmg)}</b>`)}
     else if(e.t==='rebirth'){vdPop(M(e.who),'🔥 부활!','heal');lines.push(`🔥 ${nm(e.who)} 부활!`)}
     await vdSleep(w)}
   TW.battle=r;TW.busy=false;delete TW.m.dataset.lock;const logHtml=lines.slice(-6).map(l=>`<div>${l}</div>`).join('')||'&nbsp;';
@@ -1990,14 +2043,16 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
   TW.auto=false;if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
   const won=r.status==='won';if(won){VG.equips=null;TW.st.best=Math.max(TW.st.best||0,r.floor);TW.st.clears[r.floor]=(Number(TW.st.clears[r.floor])||0)+1;if(r.boss_egg)VG.bossEggs=null}
   twBattle(logHtml);const acts=TW.m.querySelector('#twActs'),why=(r.events||[]).some(e=>e.t==='timeout')?'제한 턴(30턴)을 넘겼어요.':(r.events||[]).some(e=>e.t==='flee')?'탑에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
-  acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 ${r.floor}층 클리어! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어)</small>':''}${r.boss_egg?'<div class="vd-bossegg">🥚 관문 보상: 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>':''}${r.equip?`<div class="eq-drop"><small>🎁 장비 획득</small>${eqCard(r.equip,false)}</div>`:''}`:`💤 실패… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="twBack">탑으로 돌아가기</button></div>`;
+  acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 ${r.floor}층 클리어! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어)</small>':''}${r.boss_egg?'<div class="vd-bossegg">🥚 관문 보상: 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>':''}${r.equip?`<div class="eq-drop"><small>🎁 장비 획득</small>${eqCard(r.equip,false)}</div>`:''}${r.stones?`<div class="aw-drop">💠 각성석 <b>+${r.stones}</b> <button class="vg-btn sm purple" data-awopen="1">🌟 각성하러 가기</button></div>`:''}`:`💤 실패… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="twBack">탑으로 돌아가기</button></div>`;
+  if(won&&r.stones&&TW.st)TW.st.stones=(TW.st.stones||0)+r.stones;acts.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
   acts.querySelector('#twBack').onclick=()=>{TW.battle=null;if(won&&TW.floor<20&&r.floor===TW.floor)TW.floor=Math.min(20,r.floor+1);twLobby()}}
 
 /* ===== 보관함 세분화 (동물 · 장비 · 소모품) ===== */
 function vgInvSub(){const s=VG.invSub||'animal';return `<div class="vg-subtabs">${[['animal','🐾 동물'],['equip','⚔️ 장비'],['cons','🎒 소모품']].map(([k,l])=>`<button data-isub="${k}" class="${s===k?'on':''}">${l}</button>`).join('')}</div>`}
 function vgConsHtml(){const s=TW.st;if(!s){window.fitVillage.twStatus().then(x=>{TW.st=x;if(VG.tab==='inv'&&VG.invSub==='cons')vgRenderSide()}).catch(()=>{});return '<div class="vg-empty">불러오는 중…</div>'}
   return `<div class="vg-list-row"><div class="tw-ticket">🎟️</div><div class="grow"><b>심연의 탑 입장권 <span style="color:#9a8fab;font-size:13px">×${s.tickets}</span></b><span class="vg-meta" style="font-family:'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${s.free?'🎁 오늘 무료 입장 1회 남음':'오늘 무료 입장 사용함'} · 1장 10,000코인</span></div><button class="vg-btn sm gold" data-twbuy="1">구매</button></div>
-   <p class="vg-note">무료 입장은 매일 자정(한국 시간)에 1회 충전되고, 탑에 들어갈 때 무료 입장부터 먼저 써요. 앞으로 각성석 등 소모품도 여기에 모여요.</p>`}
+   <div class="vg-list-row"><div class="tw-ticket aw-ic">💠</div><div class="grow"><b>각성석 <span style="color:#9a8fab;font-size:13px">×${s.stones||0}</span></b><span class="vg-meta" style="font-family:'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">전설 이상 캐릭터의 고유 스킬 해금 · 심연의 탑에서 획득</span></div><button class="vg-btn sm purple" data-awopen="1">각성</button></div>
+   <p class="vg-note">무료 입장은 매일 자정(한국 시간)에 1회 충전되고, 탑에 들어갈 때 무료 입장부터 먼저 써요. 각성석은 탑 첫 클리어 때 1개(관문 5·10·15·20층은 3개), 반복 클리어 25%, 소탕 20% 확률로 나와요.</p>`}
 
 
 /* ===== 장비 (2단계) ===== */
@@ -2028,6 +2083,45 @@ function vgEquipBind(side){side.querySelectorAll('[data-eqf]').forEach(b=>b.oncl
 function eqPick(eqId){const e=VG.equips.find(x=>x.id===eqId);if(!e)return;const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>((VG.cat[b.item_key].stat_grade||VG.cat[b.item_key].grade)-(VG.cat[a.item_key].stat_grade||VG.cat[a.item_key].grade))||((b.tr||0)-(a.tr||0)));
   const m=vgModal(`<h3>${EQ_SLOT[e.slot][0]} 누구에게 장착할까요?</h3>${eqCard(e,false)}<p class="vg-mp">같은 칸에 끼고 있던 장비는 자동으로 빠져요.</p><div class="vd-picks" style="max-height:52vh">${animals.map(i=>{const c=VG.cat[i.item_key],cur=(VG.equips||[]).find(x=>x.item_id===i.id&&x.slot===e.slot);return `<button class="vd-pick" data-eqto="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>${cur?`${EQ_SLOT[e.slot][0]} ${EQ_GR[cur.grade][0]} +${cur.lvl}`:'비어 있음'}</small></button>`}).join('')}</div>`,'vg-wide eq-modal');
   m.querySelectorAll('[data-eqto]').forEach(b=>b.onclick=async()=>{try{await window.fitVillage.eqEquip(eqId,b.dataset.eqto);await eqLoad(true);m.remove();vgRenderSide();vgToast('⚔️ 장착 완료!')}catch(x){vgToast(x.message||String(x),true)}})}
+
+
+/* ===== 심연의 탑 3단계 : 고유 스킬 · 각성석 ===== */
+const AW={list:null,unlocked:new Set(),stones:0,err:null};
+function awSet(r){if(!r)return;AW.list=r.list||AW.list||[];AW.unlocked=new Set(r.unlocked||[]);AW.stones=Number(r.stones)||0;if(TW.st)TW.st.stones=AW.stones}
+function awLoad(force){if(AW.list&&!force)return Promise.resolve(AW);return window.fitVillage.awList().then(r=>{AW.err=null;awSet(r);return AW}).catch(e=>{AW.err=e;AW.list=AW.list||[];return AW})}
+function awOf(key){return (AW.list||[]).find(u=>u.key===key)}
+function awOn(key){return AW.unlocked.has(key)}
+function awBadge(key){return awOn(key)?'<span class="aw-badge" title="고유 스킬 각성 완료">🌟</span>':''}
+async function vgAwaken(){await awLoad(true);
+  if(AW.err){vgToast(AW.err.setup?'Supabase에 fit_village_update18.sql 실행이 필요합니다.':(AW.err.message||String(AW.err)),true);return}
+  const m=vgModal('<div class="vg-empty">불러오는 중…</div>','vg-wide aw-modal');awRender(m)}
+function awRender(m){const own=new Set((VG.state.items||[]).map(i=>i.item_key));
+  const rows=[...AW.list].sort((a,b)=>(awOn(b.key)-awOn(a.key))||(own.has(b.key)-own.has(a.key))||((VG.cat[a.key]?.grade||0)-(VG.cat[b.key]?.grade||0)));
+  const box=m.querySelector('.vg-modal-box');
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button><h3>🌟 각성 · 고유 스킬</h3>
+   <div class="aw-head"><span class="aw-stone">💠 각성석 <b>${AW.stones}</b>개</span><small>탑 첫 클리어 1개(관문 5·10·15·20층 +2) · 반복 클리어 25% · 소탕 20%</small></div>
+   <p class="vg-mp">전설 이상 캐릭터만 각성할 수 있어요. 고유 스킬은 <b>심연의 탑</b>에서 <b>파티당 한 번</b>만 쓸 수 있고, 쓸 때 전용 컷신이 나와요.</p>
+   <div class="aw-list">${rows.map(u=>{const c=VG.cat[u.key]||{},on=awOn(u.key),has=own.has(u.key),g=VG_GRADE[c.grade]||{name:''};
+     return `<div class="aw-card ${on?'on':''} ${has?'':'no'}"><div class="aw-art">${vgArtSvg(u.key)}<span class="vg-grade vg-g${c.grade}">${g.name}</span></div>
+      <div class="grow"><b class="aw-cn">${esc(c.name||u.key)}</b><div class="aw-sk">${esc(u.emoji)} ${esc(u.name)}</div><small class="aw-d">${esc(u.descr)}</small></div>
+      <div class="aw-btn">${on?'<span class="aw-done">✓ 각성 완료</span>':has?`<button class="vg-btn sm purple" data-awk="${u.key}" ${AW.stones<u.cost?'disabled':''}>각성 💠${u.cost}</button>`:`<span class="aw-need">💠${u.cost}<br><small>미보유</small></span>`}</div></div>`}).join('')}</div>`;
+  box.querySelector('.vg-x').onclick=()=>m.remove();
+  box.querySelectorAll('[data-awk]').forEach(b=>b.onclick=async()=>{const u=awOf(b.dataset.awk),c=VG.cat[u.key]||{};if(!window.confirm(`${c.name}을(를) 각성석 ${u.cost}개로 각성할까요?\n고유 스킬: ${u.emoji} ${u.name}`))return;b.disabled=true;
+    try{awSet(await window.fitVillage.awUnlock(u.key));awRender(m);await vgUniqueCut({name:u.name,emoji:u.emoji,awaken:true},{key:u.key,skill:c.skill});vgToast(`🌟 ${c.name} 각성! 고유 스킬 [${u.name}] 해금`);
+      if(TW.m&&!TW.battle)twLobby();if(VG.tab==='inv')vgRenderSide()}catch(e){vgToast(e.message||String(e),true);b.disabled=false}})}
+
+/* 고유 스킬 컷신 (탑에서는 고유 스킬 때만 컷신) — 영상: images/chars/{키}_unique.mp4 가 있으면 우선, 없으면 캐릭터 영상 → 기본 연출 */
+async function vgUniqueCut(e,mem){if(!vgCutPref().ally)return false;const c=VG.cat[mem.key]||{},col=((typeof VFX!=='undefined'&&VFX[mem.skill])||{}).c||'#ffd34d';
+  const host=vgCutHost();host.style.setProperty('--c',col);
+  const title=`<small>${e.awaken?'각성 완료':'🌟 고유 스킬'} · ${esc(c.name||'')}</small><b>${esc(e.emoji||'')} ${esc(e.name||'')}</b>`;
+  const over=`<div class="vc-bars"></div><div class="vc-text v">${title}</div>`;
+  if(await vgCutVideo('uq:'+mem.key,host,over)||await vgCutVideo('char:'+mem.key,host,over)){host.classList.add('out');await vdSleep(250);host.remove();return true}
+  const tr=Number(e.tr)||0,g=VG_GRADE[c.grade]||{name:''};host.classList.add('hero','uq');
+  host.innerHTML=`<div class="vc-rays"></div><div class="vc-speed"></div><div class="vc-uqring"></div><div class="vc-bars"></div>
+   <svg viewBox="-48 -96 96 102" class="vc-char">${vgArt(mem.key)}</svg><div class="vc-uqtag">AWAKEN</div>
+   <div class="vc-text r"><small><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> ${esc(c.name||'')}${tr?` ${'★'.repeat(tr)}`:''}</small><b>${esc(e.emoji||'')} ${esc(e.name||'')}</b><span>${e.awaken?'고유 스킬 해금!':'고유 스킬 발동!'}</span></div>`;
+  setTimeout(()=>{if(host.isConnected)vgCutImpact(host,{c:col,n:3})},900);
+  await vdSleep(1900);host.classList.add('out');await vdSleep(280);host.remove();return true}
 
 
 function daily(){
@@ -2394,6 +2488,8 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     twStart(f,ids,form){return vrpc('fit_tw_start',{p_floor:f,p_items:ids,p_form:form})},
     twAct(id,order,t){return vrpc('fit_tw_act',{p_battle:id,p_order:order,p_target:t})},
     twSweep(f){return vrpc('fit_tw_sweep',{p_floor:f})},
+    awList(){return vrpc('fit_aw_list')},
+    awUnlock(k){return vrpc('fit_aw_unlock',{p_key:k})},
     bossHatch(id){return vrpc('fit_village_boss_hatch',{p_egg:id})},
     async bossEggs(){vNeed();const {data,error}=await supa.from('fit_village_boss_eggs').select('id,floor,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     wbStart(ids){return vrpc('fit_village_wb_start',{p_items:ids})},

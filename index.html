@@ -638,6 +638,10 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vc-tg button.on{background:#f1ebff;border-color:#8f6bff;color:#6545d1}
 .wb-info .vc-tg button{background:#ffffff22;border-color:#ffffff44;color:#ccc}.wb-info .vc-tg button.on{background:#ffd34d;border-color:#ffd34d;color:#3a2f4a}
 @media(max-width:760px){.vd-top{flex-wrap:wrap;gap:4px}}
+.vd-sweep{margin-top:10px;background:#fff7dc;border:2px solid #f2cf6b;border-radius:12px;padding:8px;font-size:14px}.vd-sweep div{display:flex;gap:6px;justify-content:center;margin-top:6px}
+.vd-sweep.lock{background:#f3f0ea;border-color:#e4dccb;color:#9a8fab;font-size:13px}
+.vd-autolock{font-size:11.5px;color:#9a8fab;font-family:'Malgun Gothic',sans-serif}
+.vd-swp{position:absolute;left:5px;top:3px;font-style:normal;font-size:12px}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1470,7 +1474,7 @@ async function vgDungeon(){if(VD.m)VD.m.remove();VD.m=vgModal('<div class="vg-em
   VD.floor=Math.min(10,(VD.st.best||0)+1);VD.pick=VD.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));vgLobby()}
 function vgBody(html){const box=VD.m.querySelector('.vg-modal-box');box.innerHTML='<button class="vg-x" title="닫기">✕</button>'+html;box.querySelector('.vg-x').onclick=()=>{if(VD.m.dataset.lock)return;VD.m.remove();VD.m._onclose&&VD.m._onclose()}}
 function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=f=>st.max-(Number(ub[f])||0),left=fl(VD.floor),best=st.best||0;
-  const floors=VD.bosses.map(b=>{const lock=b.floor>best+1,clear=b.floor<=best;return `<button class="vd-floor ${VD.floor===b.floor?'on':''} ${lock?'lock':''}" data-floor="${b.floor}" ${lock?'disabled':''}><svg viewBox="-90 -165 180 172" class="vd-fart">${vgBossArt(b.floor,b.image_url)}</svg><b>${b.floor}층</b>${lock?'':`<em class="vd-left ${fl(b.floor)<=0?'none':''}">${fl(b.floor)}/${st.max}</em>`}<small>${lock?'🔒 잠김':esc(b.name)}</small>${clear?'<i class="vd-clear">✓ 클리어</i>':''}</button>`}).join('');
+  const floors=VD.bosses.map(b=>{const lock=b.floor>best+1,clear=b.floor<=best;return `<button class="vd-floor ${VD.floor===b.floor?'on':''} ${lock?'lock':''}" data-floor="${b.floor}" ${lock?'disabled':''}><svg viewBox="-90 -165 180 172" class="vd-fart">${vgBossArt(b.floor,b.image_url)}</svg><b>${b.floor}층</b>${lock?'':`<em class="vd-left ${fl(b.floor)<=0?'none':''}">${fl(b.floor)}/${st.max}</em>`}${clear&&(Number((st.clears||{})[b.floor])||0)>=(st.sweep_need||5)?'<i class="vd-swp">⚡</i>':''}<small>${lock?'🔒 잠김':esc(b.name)}</small>${clear?'<i class="vd-clear">✓ 클리어</i>':''}</button>`}).join('');
   const animals=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal').sort((a,b)=>(VG.cat[b.item_key].grade-VG.cat[a.item_key].grade)||(VG.cat[b.item_key].sort-VG.cat[a.item_key].sort));
   const pickHtml=animals.length?animals.map(i=>{const c=VG.cat[i.item_key],s=(VG_GSTAT[c.stat_grade||c.grade]||VG_GSTAT[1]).map(v=>Math.round(v*(1+.1*(Number(i.tr)||0)))),on=VD.pick.includes(i.id);return `<button class="vd-pick ${on?'on':''}" data-pick="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgArtSvg(i.item_key)}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>❤${s[0]} ⚔${s[1]} 🛡${s[2]}</small><em class="vd-psk" title="${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[1]}">${(VD_SK[vdSkillOf(i.item_key).s]||VD_SK.nuke)[0]} ${esc(vdSkillOf(i.item_key).n)}</em>${on?'<i class="vd-chk">✓</i>':''}</button>`}).join(''):'<div class="vg-empty">동물이 없어요. 상점이나 알 부화로 먼저 데려와 주세요.</div>';
   const b=VD.bosses.find(x=>x.floor===VD.floor)||{};
@@ -1479,8 +1483,8 @@ function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=
   <div class="vd-floors">${floors}</div>
   <div class="vd-info"><div><b>${VD.floor}층 · ${esc(b.name||'')}</b> <small>❤${vgN(b.hp)} ⚔${b.atk} 🛡${b.def}</small><div class="vd-pat">행동 패턴 ${(b.pattern||[]).map(a=>`<span title="${(VD_BA[a]||['',a,''])[2]}">${(VD_BA[a]||['❔',a])[0]} ${(VD_BA[a]||['',a])[1]}</span>`).join(' → ')}</div></div><div>🎁 ${reward}</div></div>
   <div class="vd-sub">파티 선택 <b>${VD.pick.length}/3</b></div><div class="vd-picks">${pickHtml}</div>
-  <button class="vg-btn green" id="vdGo" style="min-width:240px;margin-top:12px" ${!VD.pick.length||left<=0?'disabled':''}>${left<=0?'오늘 입장 횟수를 모두 사용했어요':`${VD.floor}층 입장하기`}</button>`);
-  vgCutBind(VD.m);VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
+  <button class="vg-btn green" id="vdGo" style="min-width:240px;margin-top:12px" ${!VD.pick.length||left<=0?'disabled':''}>${left<=0?'오늘 입장 횟수를 모두 사용했어요':`${VD.floor}층 입장하기`}</button>${vgSweepHtml(VD.floor,left)}`);
+  vgCutBind(VD.m);VD.m.querySelectorAll('[data-sweep]').forEach(b=>b.onclick=()=>vgSweep(VD.floor,Number(b.dataset.sweep)));VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
   VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
   VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used_by_floor[VD.floor]=(Number(VD.st.used_by_floor[VD.floor])||0)+1;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
 const VD_SK={nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 1.5배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 25%만큼 아군 회복 (신화 전용)'],counter:['🪓','룬 반격: 2턴간 보스 공격을 대신 받고 맞을 때마다 1.5배 반격 (돌연변이 전용)'],timestop:['🌌','성운 붕괴: 피해 + 보스 2턴 행동 봉인 (돌연변이 전용)'],overdrive:['⚙️','증기 과부하: 3턴간 일반 공격 2회 (돌연변이 전용)'],web:['🕸️','거미줄 속박: 3턴간 보스 공격력 −25% + 받는 피해 +20% (돌연변이 전용)'],cleanse:['💎','수정의 빛: 전체 30% 회복 + 2턴간 독·저주·기절 면역 (돌연변이 전용)'],meteor:['☄️','용암 운석: 공격력 4배 + 강한 화상 3턴 (돌연변이 전용)'],dodge:['🌪️','질풍의 날개: 2턴간 아군이 50% 확률로 보스 공격 회피 (돌연변이 전용)'],drain:['🌀','심해 흡수: 피해 + 보스 공격력 영구 −10% (최대 −30%) (돌연변이 전용)']};
@@ -1503,9 +1507,11 @@ function vgActs(){const bt=VD.battle,el=VD.m.querySelector('#vdActs');if(!el||bt
   const rows=bt.party.map((p,i)=>{if(p.hp<=0)return `<div class="vd-cmd dead"><b>${esc(p.name)}</b><span>쓰러짐</span></div>`;if(p.stun>0)return `<div class="vd-cmd dead"><b>${esc(p.name)}</b><span>💫 기절 — 이번 턴 행동 불가</span></div>`;
     const sk=VD_SK[p.skill]||VD_SK.nuke,sel=VD.sel[i];
     return `<div class="vd-cmd"><b>${esc(p.name)}</b><button class="${sel==='attack'?'on':''}" data-c="${i}" data-a="attack">⚔️ 공격</button><button class="sk ${sel==='skill'?'on':''}" data-c="${i}" data-a="skill" ${p.cd>0?'disabled':''} title="${sk[1]}">${sk[0]} ${esc(p.skill_name||'필살기')}${p.cd>0?` <i>${p.cd}턴</i>`:''}<small>${sk[1]}</small></button><button class="${sel==='guard'?'on':''}" data-c="${i}" data-a="guard">🛡️ 방어</button></div>`}).join('');
-  el.innerHTML=`<div class="vd-cmds">${rows}</div><div class="vd-acts"><button class="vg-btn gold" id="vdTurnGo" style="min-width:200px">▶ 턴 진행</button><button class="vg-btn sm" id="vdFlee" style="margin-left:auto">🏳️ 후퇴</button></div>`;
+  el.innerHTML=`<div class="vd-cmds">${rows}</div><div class="vd-acts"><button class="vg-btn gold" id="vdTurnGo" style="min-width:200px">▶ 턴 진행</button>${vgCanAuto()?`<button class="vg-btn sm ${VD.auto?'purple':''}" id="vdAuto">🤖 자동전투 ${VD.auto?'ON':'OFF'}</button>`:'<span class="vd-autolock">🤖 자동전투는 클리어한 층에서 열려요</span>'}<button class="vg-btn sm" id="vdFlee" style="margin-left:auto">🏳️ 후퇴</button></div>`;
   el.querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{VD.sel[Number(x.dataset.c)]=x.dataset.a;vgActs()});
-  el.querySelector('#vdTurnGo').onclick=()=>vgAct(VD.sel.slice());el.querySelector('#vdFlee').onclick=()=>vgAct(['flee'])}
+  el.querySelector('#vdTurnGo').onclick=()=>vgAct(VD.sel.slice());el.querySelector('#vdFlee').onclick=()=>{VD.auto=false;vgAct(['flee'])};
+  const au=el.querySelector('#vdAuto');if(au)au.onclick=()=>{VD.auto=!VD.auto;vgActs()};
+  if(VD.auto&&vgCanAuto()){clearTimeout(VD.autoT);VD.autoT=setTimeout(()=>{if(VD.auto&&VD.battle&&VD.battle.status==='active'&&!VD.busy&&VD.m&&document.body.contains(VD.m))vgAct(vgAutoPick())},600)}}
 function vdPop(target,text,cls){if(!target)return;const r=target.getBoundingClientRect(),f=document.createElement('div');f.className='vd-num '+(cls||'');f.textContent=text;f.style.left=(r.left+r.width/2+(Math.random()*30-15))+'px';f.style.top=(r.top+r.height*.3)+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1100)}
 function vdShake(el,cls='vd-shake'){if(!el)return;el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls)}
 const vdSleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -1550,11 +1556,32 @@ async function vgAct(actions){if(VD.busy)return;if(actions[0]==='flee'&&!window.
   if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
   if(r.status==='won'){VD.st.best=Math.max(VD.st.best||0,r.floor);boss.classList.add('vd-dead')}
   VD.m.querySelector('#vdLog').innerHTML=logHtml;
+  if(r.status!=='active')VD.auto=false;
   if(r.floor===0){vgWbResult(r);return}
   const acts=VD.m.querySelector('#vdActs'),won=r.status==='won',why=(r.events||[]).some(e=>e.t==='timeout')?`제한 턴(${r.max_turn}턴)을 넘겼어요.`:(r.events||[]).some(e=>e.t==='flee')?'던전에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
   acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 승리! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어 보상)</small>':''}${r.boss_egg?`<div class="vd-bossegg">🥚 ${r.boss_egg}층 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>`:''}`:`💤 패배… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="vdBack">던전으로 돌아가기</button></div>`;
   acts.querySelector('#vdBack').onclick=()=>{VD.battle=null;VD.sel=null;vgLobby()};
   if(won&&r.hatched_key){await vdSleep(1400);const holder=document.createElement('div');holder.className='vg-modal';holder.innerHTML='<div class="vg-modal-box"></div>';document.body.appendChild(holder);vgReveal(holder,r,'보상 알에서 ')}}
+
+/* --- 자동전투 · 소탕 --- */
+function vgCanAuto(){const bt=VD.battle;return !!bt&&bt.floor>0&&bt.floor<=((VD.st&&VD.st.best)||0)}
+function vgAutoPick(){const bt=VD.battle,b=bt.boss,P=bt.party,big=b.next==='smash'||b.next==='sweep'||b.next==='poison';
+  const low=P.some(p=>p.hp>0&&p.hp<p.max*.55),dead=P.some(p=>p.hp<=0);
+  const DEF=['shield','aegis','taunt','counter','dodge','timestop','stun'],HEAL=['heal','revive','rebirth','cleanse','grove'];
+  let defUsed=false;
+  return P.map(p=>{if(p.hp<=0||p.stun>0)return 'attack';const s=p.skill,ready=!(p.cd>0);
+    if(ready&&b.next==='smash'&&DEF.includes(s)&&!defUsed){defUsed=true;return 'skill'}
+    if(ready&&HEAL.includes(s))return (low||dead)?'skill':'attack';
+    if(ready&&DEF.includes(s))return big&&!defUsed?(defUsed=true,'skill'):(s==='stun'||s==='timestop'?'skill':'attack');
+    if(b.next==='smash'&&!defUsed)return 'guard';
+    return ready?'skill':'attack'})}
+function vgSweepHtml(f,left){const st=VD.st,best=st.best||0,c=Number((st.clears||{})[f])||0,need=st.sweep_need||5;if(f>best)return '';
+  if(c<need)return `<div class="vd-sweep lock">⚡ 소탕: ${f}층 ${c}/${need}회 클리어 후 열려요</div>`;
+  return `<div class="vd-sweep">⚡ 소탕 (전투 없이 즉시 보상 · 1회 ${vgCoinIcon(13)} ${vgN(f*60)})<div><button class="vg-btn sm gold" data-sweep="1" ${left<=0?'disabled':''}>1회 소탕</button><button class="vg-btn sm gold" data-sweep="${Math.max(1,left)}" ${left<=0?'disabled':''}>남은 ${left}회 모두 소탕</button></div></div>`}
+async function vgSweep(f,n){if(!window.confirm(`${f}층을 ${n}회 소탕할까요? (입장 횟수 ${n}회 사용)`))return;
+  let r;try{r=await window.fitVillage.dungeonSweep(f,n)}catch(e){vgToast(e.message||String(e),true);return}
+  vgSetState(r);vgRenderHud();vgTick();VD.st.used_by_floor[f]=(Number(VD.st.used_by_floor[f])||0)+r.swept;VD.st.clears[f]=(Number(VD.st.clears[f])||0)+r.swept;
+  const eggs=r.boss_eggs||[];vgToast(`⚡ ${r.swept}회 소탕 완료! +${vgN(r.reward_coins)} 코인${eggs.length?` · 🥚 보스 알 ${eggs.length}개!`:''}`);if(eggs.length)VG.bossEggs=null;vgLobby()}
 
 
 /* ===== 캐릭터 조합 ===== */
@@ -2104,6 +2131,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     giftInbox(){return vrpc('fit_village_gift_inbox')},
     wbStatus(){return vrpc('fit_village_wb_status')},
     codexList(){return vrpc('fit_village_codex_list')},
+    dungeonSweep(f,n){return vrpc('fit_village_dungeon_sweep',{p_floor:f,p_times:n})},
     bossHatch(id){return vrpc('fit_village_boss_hatch',{p_egg:id})},
     async bossEggs(){vNeed();const {data,error}=await supa.from('fit_village_boss_eggs').select('id,floor,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     wbStart(ids){return vrpc('fit_village_wb_start',{p_items:ids})},

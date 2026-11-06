@@ -917,6 +917,24 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .fm-pv.on{border-color:#5fbf4a;box-shadow:0 0 0 2px #c8f0b0}
 .vg-rep{display:inline-block;width:30px;height:30px;vertical-align:middle;margin-right:4px;border-radius:50%;background:radial-gradient(circle,#fff6d6,#ffd96a);box-shadow:0 0 0 2px #ffc94d;overflow:hidden}
 .vg-rep svg{width:30px;height:30px}
+/* ===== 스타캐치 ===== */
+.sc-btn{background:linear-gradient(180deg,#ffe36a,#ffb020)!important;color:#5a3d10!important}
+.sc-ov{position:absolute;inset:0;z-index:30;background:#1a1030cc;display:flex;align-items:center;justify-content:center;border-radius:inherit}
+.sc-box{background:linear-gradient(180deg,#2a1f4a,#1a1236);color:#fff;border-radius:20px;padding:18px 22px;width:min(560px,92%);text-align:center;box-shadow:0 0 0 3px #ffd34d55,0 20px 50px #0008}
+.sc-box h3{margin:0 0 4px;color:#ffd34d;font-size:24px}.sc-box p{margin:0 0 14px;font-family:'Malgun Gothic',sans-serif;font-size:13px;font-weight:700;color:#d8c9ff}
+.sc-y{color:#ffd34d}.sc-r{color:#ff6b7a}
+.sc-bar{position:relative;height:46px;border-radius:23px;background:linear-gradient(180deg,#3a2f5a,#2a2048);box-shadow:inset 0 3px 8px #0008;cursor:pointer;overflow:hidden}
+.sc-zone{position:absolute;top:0;bottom:0;background:linear-gradient(180deg,#ffe36acc,#ffb020cc);box-shadow:0 0 14px #ffd34d}
+.sc-perf{position:absolute;top:0;bottom:0;background:#ff4d6d;box-shadow:0 0 12px #ff4d6d}
+.sc-star{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);font-size:34px;filter:drop-shadow(0 0 8px #fff) drop-shadow(0 0 14px #ffd34d);pointer-events:none}
+.sc-bar.perfect{box-shadow:0 0 0 3px #ff4d6d,0 0 30px #ff4d6d}.sc-bar.good{box-shadow:0 0 0 3px #ffd34d,0 0 24px #ffd34d}.sc-bar.miss{opacity:.6}
+.sc-res{height:40px;margin:8px 0 4px;font-size:30px;font-weight:900;letter-spacing:.05em}
+.sc-res.perfect{color:#ff6b8a;text-shadow:0 0 18px #ff4d6d;animation:scPop .5s cubic-bezier(.2,1.6,.4,1)}.sc-res.good{color:#ffd34d;text-shadow:0 0 14px #ffb020;animation:scPop .5s cubic-bezier(.2,1.6,.4,1)}.sc-res.miss{color:#9a8fab}
+@keyframes scPop{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+.sc-stop{font-size:20px!important;padding:10px 40px!important}.sc-stop small{font-size:12px}
+.sc-note{display:block;margin-top:10px;font-family:'Malgun Gothic',sans-serif;font-size:11.5px;color:#b8a8d8;font-weight:700}
+.fm-modal .vg-modal-box{position:relative}
+.sc-box h3,.sc-box p,.sc-box .sc-res,.sc-box .sc-note{background:none!important;box-shadow:none!important;border:0!important;padding:0!important;border-radius:0!important}.sc-box h3{margin-bottom:4px!important}.sc-box p{margin-bottom:14px!important}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2491,6 +2509,7 @@ function fmRender(first){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.
       <span class="fm-sep"></span>
       <button class="vg-btn gold sm" id="fmHarvAll" ${ready?'':'disabled'}>🧺 모두 수확${ready?` (${ready})`:''}</button>
       <button class="vg-btn green sm" id="fmPlantAll" ${empty&&sc?'':'disabled'}>🌱 빈 밭 모두 심기${sc&&empty?` · ${empty}칸 (${vgN(seedCost)})`:''}</button>
+      <button class="vg-btn sm sc-btn" id="fmStar" ${fmStarN()?'':'disabled'} title="자라는 중인 밭의 남은 시간을 줄여요 (심을 때마다 1회)">⚡ 스타캐치${fmStarN()?` (${fmStarN()})`:''}</button>
       <button class="vg-btn purple sm" id="fmColAll" ${jr?'':'disabled'}>🍳 완성품 받기${jr?` (${jr})`:''}</button>
       <span class="fm-zoom"><button class="vg-btn sm" data-fz="-1">－</button><button class="vg-btn sm" data-fz="1">＋</button></span></div>
      <div class="fm-hint">${fmModeTxt()}${FM.mode!=='plant'?` <button class="vg-btn sm" data-mode="plant">그만 (Esc)</button>`:''}</div>
@@ -2501,7 +2520,7 @@ function fmRender(first){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.
   box.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{FM.mode=b.dataset.mode;if(FM.mode!=='build')FM.bkey=null;fmRender()});
   box.querySelectorAll('[data-pv]').forEach(b=>b.onclick=()=>{FM.pkey=b.dataset.pv;fmRender()});
   box.querySelectorAll('[data-fz]').forEach(b=>b.onclick=()=>{FM.zoom=Math.max(.6,Math.min(1.8,+(FM.zoom+Number(b.dataset.fz)*.2).toFixed(1)));fmRender()});
-  box.querySelector('#fmHarvAll').onclick=()=>fmHarvest(null);box.querySelector('#fmPlantAll').onclick=()=>fmPlant(s.plots.filter(p=>!p.c).map(p=>p.i));box.querySelector('#fmColAll').onclick=()=>fmCollect(null);
+  box.querySelector('#fmHarvAll').onclick=()=>fmHarvest(null);box.querySelector('#fmPlantAll').onclick=()=>fmPlant(s.plots.filter(p=>!p.c).map(p=>p.i));box.querySelector('#fmColAll').onclick=()=>fmCollect(null);box.querySelector('#fmStar').onclick=fmStarCatch;
   fmBindMap();fmBindPane();const nw=box.querySelector('#fmWalk');if(oldWalk&&FM.wsig===wsig&&nw)nw.replaceWith(oldWalk);else{FM.wsig=wsig;fmWalkers()}
   const mp=box.querySelector('#fmMap');if(keep){mp.scrollLeft=keep[0];mp.scrollTop=keep[1]}else{mp.scrollLeft=(mp.scrollWidth-mp.clientWidth)/2;mp.scrollTop=(mp.scrollHeight-mp.clientHeight)/2}}
 function fmMapSvg(){const s=FM.st,G=fmGeo();let t='',obj=[],hit='',tm='';const [lx,ly]=G.c(0,G.h),[bx,by]=G.c(G.w,G.h),[rx,ry]=G.c(G.w,0);
@@ -2514,7 +2533,7 @@ function fmMapSvg(){const s=FM.st,G=fmGeo();let t='',obj=[],hit='',tm='';const [
   (s.paths||[]).forEach(q=>{const [cx,cy]=G.c(q.x,q.y);t+=`<g transform="translate(${cx},${cy})"><g transform="scale(${q.f?-1:1},1)">${vgFloorArt(q.k)}</g></g>`});
   s.plots.forEach(p=>{const [cx,cy]=G.c(p.x,p.y),st=fmStage(p),[u,ar]=fmImg(p,st),w=80,h=w*ar;
     obj.push([p.x+p.y,`<g class="fm-plot ${st}" data-ps="${p.i}" transform="translate(${cx},${cy})"><image href="${u}" x="${-w/2}" y="${23-h}" width="${w}" height="${h}"/>${st==='ripe'?'<text class="fm-spark" y="-34" text-anchor="middle">✨</text>':''}</g>`]);
-    if(p.c&&st!=='ripe')tm+=`<g class="fm-tm" transform="translate(${cx},${cy})"><rect x="-24" y="10" width="48" height="13" rx="6"/><text y="20" text-anchor="middle" data-tm="${p.i}">${fmT((Date.parse(p.r)-fmNow())/1000)}</text></g>`});
+    if(p.c&&st!=='ripe')tm+=`<g class="fm-tm" transform="translate(${cx},${cy})"><rect x="-24" y="10" width="48" height="13" rx="6"/><text y="20" text-anchor="middle">${p.b?'⚡':''}<tspan data-tm="${p.i}">${fmT((Date.parse(p.r)-fmNow())/1000)}</tspan></text></g>`});
   Object.entries(s.builds||{}).forEach(([k,[x,y]])=>{const [cx,cy]=G.c(x,y),[w,ar]=FM_BW[k]||[100,1],h=w*ar,b=fmB(k),js=fmJobs(k),rd=js.filter(j=>Date.parse(j.r)<=fmNow()).length;
     obj.push([x+y+.5,`<g class="fm-bld" transform="translate(${cx},${cy})"><ellipse cy="6" rx="34" ry="11" fill="#00000018"/><image href="${b.img}" x="${-w/2}" y="${20-h}" width="${w}" height="${h}"/>${b.role==='make'?`<g class="fm-bub ${rd?'ok':js.length?'run':''}" transform="translate(0,${8-h})">${rd?`<circle r="12"/><text y="5" text-anchor="middle">✅</text>`:js.length?`<circle r="11"/><text y="4" text-anchor="middle">⏳</text>`:''}</g>`:''}<text class="fm-bn" y="34" text-anchor="middle">${esc(b.name||k)}</text></g>`])});
   obj.sort((a,b)=>a[0]-b[0]);t+=obj.map(o=>o[1]).join('');
@@ -2594,6 +2613,26 @@ function fmStep(w){if(!FM.m||!w.g.isConnected)return;const G=fmGeo(),tg=fmTarget
     w.t=setTimeout(()=>fmStep(w),wait)},dur*1000)}
 function fmEmote(w,em){const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('class','fm-emo');t.setAttribute('text-anchor','middle');t.setAttribute('y','-50');t.textContent=em;w.g.appendChild(t);setTimeout(()=>t.remove(),1300)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&FM.m&&FM.mode!=='plant'){FM.mode='plant';FM.bkey=null;fmRender();e.stopPropagation()}},true);
+
+/* ── ⚡ 스타캐치 (메이플 스타포스 미니게임 방식) : 별이 구역 안에 있을 때 멈추기 ── */
+function fmStarN(){return (FM.st.plots||[]).filter(p=>p.c&&!p.b&&Date.parse(p.r)>fmNow()).length}
+function fmStarCatch(){const n=fmStarN();if(!n)return vgToast('스타캐치를 쓸 수 있는 밭이 없어요',true);if(FM.m.querySelector('.sc-ov'))return;
+  const zw=20,zl=15+Math.random()*(65-15),pw=5,pl=zl+(zw-pw)/2;
+  const ov=document.createElement('div');ov.className='sc-ov';ov.innerHTML=`<div class="sc-box"><h3>⚡ 스타캐치</h3>
+    <p>별이 <b class="sc-y">노란 구역</b>에 있을 때 멈추세요! 가운데 <b class="sc-r">빨간 칸</b>이면 PERFECT</p>
+    <div class="sc-bar"><div class="sc-zone" style="left:${zl}%;width:${zw}%"></div><div class="sc-perf" style="left:${pl}%;width:${pw}%"></div><div class="sc-star">⭐</div></div>
+    <div class="sc-res"></div>
+    <button class="vg-btn gold sc-stop">STOP! <small>(스페이스)</small></button>
+    <small class="sc-note">자라는 중인 밭 <b>${n}칸</b>에 한 번에 적용 · PERFECT 남은 시간 −60% · GOOD −30% · 실패해도 기회 사용 (다시 심으면 새 기회)</small></div>`;
+  FM.m.querySelector('.vg-modal-box').appendChild(ov);
+  const star=ov.querySelector('.sc-star'),bar=ov.querySelector('.sc-bar');let pos=0,dir=1,last=performance.now(),done=false,raf;const SPD=105;// %/초
+  const loop=t=>{const dt=Math.min(.05,(t-last)/1000);last=t;pos+=dir*SPD*dt;if(pos>=100){pos=100;dir=-1}if(pos<=0){pos=0;dir=1}star.style.left=pos+'%';if(!done)raf=requestAnimationFrame(loop)};raf=requestAnimationFrame(loop);
+  const key=e=>{if(e.code==='Space'||e.key==='Enter'){e.preventDefault();e.stopPropagation();stop()}};document.addEventListener('keydown',key,true);
+  const stop=async()=>{if(done)return;done=true;cancelAnimationFrame(raf);document.removeEventListener('keydown',key,true);
+    const g=pos>=pl&&pos<=pl+pw?'perfect':pos>=zl&&pos<=zl+zw?'good':'miss',res=ov.querySelector('.sc-res');
+    res.className='sc-res '+g;res.textContent=g==='perfect'?'★ PERFECT ★':g==='good'?'GOOD!':'MISS…';bar.classList.add(g);ov.querySelector('.sc-stop').disabled=true;
+    await vdSleep(900);await fmRun(()=>window.fitVillage.farmBoost(g),r=>vgToast(g==='miss'?`아쉬워요! 밭 ${r.boosted}칸의 이번 기회를 썼어요`:`⚡ ${g==='perfect'?'PERFECT':'GOOD'}! 밭 ${r.boosted}칸 남은 시간 −${Math.round(r.cut*100)}%`));ov.remove()};
+  ov.querySelector('.sc-stop').onclick=stop;bar.onclick=stop}
 
 
 function daily(){
@@ -2951,6 +2990,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     farmPath(k,x,y){return vrpc('fit_farm_path',{p_key:k,p_x:x,p_y:y})},
     farmUnpath(x,y){return vrpc('fit_farm_unpath',{p_x:x,p_y:y})},
     setRep(id){return vrpc('fit_village_rep',{p_item:id})},
+    farmBoost(g){return vrpc('fit_farm_boost',{p_grade:g})},
     sell(id){return vrpc('fit_village_sell',{p_item:id})},
     expand(){return vrpc('fit_village_expand')},
     like(to){return vrpc('fit_village_like',{p_to:to})},

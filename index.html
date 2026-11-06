@@ -935,6 +935,31 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .sc-note{display:block;margin-top:10px;font-family:'Malgun Gothic',sans-serif;font-size:11.5px;color:#b8a8d8;font-weight:700}
 .fm-modal .vg-modal-box{position:relative}
 .sc-box h3,.sc-box p,.sc-box .sc-res,.sc-box .sc-note{background:none!important;box-shadow:none!important;border:0!important;padding:0!important;border-radius:0!important}.sc-box h3{margin-bottom:4px!important}.sc-box p{margin-bottom:14px!important}
+/* ===== 농장 : 휴대폰 배치 (위 도구 · 가운데 지도 · 아래 패널 스크롤) ===== */
+@media(max-width:860px){
+  .vg-modal-box.fm-modal{display:flex;flex-direction:column;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;padding:10px 10px 0!important}
+  .fm-top{flex:none;gap:6px;margin-bottom:4px;padding-right:44px;flex-wrap:nowrap;overflow:hidden}
+  .fm-top h3{font-size:17px;white-space:nowrap}.fm-lv b{font-size:14px}.fm-bar{width:56px;height:8px}.fm-lv small{display:none}
+  .fm-chip{font-size:11.5px;padding:1px 6px;white-space:nowrap}.fm-coin{font-size:13px;padding:2px 7px;white-space:nowrap;margin-left:auto}
+  .fm-body{flex:1;min-height:0;display:flex!important;flex-direction:column;gap:6px}
+  .fm-left{flex:none}
+  .fm-tools{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding-bottom:3px;margin-bottom:3px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .fm-tools::-webkit-scrollbar{display:none}
+  .fm-tools>*{flex:none}.fm-tool{padding:3px 8px;font-size:12.5px}.fm-tool span{font-size:15px}
+  .fm-tools .vg-btn.sm{font-size:12px!important;padding:5px 9px!important;white-space:nowrap}
+  .fm-zoom{margin-left:0}
+  .fm-hint{font-size:11.5px;min-height:0;margin-bottom:4px;line-height:1.35}
+  .fm-pvs{display:flex;flex-wrap:nowrap;overflow-x:auto;margin:4px 0 0;padding-bottom:2px;scrollbar-width:none}.fm-pvs::-webkit-scrollbar{display:none}.fm-pv{flex:none}
+  .fm-map{height:40dvh!important;min-height:200px!important;max-height:none!important;border-radius:14px;padding:2px}
+  .fm-side{flex:1;min-height:0;overflow-y:auto;max-height:none!important;border-radius:14px 14px 0 0;padding:6px 6px 14px;-webkit-overflow-scrolling:touch}
+  .fm-tabs{position:sticky;top:-6px;z-index:2;background:#fffaf0;flex-wrap:nowrap!important;overflow-x:auto;padding:4px 0;margin:0 0 4px;scrollbar-width:none}.fm-tabs::-webkit-scrollbar{display:none}
+  .fm-tabs button{flex:none!important;font-size:12.5px;padding:5px 10px!important;white-space:nowrap}
+  .fm-crop img,.fm-good img{width:36px;height:36px}
+  .fm-mkh{gap:4px}.fm-slots{margin-left:0;width:100%;flex-wrap:wrap}
+  .sc-box{padding:14px 12px}.sc-box h3{font-size:20px}.sc-stop{width:100%}
+}
+@media(max-width:860px) and (max-height:620px){.fm-map{height:34dvh!important}}
+@media(max-width:860px){.fm-top{padding-right:56px!important}}@media(max-width:440px){.fm-chip{display:none}.fm-top h3{font-size:16px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2487,7 +2512,7 @@ function fmStock(k){return (VG.state.items||[]).filter(i=>i.item_key===k&&i.x==n
 function fmJobs(b){return (FM.st.jobs||[]).filter(j=>j.b===b)}
 function fmSet(r){if(!r)return;FM.st=r;if(r.server_time)FM.off=Date.parse(r.server_time)-Date.now();if(r.crops)FM.crops=r.crops;if(r.fbcat)FM.fb=r.fbcat;if(r.recipes)FM.rec=r.recipes;
   if(r.goods)r.goods.forEach(g=>FM.goods[g.key]=g);if(r.state)vgSetState(r.state);else if(VG.state&&r.coins!=null)VG.state.village.coins=r.coins;try{vgRenderHud()}catch(e){}}
-async function vgFarm(){if(FM.m)return;FM.m=vgModal('<div class="vg-empty">농장으로 가는 중…</div>','vg-xwide fm-modal');FM.m._onclose=fmClose;FM.mode='plant';
+async function vgFarm(){if(FM.m)return;FM.m=vgModal('<div class="vg-empty">농장으로 가는 중…</div>','vg-xwide fm-modal');FM.m._onclose=fmClose;FM.mode='plant';if(!FM.zoomSet)FM.zoom=window.matchMedia('(max-width:860px)').matches?.7:1;
   try{fmSet(await window.fitVillage.farmState())}catch(e){FM.m.remove();FM.m=null;vgToast(e.setup?'Supabase에 농장 SQL(fit_village_update24.sql) 실행이 필요합니다.':(e.message||String(e)),true);return}
   fmRender(true);FM.tick=setInterval(fmTick,1000)}
 function fmClose(){clearInterval(FM.tick);FM.walk.forEach(w=>clearTimeout(w.t));FM.walk=[];FM.m=null;FM.wsig=null;try{vgRenderStage();vgRenderSide()}catch(e){}}
@@ -2519,7 +2544,7 @@ function fmRender(first){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.
   box.querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{FM.tab=b.dataset.fmt;fmRender()});
   box.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{FM.mode=b.dataset.mode;if(FM.mode!=='build')FM.bkey=null;fmRender()});
   box.querySelectorAll('[data-pv]').forEach(b=>b.onclick=()=>{FM.pkey=b.dataset.pv;fmRender()});
-  box.querySelectorAll('[data-fz]').forEach(b=>b.onclick=()=>{FM.zoom=Math.max(.6,Math.min(1.8,+(FM.zoom+Number(b.dataset.fz)*.2).toFixed(1)));fmRender()});
+  box.querySelectorAll('[data-fz]').forEach(b=>b.onclick=()=>{FM.zoomSet=true;FM.zoom=Math.max(.6,Math.min(1.8,+(FM.zoom+Number(b.dataset.fz)*.2).toFixed(1)));fmRender()});
   box.querySelector('#fmHarvAll').onclick=()=>fmHarvest(null);box.querySelector('#fmPlantAll').onclick=()=>fmPlant(s.plots.filter(p=>!p.c).map(p=>p.i));box.querySelector('#fmColAll').onclick=()=>fmCollect(null);box.querySelector('#fmStar').onclick=fmStarCatch;
   fmBindMap();fmBindPane();const nw=box.querySelector('#fmWalk');if(oldWalk&&FM.wsig===wsig&&nw)nw.replaceWith(oldWalk);else{FM.wsig=wsig;fmWalkers()}
   const mp=box.querySelector('#fmMap');if(keep){mp.scrollLeft=keep[0];mp.scrollTop=keep[1]}else{mp.scrollLeft=(mp.scrollWidth-mp.clientWidth)/2;mp.scrollTop=(mp.scrollHeight-mp.clientHeight)/2}}

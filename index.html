@@ -960,6 +960,15 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 }
 @media(max-width:860px) and (max-height:620px){.fm-map{height:34dvh!important}}
 @media(max-width:860px){.fm-top{padding-right:56px!important}}@media(max-width:440px){.fm-chip{display:none}.fm-top h3{font-size:16px}}
+/* ===== 농장 지도 이동 · 개선 ===== */
+.fm-modal .fm-body,.fm-modal .fm-left,.fm-modal .fm-map,.fm-modal .fm-side,.fm-modal .fm-tools{min-width:0;max-width:100%}
+.fm-modal .fm-map{width:100%;box-sizing:border-box;overscroll-behavior:contain;touch-action:pan-x pan-y;cursor:grab}
+.fm-map.panning{cursor:grabbing}.fm-map.panning .fm-hit{cursor:grabbing!important}
+.fm-map svg{transition:none}
+.fm-sellbar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.fm-badge{display:inline-block;min-width:18px;height:18px;line-height:18px;border-radius:9px;background:#ff4d6d;color:#fff;font-size:11px;font-family:Inter,sans-serif;margin-left:4px;padding:0 4px;box-shadow:0 0 0 2px #fff;animation:fmSpark 1.2s ease-in-out infinite}
+.fm-help p{margin:0 0 8px;font-family:'Malgun Gothic',sans-serif;font-size:13px;line-height:1.5;color:#4a3f5a;text-align:left}.fm-help b{color:#3d8a28}
+@media(max-width:860px){.fm-tools{-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);padding-right:24px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1638,7 +1647,7 @@ function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const 
   <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
   <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
-  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);if($('#vgFmBtn'))setTimeout(()=>{try{fmPeek()}catch(e){}},300);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
@@ -2522,7 +2531,7 @@ function fmModeTxt(){const s=FM.st,sc=FM.sel&&fmCrop(FM.sel);
   if(FM.mode==='path'){const k=FM.pkey||fmFloors()[0]?.item_key;FM.pkey=k;return `🧱 빈 땅을 누르면 길을 깔아요 (보관함 → 없으면 상점가로 구매) <span class="fm-pvs">${fmFloors().map(c=>{const n=fmStock(c.item_key);return `<button class="fm-pv ${FM.pkey===c.item_key?'on':''}" data-pv="${c.item_key}" title="${esc(c.name)}"><img src="${c.image_url}" alt=""><small>${n?`×${n}`:vgN(c.price)}</small></button>`}).join('')}</span>`}
   if(FM.mode==='build'){const b=fmB(FM.bkey);return `🏠 <b>${esc(b.name||'')}</b>을(를) 놓을 빈 땅을 누르세요`}
   return sc?`🌱 <b>${esc(fmG(sc.key).name)}</b> 선택됨 — 빈 밭을 누르면 심어요`:'씨앗을 고르고 빈 밭을 누르세요 · 다 자란 작물과 건물을 누르면 수확'}
-function fmRender(first){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.workers.join(','),sc0=FM.m.querySelector('#fmMap');const keep=sc0&&!first?[sc0.scrollLeft,sc0.scrollTop]:null;
+function fmRender(first){const sd0=FM.m.querySelector('.fm-side'),ps=sd0&&!first&&FM.lastTab===FM.tab?sd0.scrollTop:0;FM.lastTab=FM.tab;const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.workers.join(','),sc0=FM.m.querySelector('#fmMap');const keep=sc0&&!first?[sc0.scrollLeft,sc0.scrollTop]:null;
   const s=FM.st,box=FM.m.querySelector('.vg-modal-box'),lvp=s.lv_next?Math.min(100,Math.round((s.exp-s.lv_cur)/(s.lv_next-s.lv_cur)*100)):100;
   const ready=s.plots.filter(p=>fmStage(p)==='ripe').length,empty=s.plots.filter(p=>!p.c).length,sc=FM.sel&&fmCrop(FM.sel),jr=(s.jobs||[]).filter(j=>Date.parse(j.r)<=fmNow()).length;
   const seedCost=sc?Math.ceil(sc.seed*empty*(s.seed_mult||1)):0;
@@ -2536,7 +2545,7 @@ function fmRender(first){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.
       <button class="vg-btn green sm" id="fmPlantAll" ${empty&&sc?'':'disabled'}>🌱 빈 밭 모두 심기${sc&&empty?` · ${empty}칸 (${vgN(seedCost)})`:''}</button>
       <button class="vg-btn sm sc-btn" id="fmStar" ${fmStarN()?'':'disabled'} title="자라는 중인 밭의 남은 시간을 줄여요 (심을 때마다 1회)">⚡ 스타캐치${fmStarN()?` (${fmStarN()})`:''}</button>
       <button class="vg-btn purple sm" id="fmColAll" ${jr?'':'disabled'}>🍳 완성품 받기${jr?` (${jr})`:''}</button>
-      <span class="fm-zoom"><button class="vg-btn sm" data-fz="-1">－</button><button class="vg-btn sm" data-fz="1">＋</button></span></div>
+      <span class="fm-zoom"><button class="vg-btn sm" data-fz="-1">－</button><button class="vg-btn sm" data-fz="1">＋</button><button class="vg-btn sm" id="fmHelp" title="농장 도움말">❓</button></span></div>
      <div class="fm-hint">${fmModeTxt()}${FM.mode!=='plant'?` <button class="vg-btn sm" data-mode="plant">그만 (Esc)</button>`:''}</div>
      <div class="fm-map" id="fmMap">${fmMapSvg()}</div></div>
     <div class="fm-side"><div class="vg-subtabs fm-tabs">${[['seed','🌱 씨앗'],['build','🏠 건물'],['make','🍳 가공·요리'],['store','📦 창고'],['work','🐾 일꾼']].map(([k,n])=>`<button data-fmt="${k}" class="${FM.tab===k?'on':''}">${n}</button>`).join('')}</div><div id="fmPane">${fmPane()}</div></div></div>`;
@@ -2545,9 +2554,10 @@ function fmRender(first){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.
   box.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{FM.mode=b.dataset.mode;if(FM.mode!=='build')FM.bkey=null;fmRender()});
   box.querySelectorAll('[data-pv]').forEach(b=>b.onclick=()=>{FM.pkey=b.dataset.pv;fmRender()});
   box.querySelectorAll('[data-fz]').forEach(b=>b.onclick=()=>{FM.zoomSet=true;FM.zoom=Math.max(.6,Math.min(1.8,+(FM.zoom+Number(b.dataset.fz)*.2).toFixed(1)));fmRender()});
-  box.querySelector('#fmHarvAll').onclick=()=>fmHarvest(null);box.querySelector('#fmPlantAll').onclick=()=>fmPlant(s.plots.filter(p=>!p.c).map(p=>p.i));box.querySelector('#fmColAll').onclick=()=>fmCollect(null);box.querySelector('#fmStar').onclick=fmStarCatch;
+  box.querySelector('#fmHarvAll').onclick=()=>fmHarvest(null);box.querySelector('#fmPlantAll').onclick=()=>fmPlant(s.plots.filter(p=>!p.c).map(p=>p.i));box.querySelector('#fmColAll').onclick=()=>fmCollect(null);box.querySelector('#fmStar').onclick=fmStarCatch;box.querySelector('#fmHelp').onclick=fmHelp;
   fmBindMap();fmBindPane();const nw=box.querySelector('#fmWalk');if(oldWalk&&FM.wsig===wsig&&nw)nw.replaceWith(oldWalk);else{FM.wsig=wsig;fmWalkers()}
-  const mp=box.querySelector('#fmMap');if(keep){mp.scrollLeft=keep[0];mp.scrollTop=keep[1]}else{mp.scrollLeft=(mp.scrollWidth-mp.clientWidth)/2;mp.scrollTop=(mp.scrollHeight-mp.clientHeight)/2}}
+  const sd=box.querySelector('.fm-side');if(sd&&ps)sd.scrollTop=ps;
+  const mp=box.querySelector('#fmMap');fmBindPan(mp);if(FM.pz){const z=FM.pz;FM.pz=null;mp.scrollLeft=z[0];mp.scrollTop=z[1]}else if(keep){mp.scrollLeft=keep[0];mp.scrollTop=keep[1]}else{mp.scrollLeft=(mp.scrollWidth-mp.clientWidth)/2;mp.scrollTop=(mp.scrollHeight-mp.clientHeight)/2}}
 function fmMapSvg(){const s=FM.st,G=fmGeo();let t='',obj=[],hit='',tm='';const [lx,ly]=G.c(0,G.h),[bx,by]=G.c(G.w,G.h),[rx,ry]=G.c(G.w,0);
   const L=[lx-36,ly-18],B=[bx-0,by-18],R=[rx+36,ry-18];
   t+=`<ellipse cx="${bx}" cy="${by+18}" rx="${(G.w+G.h)*30}" ry="${(G.w+G.h)*4}" fill="#5a8ab0" opacity=".12"/>`;
@@ -2569,7 +2579,7 @@ function fmBindMap(){const mp=FM.m.querySelector('#fmMap'),G=fmGeo();
     g.onmouseenter=()=>{const hl=mp.querySelector('#fmHl');if(!hl)return;const at=fmAt(x,y),[cx,cy]=G.c(x,y);let col='';
       if(FM.mode==='till'||FM.mode==='build'||FM.mode==='path')col=at.plot||at.build||at.path?'#ff7a7a88':'#ffe56a99';else if(FM.mode==='shovel')col=(at.plot&&!at.plot.c)||at.path?'#ffb36a99':'';
       if(!col){hl.style.display='none';return}hl.setAttribute('points',`${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}`);hl.style.fill=col;hl.style.display=''}})}
-function fmTileClick(x,y){const at=fmAt(x,y),s=FM.st;
+function fmTileClick(x,y){if(Date.now()-(FM.noClick||0)<300)return;const at=fmAt(x,y),s=FM.st;
   if(FM.mode==='path'){if(at.plot||at.build||at.path)return vgToast('빈 땅에만 길을 깔 수 있어요',true);const k=FM.pkey,c=VG.cat[k]||{};return fmRun(()=>window.fitVillage.farmPath(k,x,y),r=>{if(r.bought)vgToast(`🧱 ${c.name}을(를) 사서 깔았어요 (−${vgN(c.price)})`)})}
   if(FM.mode==='till'){if(at.plot||at.build||at.path)return vgToast('빈 땅에만 밭을 만들 수 있어요',true);if(s.plot_price==null)return vgToast('밭은 최대 40칸이에요',true);return fmRun(()=>window.fitVillage.farmTill(x,y),r=>vgToast(`🟫 밭을 만들었어요 (−${vgN(r.price)})`))}
   if(FM.mode==='shovel'){if(at.path)return fmRun(()=>window.fitVillage.farmUnpath(x,y),()=>vgToast('🧱 길을 보관함으로 되돌렸어요'));if(!at.plot)return vgToast('밭이나 길을 눌러 주세요',true);if(at.plot.c)return vgToast('작물이 있는 밭은 되돌릴 수 없어요',true);if(!window.confirm('이 밭을 땅으로 되돌릴까요? (반값 환불)'))return;return fmRun(()=>window.fitVillage.farmUntill(at.plot.i),r=>vgToast(`🪣 밭을 되돌렸어요 (+${vgN(r.refund)})`))}
@@ -2598,7 +2608,8 @@ function fmPane(){const s=FM.st,store=s.store||{};
      ${own?`<div class="fm-list">${rs.map(r=>{const g=fmG(r.key),ins=Object.entries(r.inputs),ok=ins.every(([k,q])=>(store[k]||0)>=q)&&js.length<2;
        return `<div class="fm-rec"><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b> <small>⏱ ${fmT(r.secs)} · 판매 ${vgN(Math.floor(g.sell*(s.sell_mult||1)))}</small><span class="fm-ings">${ins.map(([k,q])=>fmIco(k,q,store[k]||0)).join('<i>+</i>')}</span></span><button class="vg-btn sm green" data-mk="${r.key}" ${ok?'':'disabled'}>만들기</button></div>`}).join('')}</div>`:''}</div>`}).join('')}`}
   if(FM.tab==='store'){const rows=Object.entries(store).filter(([,q])=>q>0).sort((a,b)=>(fmG(a[0]).sort||0)-(fmG(b[0]).sort||0));const sm=s.sell_mult||1;
-    return `<p class="vg-note">수확물·가공품·요리가 모여요.${sm>1?' 🏪 <b>판매대</b> 덕분에 판매가 +20%!':' 판매대를 지으면 판매가가 +20% 올라요.'}</p>`+(rows.length?`<div class="fm-list">${rows.map(([k,q])=>{const g=fmG(k),u=Math.floor(g.sell*sm);return `<div class="fm-good"><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b> <em>×${q}</em><small>개당 ${vgN(u)}코인</small></span><div class="fm-sell"><button class="vg-btn sm" data-sell1="${k}">1개</button><button class="vg-btn sm gold" data-sellall="${k}">모두 +${vgN(Math.floor(g.sell*q*sm))}</button></div></div>`}).join('')}</div>`:'<div class="vg-empty">창고가 비어 있어요. 작물을 수확해 보세요!</div>')}
+    const crops=rows.filter(([k])=>fmG(k).kind==='crop'),dish=rows.filter(([k])=>fmG(k).kind!=='crop'),sum=a=>a.reduce((t,[k,q])=>t+Math.floor(fmG(k).sell*q*sm),0);
+    return `<p class="vg-note">수확물·가공품·요리가 모여요.${sm>1?' 🏪 <b>판매대</b> 덕분에 판매가 +20%!':' 판매대를 지으면 판매가가 +20% 올라요.'}</p>${rows.length?`<div class="fm-sellbar">${crops.length?`<button class="vg-btn sm gold" data-sellkind="crop">🌾 작물 모두 팔기 +${vgN(sum(crops))}</button>`:''}${dish.length?`<button class="vg-btn sm purple" data-sellkind="made">🍳 가공·요리 모두 팔기 +${vgN(sum(dish))}</button>`:''}</div>`:''}`+(rows.length?`<div class="fm-list">${rows.map(([k,q])=>{const g=fmG(k),u=Math.floor(g.sell*sm);return `<div class="fm-good"><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b> <em>×${q}</em><small>개당 ${vgN(u)}코인</small></span><div class="fm-sell"><button class="vg-btn sm" data-sell1="${k}">1개</button><button class="vg-btn sm gold" data-sellall="${k}">모두 +${vgN(Math.floor(g.sell*q*sm))}</button></div></div>`}).join('')}</div>`:'<div class="vg-empty">창고가 비어 있어요. 작물을 수확해 보세요!</div>')}
   const items=VG.state.items||[],ws=s.workers.map(id=>items.find(i=>i.id===id)).filter(Boolean),wset=new Set(s.workers);
   const cand=items.filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!wset.has(i.id)&&!i.h).sort((a,b)=>fmPow(VG.cat[b.item_key].grade)-fmPow(VG.cat[a.item_key].grade)||(VG.cat[a.item_key].rate-VG.cat[b.item_key].rate)).slice(0,40);
   const row=(i,on)=>{const c=VG.cat[i.item_key],g=VG_GRADE[c.grade]||{name:''};return `<div class="fm-wk"><span class="fm-wart">${vgArtSvg(vgK(i))}</span><span><b>${esc(c.name)}</b> <span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span><small>일솜씨 ${fmPow(c.grade)}${!on&&i.x!=null?` · 마을 생산 −${vgN(c.rate)}/시간`:''}</small></span><button class="vg-btn sm ${on?'':'green'}" data-wk="${i.id}" data-on="${on?0:1}" ${!on&&ws.length>=s.max_workers?'disabled':''}>${on?'빼기':'보내기'}</button></div>`};
@@ -2610,6 +2621,7 @@ function fmBindPane(){const p=FM.m.querySelector('#fmPane');
   p.querySelectorAll('[data-bk]').forEach(b=>b.onclick=()=>{FM.mode='build';FM.bkey=b.dataset.bk;fmRender()});
   p.querySelectorAll('[data-mk]').forEach(b=>b.onclick=()=>{const g=fmG(b.dataset.mk);fmRun(()=>window.fitVillage.farmMake(b.dataset.mk),()=>vgToast(`🍳 ${g.name} 만들기 시작!`))});
   p.querySelectorAll('[data-col]').forEach(b=>b.onclick=()=>fmCollect(b.dataset.col));
+  p.querySelectorAll('[data-sellkind]').forEach(b=>b.onclick=()=>fmSellKind(b.dataset.sellkind));
   p.querySelectorAll('[data-sell1]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sell1,1),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
   p.querySelectorAll('[data-sellall]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sellall,FM.st.store[b.dataset.sellall]),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
   p.querySelectorAll('[data-wk]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmAssign(b.dataset.wk,b.dataset.on==='1'),()=>vgToast(b.dataset.on==='1'?'🐾 농장으로 출근!':'보관함으로 돌아갔어요')));
@@ -2658,6 +2670,39 @@ function fmStarCatch(){const n=fmStarN();if(!n)return vgToast('스타캐치를 �
     res.className='sc-res '+g;res.textContent=g==='perfect'?'★ PERFECT ★':g==='good'?'GOOD!':'MISS…';bar.classList.add(g);ov.querySelector('.sc-stop').disabled=true;
     await vdSleep(900);await fmRun(()=>window.fitVillage.farmBoost(g),r=>vgToast(g==='miss'?`아쉬워요! 밭 ${r.boosted}칸의 이번 기회를 썼어요`:`⚡ ${g==='perfect'?'PERFECT':'GOOD'}! 밭 ${r.boosted}칸 남은 시간 −${Math.round(r.cut*100)}%`));ov.remove()};
   ov.querySelector('.sc-stop').onclick=stop;bar.onclick=stop}
+
+/* ── 지도 이동 : 마우스로 끌기 · 두 손가락으로 확대/축소 (한 손가락은 그대로 스크롤) ── */
+function fmBindPan(mp){if(!mp||mp._pan)return;mp._pan=true;
+  mp.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;FM.pan={x:e.clientX,y:e.clientY,l:mp.scrollLeft,t:mp.scrollTop,mv:false,mp}});
+  mp.addEventListener('touchstart',e=>{if(e.touches.length!==2)return;const [a,b]=e.touches,r=mp.getBoundingClientRect(),cx=(a.clientX+b.clientX)/2-r.left,cy=(a.clientY+b.clientY)/2-r.top;
+    FM.pinch={d0:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),z0:FM.zoom,cx,cy,px:(mp.scrollLeft+cx)/FM.zoom,py:(mp.scrollTop+cy)/FM.zoom,s:1};
+    const sv=mp.querySelector('svg');sv.style.transformOrigin=`${mp.scrollLeft+cx}px ${mp.scrollTop+cy}px`},{passive:true});
+  mp.addEventListener('touchmove',e=>{const p=FM.pinch;if(!p||e.touches.length!==2)return;e.preventDefault();const [a,b]=e.touches;
+    p.s=Math.max(.6/p.z0,Math.min(1.8/p.z0,Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)/p.d0));mp.querySelector('svg').style.transform=`scale(${p.s})`},{passive:false});
+  const end=()=>{const p=FM.pinch;if(!p)return;FM.pinch=null;FM.noClick=Date.now();const z=Math.max(.6,Math.min(1.8,+(p.z0*p.s).toFixed(2)));
+    if(Math.abs(z-FM.zoom)<.02){mp.querySelector('svg').style.transform='';return}FM.zoom=z;FM.zoomSet=true;FM.pz=[p.px*z-p.cx,p.py*z-p.cy];fmRender()};
+  mp.addEventListener('touchend',e=>{if(e.touches.length<2)end()});mp.addEventListener('touchcancel',end)}
+document.addEventListener('pointermove',e=>{const p=FM.pan;if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;if(!p.mv&&Math.hypot(dx,dy)<5)return;p.mv=true;p.mp.classList.add('panning');p.mp.scrollLeft=p.l-dx;p.mp.scrollTop=p.t-dy});
+document.addEventListener('pointerup',()=>{const p=FM.pan;if(!p)return;FM.pan=null;p.mp.classList.remove('panning');if(p.mv)FM.noClick=Date.now()});
+/* ── 창고 한꺼번에 팔기 ── */
+async function fmSellKind(kind){if(FM.busy)return;const s=FM.st,rows=Object.entries(s.store||{}).filter(([k,q])=>q>0&&(kind==='crop'?fmG(k).kind==='crop':fmG(k).kind!=='crop'));if(!rows.length)return;
+  if(!window.confirm(kind==='crop'?'창고의 작물을 모두 팔까요?\n(가공·요리 재료로 쓸 작물도 함께 팔려요)':'가공품·요리를 모두 팔까요?'))return;
+  FM.busy=true;let tot=0;try{for(const [k,q] of rows){const r=await window.fitVillage.farmSell(k,q);tot+=r.earned||0;fmSet(r)}vgToast(`💰 모두 팔았어요! +${vgN(tot)}코인`)}catch(e){vgToast(e.message||String(e),true)}FM.busy=false;if(FM.m)fmRender()}
+/* ── 농장 도움말 ── */
+function fmHelp(){vgModal(`<h3>🌾 농장 안내</h3><div class="fm-help">
+  <p><b>1. 심기</b> — 🌱 씨앗 탭에서 작물을 고르고 빈 밭을 누르세요. [빈 밭 모두 심기]로 한 번에!</p>
+  <p><b>2. 기다리기</b> — 밭 위 시간이 0이 되면 ✨ 반짝여요. <b>⚡ 스타캐치</b>로 남은 시간을 줄일 수 있어요 (심을 때마다 1회).</p>
+  <p><b>3. 수확</b> — 다 자란 밭을 누르거나 [모두 수확]. 수확물은 📦 창고로 가요.</p>
+  <p><b>4. 팔기 · 가공</b> — 그대로 팔거나, 🏠 건물(물레방아·공방·장독대)을 지어 🍳 가공·요리하면 더 비싸게 팔려요.</p>
+  <p><b>5. 일꾼</b> — 🐾 일꾼 탭에서 동물을 보내면 성장이 빨라져요. 낮은 등급일수록 농사를 잘해요!</p>
+  <p><b>땅 꾸미기</b> — ⛏ 괭이로 밭 만들기(500코인) · 🧱 길 깔기 · 🪣 삽으로 되돌리기</p>
+  <p><b>지도 보기</b> — 손가락으로 밀어서 이동, 두 손가락으로 확대/축소 (PC는 끌어서 이동, ＋/－ 버튼)</p></div>`,'vg-wide')}
+/* ── 마을의 [🌾 농장] 버튼에 수확할 것 개수 표시 ── */
+function fmReadyN(st){if(!st)return 0;const now=fmNow();return (st.plots||[]).filter(p=>p.c&&Date.parse(p.r)<=now).length+(st.jobs||[]).filter(j=>Date.parse(j.r)<=now).length}
+function fmBadge(){const b=document.getElementById('vgFmBtn');if(!b)return;const n=fmReadyN(FM.st);b.innerHTML=`🌾 농장${n?`<b class="fm-badge">${n}</b>`:''}`}
+async function fmPeek(){if(FM.m||FM.peeking||!window.fitVillage||!window.fitVillage.farmState)return;if(FM.peekAt&&Date.now()-FM.peekAt<180000)return fmBadge();
+  FM.peeking=true;try{const r=await window.fitVillage.farmState();FM.st=r;if(r.server_time)FM.off=Date.parse(r.server_time)-Date.now();if(r.crops)FM.crops=r.crops;if(r.fbcat)FM.fb=r.fbcat;if(r.recipes)FM.rec=r.recipes;if(r.goods)r.goods.forEach(g=>FM.goods[g.key]=g);FM.peekAt=Date.now()}catch(e){FM.peekAt=Date.now()}FM.peeking=false;fmBadge()}
+setInterval(()=>{if(document.getElementById('vgFmBtn')&&!FM.m)fmPeek()},20000);
 
 
 function daily(){

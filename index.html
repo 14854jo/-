@@ -832,6 +832,13 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .pt-eqpick{border:none;background:none;padding:0;cursor:pointer;text-align:left;font-family:inherit;border-radius:14px}.pt-eqpick:hover .eq-card{border-color:#8f6bff;background:#f6f1ff}
 @media(max-width:860px){.pt-grid{grid-template-columns:1fr;max-height:66vh}}
 @media(max-width:520px){.pt-card{grid-template-columns:110px 1fr;gap:8px;padding:8px}.pt-por{min-height:170px;padding-top:12px}.pt-art{width:96px!important;height:96px!important}.pt-cbtn{flex-direction:column}.pt-name{font-size:17px}.tw-banner b{font-size:17px}.tw-banner{min-width:200px}.tn>b{min-width:0}.tw-ptb{display:flex;margin:6px 0 0}}
+/* ===== 드래그 이동 · 방향전환 ===== */
+#vgMap .vg-item{cursor:grab}
+#vgMap .vg-item.vg-dragging{cursor:grabbing;filter:drop-shadow(0 12px 8px #0005);opacity:.92}
+#vgMap .vg-item.vg-dragging .vg-sel-ring{display:none}
+#vgMap .vg-tile.swap{stroke:#ff6b9a;stroke-width:2}
+#vgMap .vg-tile.hl{stroke:#ffb21f;stroke-width:2}
+#vgMap{-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1486,14 +1493,14 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
   for(let x=0;x<N;x++)for(let y=0;y<N;y++){const [cx,cy]=G.c(x,y),h=(x*7+y*13)%5;t+=`<polygon class="vg-tile" data-tile="${x},${y}" points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a4e080':'#98d975'}" stroke="#8acd69" stroke-width=".8"/>`;if(h===0)t+=`<path d="M${cx-8},${cy+4} l2,-6 l2,6 M${cx+10},${cy-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`}
   const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N).sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.x-b.x);
   items.forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
-    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${sc})">${vgArt(vgK(i),c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
+    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${i.f?-sc:sc},${sc})">${vgArt(vgK(i),c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
   t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
   return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
 
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
-  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>동물을 클릭하면 이동·보관·판매할 수 있어요</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button>`;
+  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요 <button class="vg-btn sm" id="vgCancel">취소 (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
@@ -1503,12 +1510,12 @@ function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const 
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
-function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;
+function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;vgBindTouchDrag();
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&VG.mode&&document.getElementById('vgRoot'))vgCancelMode()});
-  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
-  document.addEventListener('pointermove',e=>{const d=VG.drag;if(d){const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!VG.moved&&Math.hypot(dx,dy)>6){VG.moved=true;d.sc.classList.add('dragging')}if(VG.moved){d.sc.scrollLeft=d.l-dx;d.sc.scrollTop=d.t-dy}}
+  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;const gi=VG.view==='mine'&&!VG.mode&&e.target.closest('[data-item]');if(gi){vgIdStart(gi,e.clientX,e.clientY,false);return}VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
+  document.addEventListener('pointermove',e=>{if(VG.idrag&&!VG.idrag.touch){vgIdMove(e.clientX,e.clientY);return}const d=VG.drag;if(d){const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!VG.moved&&Math.hypot(dx,dy)>6){VG.moved=true;d.sc.classList.add('dragging')}if(VG.moved){d.sc.scrollLeft=d.l-dx;d.sc.scrollTop=d.t-dy}}
     if(VG.mode&&!VG.moved){const tile=e.target.closest&&e.target.closest('[data-tile]');vgGhostAt(tile)}});
-  document.addEventListener('pointerup',()=>{if(VG.drag){VG.drag.sc.classList.remove('dragging');VG.drag=null}});
+  document.addEventListener('pointerup',e=>{if(VG.idrag&&!VG.idrag.touch)vgIdEnd(e.clientX,e.clientY);if(VG.drag){VG.drag.sc.classList.remove('dragging');VG.drag=null}});
   document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#vgScroll'))return;if(VG.moved){VG.moved=false;return}
     const it=e.target.closest('[data-item]'),tile=e.target.closest('[data-tile]');
     if(VG.view==='friend'){if(it)vgHop(it);return}
@@ -1516,6 +1523,32 @@ function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;
     if(it){const id=it.dataset.item;VG.sel=VG.sel===id?null:id;if(VG.sel&&vgMob())VG.sheet=true;document.querySelectorAll('#vgMap .vg-item').forEach(g=>g.classList.toggle('sel',g.dataset.item===VG.sel));if(VG.sel)vgHop(it);vgRenderSide();return}
     if(VG.sel){VG.sel=null;document.querySelectorAll('#vgMap .vg-item.sel').forEach(g=>g.classList.remove('sel'));vgRenderSide()}},true);
 }
+/* ── 드래그 이동 (마우스: 바로 끌기 · 터치: 길게 눌러 끌기) ── */
+function vgIdStart(g,x,y,touch){VG.idrag={id:g.dataset.item,g,x,y,touch,on:false};VG.moved=false}
+function vgIdOn(){const d=VG.idrag;if(!d||d.on)return;d.on=true;VG.moved=true;const g=d.g,svg=g.ownerSVGElement,m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');
+  d.ox=m?+m[1]:0;d.oy=m?+m[2]:0;const p=vgSvgPt(svg,d.x,d.y);d.dx=d.ox-p.x;d.dy=d.oy-p.y;g.style.pointerEvents='none';g.classList.add('vg-dragging');g.parentNode.appendChild(g);
+  document.querySelectorAll('#vgMap .vg-item.sel').forEach(x=>x.classList.remove('sel'));if(navigator.vibrate&&d.touch)navigator.vibrate(15)}
+function vgSvgPt(svg,x,y){const pt=svg.createSVGPoint();pt.x=x;pt.y=y;return pt.matrixTransform(svg.getScreenCTM().inverse())}
+function vgIdTile(x,y){const d=VG.idrag;if(!d||!d.g.ownerSVGElement)return null;const p=vgSvgPt(d.g.ownerSVGElement,x,y),N=vgSize(VG.state.village.land_level),G=vgGeom(N);
+  const fx=p.x+d.dx,fy=p.y+d.dy-4,u=(fx-G.ox)/36,v=(fy-18-G.top)/18,tx=Math.round((u+v)/2),ty=Math.round((v-u)/2);   // 발 위치 → 칸
+  if(tx<0||ty<0||tx>=N||ty>=N)return null;const el=document.querySelector(`#vgMap [data-tile="${tx},${ty}"]`);
+  const other=(VG.state.items||[]).some(i=>i.id!==d.id&&i.x===tx&&i.y===ty);return {el,xy:[tx,ty],other}}
+function vgIdMove(x,y){const d=VG.idrag;if(!d)return;if(!d.on){if(Math.hypot(x-d.x,y-d.y)<6)return;vgIdOn()}
+  const svg=d.g.ownerSVGElement;if(!svg)return;const p=vgSvgPt(svg,x,y);d.g.setAttribute('transform',`translate(${p.x+d.dx},${p.y+d.dy})`);
+  document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.swap').forEach(t=>{t.classList.remove('hl','swap');t.style.fill=''});const t=vgIdTile(x,y);if(t&&t.el){t.el.classList.add(t.other?'swap':'hl');t.el.style.fill=t.other?'#ffd0e0':'#fff1a8'}
+  const sc=$('#vgScroll');if(sc){const r=sc.getBoundingClientRect(),E=48,v=14;if(x<r.left+E)sc.scrollLeft-=v;else if(x>r.right-E)sc.scrollLeft+=v;if(y<r.top+E)sc.scrollTop-=v;else if(y>r.bottom-E)sc.scrollTop+=v}}
+async function vgIdEnd(x,y){const d=VG.idrag;if(!d)return;const t=d.on?vgIdTile(x,y):null;VG.idrag=null;clearTimeout(d.timer);if(!d.on)return;const it=(VG.state.items||[]).find(i=>i.id===d.id);
+  if(!t||!it||(it.x===t.xy[0]&&it.y===t.xy[1])){vgRenderStage();return}
+  const r=await vgRun(()=>window.fitVillage.move(d.id,t.xy[0],t.xy[1]));if(!r){vgRenderStage();return}vgSetState(r);vgRenderStage();if(r.swapped)vgToast('🔄 자리를 바꿨어요')}
+async function vgFlip(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;it.f=!it.f;vgRenderStage();
+  try{vgSetState(await window.fitVillage.flip(id));vgRenderStage()}catch(e){it.f=!it.f;vgRenderStage();vgToast(e.setup?'Supabase에 fit_village_update21.sql 실행이 필요합니다.':(e.message||String(e)),true)}}
+function vgBindTouchDrag(){
+  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||VG.view!=='mine'||VG.mode)return;const g=e.target.closest&&e.target.closest('#vgScroll [data-item]');if(!g)return;const t=e.touches[0];
+    vgIdStart(g,t.clientX,t.clientY,true);VG.idrag.timer=setTimeout(()=>{if(VG.idrag&&VG.idrag.g===g)vgIdOn()},380)},{passive:true});
+  document.addEventListener('touchmove',e=>{const d=VG.idrag;if(!d||!d.touch)return;const t=e.touches[0];if(!d.on){if(Math.hypot(t.clientX-d.x,t.clientY-d.y)>10){clearTimeout(d.timer);VG.idrag=null}return}
+    e.preventDefault();d.lx=t.clientX;d.ly=t.clientY;vgIdMove(t.clientX,t.clientY)},{passive:false});
+  document.addEventListener('touchend',e=>{const d=VG.idrag;if(!d||!d.touch)return;clearTimeout(d.timer);if(d.on){e.preventDefault();vgIdEnd(d.lx??d.x,d.ly??d.y);setTimeout(()=>{VG.moved=false},50)}else VG.idrag=null},{passive:false});
+  document.addEventListener('touchcancel',()=>{const d=VG.idrag;if(d&&d.touch){clearTimeout(d.timer);VG.idrag=null;if(d.on)vgRenderStage()}})}
 function vgHop(g){const inner=g.querySelector('.vg-bob');if(!inner)return;inner.classList.remove('vg-hop');void inner.getBBox();inner.classList.add('vg-hop');setTimeout(()=>inner.classList.remove('vg-hop'),700)}
 function vgOcc(exceptId){const m=new Set();(VG.state.items||[]).forEach(i=>{if(i.x!=null&&i.id!==exceptId)m.add(i.x+','+i.y)});return m}
 function vgGhostAt(tile){const gh=document.getElementById('vgGhost');if(!gh)return;document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.bad').forEach(t=>{t.classList.remove('hl','bad');t.style.fill=''});if(!tile){gh.style.display='none';return}
@@ -1552,7 +1585,7 @@ function vgReveal(m,r,title){const k=r.hatched_key,c=VG.cat[k]||{},g=VG_GRADE[c.
 
 function vgCard(c,btn){const g=VG_GRADE[c.grade]||VG_GRADE[1];return `<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${g.name}</span>${vgArtSvg(vgK(c))}<b>${esc(c.name)}</b><div class="vg-meta">${c.kind==='animal'?`⏱ 시간당 +${vgN(c.rate)}`:`✨ 매력 +${vgN(c.charm)}`}</div>${btn||''}</div>`}
 function vgSelCard(){const it=(VG.state.items||[]).find(i=>i.id===VG.sel);if(!it)return '';const c=VG.cat[it.item_key]||{},g=VG_GRADE[c.grade]||VG_GRADE[1];
-  return `<div class="vg-sel">${vgArtSvg(vgK(it))}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">↔ 이동</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}${it.item_key==='pet_house'?`<button class="vg-btn sm purple" data-hopen="1">🏠 하우스 열기</button>`:''}</div></div></div>`}
+  return `<div class="vg-sel">${vgArtSvg(vgK(it))}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">✥ 이동</button><button class="vg-btn sm" data-flip="${it.id}" title="좌우 방향 바꾸기">⇋ 방향</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}${it.item_key==='pet_house'?`<button class="vg-btn sm purple" data-hopen="1">🏠 하우스 열기</button>`:''}</div></div></div>`}
 function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null&&!i.h);
   const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['fuse','🧬','조합'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['game','🎮','게임'],['friends','👫','친구']];
   let body='';
@@ -1582,7 +1615,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{b.disabled=true;vgBuy(b.dataset.buy)});
   side.querySelectorAll('[data-hatch]').forEach(b=>b.onclick=()=>vgHatch(b.dataset.hatch));
   side.querySelectorAll('[data-bhatch]').forEach(b=>b.onclick=()=>vgBossHatch(b.dataset.bhatch));
-  side.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>vgStartPlace(b.dataset.mv));
+  side.querySelectorAll('[data-mv]').forEach(b=>b.onclick=()=>vgStartPlace(b.dataset.mv));side.querySelectorAll('[data-flip]').forEach(b=>b.onclick=()=>vgFlip(b.dataset.flip));
   side.querySelectorAll('[data-keep]').forEach(b=>b.onclick=()=>vgPlace(b.dataset.keep,null,null));
   side.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>vgSell(b.dataset.sell));
   if(VG.tab==='fuse')vgFuseBind(side);
@@ -2658,6 +2691,8 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     buy(k){return vrpc('fit_village_buy',{p_key:k})},
     hatch(k){return vrpc('fit_village_hatch',{p_egg:k})},
     place(id,x,y){return vrpc('fit_village_place',{p_item:id,p_x:x,p_y:y})},
+    move(id,x,y){return vrpc('fit_village_move',{p_item:id,p_x:x,p_y:y})},
+    flip(id){return vrpc('fit_village_flip',{p_item:id})},
     sell(id){return vrpc('fit_village_sell',{p_item:id})},
     expand(){return vrpc('fit_village_expand')},
     like(to){return vrpc('fit_village_like',{p_to:to})},

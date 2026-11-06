@@ -839,6 +839,13 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 #vgMap .vg-tile.swap{stroke:#ff6b9a;stroke-width:2}
 #vgMap .vg-tile.hl{stroke:#ffb21f;stroke-width:2}
 #vgMap{-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+/* ===== 꾸미기 2단계 : 분류 · 바닥층 ===== */
+.vg-chips{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 2px}
+.vg-chips button{border:2px solid #eadfcb;background:#fff;border-radius:999px;padding:3px 11px;font-family:inherit;font-size:13px;color:#7d7290;cursor:pointer}
+.vg-chips button.on{background:#8f6bff;border-color:#8f6bff;color:#fff}
+#vgMap .vg-hl{stroke:#ffb21f;stroke-width:2}
+#vgMap .vg-floor .vg-sel-ring{animation:none}
+#vgMap .vg-ghost image{opacity:.85}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1431,7 +1438,15 @@ function vgArtSvg(key,cls='vg-art',vb){vb=vb||VG_VB[String(key).replace(/@lb$/,'
 
 /* ===== 동물 마을: 화면 · 동작 ===== */
 const VG={catalog:[],cat:{},state:null,off:0,view:'mine',friend:null,friendState:null,mode:null,sel:null,tab:'shop',shopCat:'animal',zoom:1,ticker:null,friends:null,liked:new Set(),drag:null,moved:false,ready:false,setup:false,err:''};
-const VG_DSCALE={stone_path:.7,fence:.8,bush:.72,flower:.82,flower_bed:.72,tree:1.1,lamp:.8,crystal_lantern:1.05,crystal_obelisk:.95,mushroom_house:1.35,fountain:1.25,crystal_tree:1.6};
+const VG_DOFF={fl_tulip:8,fl_daisy:8,fl_sunflower:8,fl_lavender:8,fl_hydrangea:8,fl_cosmos:8,fl_lily:8,fl_moon:8,bd_cottage:6,bd_treehouse:6,bd_cafe:6,bd_flowershop:6,bd_clock:6,bd_gazebo:6,bd_well:5,bd_lighthouse:6};
+const VG_NOFLIP=new Set(['bd_cafe']);   // 글자가 들어간 그림은 좌우 반전 안 함
+function vgIsFloor(key){return (VG.cat[key]||{}).cat==='floor'}
+function vgFloorArt(key){const u=String((VG.cat[key]||{}).image_url||'').replace(/["<>&]/g,'');return `<image href="${u}" width="100" height="100" preserveAspectRatio="none" transform="matrix(.36,.18,-.36,.18,0,-18)"/><polygon points="0,-18 36,0 0,18 -36,0" fill="none" stroke="#0000001a" stroke-width="1"/>`}
+function vgHl(x,y,col){const h=document.getElementById('vgHl');if(!h)return;if(x==null){h.style.display='none';return}const [cx,cy]=vgGeom(vgSize(VG.state.village.land_level)).c(x,y);
+  h.setAttribute('points',`${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}`);h.style.fill=col;h.style.display=''}
+function vgEvTile(target){if(!target||!target.closest)return null;const t=target.closest('[data-tile]');if(t)return t;const o=target.closest('#vgMap [data-item]');if(!o)return null;
+  const it=(VG.state.items||[]).find(i=>i.id===o.dataset.item);return it&&it.x!=null?document.querySelector(`#vgMap [data-tile="${it.x},${it.y}"]`):null}
+const VG_DSCALE={fl_tulip:.82,fl_daisy:.82,fl_sunflower:.88,fl_lavender:.95,fl_hydrangea:.82,fl_cosmos:.84,fl_lily:.82,fl_moon:.84,bd_cottage:1.25,bd_treehouse:1.3,bd_cafe:1.25,bd_flowershop:1.3,bd_clock:1.45,bd_gazebo:1.3,bd_well:1.05,bd_lighthouse:1.45,stone_path:.7,fence:.8,bush:.72,flower:.82,flower_bed:.72,tree:1.1,lamp:.8,crystal_lantern:1.05,crystal_obelisk:.95,mushroom_house:1.35,fountain:1.25,crystal_tree:1.6};
 const VG_EXPAND=[0,2000,6000,18000,50000,120000];
 const vgMob=()=>window.matchMedia('(max-width:760px)').matches;
 const vgN=v=>Math.floor(Number(v)||0).toLocaleString();
@@ -1492,8 +1507,11 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
   t+=`<polygon points="${T} ${R} ${B} ${L}" fill="#8fd46c" stroke="#7cc95e" stroke-width="2"/>`;
   for(let x=0;x<N;x++)for(let y=0;y<N;y++){const [cx,cy]=G.c(x,y),h=(x*7+y*13)%5;t+=`<polygon class="vg-tile" data-tile="${x},${y}" points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a4e080':'#98d975'}" stroke="#8acd69" stroke-width=".8"/>`;if(h===0)t+=`<path d="M${cx-8},${cy+4} l2,-6 l2,6 M${cx+10},${cy-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`}
   const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N).sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.x-b.x);
-  items.forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
-    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="scale(${i.f?-sc:sc},${sc})">${vgArt(vgK(i),c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
+  items.filter(i=>vgIsFloor(i.item_key)).forEach(i=>{const [cx,cy]=G.c(i.x,i.y);
+    t+=`<g class="vg-item vg-floor${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy})"><g transform="scale(${i.f?-1:1},1)">${vgFloorArt(i.item_key)}</g><polygon class="vg-sel-ring" points="0,-18 36,0 0,18 -36,0" fill="#fff4" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/></g>`});
+  t+=`<polygon id="vgHl" class="vg-hl" points="0,0" style="display:none" pointer-events="none"/>`;
+  items.filter(i=>!vgIsFloor(i.item_key)).forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
+    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="translate(0,${VG_DOFF[i.item_key]||0}) scale(${i.f?-sc:sc},${sc})">${vgArt(vgK(i),c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
   t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
   return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
 
@@ -1514,12 +1532,12 @@ function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;vgBindTou
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&VG.mode&&document.getElementById('vgRoot'))vgCancelMode()});
   document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;const gi=VG.view==='mine'&&!VG.mode&&e.target.closest('[data-item]');if(gi){vgIdStart(gi,e.clientX,e.clientY,false);return}VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
   document.addEventListener('pointermove',e=>{if(VG.idrag&&!VG.idrag.touch){vgIdMove(e.clientX,e.clientY);return}const d=VG.drag;if(d){const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!VG.moved&&Math.hypot(dx,dy)>6){VG.moved=true;d.sc.classList.add('dragging')}if(VG.moved){d.sc.scrollLeft=d.l-dx;d.sc.scrollTop=d.t-dy}}
-    if(VG.mode&&!VG.moved){const tile=e.target.closest&&e.target.closest('[data-tile]');vgGhostAt(tile)}});
+    if(VG.mode&&!VG.moved){vgGhostAt(vgEvTile(e.target))}});
   document.addEventListener('pointerup',e=>{if(VG.idrag&&!VG.idrag.touch)vgIdEnd(e.clientX,e.clientY);if(VG.drag){VG.drag.sc.classList.remove('dragging');VG.drag=null}});
   document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#vgScroll'))return;if(VG.moved){VG.moved=false;return}
     const it=e.target.closest('[data-item]'),tile=e.target.closest('[data-tile]');
     if(VG.view==='friend'){if(it)vgHop(it);return}
-    if(VG.mode){if(tile){const [x,y]=tile.dataset.tile.split(',').map(Number);vgPlace(VG.mode.id,x,y)}return}
+    if(VG.mode){const mt=vgEvTile(e.target);if(mt){const [x,y]=mt.dataset.tile.split(',').map(Number);vgPlace(VG.mode.id,x,y)}return}
     if(it){const id=it.dataset.item;VG.sel=VG.sel===id?null:id;if(VG.sel&&vgMob())VG.sheet=true;document.querySelectorAll('#vgMap .vg-item').forEach(g=>g.classList.toggle('sel',g.dataset.item===VG.sel));if(VG.sel)vgHop(it);vgRenderSide();return}
     if(VG.sel){VG.sel=null;document.querySelectorAll('#vgMap .vg-item.sel').forEach(g=>g.classList.remove('sel'));vgRenderSide()}},true);
 }
@@ -1532,10 +1550,10 @@ function vgSvgPt(svg,x,y){const pt=svg.createSVGPoint();pt.x=x;pt.y=y;return pt.
 function vgIdTile(x,y){const d=VG.idrag;if(!d||!d.g.ownerSVGElement)return null;const p=vgSvgPt(d.g.ownerSVGElement,x,y),N=vgSize(VG.state.village.land_level),G=vgGeom(N);
   const fx=p.x+d.dx,fy=p.y+d.dy-4,u=(fx-G.ox)/36,v=(fy-18-G.top)/18,tx=Math.round((u+v)/2),ty=Math.round((v-u)/2);   // 발 위치 → 칸
   if(tx<0||ty<0||tx>=N||ty>=N)return null;const el=document.querySelector(`#vgMap [data-tile="${tx},${ty}"]`);
-  const other=(VG.state.items||[]).some(i=>i.id!==d.id&&i.x===tx&&i.y===ty);return {el,xy:[tx,ty],other}}
+  const me=(VG.state.items||[]).find(i=>i.id===d.id),fl=me?vgIsFloor(me.item_key):false;const other=(VG.state.items||[]).some(i=>i.id!==d.id&&i.x===tx&&i.y===ty&&vgIsFloor(i.item_key)===fl);return {el,xy:[tx,ty],other}}
 function vgIdMove(x,y){const d=VG.idrag;if(!d)return;if(!d.on){if(Math.hypot(x-d.x,y-d.y)<6)return;vgIdOn()}
   const svg=d.g.ownerSVGElement;if(!svg)return;const p=vgSvgPt(svg,x,y);d.g.setAttribute('transform',`translate(${p.x+d.dx},${p.y+d.dy})`);
-  document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.swap').forEach(t=>{t.classList.remove('hl','swap');t.style.fill=''});const t=vgIdTile(x,y);if(t&&t.el){t.el.classList.add(t.other?'swap':'hl');t.el.style.fill=t.other?'#ffd0e0':'#fff1a8'}
+  document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.swap').forEach(t=>{t.classList.remove('hl','swap');t.style.fill=''});const t=vgIdTile(x,y);if(t&&t.el){t.el.classList.add(t.other?'swap':'hl');t.el.style.fill=t.other?'#ffd0e0':'#fff1a8';vgHl(t.xy[0],t.xy[1],t.other?'#ff7ab099':'#ffe56a99')}else vgHl(null);
   const sc=$('#vgScroll');if(sc){const r=sc.getBoundingClientRect(),E=48,v=14;if(x<r.left+E)sc.scrollLeft-=v;else if(x>r.right-E)sc.scrollLeft+=v;if(y<r.top+E)sc.scrollTop-=v;else if(y>r.bottom-E)sc.scrollTop+=v}}
 async function vgIdEnd(x,y){const d=VG.idrag;if(!d)return;const t=d.on?vgIdTile(x,y):null;VG.idrag=null;clearTimeout(d.timer);if(!d.on)return;const it=(VG.state.items||[]).find(i=>i.id===d.id);
   if(!t||!it||(it.x===t.xy[0]&&it.y===t.xy[1])){vgRenderStage();return}
@@ -1550,12 +1568,12 @@ function vgBindTouchDrag(){
   document.addEventListener('touchend',e=>{const d=VG.idrag;if(!d||!d.touch)return;clearTimeout(d.timer);if(d.on){e.preventDefault();vgIdEnd(d.lx??d.x,d.ly??d.y);setTimeout(()=>{VG.moved=false},50)}else VG.idrag=null},{passive:false});
   document.addEventListener('touchcancel',()=>{const d=VG.idrag;if(d&&d.touch){clearTimeout(d.timer);VG.idrag=null;if(d.on)vgRenderStage()}})}
 function vgHop(g){const inner=g.querySelector('.vg-bob');if(!inner)return;inner.classList.remove('vg-hop');void inner.getBBox();inner.classList.add('vg-hop');setTimeout(()=>inner.classList.remove('vg-hop'),700)}
-function vgOcc(exceptId){const m=new Set();(VG.state.items||[]).forEach(i=>{if(i.x!=null&&i.id!==exceptId)m.add(i.x+','+i.y)});return m}
-function vgGhostAt(tile){const gh=document.getElementById('vgGhost');if(!gh)return;document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.bad').forEach(t=>{t.classList.remove('hl','bad');t.style.fill=''});if(!tile){gh.style.display='none';return}
+function vgOcc(exceptId){const me=(VG.state.items||[]).find(i=>i.id===exceptId),fl=me?vgIsFloor(me.item_key):false,m=new Set();(VG.state.items||[]).forEach(i=>{if(i.x!=null&&i.id!==exceptId&&vgIsFloor(i.item_key)===fl)m.add(i.x+','+i.y)});return m}
+function vgGhostAt(tile){const gh=document.getElementById('vgGhost');if(!gh)return;document.querySelectorAll('#vgMap .vg-tile.hl,#vgMap .vg-tile.bad').forEach(t=>{t.classList.remove('hl','bad');t.style.fill=''});if(!tile){gh.style.display='none';vgHl(null);return}
   const [x,y]=tile.dataset.tile.split(',').map(Number),G=vgGeom(vgSize(VG.state.village.land_level)),[cx,cy]=G.c(x,y),bad=vgOcc(VG.mode.id).has(x+','+y),c=VG.cat[VG.mode.key]||{};
-  tile.style.fill=bad?'#ffb3b3':'#e2ffc8';tile.classList.add(bad?'bad':'hl');
-  if(gh.dataset.key!==VG.mode.key){gh.innerHTML=`<g transform="scale(${c.kind==='animal'?.86:(c.image_url?(VG_DSCALE[VG.mode.key]||1):1)})">${vgArt(VG.mode.key,c.kind)}</g>`;gh.dataset.key=VG.mode.key}
-  gh.setAttribute('transform',`translate(${cx},${cy+4})`);gh.style.display='';gh.style.opacity=bad?.35:.8}
+  tile.style.fill=bad?'#ffb3b3':'#e2ffc8';tile.classList.add(bad?'bad':'hl');vgHl(x,y,bad?'#ff7a7a88':'#c8ff9a88');
+  if(gh.dataset.key!==VG.mode.key){gh.innerHTML=vgIsFloor(VG.mode.key)?vgFloorArt(VG.mode.key):`<g transform="translate(0,${VG_DOFF[VG.mode.key]||0}) scale(${c.kind==='animal'?.86:(c.image_url?(VG_DSCALE[VG.mode.key]||1):1)})">${vgArt(VG.mode.key,c.kind)}</g>`;gh.dataset.key=VG.mode.key}
+  gh.setAttribute('transform',`translate(${cx},${cy+(vgIsFloor(VG.mode.key)?0:4)})`);gh.style.display='';gh.style.opacity=bad?.35:.8}
 function vgStartPlace(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;VG.sheet=false;VG.mode={id,key:it.item_key};VG.sel=null;if(VG.view!=='mine'){VG.view='mine';VG.friend=null}vgRenderStage();vgRenderSide()}
 function vgCancelMode(){VG.mode=null;vgRenderStage();vgRenderSide()}
 
@@ -1585,12 +1603,12 @@ function vgReveal(m,r,title){const k=r.hatched_key,c=VG.cat[k]||{},g=VG_GRADE[c.
 
 function vgCard(c,btn){const g=VG_GRADE[c.grade]||VG_GRADE[1];return `<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${g.name}</span>${vgArtSvg(vgK(c))}<b>${esc(c.name)}</b><div class="vg-meta">${c.kind==='animal'?`⏱ 시간당 +${vgN(c.rate)}`:`✨ 매력 +${vgN(c.charm)}`}</div>${btn||''}</div>`}
 function vgSelCard(){const it=(VG.state.items||[]).find(i=>i.id===VG.sel);if(!it)return '';const c=VG.cat[it.item_key]||{},g=VG_GRADE[c.grade]||VG_GRADE[1];
-  return `<div class="vg-sel">${vgArtSvg(vgK(it))}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">✥ 이동</button><button class="vg-btn sm" data-flip="${it.id}" title="좌우 방향 바꾸기">⇋ 방향</button><button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}${it.item_key==='pet_house'?`<button class="vg-btn sm purple" data-hopen="1">🏠 하우스 열기</button>`:''}</div></div></div>`}
+  return `<div class="vg-sel">${vgArtSvg(vgK(it))}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">✥ 이동</button>${VG_NOFLIP.has(it.item_key)?'':`<button class="vg-btn sm" data-flip="${it.id}" title="좌우 방향 바꾸기">⇋ 방향</button>`}<button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}${it.item_key==='pet_house'?`<button class="vg-btn sm purple" data-hopen="1">🏠 하우스 열기</button>`:''}</div></div></div>`}
 function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null&&!i.h);
   const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['fuse','🧬','조합'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['game','🎮','게임'],['friends','👫','친구']];
   let body='';
-  if(VG.tab==='shop'){const list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat);
-    body=`<div class="vg-subtabs"><button data-sc="animal" class="${VG.shopCat==='animal'?'on':''}">🐾 동물</button><button data-sc="deco" class="${VG.shopCat==='deco'?'on':''}">🌳 장식</button></div><p class="vg-note">${VG.shopCat==='animal'?'동물은 시간마다 코인을 만들어요. 영웅 이상 등급은 <b>알 부화</b>로만 만날 수 있어요.':'장식은 매력도를 올려 마을 전체 생산량을 최대 +100%까지 늘려 줘요.'}</p><div class="vg-cards">${list.map(c=>vgCard(c,`<button class="vg-btn sm gold full" data-buy="${c.item_key}" ${coins<c.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(c.price)}</button>`)).join('')}</div>`}
+  if(VG.tab==='shop'){const dc=VG.decoCat||'all',list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat&&(VG.shopCat!=='deco'||dc==='all'||(dc==='etc'?!['flower','building','floor'].includes(c.cat):c.cat===dc)));
+    body=`<div class="vg-subtabs"><button data-sc="animal" class="${VG.shopCat==='animal'?'on':''}">🐾 동물</button><button data-sc="deco" class="${VG.shopCat==='deco'?'on':''}">🌳 장식</button></div>${VG.shopCat==='deco'?`<div class="vg-chips">${[['all','전체'],['flower','🌷 꽃'],['building','🏠 건물'],['floor','🧱 길'],['etc','🌳 기타']].map(([k,n])=>`<button data-dc="${k}" class="${dc===k?'on':''}">${n}</button>`).join('')}</div>`:''}<p class="vg-note">${VG.shopCat==='animal'?'동물은 시간마다 코인을 만들어요. 영웅 이상 등급은 <b>알 부화</b>로만 만날 수 있어요.':(dc==='floor'?'길은 바닥에 깔려서 그 위에 동물·꾸미기를 함께 놓을 수 있어요. 끌어서 이어 붙여 보세요!':'장식은 매력도를 올려 마을 전체 생산량을 최대 +100%까지 늘려 줘요.')}</p><div class="vg-cards">${list.map(c=>vgCard(c,`<button class="vg-btn sm gold full" data-buy="${c.item_key}" ${coins<c.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(c.price)}</button>`)).join('')}</div>`}
   if(VG.tab==='egg'){const eggs=VG.catalog.filter(c=>c.kind==='egg'),odds={egg_basic:[85,13,2],egg_gold:[30,55,15]},pool=VG.catalog.filter(c=>c.kind==='animal'&&!c.shop&&c.grade>=3&&c.grade<=5);
     if(!VG.bossEggs){VG.bossEggs=[];window.fitVillage.bossEggs().then(l=>{VG.bossEggs=l||[];if(VG.tab==='egg')vgRenderSide()}).catch(()=>{})}
     const BE=VG.bossEggs.length?`<div class="vg-bosseggs"><b>🥚 보스 알 ${VG.bossEggs.length}개</b>${VG.bossEggs.map(e=>`<div class="vg-egg-card boss"><svg class="vg-art" viewBox="-120 -170 240 178">${vgBossArt(e.floor,'images/bosses/boss'+e.floor+'.webp')}</svg><div style="flex:1"><b>${e.floor}층 보스 알</b><div class="vg-odds">${esc((VG.cat['boss_'+e.floor]||{}).name||'')} · ${[5,10].includes(e.floor)?'신화급':e.floor>=6?'전설급':'영웅급'}</div><button class="vg-btn purple sm full" data-bhatch="${e.id}">부화하기 (무료)</button></div></div>`).join('')}</div>`:'<p class="vg-note">🥚 <b>보스 알</b>: 동굴 던전 10층을 처음 깨면 랜덤 보스 알 1개를 받아요. 그 뒤로는 층 보스를 잡을 때마다 낮은 확률로 그 층의 보스 알이 나와요.</p>';
@@ -1611,7 +1629,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.classList.toggle('open',!!VG.sheet);side.innerHTML=`<div class="vg-handle" id="vgHandle"><span></span></div><div class="vg-tabs">${tabs.map(([k,ic,l])=>`<button class="vg-tab ${VG.tab===k?'on':''}" data-tab="${k}"><span>${ic}</span>${l}</button>`).join('')}</div><div class="vg-side-body">${VG.sel&&VG.view==='mine'?vgSelCard():''}${body}</div>`;
   side.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(vgMob()){if(VG.tab===b.dataset.tab&&VG.sheet)VG.sheet=false;else{VG.tab=b.dataset.tab;VG.sheet=true}}else VG.tab=b.dataset.tab;vgRenderSide()});
   $('#vgHandle')&&($('#vgHandle').onclick=()=>{VG.sheet=!VG.sheet;vgRenderSide()});
-  side.querySelectorAll('[data-sc]').forEach(b=>b.onclick=()=>{VG.shopCat=b.dataset.sc;vgRenderSide()});
+  side.querySelectorAll('[data-sc]').forEach(b=>b.onclick=()=>{VG.shopCat=b.dataset.sc;vgRenderSide()});side.querySelectorAll('[data-dc]').forEach(b=>b.onclick=()=>{VG.decoCat=b.dataset.dc;vgRenderSide()});
   side.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{b.disabled=true;vgBuy(b.dataset.buy)});
   side.querySelectorAll('[data-hatch]').forEach(b=>b.onclick=()=>vgHatch(b.dataset.hatch));
   side.querySelectorAll('[data-bhatch]').forEach(b=>b.onclick=()=>vgBossHatch(b.dataset.bhatch));

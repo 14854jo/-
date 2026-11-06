@@ -846,6 +846,42 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 #vgMap .vg-hl{stroke:#ffb21f;stroke-width:2}
 #vgMap .vg-floor .vg-sel-ring{animation:none}
 #vgMap .vg-ghost image{opacity:.85}
+/* ===== 농장 ===== */
+.fm-btn{background:linear-gradient(180deg,#9be07a,#5fbf4a)!important;color:#fff!important}
+.fm-modal{width:min(98vw,1180px)!important;text-align:left!important}
+.fm-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px;padding-right:40px}.fm-top h3{margin:0}
+.fm-lv{display:flex;align-items:center;gap:6px}.fm-lv b{color:#5a9a3a;font-size:17px}.fm-lv small{font-size:12px;color:#7d7290;font-family:Inter,sans-serif}
+.fm-bar{width:130px;height:10px;border-radius:6px;background:#e8e2d4;overflow:hidden}.fm-bar i{display:block;height:100%;background:linear-gradient(90deg,#9be07a,#5fbf4a)}
+.fm-coin{margin-left:auto;background:#fff6d6;border-radius:12px;padding:3px 10px}
+.fm-body{display:grid;grid-template-columns:1fr 340px;gap:12px;align-items:start}
+.fm-acts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px}.fm-hint{font-family:'Malgun Gothic',sans-serif;font-size:12px;font-weight:700;color:#7d7290}
+.fm-map{background:linear-gradient(180deg,#cdeeff,#e9f8ff);border-radius:18px;padding:6px;overflow:auto;max-height:72vh}
+.fm-svg{width:100%;height:auto;display:block;min-width:560px;user-select:none;-webkit-user-select:none}
+.fm-plot{pointer-events:none}.fm-hit{fill:transparent;cursor:pointer;stroke:none}.fm-hit:hover{fill:#ffffff33;stroke:#fff;stroke-width:2}
+.fm-plot.ripe image{animation:fmRipe 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes fmRipe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.fm-spark{font-size:16px;animation:fmSpark 1.2s ease-in-out infinite;pointer-events:none}@keyframes fmSpark{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+.fm-tm rect{fill:#3a2f4acc}.fm-tm text{fill:#fff;font-size:9px;font-family:Inter,sans-serif;font-weight:800}.fm-tm{pointer-events:none}
+.fm-lock text{font-size:14px;fill:#a07850}.fm-lock .fm-lk{opacity:.45;font-size:12px}.fm-lock.next{cursor:pointer}.fm-lock.next:hover polygon{fill:#fffb}.fm-lock .fm-pr{font-size:9px;font-family:Inter,sans-serif;font-weight:800}
+.fm-wkr{pointer-events:none}.fm-wkr.walk .fm-bob{animation:fmHop .42s ease-in-out infinite}
+@keyframes fmHop{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.fm-wkr.work .fm-bob{animation:fmWork .35s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes fmWork{0%,100%{transform:scale(1,1)}50%{transform:scale(1.08,.9)}}
+.fm-face{transition:transform .2s}
+.fm-emo{font-size:15px;animation:fmEmo 1.3s ease-out forwards}@keyframes fmEmo{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+.fm-side{background:#fffaf0;border-radius:16px;padding:8px;max-height:76vh;overflow:auto}
+.fm-list{display:flex;flex-direction:column;gap:5px}
+.fm-crop,.fm-good,.fm-wk{display:flex;align-items:center;gap:8px;border:2px solid #eadfcb;background:#fff;border-radius:12px;padding:5px 8px;text-align:left;font-family:inherit;color:#3a2f4a;width:100%}
+.fm-crop{cursor:pointer}.fm-crop:hover{border-color:#9be07a}.fm-crop.on{border-color:#5fbf4a;background:#effbe8;box-shadow:0 0 0 2px #c8f0b0}.fm-crop.lock{opacity:.55;cursor:not-allowed}
+.fm-crop img,.fm-good img{width:42px;height:42px;object-fit:contain;flex:none}
+.fm-crop span,.fm-good span{display:flex;flex-direction:column;min-width:0;flex:1}.fm-crop b,.fm-good b{font-size:14px}
+.fm-crop small,.fm-good small,.fm-wk small{font-family:'Malgun Gothic',sans-serif;font-size:11.5px;color:#7d7290;font-weight:700}.fm-crop small b{font-size:11.5px;color:#c27a00}
+.fm-good em{font-style:normal;color:#5a9a3a}.fm-sell{display:flex;gap:4px;flex:none}
+.fm-wsum{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px}.fm-wsum span{background:#effbe8;border-radius:8px;padding:2px 8px;font-size:12.5px}
+.fm-wart svg{width:40px;height:40px}.fm-wk>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}.fm-wk b{font-size:13.5px}
+@media(max-width:860px){.fm-body{grid-template-columns:1fr}.fm-side{max-height:none}.fm-map{max-height:52vh}}
+.fm-left{min-width:0}.fm-wk .vg-grade{display:inline-block;width:auto;align-self:flex-start;font-size:10px;padding:0 6px}.fm-tm{opacity:.92}
+@media(max-width:860px){.fm-svg{min-width:520px}.fm-hint{width:100%}.fm-coin{margin-left:0}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1518,13 +1554,13 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
-  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button>`;
+  const banner=friend?`<div class="vg-banner">🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button><button class="vg-btn sm green fm-btn" id="vgFmBtn">🌾 농장</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요 <button class="vg-btn sm" id="vgCancel">취소 (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
   <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
-  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
@@ -1604,7 +1640,7 @@ function vgReveal(m,r,title){const k=r.hatched_key,c=VG.cat[k]||{},g=VG_GRADE[c.
 function vgCard(c,btn){const g=VG_GRADE[c.grade]||VG_GRADE[1];return `<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${g.name}</span>${vgArtSvg(vgK(c))}<b>${esc(c.name)}</b><div class="vg-meta">${c.kind==='animal'?`⏱ 시간당 +${vgN(c.rate)}`:`✨ 매력 +${vgN(c.charm)}`}</div>${btn||''}</div>`}
 function vgSelCard(){const it=(VG.state.items||[]).find(i=>i.id===VG.sel);if(!it)return '';const c=VG.cat[it.item_key]||{},g=VG_GRADE[c.grade]||VG_GRADE[1];
   return `<div class="vg-sel">${vgArtSvg(vgK(it))}<div style="min-width:0"><span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span> <b style="font-size:17px">${esc(c.name)}</b> ${vgStars(it.tr,'sm')}<div class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290;margin-top:3px">${c.kind==='animal'?`시간당 +${vgN(c.rate*(1+.05*(Number(it.tr)||0)))} 코인`:`매력 +${vgN(c.charm)}`} · 판매가 ${vgN(c.sell)}</div><div class="vg-sel-actions"><button class="vg-btn sm green" data-mv="${it.id}">✥ 이동</button>${VG_NOFLIP.has(it.item_key)?'':`<button class="vg-btn sm" data-flip="${it.id}" title="좌우 방향 바꾸기">⇋ 방향</button>`}<button class="vg-btn sm" data-keep="${it.id}">📦 보관</button><button class="vg-btn sm" data-sell="${it.id}">💰 판매</button>${c.kind==='animal'?`<button class="vg-btn sm gold" data-tr="${it.id}">✨ 초월</button>`:''}${it.item_key==='pet_house'?`<button class="vg-btn sm purple" data-hopen="1">🏠 하우스 열기</button>`:''}</div></div></div>`}
-function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null&&!i.h);
+function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const st=VG.state,coins=Number(st.village.coins)||0,inv=(st.items||[]).filter(i=>i.x==null&&!i.h&&!i.fm);
   const tabs=[['shop','🛒','상점'],['egg','🥚','알 부화'],['fuse','🧬','조합'],['inv','📦',`보관함${inv.length?' '+inv.length:''}`],['codex','📖','도감'],['game','🎮','게임'],['friends','👫','친구']];
   let body='';
   if(VG.tab==='shop'){const dc=VG.decoCat||'all',list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat&&(VG.shopCat!=='deco'||dc==='all'||(dc==='etc'?!['flower','building','floor'].includes(c.cat):c.cat===dc)));
@@ -2044,7 +2080,7 @@ function vgHouseHtml(has){if(!has)return '<p class="vg-note">🏠 <b>펫 하우�
 async function vgHousePut(k){const r=await vgRun(()=>window.fitVillage.housePut(k,99));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`🏠 ${VG.cat[k]?.name||''} ${r.moved}마리를 하우스에 넣었어요`)}
 async function vgHouseTake(k,n){const r=await vgRun(()=>window.fitVillage.houseTake(k,n));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`📦 ${r.moved}마리를 보관함으로 꺼냈어요`)}
 /* 일괄 조합 */
-function vgBatchCount(g){return (VG.state.items||[]).filter(i=>i.x==null&&!i.h&&!(i.tr>0)&&VG.cat[i.item_key]?.kind==='animal'&&VG.cat[i.item_key].grade===g).length}
+function vgBatchCount(g){return (VG.state.items||[]).filter(i=>i.x==null&&!i.h&&!i.fm&&!(i.tr>0)&&VG.cat[i.item_key]?.kind==='animal'&&VG.cat[i.item_key].grade===g).length}
 function vgBatchHtml(g){if(g>2)return '';const n=vgBatchCount(g),times=Math.min(10,Math.floor(n/2)),fee=VG_FUSE.fee[g];
   return `<div class="vb-box"><b>⚡ 일괄 조합</b><small>보관함의 ${VG_GRADE[g].name} ${n}마리 (배치·하우스·초월 동물 제외)</small><button class="vg-btn gold full" id="vbGo" ${times<1?'disabled':''}>${times<1?'재료가 부족해요 (2마리 이상)':`${times}회 한 번에 조합 · ${vgN(fee*times)}코인`}</button></div>`}
 async function vgBatchFuse(){const g=VG.fuse.g,n=Math.min(10,Math.floor(vgBatchCount(g)/2));if(n<1)return;
@@ -2369,6 +2405,92 @@ function ptPickEquip(itemId,slot){const it=ptItem(itemId),c=VG.cat[it.item_key],
   const done=async(eid,to)=>{try{await window.fitVillage.eqEquip(eid,to);await eqLoad(true);m.remove();if(PT.m)ptRender();vgToast(to?'⚔️ 장착 완료!':'장비를 해제했어요')}catch(x){vgToast(x.message||String(x),true)}};
   const un=m.querySelector('#ptUnEq');if(un)un.onclick=()=>done(cur.id,null);
   m.querySelectorAll('[data-pteqto]').forEach(b=>b.onclick=()=>done(b.dataset.pteqto,itemId))}
+
+
+/* ===== 농장 1단계 : 밭 · 씨앗 · 성장 · 수확 · 판매 · 일꾼(돌아다니며 일하는 동물) ===== */
+const FM={m:null,st:null,sel:null,tab:'seed',tick:null,walk:[],crops:[],goods:{},off:0};
+const FM_W=8,FM_H=6,FM_AR={fm_plot0:.667,fm_plot1:.663,fm_plot2:.667,fm_plot3:.713,cf_wheat:.857,cf_carrot:.837,cf_potato:.81,cf_tomato:.847,cf_strawberry:.697,cf_corn:1,cf_cabbage:.727,cf_soy:.79};
+const FM_POW={1:1,2:.8,3:.6};function fmPow(g){return FM_POW[g]||.3}
+function fmGeo(){const top=70,ox=FM_H*36+40;return {W:(FM_W+FM_H)*36+80,H:(FM_W+FM_H)*18+top+50,c:(x,y)=>[(x-y)*36+ox,(x+y)*18+top]}}
+function fmPlotXY(i){return [1+i%6,1+Math.floor(i/6)]}
+function fmNow(){return Date.now()+FM.off}
+function fmT(sec){sec=Math.max(0,Math.round(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return h?`${h}시간 ${m}분`:m?`${m}분 ${s}초`:`${s}초`}
+function fmCrop(k){return FM.crops.find(c=>c.key===k)}
+function fmStage(p){if(!p.c)return 'empty';const t0=Date.parse(p.p),t1=Date.parse(p.r),now=fmNow();if(now>=t1)return 'ripe';const f=(now-t0)/Math.max(1,t1-t0);return f<.3?'s1':f<.65?'s2':'s3'}
+function fmImg(p,st){const nm=st==='empty'?'fm_plot0':st==='s1'?'fm_plot1':st==='s2'?'fm_plot2':st==='s3'?'fm_plot3':'cf_'+p.c;return [`images/farm/${nm}.webp`,FM_AR[nm]||.8]}
+function fmSet(r){if(!r)return;const keep=FM.st;FM.st=r;if(r.server_time)FM.off=Date.parse(r.server_time)-Date.now();if(r.crops)FM.crops=r.crops;
+  if(r.goods)r.goods.forEach(g=>FM.goods[g.key]=g);if(r.state)vgSetState(r.state);else if(VG.state&&r.coins!=null)VG.state.village.coins=r.coins;try{vgRenderHud()}catch(e){}}
+async function vgFarm(){if(FM.m)return;FM.m=vgModal('<div class="vg-empty">농장으로 가는 중…</div>','vg-xwide fm-modal');FM.m._onclose=fmClose;
+  try{fmSet(await window.fitVillage.farmState())}catch(e){FM.m.remove();FM.m=null;vgToast(e.setup?'Supabase에 fit_village_update23.sql 실행이 필요합니다.':(e.message||String(e)),true);return}
+  fmRender();FM.tick=setInterval(fmTick,1000)}
+function fmClose(){clearInterval(FM.tick);FM.walk.forEach(w=>clearTimeout(w.t));FM.walk=[];FM.m=null;try{vgRenderStage();vgRenderSide()}catch(e){}}
+function fmRender(){const oldWalk=FM.m.querySelector('#fmWalk'),wsig=FM.st.workers.join(',');const s=FM.st,box=FM.m.querySelector('.vg-modal-box'),lvp=s.lv_next?Math.min(100,Math.round((s.exp-s.lv_cur)/(s.lv_next-s.lv_cur)*100)):100;
+  const ready=s.plots.filter(p=>fmStage(p)==='ripe').length,empty=s.plots.filter(p=>!p.c).length,sc=FM.sel&&fmCrop(FM.sel);
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button>
+   <div class="fm-top"><h3>🌾 우리 농장</h3><div class="fm-lv"><b>Lv.${s.level}</b><div class="fm-bar"><i style="width:${lvp}%"></i></div><small>${s.lv_next?`${s.exp}/${s.lv_next}`:'최고 레벨'}</small></div>
+    <span class="fm-coin">${vgCoinIcon(15)} <b id="fmCoins">${vgN(s.coins)}</b></span></div>
+   <div class="fm-body"><div class="fm-left"><div class="fm-acts">
+      <button class="vg-btn gold sm" id="fmHarvAll" ${ready?'':'disabled'}>🧺 모두 수확${ready?` (${ready})`:''}</button>
+      <button class="vg-btn green sm" id="fmPlantAll" ${empty&&sc?'':'disabled'}>🌱 빈 밭 모두 심기${sc&&empty?` · ${esc(FM.goods[sc.key]?.name||'')} ${empty}칸 (${vgN(sc.seed*empty)})`:''}</button>
+      <span class="fm-hint">${sc?`🌱 <b>${esc(FM.goods[sc.key]?.name||'')}</b> 선택됨 — 빈 밭을 누르면 심어요`:'오른쪽에서 씨앗을 고르고 빈 밭을 누르세요'}</span></div>
+     <div class="fm-map" id="fmMap">${fmMapSvg()}</div></div>
+    <div class="fm-side"><div class="vg-subtabs">${[['seed','🌱 씨앗'],['store','📦 창고'],['work','🐾 일꾼']].map(([k,n])=>`<button data-fmt="${k}" class="${FM.tab===k?'on':''}">${n}</button>`).join('')}</div><div id="fmPane">${fmPane()}</div></div></div>`;
+  box.querySelector('.vg-x').onclick=()=>{FM.m.remove();fmClose()};
+  box.querySelectorAll('[data-fmt]').forEach(b=>b.onclick=()=>{FM.tab=b.dataset.fmt;fmRender()});
+  box.querySelector('#fmHarvAll').onclick=()=>fmHarvest(null);box.querySelector('#fmPlantAll').onclick=()=>fmPlant(s.plots.filter(p=>!p.c).map(p=>p.i));
+  fmBindMap();fmBindPane();const nw=box.querySelector('#fmWalk');if(oldWalk&&FM.wsig===wsig&&nw)nw.replaceWith(oldWalk);else{FM.wsig=wsig;fmWalkers()}}
+function fmMapSvg(){const s=FM.st,G=fmGeo();let t='',hit='',tm='';const [lx,ly]=G.c(0,FM_H),[bx,by]=G.c(FM_W,FM_H),[rx,ry]=G.c(FM_W,0),[tx,ty]=G.c(0,0);
+  const L=[lx-36,ly-18+18],B=[bx,by],R=[rx+36,ry],T=[tx,ty-18];
+  t+=`<polygon points="${lx-0},${ly} ${bx},${by} ${bx},${by+20} ${lx},${ly+20}" fill="#b98656"/><polygon points="${bx},${by} ${rx},${ry} ${rx},${ry+20} ${bx},${by+20}" fill="#9a6c42"/>`;
+  for(let x=0;x<FM_W;x++)for(let y=0;y<FM_H;y++){const [cx,cy]=G.c(x,y);t+=`<polygon points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a7df82':'#9bd877'}" stroke="#8acd69" stroke-width=".8"/>`}
+  for(let i=0;i<24;i++){const [x,y]=fmPlotXY(i),[cx,cy]=G.c(x,y),p=s.plots[i];
+    if(!p){if(i===s.plots_n&&s.plot_price!=null)t+=`<g class="fm-lock next" data-pexp="1" transform="translate(${cx},${cy})"><polygon points="0,-18 36,0 0,18 -36,0" fill="#fff6" stroke="#c58f5c" stroke-width="2" stroke-dasharray="5 4"/><text y="-2" text-anchor="middle">＋</text><text y="12" class="fm-pr" text-anchor="middle">${vgN(s.plot_price)}</text></g>`;
+      else t+=`<g class="fm-lock" transform="translate(${cx},${cy})"><text y="5" text-anchor="middle" class="fm-lk">🔒</text></g>`;continue}
+    const st=fmStage(p),[u,ar]=fmImg(p,st),w=80,h=w*ar;
+    hit+=`<polygon class="fm-hit" data-pi="${i}" transform="translate(${cx},${cy})" points="0,-18 36,0 0,18 -36,0"/>`;t+=`<g class="fm-plot ${st}" data-ps="${i}" transform="translate(${cx},${cy})"><image href="${u}" x="${-w/2}" y="${23-h}" width="${w}" height="${h}"/>${st==='ripe'?'<text class="fm-spark" y="-34" text-anchor="middle">✨</text>':''}</g>`;if(p.c&&st!=='ripe')tm+=`<g class="fm-tm" transform="translate(${cx},${cy})"><rect x="-24" y="10" width="48" height="13" rx="6"/><text y="20" text-anchor="middle" data-tm="${i}">${fmT((Date.parse(p.r)-fmNow())/1000)}</text></g>`}
+  t+=`<g id="fmWalk"></g>`+tm+hit;return `<svg viewBox="0 0 ${G.W} ${G.H}" class="fm-svg">${t}</svg>`}
+function fmBindMap(){const mp=FM.m.querySelector('#fmMap');mp.querySelectorAll('[data-pi]').forEach(g=>g.onclick=()=>fmPlotClick(Number(g.dataset.pi)));const ex=mp.querySelector('[data-pexp]');if(ex)ex.onclick=fmExpand}
+function fmPlotClick(i){const p=FM.st.plots[i],st=fmStage(p);if(st==='ripe')return fmHarvest([i]);
+  if(!p.c){if(!FM.sel){FM.tab='seed';fmRender();vgToast('🌱 먼저 오른쪽에서 심을 씨앗을 골라 주세요');return}return fmPlant([i])}
+  vgToast(`${FM.goods[p.c]?.name||''} — ${fmT((Date.parse(p.r)-fmNow())/1000)} 뒤에 수확할 수 있어요`)}
+async function fmRun(fn,ok){if(FM.busy)return;FM.busy=true;try{const r=await fn();fmSet(r);if(ok)ok(r)}catch(e){vgToast(e.message||String(e),true)}FM.busy=false;if(FM.m)fmRender()}
+function fmPlant(idx){const c=fmCrop(FM.sel);if(!c)return;return fmRun(()=>window.fitVillage.farmPlant(idx,c.key),r=>{vgToast(`🌱 ${FM.goods[c.key]?.name} ${r.planted}칸 심기 완료 (−${vgN(r.cost)})`)})}
+function fmHarvest(idx){return fmRun(()=>window.fitVillage.farmHarvest(idx),r=>{const got=Object.entries(r.got||{}).map(([k,q])=>`${FM.goods[k]?.name||k} ${q}`).join(', ');
+  vgToast(`🧺 ${got} 수확! (경험치 +${r.exp_gain})`);if(r.level_up){const nc=FM.crops.filter(c=>c.lvl===r.level);setTimeout(()=>vgToast(`🎉 농장 Lv.${r.level}! 일꾼 자리 +1${nc.length?` · ${nc.map(c=>FM.goods[c.key]?.name).join(', ')} 해금`:''}`),900)}})}
+function fmExpand(){const s=FM.st;if(!window.confirm(`밭을 1칸 넓힐까요? (${vgN(s.plot_price)} 코인)`))return;fmRun(()=>window.fitVillage.farmExpand(),()=>vgToast('🟫 밭이 1칸 늘었어요!'))}
+function fmPane(){const s=FM.st;
+  if(FM.tab==='seed')return `<p class="vg-note">일꾼 덕분에 성장 속도 <b>×${(+s.speed).toFixed(2)}</b> · 추가 수확 확률 <b>${Math.round(s.bonus*100)}%</b></p><div class="fm-list">${FM.crops.map(c=>{const g=FM.goods[c.key]||{},lock=s.level<c.lvl,on=FM.sel===c.key;
+    return `<button class="fm-crop ${on?'on':''} ${lock?'lock':''}" data-crop="${c.key}" ${lock?'disabled':''}><img src="${g.icon}" alt=""><span><b>${esc(g.name||c.key)}</b><small>${lock?`🔒 농장 Lv.${c.lvl}`:`⏱ ${fmT(c.grow_sec/s.speed)}${s.speed>1?` <s>${fmT(c.grow_sec)}</s>`:''}`}</small><small>씨앗 ${vgN(c.seed)} → ${c.yield}개 × ${vgN(g.sell)} = <b>${vgN(c.yield*g.sell)}</b></small></span></button>`}).join('')}</div>`;
+  if(FM.tab==='store'){const rows=Object.entries(s.store||{}).filter(([,q])=>q>0);return `<p class="vg-note">수확한 작물이 모여요. 그대로 팔거나, 다음 업데이트의 <b>가공·요리</b>로 더 비싸게 팔 수 있어요.</p>`+(rows.length?`<div class="fm-list">${rows.map(([k,q])=>{const g=FM.goods[k]||{};return `<div class="fm-good"><img src="${g.icon}" alt=""><span><b>${esc(g.name||k)}</b> <em>×${q}</em><small>개당 ${vgN(g.sell)}코인</small></span><div class="fm-sell"><button class="vg-btn sm" data-sell1="${k}">1개</button><button class="vg-btn sm gold" data-sellall="${k}">모두 +${vgN(g.sell*q)}</button></div></div>`}).join('')}</div>`:'<div class="vg-empty">창고가 비어 있어요. 작물을 수확해 보세요!</div>')}
+  const items=VG.state.items||[],ws=s.workers.map(id=>items.find(i=>i.id===id)).filter(Boolean),wset=new Set(s.workers);
+  const cand=items.filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!wset.has(i.id)&&!i.h).sort((a,b)=>fmPow(VG.cat[b.item_key].grade)-fmPow(VG.cat[a.item_key].grade)||(VG.cat[a.item_key].rate-VG.cat[b.item_key].rate)).slice(0,40);
+  const row=(i,on)=>{const c=VG.cat[i.item_key],g=VG_GRADE[c.grade]||{name:''};return `<div class="fm-wk"><span class="fm-wart">${vgArtSvg(vgK(i))}</span><span><b>${esc(c.name)}</b> <span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span><small>일솜씨 ${fmPow(c.grade)}${!on&&i.x!=null?` · 마을 생산 −${vgN(c.rate)}/시간`:''}</small></span><button class="vg-btn sm ${on?'':'green'}" data-wk="${i.id}" data-on="${on?0:1}" ${!on&&ws.length>=s.max_workers?'disabled':''}>${on?'빼기':'보내기'}</button></div>`};
+  return `<div class="fm-wsum"><span>일꾼 <b>${ws.length}/${s.max_workers}</b></span><span>힘 <b>${(+s.power).toFixed(1)}</b></span><span>성장 <b>×${(+s.speed).toFixed(2)}</b></span><span>추가 수확 <b>${Math.round(s.bonus*100)}%</b></span></div>
+   <p class="vg-note">낮은 등급일수록 농사를 잘해요 (일반 1.0 · 희귀 0.8 · 영웅 0.6 · 전설 이상 0.3). 일꾼은 마을 코인 생산에서 빠지고, 마을에 다시 놓으면 자동으로 일꾼에서 빠져요. 일꾼 효과는 <b>새로 심는 작물</b>부터 적용돼요.</p>
+   <div class="fm-list">${ws.map(i=>row(i,true)).join('')||'<div class="vg-empty" style="padding:10px">아직 일꾼이 없어요</div>'}</div><div class="pt-lbl" style="margin:8px 0 4px">보낼 수 있는 동물 (일솜씨 높은 순)</div><div class="fm-list">${cand.map(i=>row(i,false)).join('')}</div>`}
+function fmBindPane(){const p=FM.m.querySelector('#fmPane');
+  p.querySelectorAll('[data-crop]').forEach(b=>b.onclick=()=>{FM.sel=FM.sel===b.dataset.crop?null:b.dataset.crop;fmRender()});
+  p.querySelectorAll('[data-sell1]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sell1,1),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
+  p.querySelectorAll('[data-sellall]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sellall,FM.st.store[b.dataset.sellall]),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
+  p.querySelectorAll('[data-wk]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmAssign(b.dataset.wk,b.dataset.on==='1'),()=>vgToast(b.dataset.on==='1'?'🐾 농장으로 출근!':'보관함으로 돌아갔어요')))}
+function fmTick(){if(!FM.m||!FM.m.isConnected){fmClose();return}const s=FM.st;let restage=false;
+  s.plots.forEach(p=>{if(!p.c)return;const el=FM.m.querySelector(`[data-ps="${p.i}"]`);if(el&&!el.classList.contains(fmStage(p)))restage=true;const tm=FM.m.querySelector(`[data-tm="${p.i}"]`);if(tm)tm.textContent=fmT((Date.parse(p.r)-fmNow())/1000)});
+  if(restage&&!FM.busy)fmRender()}
+/* ── 돌아다니며 일하는 동물 ── */
+function fmWalkers(){FM.walk.forEach(w=>clearTimeout(w.t));FM.walk=[];const lay=FM.m.querySelector('#fmWalk');if(!lay)return;const G=fmGeo(),items=VG.state.items||[];
+  FM.st.workers.map(id=>items.find(i=>i.id===id)).filter(Boolean).forEach((it,k)=>{const c=VG.cat[it.item_key],tile=fmRandTile(),[x,y]=G.c(...tile);
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','fm-wkr');g.style.transform=`translate(${x}px,${y}px)`;
+    g.innerHTML=`<ellipse rx="13" ry="4.5" fill="#00000022"/><g class="fm-face"><g class="fm-bob"><g transform="scale(.5)">${vgArt(vgK(it),c.kind)}</g></g></g>`;lay.appendChild(g);
+    const w={g,x,y,t:null};FM.walk.push(w);w.t=setTimeout(()=>fmStep(w),400+k*500)})}
+function fmRandTile(plot){const n=FM.st.plots_n;if(plot&&n){const i=Math.floor(Math.random()*n);return fmPlotXY(i).concat(i)}const r=Math.random();
+  return r<.5?[Math.floor(Math.random()*FM_W),Math.random()<.5?0:FM_H-1]:[Math.random()<.5?0:FM_W-1,Math.floor(Math.random()*FM_H)]}
+function fmStep(w){if(!FM.m||!w.g.isConnected)return;const G=fmGeo(),toPlot=Math.random()<.7,tl=fmRandTile(toPlot),[nx,ny0]=G.c(tl[0],tl[1]),ny=ny0+(toPlot?14:0);
+  const d=Math.hypot(nx-w.x,ny-w.y),dur=Math.max(.6,d/42);const face=w.g.querySelector('.fm-face');if(Math.abs(nx-w.x)>2)face.style.transform=`scaleX(${nx<w.x?1:-1})`;
+  w.g.classList.add('walk');w.g.style.transition=`transform ${dur}s linear`;w.g.style.transform=`translate(${nx}px,${ny}px)`;w.x=nx;w.y=ny;
+  w.t=setTimeout(()=>{if(!w.g.isConnected)return;w.g.classList.remove('walk');let wait=500+Math.random()*1500;
+    if(toPlot){const p=FM.st.plots[tl[2]],st=p?fmStage(p):'empty',em=st==='ripe'?'🧺':st==='empty'?'🌱':Math.random()<.5?'💧':'✨';w.g.classList.add('work');fmEmote(w,em);wait=1600+Math.random()*1200;setTimeout(()=>w.g.classList.remove('work'),1400)}
+    w.t=setTimeout(()=>fmStep(w),wait)},dur*1000)}
+function fmEmote(w,em){const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('class','fm-emo');t.setAttribute('text-anchor','middle');t.setAttribute('y','-46');t.textContent=em;w.g.appendChild(t);setTimeout(()=>t.remove(),1300)}
 
 
 function daily(){
@@ -2711,6 +2833,12 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     place(id,x,y){return vrpc('fit_village_place',{p_item:id,p_x:x,p_y:y})},
     move(id,x,y){return vrpc('fit_village_move',{p_item:id,p_x:x,p_y:y})},
     flip(id){return vrpc('fit_village_flip',{p_item:id})},
+    farmState(){return vrpc('fit_farm_state')},
+    farmPlant(idx,crop){return vrpc('fit_farm_plant',{p_idxs:idx,p_crop:crop})},
+    farmHarvest(idx){return vrpc('fit_farm_harvest',{p_idxs:idx})},
+    farmSell(k,q){return vrpc('fit_farm_sell',{p_key:k,p_qty:q})},
+    farmExpand(){return vrpc('fit_farm_expand')},
+    farmAssign(id,on){return vrpc('fit_farm_assign',{p_item:id,p_on:on})},
     sell(id){return vrpc('fit_village_sell',{p_item:id})},
     expand(){return vrpc('fit_village_expand')},
     like(to){return vrpc('fit_village_like',{p_to:to})},

@@ -981,6 +981,14 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .fm-fr-act{margin:4px 0 8px}.fm-friend .fm-map{max-height:70vh!important}
 .fm-friend .fm-svg .fm-hit{display:none}
 @media(max-width:860px){.fm-friend .fm-map{height:62dvh!important}.fm-fr-act .vg-btn{width:100%;font-size:13px!important}}
+/* ===== 농장 전용 캐릭터 ===== */
+.fq-sub{display:block;margin:10px 2px 6px;font-size:14px;color:#5b4a7a}
+.fm-fcl{display:flex;flex-direction:column;gap:6px}
+.fm-fc{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;background:linear-gradient(135deg,#fff8dc,#fdfbf4);border:2px solid #f2dc8a}
+.fm-fc-art{width:62px;height:62px;flex:none;display:flex;align-items:flex-end;justify-content:center}.fm-fc-art svg,.fm-fc-art img{max-width:100%;max-height:100%}
+.fm-fc>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.fm-fc small{font-family:'Malgun Gothic',sans-serif;font-size:11.5px;font-weight:700;color:#7d7290}
+.fm-fc .vg-grade{font-size:10.5px;padding:1px 6px;display:inline-block;width:max-content}
+.fm-fc .vg-btn{flex:none;line-height:1.15;min-width:70px}.fm-fc .vg-btn small{font-size:10.5px;color:inherit}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1752,7 +1760,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   let body='';
   if(VG.tab==='shop'){const dc=VG.decoCat||'all',list=VG.catalog.filter(c=>c.shop&&c.kind===VG.shopCat&&(VG.shopCat!=='deco'||dc==='all'||(dc==='etc'?!['flower','building','floor'].includes(c.cat):c.cat===dc)));
     body=`<div class="vg-subtabs"><button data-sc="animal" class="${VG.shopCat==='animal'?'on':''}">🐾 동물</button><button data-sc="deco" class="${VG.shopCat==='deco'?'on':''}">🌳 장식</button></div>${VG.shopCat==='deco'?`<div class="vg-chips">${[['all','전체'],['flower','🌷 꽃'],['building','🏠 건물'],['floor','🧱 길'],['etc','🌳 기타']].map(([k,n])=>`<button data-dc="${k}" class="${dc===k?'on':''}">${n}</button>`).join('')}</div>`:''}<p class="vg-note">${VG.shopCat==='animal'?'동물은 시간마다 코인을 만들어요. 영웅 이상 등급은 <b>알 부화</b>로만 만날 수 있어요.':(dc==='floor'?'길은 바닥에 깔려서 그 위에 동물·꾸미기를 함께 놓을 수 있어요. 끌어서 이어 붙여 보세요!':'장식은 매력도를 올려 마을 전체 생산량을 최대 +100%까지 늘려 줘요.')}</p><div class="vg-cards">${list.map(c=>vgCard(c,`<button class="vg-btn sm gold full" data-buy="${c.item_key}" ${coins<c.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(c.price)}</button><button class="vg-btn sm full vg-buy10" data-buy10="${c.item_key}" ${coins<c.price*10?'disabled':''}>10개 · ${vgN(c.price*10)}</button>`)).join('')}</div>`}
-  if(VG.tab==='egg'){const eggs=VG.catalog.filter(c=>c.kind==='egg'),odds={egg_basic:[85,13,2],egg_gold:[30,55,15]},pool=VG.catalog.filter(c=>c.kind==='animal'&&!c.shop&&c.grade>=3&&c.grade<=5);
+  if(VG.tab==='egg'){const eggs=VG.catalog.filter(c=>c.kind==='egg'),odds={egg_basic:[85,13,2],egg_gold:[30,55,15]},pool=VG.catalog.filter(c=>c.kind==='animal'&&!c.shop&&!c.farm_fc&&c.grade>=3&&c.grade<=5);
     if(!VG.bossEggs){VG.bossEggs=[];window.fitVillage.bossEggs().then(l=>{VG.bossEggs=l||[];if(VG.tab==='egg')vgRenderSide()}).catch(()=>{})}
     const BE=VG.bossEggs.length?`<div class="vg-bosseggs"><b>🥚 보스 알 ${VG.bossEggs.length}개</b>${VG.bossEggs.map(e=>`<div class="vg-egg-card boss"><svg class="vg-art" viewBox="-120 -170 240 178">${vgBossArt(e.floor,'images/bosses/boss'+e.floor+'.webp')}</svg><div style="flex:1"><b>${e.floor}층 보스 알</b><div class="vg-odds">${esc((VG.cat['boss_'+e.floor]||{}).name||'')} · ${[5,10].includes(e.floor)?'신화급':e.floor>=6?'전설급':'영웅급'}</div><button class="vg-btn purple sm full" data-bhatch="${e.id}">부화하기 (무료)</button></div></div>`).join('')}</div>`:'<p class="vg-note">🥚 <b>보스 알</b>: 동굴 던전 10층을 처음 깨면 랜덤 보스 알 1개를 받아요. 그 뒤로는 층 보스를 잡을 때마다 낮은 확률로 그 층의 보스 알이 나와요.</p>';
     body=BE+`<p class="vg-note">알에서는 <b style="color:#9b5cff">영웅</b>·<b style="color:#ff9a1f">전설</b>·<b style="color:#ff4f8b">신화</b> 등급 친구들만 태어나요. 상점 동물보다 훨씬 많은 코인을 만들어요!</p>${eggs.map(e=>{const o=odds[e.item_key]||[0,0,0];return `<div class="vg-egg-card">${vgArtSvg(vgK(e),'vg-art','-40 -74 80 80')}<div style="flex:1"><b style="font-size:17px">${esc(e.name)}</b><div class="vg-odds"><i style="color:#9b5cff">영웅 ${o[0]}%</i> · <i style="color:#ff9a1f">전설 ${o[1]}%</i> · <i style="color:#ff4f8b">신화 ${o[2]}%</i></div><button class="vg-btn purple sm full" data-hatch="${e.item_key}" ${coins<e.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(e.price)} · 부화하기</button></div></div>`}).join('')}
@@ -1764,7 +1772,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
     const seen=new Set([...VG.codex.keys,...vgSeen()]),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
     const CB={1:'공격 시 3% 확률로 추가 공격',2:'전투 시작 시 보호막 (최대 체력 8%)',3:'받는 피해 −3%',4:'필살기 피해 +5%',5:'매 턴 체력 2% 회복',6:'모든 능력치 +5%',7:'마을 코인 생산 +5%'};
     body=`<p class="vg-note">만난 친구 <b>${got}</b> / ${an.length} · 등급별 도감을 모두 채우면 던전·월드 보스에서 <b>도감 보너스</b>가 적용돼요. (한 번이라도 얻은 캐릭터는 계속 기록돼요)</p>${[1,2,3,4,5,6,7].map(gr=>{const l=an.filter(c=>c.grade===gr);if(!l.length)return '';const n=l.filter(c=>seen.has(c.item_key)).length,done=n===l.length;
-      return `<div class="vc-head"><b style="color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><span>${n}/${l.length}</span><div class="vc-bar"><span style="width:${n/l.length*100}%"></span></div></div><div class="vc-bonus ${done?'on':''}">${done?'✅':'🔒'} 완성 보너스: ${CB[gr]}</div><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(vgK(c))}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':c.grade===6?'조합':c.grade===7?'보스 알':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
+      return `<div class="vc-head"><b style="color:${VG_GRADE[gr].color}">${VG_GRADE[gr].name}</b><span>${n}/${l.length}</span><div class="vc-bar"><span style="width:${n/l.length*100}%"></span></div></div><div class="vc-bonus ${done?'on':''}">${done?'✅':'🔒'} 완성 보너스: ${CB[gr]}</div><div class="vg-codex">${l.map(c=>{const ok=seen.has(c.item_key);return `<div class="vg-card ${ok?'g'+gr:'locked'}">${vgArtSvg(vgK(c))}<b style="font-size:13px">${ok?esc(c.name):'???'}</b><div class="vg-meta">${ok?`+${vgN(c.rate)}/h`:(c.shop?'상점':c.farm_fc?'농장코인':c.grade===6?'조합':c.grade===7?'보스 알':'알 부화')}</div></div>`}).join('')}</div>`}).join('')}`}
   if(VG.tab==='game')body=vgGameTab();
   if(VG.tab==='fuse')body=vgFuseTab();
   if(VG.tab==='friends'){if(!VG.friends){body='<div class="vg-empty">친구 마을을 불러오는 중…</div>';window.fitVillage.friends().then(l=>{VG.friends=l;if(VG.tab==='friends')vgRenderSide()}).catch(e=>{VG.friends=[];vgToast(e.message||String(e),true)})}
@@ -2518,7 +2526,7 @@ function ptPickEquip(itemId,slot){const it=ptItem(itemId),c=VG.cat[it.item_key],
 const FM={m:null,st:null,sel:null,tab:'seed',mode:'plant',bkey:null,pkey:null,zoom:1,tick:null,walk:[],crops:[],goods:{},fb:[],rec:[],off:0,busy:false};
 const FM_AR={fm_plot0:.667,fm_plot1:.663,fm_plot2:.667,fm_plot3:.713,cf_wheat:.857,cf_carrot:.837,cf_potato:.81,cf_tomato:.847,cf_strawberry:.697,cf_corn:1,cf_cabbage:.727,cf_soy:.79};
 const FM_BW={barn:[104,1.01],silo:[62,1.69],greenhouse:[104,1.03],mill:[108,.99],kitchen:[104,1.05],jamhouse:[104,1.01],jangdok:[104,.73],market:[100,1.07]};
-const FM_POW={1:1,2:.8,3:.6};function fmPow(g){return FM_POW[g]||.3}
+const FM_POW={1:1,2:.8,3:.6};function fmPow(g){return FM_POW[g]||.3}function fmPowC(c){return c&&c.farm_fc?2:fmPow(c&&c.grade)}
 function fmGeo(){const w=FM.st.w||14,h=FM.st.h||10,top=96,ox=h*36+56;return {w,h,W:(w+h)*36+112,H:(w+h)*18+top+70,c:(x,y)=>[(x-y)*36+ox,(x+y)*18+top]}}
 function fmNow(){return Date.now()+FM.off}
 function fmT(sec){sec=Math.max(0,Math.round(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return h?`${h}시간 ${m}분`:m?`${m}분 ${s}초`:`${s}초`}
@@ -2616,8 +2624,10 @@ function fmPane(){const s=FM.st,store=s.store||{};
   if(FM.tab==='build')return `<p class="vg-note">건물은 하나씩 지을 수 있어요. 고른 뒤 농장의 <b>빈 땅</b>을 누르면 지어지고, 지은 건물은 [옮기기]로 자리를 바꿀 수 있어요.</p><div class="fm-list">${FM.fb.map(b=>{const own=!!(s.builds||{})[b.key],lock=s.level<b.lvl;
     return `<div class="fm-good fm-bcard ${own?'own':''}"><img src="${b.img}" alt=""><span><b>${esc(b.name)}</b><small>${esc(b.descr)}</small><small>${own?'✅ 지음':lock?`🔒 농장 Lv.${b.lvl}`:`${vgN(b.price)}코인`}</small></span><button class="vg-btn sm ${own?'':'gold'}" data-bk="${b.key}" ${!own&&(lock||s.coins<b.price)?'disabled':''}>${own?'옮기기':'짓기'}</button></div>`}).join('')}</div>`;
   if(FM.tab==='quest'){const qs=s.quests||[],left=qs.filter(q=>!q.done).length;
-    return `<div class="fq-head"><span>🌾 농장코인 <b>${vgN(s.farm_coins||0)}</b></span><small>곧 열릴 <b>농장 전용 캐릭터</b>를 데려올 때 써요</small></div>
+    return `<div class="fq-head"><span>🌾 농장코인 <b>${vgN(s.farm_coins||0)}</b></span><small>아래 <b>농장 친구</b>를 데려올 때 써요</small></div>
      <p class="vg-note">매일 새 주문 3개 (한국 시간 자정). 창고에 물건이 모이면 [납품]! ${left?`모두 끝내면 보너스 <b>+5</b>`:'🎉 오늘 주문을 모두 끝냈어요!'}</p>
+     ${fmCharShop()}
+     <b class="fq-sub">📜 오늘의 주문</b>
      <div class="fm-list">${qs.map(q=>{const g=fmG(q.k),have=store[q.k]||0,ok=have>=q.q;return `<div class="fm-good fq ${q.done?'done':''}"><img src="${g.icon}" alt=""><span><b>${esc(g.name)} ${q.q}개</b><small>${q.done?'✅ 납품 완료':`창고 ${have}/${q.q}`} · 보상 🌾+${q.rw}</small><span class="fq-bar"><i style="width:${q.done?100:Math.min(100,have/q.q*100)}%"></i></span></span>${q.done?'<span class="fq-ok">✅</span>':`<button class="vg-btn sm ${ok?'gold':''}" data-qd="${q.slot}" ${ok?'':'disabled'}>납품</button>`}</div>`}).join('')||'<div class="vg-empty">주문을 불러오는 중…</div>'}</div>`}
   if(FM.tab==='make'){const mk=FM.fb.filter(b=>b.role==='make');return `<p class="vg-note">🍳 <b>요리 공방</b>은 미니게임으로 바로 만들어요 (대성공 2개 · 성공 1개 · 실패 0개+재료 절반 반환). 다른 가공 건물은 시간이 걸리고, 칸을 늘리면 동시에 더 만들어요.</p>${mk.map(b=>{const own=!!(s.builds||{})[b.key],js=fmJobs(b.key),rs=FM.rec.filter(r=>r.building===b.key),kit=b.key==='kitchen',sl=own?((s.builds[b.key]||[])[2]||2):2;
     const head=!own?`<span class="fm-need">🏠 건물 탭에서 먼저 지어 주세요</span>`:kit?`<span class="fm-need ok">🎮 미니게임으로 바로 완성</span>`:`<span class="fm-slots">${Array.from({length:sl},(_,i)=>{const j=js[i];if(!j)return '<span class="fm-slot">빈 칸</span>';const done=Date.parse(j.r)<=fmNow(),g=fmG(j.k);return `<span class="fm-slot ${done?'done':''}"><img src="${g.icon}" alt="">${done?'완성!':`<em data-jt="${j.id}">${fmT((Date.parse(j.r)-fmNow())/1000)}</em>`}</span>`}).join('')}${js.some(j=>Date.parse(j.r)<=fmNow())?`<button class="vg-btn sm purple" data-col="${b.key}">받기</button>`:''}${sl<4?`<button class="vg-btn sm" data-slot="${b.key}" title="동시에 만드는 칸 +1">＋칸 ${vgN(sl===2?3000:8000)}</button>`:''}</span>`;
@@ -2628,8 +2638,8 @@ function fmPane(){const s=FM.st,store=s.store||{};
     const crops=rows.filter(([k])=>fmG(k).kind==='crop'),dish=rows.filter(([k])=>fmG(k).kind!=='crop'),sum=a=>a.reduce((t,[k,q])=>t+Math.floor(fmG(k).sell*q*sm),0);
     return `<p class="vg-note">수확물·가공품·요리가 모여요.${sm>1?' 🏪 <b>판매대</b> 덕분에 판매가 +20%!':' 판매대를 지으면 판매가가 +20% 올라요.'}</p>${rows.length?`<div class="fm-sellbar">${crops.length?`<button class="vg-btn sm gold" data-sellkind="crop">🌾 작물 모두 팔기 +${vgN(sum(crops))}</button>`:''}${dish.length?`<button class="vg-btn sm purple" data-sellkind="made">🍳 가공·요리 모두 팔기 +${vgN(sum(dish))}</button>`:''}</div>`:''}`+(rows.length?`<div class="fm-list">${rows.map(([k,q])=>{const g=fmG(k),u=Math.floor(g.sell*sm);return `<div class="fm-good"><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b> <em>×${q}</em><small>개당 ${vgN(u)}코인</small></span><div class="fm-sell"><button class="vg-btn sm" data-sell1="${k}">1개</button><button class="vg-btn sm gold" data-sellall="${k}">모두 +${vgN(Math.floor(g.sell*q*sm))}</button></div></div>`}).join('')}</div>`:'<div class="vg-empty">창고가 비어 있어요. 작물을 수확해 보세요!</div>')}
   const items=VG.state.items||[],ws=s.workers.map(id=>items.find(i=>i.id===id)).filter(Boolean),wset=new Set(s.workers);
-  const cand=items.filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!wset.has(i.id)&&!i.h).sort((a,b)=>fmPow(VG.cat[b.item_key].grade)-fmPow(VG.cat[a.item_key].grade)||(VG.cat[a.item_key].rate-VG.cat[b.item_key].rate)).slice(0,40);
-  const row=(i,on)=>{const c=VG.cat[i.item_key],g=VG_GRADE[c.grade]||{name:''};return `<div class="fm-wk"><span class="fm-wart">${vgArtSvg(vgK(i))}</span><span><b>${esc(c.name)}</b> <span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span><small>일솜씨 ${fmPow(c.grade)}${!on&&i.x!=null?` · 마을 생산 −${vgN(c.rate)}/시간`:''}</small></span><button class="vg-btn sm ${on?'':'green'}" data-wk="${i.id}" data-on="${on?0:1}" ${!on&&ws.length>=s.max_workers?'disabled':''}>${on?'빼기':'보내기'}</button></div>`};
+  const cand=items.filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!wset.has(i.id)&&!i.h).sort((a,b)=>fmPowC(VG.cat[b.item_key])-fmPowC(VG.cat[a.item_key])||(VG.cat[a.item_key].rate-VG.cat[b.item_key].rate)).slice(0,40);
+  const row=(i,on)=>{const c=VG.cat[i.item_key],g=VG_GRADE[c.grade]||{name:''};return `<div class="fm-wk"><span class="fm-wart">${vgArtSvg(vgK(i))}</span><span><b>${esc(c.name)}</b> <span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span><small>일솜씨 ${fmPowC(c)}${c.farm_fc?' 🐣':''}${!on&&i.x!=null?` · 마을 생산 −${vgN(c.rate)}/시간`:''}</small></span><button class="vg-btn sm ${on?'':'green'}" data-wk="${i.id}" data-on="${on?0:1}" ${!on&&ws.length>=s.max_workers?'disabled':''}>${on?'빼기':'보내기'}</button></div>`};
   return `<div class="fm-wsum"><span>일꾼 <b>${ws.length}/${s.max_workers}</b></span><span>힘 <b>${(+s.power).toFixed(1)}</b></span><span>성장 <b>×${(+s.speed).toFixed(2)}</b></span><span>추가 수확 <b>${Math.round(s.bonus*100)}%</b></span></div>
    <p class="vg-note">낮은 등급일수록 농사를 잘해요 (일반 1.0 · 희귀 0.8 · 영웅 0.6 · 전설 이상 0.3). 일꾼은 마을 코인 생산에서 빠지고, 마을에 다시 놓으면 자동으로 빠져요. 효과는 <b>새로 심는 작물</b>부터 적용돼요. 헛간을 지으면 일꾼 자리 +2.</p>
    <div class="fm-list">${ws.map(i=>row(i,true)).join('')||'<div class="vg-empty" style="padding:10px">아직 일꾼이 없어요</div>'}</div><div class="pt-lbl" style="margin:8px 0 4px">보낼 수 있는 동물 (일솜씨 높은 순)</div><div class="fm-list">${cand.map(i=>row(i,false)).join('')}</div>`}
@@ -2640,6 +2650,7 @@ function fmBindPane(){const p=FM.m.querySelector('#fmPane');
   p.querySelectorAll('[data-col]').forEach(b=>b.onclick=()=>fmCollect(b.dataset.col));
   p.querySelectorAll('[data-cook]').forEach(b=>b.onclick=()=>fmCook(b.dataset.cook));
   p.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{const k=b.dataset.slot,sl=(FM.st.builds[k]||[])[2]||2,pr=sl===2?3000:8000;if(!window.confirm(`${fmB(k).name}의 칸을 ${sl+1}칸으로 늘릴까요? (${vgN(pr)}코인)`))return;fmRun(()=>window.fitVillage.farmSlotUp(k),r=>vgToast(`🏭 ${fmB(k).name} ${r.slots}칸!`))});
+  p.querySelectorAll('[data-fc]').forEach(b=>b.onclick=()=>fmCharBuy(b.dataset.fc));
   p.querySelectorAll('[data-qd]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmQuest(Number(b.dataset.qd)),r=>vgToast(`📜 납품 완료! 🌾 농장코인 +${r.gain}${r.all_done?' (모두 완료 보너스 포함!)':''}`)));
   p.querySelectorAll('[data-sellkind]').forEach(b=>b.onclick=()=>fmSellKind(b.dataset.sellkind));
   p.querySelectorAll('[data-sell1]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sell1,1),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
@@ -2690,6 +2701,16 @@ function fmMini(cfg){return new Promise(res=>{const host=(FM.m&&FM.m.querySelect
 async function fmCook(key){if(FM.busy)return;const g=fmG(key),r=FM.rec.find(x=>x.key===key);
   const grade=await fmMini({title:`🍳 ${esc(g.name)} 요리하기`,icon:'🔥',note:`대성공 ${esc(g.name)} 2개 · 성공 1개 · 실패 0개 (재료 절반 돌려받음)`,spd:100+Math.min(60,(r&&r.exp||1)*5)});
   fmRun(()=>window.fitVillage.farmCook(key,grade),x=>{vgToast(grade==='great'?`★ 대성공! ${g.name} 2개 완성!`:grade==='good'?`🍳 ${g.name} 완성!`:'🔥 앗, 탔어요… 재료 절반을 돌려받았어요',grade==='fail');fmLvUp(x)})}
+/* ── 🐣 농장 전용 캐릭터 (농장코인) ── */
+function fmCharShop(){const fc=FM.st.farm_coins||0,L=(VG.catalog||[]).filter(c=>c.farm_fc);if(!L.length)return '';
+  return `<b class="fq-sub">🐣 농장 친구 데려오기</b><div class="fm-fcl">${L.map(c=>{const own=(VG.state.items||[]).filter(i=>i.item_key===c.item_key).length,ok=fc>=c.farm_fc,g=VG_GRADE[c.grade]||VG_GRADE[1];
+    return `<div class="fm-fc g${c.grade}"><div class="fm-fc-art">${vgArtSvg(c.item_key)}</div><span><b>${esc(c.name)}</b> <span class="vg-grade vg-g${c.grade}" style="position:static">${g.name}</span><small>농장 일꾼 힘 <b>×2</b> (일반 동물의 2배) · 마을 시간당 +${vgN(c.rate)}${own?` · 보유 ${own}`:''}</small>
+     <span class="fq-bar"><i style="width:${Math.min(100,fc/c.farm_fc*100)}%"></i></span></span><button class="vg-btn sm ${ok?'gold':''}" data-fc="${c.item_key}" ${ok?'':'disabled'}>🌾 ${c.farm_fc}<br><small>${ok?'데려오기':`${fc}/${c.farm_fc}`}</small></button></div>`}).join('')}</div>`}
+function fmCharBuy(k){const c=VG.cat[k];if(!window.confirm(`🌾 농장코인 ${c.farm_fc}개로 ${c.name}를 데려올까요?`))return;
+  fmRun(()=>window.fitVillage.farmCharBuy(k),r=>{const m=vgModal(`<div class="vg-rays"></div><div style="position:relative"><div class="vg-modal-art vg-pop">${vgArtSvg(k)}</div><h3>🐣 ${esc(c.name)} 합류!</h3><p class="vg-mp">농장 일꾼으로 쓰면 일반 동물 2배의 힘으로 일해요</p>
+    <div style="display:flex;gap:8px;justify-content:center"><button class="vg-btn green" data-a="work">🐾 농장 일꾼으로</button><button class="vg-btn" data-a="keep">보관함에 두기</button></div></div>`);
+    m.querySelector('[data-a=keep]').onclick=()=>m.remove();
+    m.querySelector('[data-a=work]').onclick=()=>{m.remove();fmRun(()=>window.fitVillage.farmAssign(r.new_item,true),()=>{FM.tab='work';vgToast(`🐾 ${c.name}가 농장에서 일해요!`)})}})}
 /* ── 😴 수면 모드 ── */
 function fmSleepUI(){const s=FM.st;if(s.sleep&&s.sleep.on){if(!window.confirm('수면 모드를 끌까요?\n(지금까지 자동으로 수확한 것은 창고에 들어가요)'))return;return fmRun(()=>window.fitVillage.farmSleep(false,null),r=>{fmSleepReport(r.sleep_report);vgToast('☀️ 수면 모드를 껐어요')})}
   const list=FM.crops.filter(c=>s.level>=c.lvl);const m=vgModal(`<h3>😴 수면 모드</h3><p class="vg-mp">앱을 꺼 둔 동안 고른 작물을 <b>자동으로 수확 → 씨앗 구매 → 다시 심기</b>를 반복해요.<br>· 한 번에 최대 <b>12시간</b>까지 처리 · 씨앗값은 코인에서 자동으로 빠져요<br>· 자는 동안은 일꾼도 쉬어요 (기본 속도 · 추가 수확·경험치 없음)<br>· 다시 들어오면 그동안 수확한 결과를 보여 드려요</p>
@@ -2734,7 +2755,7 @@ function fmHelp(){vgModal(`<h3>🌾 농장 안내</h3><div class="fm-help">
   <p><b>2. 기다리기</b> — 작물은 1~10분이면 자라요. 밭 위 시간이 0이 되면 ✨ 반짝여요. 앱을 끌 땐 <b>😴 수면 모드</b>를 켜 두면 자동으로 수확·재배해요.</p>
   <p><b>3. 수확</b> — 다 자란 밭을 누르거나 [모두 수확]. 수확물은 📦 창고로 가요.</p>
   <p><b>4. 팔기 · 가공</b> — 그대로 팔거나, 🏠 건물(물레방아·공방·장독대)을 지어 🍳 가공·요리하면 더 비싸게 팔려요.</p>
-  <p><b>📜 주문</b> — 매일 3개 납품하면 🌾 농장코인! 농장 전용 캐릭터에 쓸 수 있어요. 친구 농장에 💧 물을 줘도 받아요.</p>
+  <p><b>📜 주문</b> — 매일 3개 납품하면 🌾 농장코인! 🐣 농장 친구(전용 캐릭터)를 데려올 수 있어요. 친구 농장에 💧 물을 줘도 받아요.</p>
   <p><b>🍳 요리</b> — 요리 공방 레시피는 미니게임으로 바로 완성 (대성공 2개 · 성공 1개 · 실패 0개)</p>
   <p><b>5. 일꾼</b> — 🐾 일꾼 탭에서 동물을 보내면 성장이 빨라져요. 낮은 등급일수록 농사를 잘해요!</p>
   <p><b>땅 꾸미기</b> — ⛏ 괭이로 밭 만들기(500코인) · 🧱 길 깔기 · 🪣 삽으로 되돌리기</p>
@@ -3109,6 +3130,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     farmSlotUp(k){return vrpc('fit_farm_slot_up',{p_key:k})},
     farmView(uid){return vrpc('fit_farm_view',{p_uid:uid})},
     farmWater(uid){return vrpc('fit_farm_water',{p_uid:uid})},
+    farmCharBuy(k){return vrpc('fit_farm_char_buy',{p_key:k})},
     sell(id){return vrpc('fit_village_sell',{p_item:id})},
     expand(){return vrpc('fit_village_expand')},
     like(to){return vrpc('fit_village_like',{p_to:to})},

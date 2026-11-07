@@ -989,6 +989,15 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .fm-fc>span{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.fm-fc small{font-family:'Malgun Gothic',sans-serif;font-size:11.5px;font-weight:700;color:#7d7290}
 .fm-fc .vg-grade{font-size:10.5px;padding:1px 6px;display:inline-block;width:max-content}
 .fm-fc .vg-btn{flex:none;line-height:1.15;min-width:70px}.fm-fc .vg-btn small{font-size:10.5px;color:inherit}
+/* ===== 특별 주문 ===== */
+.fq-sp{margin:8px 0;padding:10px 12px;border-radius:14px;background:linear-gradient(135deg,#fff3c4,#ffe2ef);border:2px solid #f5c84c;box-shadow:0 3px 0 #e8b23a55}
+.fq-sp.lock{background:#f6f2fb;border:2px dashed #cfc3e3;box-shadow:none;display:flex;flex-direction:column;gap:2px}
+.fq-sp.lock small,.fq-sp small{font-family:'Malgun Gothic',sans-serif;font-size:11.5px;font-weight:700;color:#7d7290}
+.fq-sp.done{opacity:.65}
+.fq-sph{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.fq-sph b{color:#c27a00;font-size:15px}.fq-sph span{font-size:12px;color:#8a6a9a}
+.fq-spi{display:flex;gap:6px}.fq-spi>span{flex:1;display:flex;flex-direction:column;align-items:center;background:#fffc;border-radius:10px;padding:6px 4px;border:2px solid transparent}
+.fq-spi>span.ok{border-color:#9be07a}.fq-spi img{width:44px;height:44px;object-fit:contain}.fq-spi b{font-size:12.5px}
+.fq-spf{display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:6px}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2623,9 +2632,10 @@ function fmPane(){const s=FM.st,store=s.store||{};
     return `<button class="fm-crop ${on?'on':''} ${lock?'lock':''}" data-crop="${c.key}" ${lock?'disabled':''}><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b><small>${lock?`🔒 농장 Lv.${c.lvl}`:`⏱ ${fmT(c.grow_sec/s.speed)}${s.speed>1?` <s>${fmT(c.grow_sec)}</s>`:''}`}</small><small>씨앗 ${vgN(seed)} → ${c.yield}개 × ${vgN(g.sell)} = <b>${vgN(c.yield*g.sell)}</b></small></span></button>`}).join('')}</div>`;
   if(FM.tab==='build')return `<p class="vg-note">건물은 하나씩 지을 수 있어요. 고른 뒤 농장의 <b>빈 땅</b>을 누르면 지어지고, 지은 건물은 [옮기기]로 자리를 바꿀 수 있어요.</p><div class="fm-list">${FM.fb.map(b=>{const own=!!(s.builds||{})[b.key],lock=s.level<b.lvl;
     return `<div class="fm-good fm-bcard ${own?'own':''}"><img src="${b.img}" alt=""><span><b>${esc(b.name)}</b><small>${esc(b.descr)}</small><small>${own?'✅ 지음':lock?`🔒 농장 Lv.${b.lvl}`:`${vgN(b.price)}코인`}</small></span><button class="vg-btn sm ${own?'':'gold'}" data-bk="${b.key}" ${!own&&(lock||s.coins<b.price)?'disabled':''}>${own?'옮기기':'짓기'}</button></div>`}).join('')}</div>`;
-  if(FM.tab==='quest'){const qs=s.quests||[],left=qs.filter(q=>!q.done).length;
+  if(FM.tab==='quest'){const qa=s.quests||[],qs=qa.filter(q=>q.slot<=3),sp=qa.find(q=>q.slot===4),left=qs.filter(q=>!q.done).length;
     return `<div class="fq-head"><span>🌾 농장코인 <b>${vgN(s.farm_coins||0)}</b></span><small>아래 <b>농장 친구</b>를 데려올 때 써요</small></div>
      <p class="vg-note">매일 새 주문 3개 (한국 시간 자정). 창고에 물건이 모이면 [납품]! ${left?`모두 끝내면 보너스 <b>+5</b>`:'🎉 오늘 주문을 모두 끝냈어요!'}</p>
+     ${fmSpecial(sp,left)}
      ${fmCharShop()}
      <b class="fq-sub">📜 오늘의 주문</b>
      <div class="fm-list">${qs.map(q=>{const g=fmG(q.k),have=store[q.k]||0,ok=have>=q.q;return `<div class="fm-good fq ${q.done?'done':''}"><img src="${g.icon}" alt=""><span><b>${esc(g.name)} ${q.q}개</b><small>${q.done?'✅ 납품 완료':`창고 ${have}/${q.q}`} · 보상 🌾+${q.rw}</small><span class="fq-bar"><i style="width:${q.done?100:Math.min(100,have/q.q*100)}%"></i></span></span>${q.done?'<span class="fq-ok">✅</span>':`<button class="vg-btn sm ${ok?'gold':''}" data-qd="${q.slot}" ${ok?'':'disabled'}>납품</button>`}</div>`}).join('')||'<div class="vg-empty">주문을 불러오는 중…</div>'}</div>`}
@@ -2651,7 +2661,7 @@ function fmBindPane(){const p=FM.m.querySelector('#fmPane');
   p.querySelectorAll('[data-cook]').forEach(b=>b.onclick=()=>fmCook(b.dataset.cook));
   p.querySelectorAll('[data-slot]').forEach(b=>b.onclick=()=>{const k=b.dataset.slot,sl=(FM.st.builds[k]||[])[2]||2,pr=sl===2?3000:8000;if(!window.confirm(`${fmB(k).name}의 칸을 ${sl+1}칸으로 늘릴까요? (${vgN(pr)}코인)`))return;fmRun(()=>window.fitVillage.farmSlotUp(k),r=>vgToast(`🏭 ${fmB(k).name} ${r.slots}칸!`))});
   p.querySelectorAll('[data-fc]').forEach(b=>b.onclick=()=>fmCharBuy(b.dataset.fc));
-  p.querySelectorAll('[data-qd]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmQuest(Number(b.dataset.qd)),r=>vgToast(`📜 납품 완료! 🌾 농장코인 +${r.gain}${r.all_done?' (모두 완료 보너스 포함!)':''}`)));
+  p.querySelectorAll('[data-qd]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmQuest(Number(b.dataset.qd)),r=>{vgToast(r.special?`🌟 특별 주문 완료! 🌾 +${r.gain} · 코인 +${vgN(r.coin)} · 경험치 +${r.exp}`:`📜 납품 완료! 🌾 농장코인 +${r.gain}${r.all_done?' (모두 완료 보너스 포함!) — 🌟 특별 주문이 열렸어요!':''}`);fmLvUp(r)}));
   p.querySelectorAll('[data-sellkind]').forEach(b=>b.onclick=()=>fmSellKind(b.dataset.sellkind));
   p.querySelectorAll('[data-sell1]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sell1,1),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
   p.querySelectorAll('[data-sellall]').forEach(b=>b.onclick=()=>fmRun(()=>window.fitVillage.farmSell(b.dataset.sellall,FM.st.store[b.dataset.sellall]),r=>vgToast(`💰 +${vgN(r.earned)}코인`)));
@@ -2701,6 +2711,13 @@ function fmMini(cfg){return new Promise(res=>{const host=(FM.m&&FM.m.querySelect
 async function fmCook(key){if(FM.busy)return;const g=fmG(key),r=FM.rec.find(x=>x.key===key);
   const grade=await fmMini({title:`🍳 ${esc(g.name)} 요리하기`,icon:'🔥',note:`대성공 ${esc(g.name)} 2개 · 성공 1개 · 실패 0개 (재료 절반 돌려받음)`,spd:100+Math.min(60,(r&&r.exp||1)*5)});
   fmRun(()=>window.fitVillage.farmCook(key,grade),x=>{vgToast(grade==='great'?`★ 대성공! ${g.name} 2개 완성!`:grade==='good'?`🍳 ${g.name} 완성!`:'🔥 앗, 탔어요… 재료 절반을 돌려받았어요',grade==='fail');fmLvUp(x)})}
+/* ── 🌟 특별 주문 (오늘 주문 3개 완료 후) ── */
+function fmSpecial(sp,left){const store=FM.st.store||{};
+  if(!sp)return `<div class="fq-sp lock"><b>🔒 특별 주문</b><small>오늘의 주문 ${3-left}/3 완료 — 모두 끝내면 특별 주문이 열려요 (🌾+15 · 코인 · 농장 경험치)</small></div>`;
+  const it=[[sp.k,sp.q],[sp.k2,sp.q2]].filter(x=>x[0]),ok=it.every(([k,q])=>(store[k]||0)>=q);
+  return `<div class="fq-sp ${sp.done?'done':''}"><div class="fq-sph"><b>🌟 특별 주문</b><span>${esc(sp.who||'단골 손님')}</span></div>
+   <div class="fq-spi">${it.map(([k,q])=>{const g=fmG(k),h=store[k]||0;return `<span class="${h>=q?'ok':''}"><img src="${g.icon}" alt=""><b>${esc(g.name)}</b><small>${sp.done?q:`${Math.min(h,q)}/${q}`}</small></span>`}).join('')}</div>
+   <div class="fq-spf"><small>보상 🌾+${sp.rw} · 🪙+${vgN(sp.coin)} · 농장 경험치</small>${sp.done?'<b class="fq-ok">✅ 완료!</b>':`<button class="vg-btn sm ${ok?'gold':''}" data-qd="4" ${ok?'':'disabled'}>납품</button>`}</div></div>`}
 /* ── 🐣 농장 전용 캐릭터 (농장코인) ── */
 function fmCharShop(){const fc=FM.st.farm_coins||0,L=(VG.catalog||[]).filter(c=>c.farm_fc);if(!L.length)return '';
   return `<b class="fq-sub">🐣 농장 친구 데려오기</b><div class="fm-fcl">${L.map(c=>{const own=(VG.state.items||[]).filter(i=>i.item_key===c.item_key).length,ok=fc>=c.farm_fc,g=VG_GRADE[c.grade]||VG_GRADE[1];
@@ -2755,7 +2772,7 @@ function fmHelp(){vgModal(`<h3>🌾 농장 안내</h3><div class="fm-help">
   <p><b>2. 기다리기</b> — 작물은 1~10분이면 자라요. 밭 위 시간이 0이 되면 ✨ 반짝여요. 앱을 끌 땐 <b>😴 수면 모드</b>를 켜 두면 자동으로 수확·재배해요.</p>
   <p><b>3. 수확</b> — 다 자란 밭을 누르거나 [모두 수확]. 수확물은 📦 창고로 가요.</p>
   <p><b>4. 팔기 · 가공</b> — 그대로 팔거나, 🏠 건물(물레방아·공방·장독대)을 지어 🍳 가공·요리하면 더 비싸게 팔려요.</p>
-  <p><b>📜 주문</b> — 매일 3개 납품하면 🌾 농장코인! 🐣 농장 친구(전용 캐릭터)를 데려올 수 있어요. 친구 농장에 💧 물을 줘도 받아요.</p>
+  <p><b>📜 주문</b> — 매일 3개 납품하면 🌾 농장코인! 3개를 다 끝내면 🌟 특별 주문이 열려요. 🐣 농장 친구(전용 캐릭터)를 데려올 수 있어요. 친구 농장에 💧 물을 줘도 받아요.</p>
   <p><b>🍳 요리</b> — 요리 공방 레시피는 미니게임으로 바로 완성 (대성공 2개 · 성공 1개 · 실패 0개)</p>
   <p><b>5. 일꾼</b> — 🐾 일꾼 탭에서 동물을 보내면 성장이 빨라져요. 낮은 등급일수록 농사를 잘해요!</p>
   <p><b>땅 꾸미기</b> — ⛏ 괭이로 밭 만들기(500코인) · 🧱 길 깔기 · 🪣 삽으로 되돌리기</p>

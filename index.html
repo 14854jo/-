@@ -998,6 +998,59 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .fq-spi{display:flex;gap:6px}.fq-spi>span{flex:1;display:flex;flex-direction:column;align-items:center;background:#fffc;border-radius:10px;padding:6px 4px;border:2px solid transparent}
 .fq-spi>span.ok{border-color:#9be07a}.fq-spi img{width:44px;height:44px;object-fit:contain}.fq-spi b{font-size:12.5px}
 .fq-spf{display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:6px}
+/* ===== 🎣 낚시터 ===== */
+.vg-modal-box.fs-modal{width:min(96vw,980px);padding:14px 16px 12px}
+.fs-top{display:flex;align-items:center;gap:8px;margin:0 34px 8px 0;flex-wrap:wrap}.fs-top h3{margin:0;font-size:20px}.fs-top #fsDex{margin-left:auto}
+.fs-stage{position:relative;width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#5fd6c0;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+.fs-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.fs-stage.shake{animation:fsShake .25s}@keyframes fsShake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fs-msg{position:absolute;left:50%;top:14%;transform:translateX(-50%);background:#fffffff0;border-radius:14px;padding:8px 16px;font-size:17px;color:#3a2f4a;box-shadow:0 4px 14px #0002;text-align:center;white-space:nowrap;pointer-events:none}
+.fs-msg small{font-size:12.5px;color:#8b7f99}.fs-msg.sm{font-size:14px;top:auto;bottom:6%}
+.fs-msg:empty{display:none}
+.fs-foot{margin-top:8px}.fs-foot .vg-note{margin:6px 0 0;font-size:12px}
+.fs-baits{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.fs-baits .vg-btn{display:flex;flex-direction:column;align-items:center;line-height:1.2;min-width:150px}
+.fs-baits .vg-btn small{font-size:11px;opacity:.85}
+.fs-bob{position:absolute;transform:translate(-50%,-50%);font-size:22px;pointer-events:none}
+.fs-bob:before{content:'';position:absolute;left:50%;top:60%;width:60px;height:22px;margin-left:-30px;border:2px solid #ffffffaa;border-radius:50%;animation:fsRip 1.6s infinite}
+@keyframes fsRip{from{transform:scale(.4);opacity:1}to{transform:scale(1.6);opacity:0}}
+.fs-bob-in{display:inline-block;animation:fsBob 1.4s ease-in-out infinite}@keyframes fsBob{50%{transform:translateY(4px)}}
+.fs-bob.bite .fs-bob-in{animation:fsDip .3s infinite}@keyframes fsDip{50%{transform:translateY(10px) scale(.8)}}
+.fs-bang{position:absolute;left:50%;top:-34px;transform:translateX(-50%);font-size:30px;animation:vgPop .3s}
+.fs-hud{position:absolute;left:10px;right:10px;top:8px;display:grid;grid-template-columns:1fr 1fr auto;gap:8px;pointer-events:none;z-index:3}
+.fs-bar{position:relative;height:22px;border-radius:12px;background:#0005;overflow:hidden;border:2px solid #fff}
+.fs-bar i{position:absolute;left:0;top:0;bottom:0;transition:width .12s}.fs-bar.hp i{background:linear-gradient(90deg,#ff7a7a,#ff4f6b)}
+.fs-bar.ten i{background:linear-gradient(90deg,#8fd3ff,#3b8cff)}.fs-bar.ten i.warn{background:linear-gradient(90deg,#ffb04a,#ff3b3b)}
+.fs-bar span{position:relative;font-size:12px;color:#fff;padding-left:8px;line-height:18px;text-shadow:0 1px 2px #0008}
+.fs-bar .vg-grade{font-size:10px;padding:0 5px;vertical-align:1px}
+.fs-time{background:#fff;border-radius:12px;padding:0 10px;font-size:15px;line-height:22px;color:#3a2f4a}
+.fs-fish{position:absolute;width:13%;aspect-ratio:2/1;pointer-events:none;z-index:1}
+.fs-shadow{width:100%;height:100%;background:radial-gradient(ellipse at 45% 50%,#123a4acc 0 45%,#123a4a55 60%,transparent 72%);border-radius:50%;position:relative}
+.fs-shadow:after{content:'';position:absolute;right:2%;top:32%;width:20%;height:36%;background:#123a4a99;clip-path:polygon(0 50%,100% 0,100% 100%)}
+.fs-fish.g4 .fs-shadow{filter:drop-shadow(0 0 10px #c58bff) drop-shadow(0 0 4px #fff)}.fs-fish.g5 .fs-shadow{filter:drop-shadow(0 0 12px #ffd34d) drop-shadow(0 0 5px #fff)}
+.fs-fish.hit .fs-shadow{animation:fsHitA .25s}@keyframes fsHitA{50%{transform:scale(1.15);filter:brightness(2)}}
+.fs-fish.reel{transition:left 1s,top 1s;left:50%!important;top:88%!important}
+.fs-pt{position:absolute;transform:translate(-50%,-50%);z-index:2;pointer-events:none}
+.fs-pt i{position:absolute;inset:0;border-radius:50%}
+.fs-core{border:4px solid #fff;background:#ffffff33;box-shadow:0 0 10px #fff8}
+.fs-ring{border:3px solid #ffe066;box-shadow:0 0 8px #ffd34d}
+.fs-pt.gone{transition:opacity .18s,transform .18s;opacity:0;transform:translate(-50%,-50%) scale(1.4)}
+.fs-pop{position:absolute;transform:translate(-50%,-140%);font-size:16px;z-index:4;pointer-events:none;animation:fsUp .7s forwards;text-shadow:0 2px 0 #fff,0 0 6px #fff}
+.fs-pop.pf{color:#ff8a00;font-size:19px}.fs-pop.gd{color:#2a9d4a}.fs-pop.ms{color:#e0405a}
+@keyframes fsUp{to{transform:translate(-50%,-260%);opacity:0}}
+.fs-res{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#ffffffcc;gap:4px}
+.fs-res .vg-rays{opacity:.5}.fs-res>*{position:relative}.fs-res h3{margin:2px 0;font-size:22px}.fs-res p{margin:0;font-size:13px;color:#6b5f80}
+.fs-catch{width:min(42%,260px);max-height:46%;object-fit:contain;filter:drop-shadow(0 6px 10px #0003)}
+.fs-res.g4 .fs-catch{filter:drop-shadow(0 0 16px #c58bff)}.fs-res.g5 .fs-catch{filter:drop-shadow(0 0 20px #ffd34d)}
+.fs-new{background:#ff4f8b;color:#fff;border-radius:10px;padding:1px 10px;font-size:13px}
+.fs-dex{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-height:60vh;overflow:auto;padding:2px}
+.fs-dx{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;border-radius:12px;padding:6px 4px;border:2px solid #efe7d8}
+.fs-dx.g4{border-color:#e5c9ff}.fs-dx.g5{border-color:#ffe08a}.fs-dx img{width:100%;height:48px;object-fit:contain}.fs-dx b{font-size:12px}.fs-dx small{font-size:10.5px;color:#8b7f99}
+.fs-dx.no img{filter:brightness(0) opacity(.25)}.fs-dx .vg-grade{font-size:9.5px;padding:0 5px}
+.fs-load{padding:40px;font-size:18px}
+@media(max-width:860px){.vg-modal-box.fs-modal{width:100vw;max-width:100vw;border-radius:18px 18px 0 0;padding:10px 8px}
+ .fs-stage{aspect-ratio:4/5}.fs-bg{object-position:30% 50%}.fs-hud{grid-template-columns:1fr 1fr;}.fs-time{grid-column:1/3;justify-self:center}
+ .fs-fish{width:26%}.fs-msg{font-size:15px;white-space:normal;width:86%}.fs-dex{grid-template-columns:repeat(3,1fr)}.fs-baits .vg-btn{min-width:0;flex:1}}
+.fs-res .vg-rays{display:none}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2599,7 +2652,7 @@ function fmMapSvg(){const s=FM.st,G=fmGeo();let t='',obj=[],hit='',tm='';const [
     obj.push([p.x+p.y,`<g class="fm-plot ${st}" data-ps="${p.i}" transform="translate(${cx},${cy})"><image href="${u}" x="${-w/2}" y="${23-h}" width="${w}" height="${h}"/>${st==='ripe'?'<text class="fm-spark" y="-34" text-anchor="middle">✨</text>':''}</g>`]);
     if(p.c&&st!=='ripe')tm+=`<g class="fm-tm" transform="translate(${cx},${cy})"><rect x="-24" y="10" width="48" height="13" rx="6"/><text y="20" text-anchor="middle">${p.b?'⚡':''}<tspan data-tm="${p.i}">${fmT((Date.parse(p.r)-fmNow())/1000)}</tspan></text></g>`});
   Object.entries(s.builds||{}).forEach(([k,[x,y]])=>{const [cx,cy]=G.c(x,y),[w,ar]=FM_BW[k]||[100,1],h=w*ar,b=fmB(k),js=fmJobs(k),rd=js.filter(j=>Date.parse(j.r)<=fmNow()).length;
-    obj.push([x+y+.5,`<g class="fm-bld" transform="translate(${cx},${cy})"><ellipse cy="6" rx="34" ry="11" fill="#00000018"/><image href="${b.img}" x="${-w/2}" y="${20-h}" width="${w}" height="${h}"/>${b.role==='make'?`<g class="fm-bub ${rd?'ok':js.length?'run':''}" transform="translate(0,${8-h})">${rd?`<circle r="12"/><text y="5" text-anchor="middle">✅</text>`:js.length?`<circle r="11"/><text y="4" text-anchor="middle">⏳</text>`:''}</g>`:''}<text class="fm-bn" y="34" text-anchor="middle">${esc(b.name||k)}</text></g>`])});
+    obj.push([x+y+.5,`<g class="fm-bld" transform="translate(${cx},${cy})"><ellipse cy="6" rx="34" ry="11" fill="#00000018"/><image href="${b.img}" x="${-w/2}" y="${20-h}" width="${w}" height="${h}"/>${b.role==='make'?`<g class="fm-bub ${rd?'ok':js.length?'run':''}" transform="translate(0,${8-h})">${rd?`<circle r="12"/><text y="5" text-anchor="middle">✅</text>`:js.length?`<circle r="11"/><text y="4" text-anchor="middle">⏳</text>`:''}</g>`:b.role==='fish'?`<g class="fm-bub run fs-bub" transform="translate(0,${8-h})"><circle r="12"/><text y="5" text-anchor="middle">🎣</text></g>`:''}<text class="fm-bn" y="34" text-anchor="middle">${esc(b.name||k)}</text></g>`])});
   obj.sort((a,b)=>a[0]-b[0]);t+=obj.map(o=>o[1]).join('');
   t+=`<polygon id="fmHl" class="fm-hl" points="0,0" style="display:none"/><g id="fmWalk"></g>`+tm+hit;
   return `<svg viewBox="0 0 ${G.W} ${G.H}" width="${G.W*FM.zoom}" height="${G.H*FM.zoom}" class="fm-svg mode-${FM.mode}">${t}</svg>`}
@@ -2615,7 +2668,7 @@ function fmTileClick(x,y){if(Date.now()-(FM.noClick||0)<300)return;const at=fmAt
   if(FM.mode==='build'){if(at.plot||at.build||at.path)return vgToast('빈 땅에만 지을 수 있어요',true);const k=FM.bkey,b=fmB(k),own=!!(s.builds||{})[k];if(!own&&!window.confirm(`${b.name}을(를) ${vgN(b.price)}코인에 지을까요?`))return;
     return fmRun(()=>window.fitVillage.farmBuild(k,x,y),r=>{FM.mode='plant';FM.bkey=null;vgToast(r.built?`🏠 ${b.name} 완성!`:`🏠 ${b.name}을(를) 옮겼어요`)})}
   if(at.plot)return fmPlotClick(at.plot);
-  if(at.build){const b=fmB(at.build);if(b.role!=='make')return vgToast(`${b.name} — ${b.descr}`);if(fmJobs(at.build).some(j=>Date.parse(j.r)<=fmNow()))return fmCollect(at.build);FM.tab='make';FM.focus=at.build;return fmRender()}
+  if(at.build){const b=fmB(at.build);if(b.role==='fish')return vgFish();if(b.role!=='make')return vgToast(`${b.name} — ${b.descr}`);if(fmJobs(at.build).some(j=>Date.parse(j.r)<=fmNow()))return fmCollect(at.build);FM.tab='make';FM.focus=at.build;return fmRender()}
   vgToast('⛏ 괭이를 들면 빈 땅에 밭을 만들 수 있어요')}
 function fmPlotClick(p){const st=fmStage(p);if(st==='ripe')return fmHarvest([p.i]);
   if(!p.c){if(!FM.sel){FM.tab='seed';fmRender();vgToast('🌱 먼저 오른쪽에서 심을 씨앗을 골라 주세요');return}return fmPlant([p.i])}
@@ -2645,7 +2698,7 @@ function fmPane(){const s=FM.st,store=s.store||{};
      ${own?`<div class="fm-list">${rs.map(r=>{const g=fmG(r.key),ins=Object.entries(r.inputs),has=ins.every(([k,q])=>(store[k]||0)>=q),ok=has&&(kit||js.length<sl);
        return `<div class="fm-rec"><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b> <small>${kit?'':`⏱ ${fmT(r.secs)} · `}판매 ${vgN(Math.floor(g.sell*(s.sell_mult||1)))}</small><span class="fm-ings">${ins.map(([k,q])=>fmIco(k,q,store[k]||0)).join('<i>+</i>')}</span></span>${kit?`<button class="vg-btn sm gold" data-cook="${r.key}" ${has?'':'disabled'}>🍳 요리하기</button>`:`<button class="vg-btn sm green" data-mk="${r.key}" ${ok?'':'disabled'}>만들기</button>`}</div>`}).join('')}</div>`:''}</div>`}).join('')}`}
   if(FM.tab==='store'){const rows=Object.entries(store).filter(([,q])=>q>0).sort((a,b)=>(fmG(a[0]).sort||0)-(fmG(b[0]).sort||0));const sm=s.sell_mult||1;
-    const crops=rows.filter(([k])=>fmG(k).kind==='crop'),dish=rows.filter(([k])=>fmG(k).kind!=='crop'),sum=a=>a.reduce((t,[k,q])=>t+Math.floor(fmG(k).sell*q*sm),0);
+    const crops=rows.filter(([k])=>fmG(k).kind==='crop'),dish=rows.filter(([k])=>fmG(k).kind!=='crop'&&fmG(k).kind!=='fish'),sum=a=>a.reduce((t,[k,q])=>t+Math.floor(fmG(k).sell*q*sm),0);
     return `<p class="vg-note">수확물·가공품·요리가 모여요.${sm>1?' 🏪 <b>판매대</b> 덕분에 판매가 +20%!':' 판매대를 지으면 판매가가 +20% 올라요.'}</p>${rows.length?`<div class="fm-sellbar">${crops.length?`<button class="vg-btn sm gold" data-sellkind="crop">🌾 작물 모두 팔기 +${vgN(sum(crops))}</button>`:''}${dish.length?`<button class="vg-btn sm purple" data-sellkind="made">🍳 가공·요리 모두 팔기 +${vgN(sum(dish))}</button>`:''}</div>`:''}`+(rows.length?`<div class="fm-list">${rows.map(([k,q])=>{const g=fmG(k),u=Math.floor(g.sell*sm);return `<div class="fm-good"><img src="${g.icon}" alt=""><span><b>${esc(g.name)}</b> <em>×${q}</em><small>개당 ${vgN(u)}코인</small></span><div class="fm-sell"><button class="vg-btn sm" data-sell1="${k}">1개</button><button class="vg-btn sm gold" data-sellall="${k}">모두 +${vgN(Math.floor(g.sell*q*sm))}</button></div></div>`}).join('')}</div>`:'<div class="vg-empty">창고가 비어 있어요. 작물을 수확해 보세요!</div>')}
   const items=VG.state.items||[],ws=s.workers.map(id=>items.find(i=>i.id===id)).filter(Boolean),wset=new Set(s.workers);
   const cand=items.filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!wset.has(i.id)&&!i.h).sort((a,b)=>fmPowC(VG.cat[b.item_key])-fmPowC(VG.cat[a.item_key])||(VG.cat[a.item_key].rate-VG.cat[b.item_key].rate)).slice(0,40);
@@ -2763,7 +2816,7 @@ function fmBindPan(mp){if(!mp||mp._pan)return;mp._pan=true;
 document.addEventListener('pointermove',e=>{const p=FM.pan;if(!p)return;const dx=e.clientX-p.x,dy=e.clientY-p.y;if(!p.mv&&Math.hypot(dx,dy)<5)return;p.mv=true;p.mp.classList.add('panning');p.mp.scrollLeft=p.l-dx;p.mp.scrollTop=p.t-dy});
 document.addEventListener('pointerup',()=>{const p=FM.pan;if(!p)return;FM.pan=null;p.mp.classList.remove('panning');if(p.mv)FM.noClick=Date.now()});
 /* ── 창고 한꺼번에 팔기 ── */
-async function fmSellKind(kind){if(FM.busy)return;const s=FM.st,rows=Object.entries(s.store||{}).filter(([k,q])=>q>0&&(kind==='crop'?fmG(k).kind==='crop':fmG(k).kind!=='crop'));if(!rows.length)return;
+async function fmSellKind(kind){if(FM.busy)return;const s=FM.st,rows=Object.entries(s.store||{}).filter(([k,q])=>q>0&&(kind==='crop'?fmG(k).kind==='crop':fmG(k).kind!=='crop'&&fmG(k).kind!=='fish'));if(!rows.length)return;
   if(!window.confirm(kind==='crop'?'창고의 작물을 모두 팔까요?\n(가공·요리 재료로 쓸 작물도 함께 팔려요)':'가공품·요리를 모두 팔까요?'))return;
   FM.busy=true;let tot=0;try{for(const [k,q] of rows){const r=await window.fitVillage.farmSell(k,q);tot+=r.earned||0;fmSet(r)}vgToast(`💰 모두 팔았어요! +${vgN(tot)}코인`)}catch(e){vgToast(e.message||String(e),true)}FM.busy=false;if(FM.m)fmRender()}
 /* ── 농장 도움말 ── */
@@ -2772,6 +2825,7 @@ function fmHelp(){vgModal(`<h3>🌾 농장 안내</h3><div class="fm-help">
   <p><b>2. 기다리기</b> — 작물은 1~10분이면 자라요. 밭 위 시간이 0이 되면 ✨ 반짝여요. 앱을 끌 땐 <b>😴 수면 모드</b>를 켜 두면 자동으로 수확·재배해요.</p>
   <p><b>3. 수확</b> — 다 자란 밭을 누르거나 [모두 수확]. 수확물은 📦 창고로 가요.</p>
   <p><b>4. 팔기 · 가공</b> — 그대로 팔거나, 🏠 건물(물레방아·공방·장독대)을 지어 🍳 가공·요리하면 더 비싸게 팔려요.</p>
+  <p><b>🎣 낚시터</b> — 건물 탭에서 낚시터를 짓고 누르면 낚시! 링이 원에 겹칠 때 터치해 물고기 체력을 깎아요. 잡은 물고기로 생선 요리도 만들어요.</p>
   <p><b>📜 주문</b> — 매일 3개 납품하면 🌾 농장코인! 3개를 다 끝내면 🌟 특별 주문이 열려요. 🐣 농장 친구(전용 캐릭터)를 데려올 수 있어요. 친구 농장에 💧 물을 줘도 받아요.</p>
   <p><b>🍳 요리</b> — 요리 공방 레시피는 미니게임으로 바로 완성 (대성공 2개 · 성공 1개 · 실패 0개)</p>
   <p><b>5. 일꾼</b> — 🐾 일꾼 탭에서 동물을 보내면 성장이 빨라져요. 낮은 등급일수록 농사를 잘해요!</p>
@@ -2783,6 +2837,113 @@ function fmBadge(){const b=document.getElementById('vgFmBtn');if(!b)return;const
 async function fmPeek(force){if(FM.m||FM.peeking||!window.fitVillage||!window.fitVillage.farmState)return;if(!force&&FM.peekAt&&Date.now()-FM.peekAt<180000)return fmBadge();
   FM.peeking=true;try{const r=await window.fitVillage.farmState();FM.st=r;if(r.server_time)FM.off=Date.parse(r.server_time)-Date.now();if(r.crops)FM.crops=r.crops;if(r.fbcat)FM.fb=r.fbcat;if(r.recipes)FM.rec=r.recipes;if(r.goods)r.goods.forEach(g=>FM.goods[g.key]=g);FM.peekAt=Date.now()}catch(e){FM.peekAt=Date.now()}FM.peeking=false;fmBadge()}
 setInterval(()=>{if(document.getElementById('vgFmBtn')&&!FM.m)fmPeek()},20000);
+
+/* =====================================================================
+   🎣 낚시터 — 찌 던지기 → 입질 → 링 타이밍 터치로 물고기 체력 깎기
+   등급이 높을수록 체력 · 속도 · 동시에 뜨는 포인트 수 ↑
+   ===================================================================== */
+const FS={m:null,st:null,cur:null,raf:0,busy:false};
+const FS_BAIT={worm:{name:'지렁이 미끼',ico:'🪱',price:30,note:'일반 물고기 위주'},shiny:{name:'반짝 미끼',ico:'✨',price:120,note:'영웅 이상 확률 ↑'}};
+function fsName(k){return (FM.goods[k]||{}).name||k}
+function fsIcon(k){return (FM.goods[k]||{}).icon||''}
+function fsGr(g){return VG_GRADE[g]||VG_GRADE[1]}
+async function vgFish(){if(FS.m)return;
+  FS.m=vgModal('<div class="fs-load">🎣 낚시터 준비 중…</div>','vg-xwide fs-modal');FS.m.dataset.lock='';
+  FS.m.querySelector('.vg-x').onclick=fsClose;
+  try{FS.st=await window.fitVillage.fishState()}catch(e){fsClose();vgToast(e.setup?'Supabase에 fit_village_update31.sql 실행이 필요합니다.':(e.message||String(e)),true);return}
+  fsIdle()}
+function fsClose(){if(FS.cur&&FS.cur.phase!=='done'&&FS.cur.phase!=='idle'){if(!window.confirm('낚시 중이에요. 그만두면 미끼와 물고기를 잃어요. 닫을까요?'))return;fsStop();window.fitVillage.fishEnd(false).catch(()=>{})}
+  fsStop();if(FS.m)FS.m.remove();FS.m=null;FS.cur=null;if(FM.m){fmRender()}}
+function fsStop(){cancelAnimationFrame(FS.raf);FS.raf=0;if(FS.cur&&FS.cur.tm)clearTimeout(FS.cur.tm)}
+function fsDexN(){return Object.keys(FS.st.dex||{}).length}
+function fsShell(inner,foot){const box=FS.m.querySelector('.vg-modal-box');
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button>
+   <div class="fs-top"><h3>🎣 낚시터</h3><span class="fm-chip">🪙 ${vgN(FS.st.coins||0)}</span><button class="vg-btn sm" id="fsDex">📖 도감 ${fsDexN()}/${FS.st.fish.length}</button></div>
+   <div class="fs-stage" id="fsStage"><img class="fs-bg" src="images/fish/pond_bg.webp" alt="" draggable="false">${inner}</div>
+   <div class="fs-foot">${foot}</div>`;
+  box.querySelector('.vg-x').onclick=fsClose;box.querySelector('#fsDex').onclick=fsDex}
+/* ── 대기 : 미끼 고르기 ── */
+function fsIdle(msg){fsStop();FS.cur={phase:'idle'};
+  fsShell(`<div class="fs-msg">${msg||'미끼를 골라 찌를 던져 보세요!'}</div>`,
+   `<div class="fs-baits">${Object.entries(FS_BAIT).map(([k,b])=>`<button class="vg-btn ${k==='shiny'?'purple':'green'}" data-bait="${k}" ${FS.st.coins>=b.price?'':'disabled'}>${b.ico} ${b.name} <b>${b.price}</b><small>${b.note}</small></button>`).join('')}</div>
+    <p class="vg-note">입질(❗)이 오면 바로 터치! 물 위에 동그라미가 뜨면 <b>바깥 링이 안쪽 원에 닿는 순간</b> 터치해서 물고기 체력을 깎아요. 놓치면 줄이 팽팽해지고, 끝까지 차면 끊어져요.</p>`);
+  FS.m.querySelectorAll('[data-bait]').forEach(b=>b.onclick=()=>fsCast(b.dataset.bait))}
+/* ── 찌 던지기 → 입질 기다리기 ── */
+async function fsCast(bait){if(FS.busy)return;FS.busy=true;let r;
+  try{r=await window.fitVillage.fishCast(bait)}catch(e){FS.busy=false;vgToast(e.message||String(e),true);return}
+  FS.busy=false;FS.st.coins=r.coins;try{if(VG.state)VG.state.village.coins=r.coins;vgRenderHud()}catch(e){}
+  FS.cur={phase:'wait',f:r,bait};
+  fsShell(`<div class="fs-bob" style="left:52%;top:50%"><span class="fs-bob-in">🔴</span></div><div class="fs-msg sm">${FS_BAIT[bait].ico} 찌를 던졌어요… 기다리는 중</div>`,`<p class="vg-note">물고기가 미끼를 물면 찌가 쏙 들어가요. <b>❗가 뜨면 터치!</b></p>`);
+  const stg=FS.m.querySelector('#fsStage');
+  FS.cur.tm=setTimeout(()=>{if(!FS.cur||FS.cur.phase!=='wait')return;FS.cur.phase='bite';
+    const bob=stg.querySelector('.fs-bob');bob.classList.add('bite');bob.insertAdjacentHTML('beforeend','<b class="fs-bang">❗</b>');stg.querySelector('.fs-msg').textContent='지금! 터치!';
+    FS.cur.tm=setTimeout(()=>{if(FS.cur&&FS.cur.phase==='bite'){FS.cur.phase='done';window.fitVillage.fishEnd(false).catch(()=>{});fsIdle('😢 물고기가 미끼만 먹고 도망갔어요…')}},1300)},1500+Math.random()*2800);
+  stg.onpointerdown=e=>{e.preventDefault();if(!FS.cur)return;
+    if(FS.cur.phase==='bite'){clearTimeout(FS.cur.tm);fsFight()}
+    else if(FS.cur.phase==='wait'){stg.querySelector('.fs-msg').textContent='아직이에요… 조금만 더 기다려요'}}}
+/* ── 싸움 ── */
+function fsFight(){const f=FS.cur.f,g=f.g,spd=Number(f.spd)||1;
+  const C=FS.cur=Object.assign(FS.cur,{phase:'fight',hp:f.hp,max:f.hp,ten:0,t0:performance.now(),last:performance.now(),limit:30+g*3,pts:[],next:0,
+    maxPts:g>=5?3:g>=3?2:1,dur:1.35/spd,fx:50,fy:50,ang:Math.random()*6.28,combo:0,minT:(2+f.hp*.25)*1000+400});
+  const glow=g>=4?`fs-glow g${g}`:'';
+  fsShell(`<div class="fs-hud"><div class="fs-bar hp"><i id="fsHp"></i><span>🐟 ??? <b class="vg-grade vg-g${g}" style="position:static">${fsGr(g).name}</b></span></div><div class="fs-bar ten"><i id="fsTen"></i><span>🧵 줄 장력</span></div><div class="fs-time" id="fsTime"></div></div>
+    <div class="fs-fish ${glow}" id="fsFishS"><div class="fs-shadow"></div></div><div id="fsPts"></div><div class="fs-msg sm" id="fsCombo"></div>`,
+   `<p class="vg-note">바깥 링이 안쪽 원에 겹칠 때 터치! <b>PERFECT</b> 2 · <b>GOOD</b> 1 데미지 · 빗나가면 장력 ↑</p>`);
+  const stg=FS.m.querySelector('#fsStage'),fishEl=stg.querySelector('#fsFishS'),pl=stg.querySelector('#fsPts');
+  const W=()=>stg.clientWidth,H=()=>stg.clientHeight;
+  stg.onpointerdown=e=>{e.preventDefault();if(C.phase!=='fight')return;const rc=stg.getBoundingClientRect(),x=e.clientX-rc.left,y=e.clientY-rc.top;
+    let best=null,bd=1e9;C.pts.forEach(p=>{const d=Math.hypot(p.x/100*W()-x,p.y/100*H()-y);if(d<bd){bd=d;best=p}});
+    const R=fsR();if(!best||bd>R*2.4){fsMiss(null,'빗나감');return}
+    const k=fsRing(best),diff=Math.abs(k-1);   // 1 = 바깥 링이 안쪽 원과 딱 겹침
+    if(diff<=.16)fsHit(best,2,'PERFECT');else if(diff<=.42)fsHit(best,1,'GOOD');else fsMiss(best,k>1?'너무 빨라요':'늦었어요')};
+  const loop=t=>{if(!FS.m||C.phase!=='fight')return;const dt=Math.min(.05,(t-C.last)/1000);C.last=t;
+    // 물고기 이동 : 등급이 높을수록 빠르고 방향을 자주 바꿈
+    C.ang+=(Math.random()-.5)*dt*3*spd;let nx=C.fx+Math.cos(C.ang)*dt*9*spd,ny=C.fy+Math.sin(C.ang)*dt*7*spd;
+    if(nx<18||nx>82){C.ang=Math.PI-C.ang;nx=Math.max(18,Math.min(82,nx))}if(ny<26||ny>78){C.ang=-C.ang;ny=Math.max(26,Math.min(78,ny))}
+    C.fx=nx;C.fy=ny;fishEl.style.left=nx+'%';fishEl.style.top=ny+'%';fishEl.style.transform=`translate(-50%,-50%) scaleX(${Math.cos(C.ang)<0?-1:1})`;
+    // 포인트 만들기
+    C.next-=dt;if(C.next<=0&&C.pts.length<C.maxPts){fsSpawn(pl);C.next=Math.max(.35,.95/spd-.1*C.maxPts)}
+    // 포인트 링 줄이기 · 놓친 포인트
+    C.pts.slice().forEach(p=>{p.t+=dt;const k=fsRing(p);p.el.querySelector('.fs-ring').style.transform=`scale(${k})`;if(k<.55)fsMiss(p,'놓쳤어요')});
+    C.ten=Math.max(0,C.ten-dt*4);
+    const el=(t-C.t0)/1000,left=Math.max(0,C.limit-el);
+    stg.querySelector('#fsHp').style.width=(C.hp/C.max*100)+'%';const te=stg.querySelector('#fsTen');te.style.width=C.ten+'%';te.className=C.ten>70?'warn':'';
+    stg.querySelector('#fsTime').textContent=`⏱ ${left.toFixed(0)}`;
+    if(C.ten>=100)return fsLose('🧵 줄이 끊어졌어요!');if(left<=0)return fsLose('⏱ 시간 초과! 물고기가 도망갔어요');
+    FS.raf=requestAnimationFrame(loop)};
+  FS.raf=requestAnimationFrame(loop)}
+function fsR(){const s=FS.m.querySelector('#fsStage');return Math.max(22,Math.min(34,s.clientWidth*.035))}
+function fsRing(p){return 2.3-1.3*(p.t/p.dur)*1.25}   // 2.3 → 1 (딱 맞음) → 계속 줄어듦
+function fsSpawn(pl){const C=FS.cur;const a=Math.random()*6.28,d=6+Math.random()*10;
+  const x=Math.max(10,Math.min(90,C.fx+Math.cos(a)*d*1.3)),y=Math.max(22,Math.min(84,C.fy+Math.sin(a)*d));
+  const el=document.createElement('div');el.className='fs-pt';el.style.left=x+'%';el.style.top=y+'%';const R=fsR();el.style.width=el.style.height=R*2+'px';
+  el.innerHTML='<i class="fs-core"></i><i class="fs-ring"></i>';pl.appendChild(el);C.pts.push({x,y,t:0,dur:C.dur,el})}
+function fsPop(p,txt,cls){const stg=FS.m.querySelector('#fsStage');const d=document.createElement('b');d.className='fs-pop '+cls;d.textContent=txt;
+  d.style.left=(p?p.x:FS.cur.fx)+'%';d.style.top=(p?p.y:FS.cur.fy)+'%';stg.appendChild(d);setTimeout(()=>d.remove(),700)}
+function fsKill(p){const C=FS.cur;C.pts=C.pts.filter(q=>q!==p);p.el.classList.add('gone');setTimeout(()=>p.el.remove(),180)}
+function fsHit(p,dmg,txt){const C=FS.cur;fsKill(p);C.combo++;const d=dmg+(C.combo>=5&&dmg===2?1:0);C.hp=Math.max(0,C.hp-d);C.ten=Math.max(0,C.ten-(dmg===2?8:3));
+  fsPop(p,`${txt}${d>dmg?' ×COMBO':''} -${d}`,dmg===2?'pf':'gd');const fe=FS.m.querySelector('#fsFishS');fe.classList.remove('hit');void fe.offsetWidth;fe.classList.add('hit');
+  FS.m.querySelector('#fsCombo').textContent=C.combo>=3?`🔥 ${C.combo} 콤보`:'';
+  if(C.hp<=0)fsWin()}
+function fsMiss(p,txt){const C=FS.cur;if(p)fsKill(p);C.combo=0;C.ten=Math.min(100,C.ten+(C.f.g>=4?24:18));fsPop(p,txt,'ms');
+  const s=FS.m.querySelector('#fsStage');s.classList.remove('shake');void s.offsetWidth;s.classList.add('shake');FS.m.querySelector('#fsCombo').textContent=''}
+function fsLose(msg){const C=FS.cur;C.phase='done';fsStop();window.fitVillage.fishEnd(false).catch(()=>{});
+  const g=C.f.g;fsIdle(`${msg}<br><small>${g>=4?`✨ ${fsGr(g).name} 물고기였어요… 아까워요!`:'다시 도전해 봐요!'}</small>`)}
+async function fsWin(){const C=FS.cur;C.phase='reel';cancelAnimationFrame(FS.raf);C.pts.forEach(p=>p.el.remove());C.pts=[];
+  const stg=FS.m.querySelector('#fsStage');stg.onpointerdown=null;stg.querySelector('#fsCombo').textContent='🎣 끌어올리는 중…';stg.querySelector('#fsFishS').classList.add('reel');
+  const wait=C.minT-(performance.now()-C.t0);if(wait>0)await vdSleep(wait);else await vdSleep(700);
+  let r;try{r=await window.fitVillage.fishEnd(true)}catch(e){vgToast(e.message||String(e),true);return fsIdle()}
+  C.phase='done';fmSet(r);if(r.dex)FS.st.dex=r.dex;FS.st.coins=r.coins!=null?r.coins:FS.st.coins;fsResult(r)}
+function fsResult(r){const g=r.g,gr=fsGr(g);
+  fsShell(`<div class="fs-res g${g}"><div class="vg-rays"></div><span class="vg-grade vg-g${g}" style="position:static">${gr.name}</span>${r.new?'<b class="fs-new">NEW!</b>':''}
+    <img class="fs-catch vg-pop" src="${fsIcon(r.k)}" alt=""><h3>${esc(fsName(r.k))} 낚았다!</h3>
+    <p>창고 +1 · 농장 경험치 +${r.exp}${r.fc?` · 🌾 농장코인 +${r.fc}`:''} · 판매가 ${vgN((FM.goods[r.k]||{}).sell||0)}</p></div>`,
+   `<div class="fs-baits">${Object.entries(FS_BAIT).map(([k,b])=>`<button class="vg-btn ${k==='shiny'?'purple':'green'}" data-bait="${k}" ${FS.st.coins>=b.price?'':'disabled'}>${b.ico} 다시 던지기 <b>${b.price}</b></button>`).join('')}</div>`);
+  FS.m.querySelectorAll('[data-bait]').forEach(b=>b.onclick=()=>fsCast(b.dataset.bait));fmLvUp(r)}
+/* ── 물고기 도감 ── */
+function fsDex(){const dex=FS.st.dex||{},L=FS.st.fish;
+  const m=vgModal(`<h3>📖 물고기 도감 <small>${Object.keys(dex).length}/${L.length}</small></h3><p class="vg-mp">전설 · 신화 물고기를 처음 낚으면 🌾 농장코인 +2 보너스!</p>
+   <div class="fs-dex">${L.map(f=>{const n=dex[f.k],gr=fsGr(f.g);return `<div class="fs-dx ${n?'':'no'} g${f.g}"><span class="vg-grade vg-g${f.g}" style="position:static">${gr.name}</span><img src="${fsIcon(f.k)}" alt=""><b>${n?esc(fsName(f.k)):'???'}</b><small>${n?`${n}마리`:'아직 못 낚음'}</small></div>`}).join('')}</div>`,'vg-wide');}
 
 
 function daily(){
@@ -3148,6 +3309,9 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     farmView(uid){return vrpc('fit_farm_view',{p_uid:uid})},
     farmWater(uid){return vrpc('fit_farm_water',{p_uid:uid})},
     farmCharBuy(k){return vrpc('fit_farm_char_buy',{p_key:k})},
+    fishState(){return vrpc('fit_fish_state',{})},
+    fishCast(b){return vrpc('fit_fish_cast',{p_bait:b})},
+    fishEnd(ok){return vrpc('fit_fish_end',{p_ok:ok})},
     sell(id){return vrpc('fit_village_sell',{p_item:id})},
     expand(){return vrpc('fit_village_expand')},
     like(to){return vrpc('fit_village_like',{p_to:to})},

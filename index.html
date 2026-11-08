@@ -1154,6 +1154,14 @@ body.vg-noscroll{overflow:hidden}
 .vg-grchips{margin:8px 0 4px;flex-wrap:wrap}.vg-grchips button i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gc,#bbb);margin-right:3px;vertical-align:1px}
 .vg-stage-top{flex-wrap:wrap;row-gap:6px}.vg-stage-top>.vg-btn{white-space:nowrap}.vg-stage-top .vg-banner{white-space:nowrap}.vg-stage-top .vg-zoom{margin-left:auto}
 .vg-boxbar{white-space:normal;max-width:calc(100% - 20px)}.vg-boxbar span{flex:1;min-width:0}.vg-boxbar label,.vg-boxbar .vg-btn{flex:none;white-space:nowrap}
+/* PC : 마을 화면을 창 크기에 맞게 크게 */
+main:has(#vgRoot){max-width:none}
+@media(min-width:1181px){
+ .vg-root:not(.vg-full) .vg-scroll{height:clamp(600px,calc(100vh - 230px),1600px)}
+ .vg-root:not(.vg-full) .vg-side-body{max-height:clamp(600px,calc(100vh - 300px),1600px)}
+ .vg-layout{grid-template-columns:minmax(0,1fr) 380px}
+}
+@media(min-width:1900px){.vg-layout{grid-template-columns:minmax(0,1fr) 420px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1845,7 +1853,7 @@ function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const 
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom">${tools}<button class="vg-btn" id="vgFull" title="전체 화면">${VG.full?'✕':'⛶'}</button><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   ${(st.village.bg||'sky')==='classic'?'':vgBgHtml(st.village.bg||'sky')}${(st.village.bg||'sky')==='classic'?'<div class="vg-cloud cl" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud cl" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>':''}
   <div class="vg-scroll${VG.box?' boxing':''}" id="vgScroll">${vgMapSvg(st,!friend)}</div>${VG.ter&&!friend?vgTerBar():VG.box&&!friend?vgBoxBar():hint}`;
-  const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else if(VG.boardC){s2.scrollLeft=VG.boardC[0]-s2.clientWidth/2;s2.scrollTop=VG.boardC[1]-s2.clientHeight/2}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
+  const s2=$('#vgScroll');if(!VG.full&&s2&&(Math.abs(s2.clientWidth-(VG.stageW||0))>4||Math.abs(s2.clientHeight-(VG.stageH||0))>4)&&!VG._rs){VG.stageW=s2.clientWidth;VG.stageH=s2.clientHeight;VG._rs=1;vgRenderStage(center);VG._rs=0;return}if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else if(VG.boardC){s2.scrollLeft=VG.boardC[0]-s2.clientWidth/2;s2.scrollTop=VG.boardC[1]-s2.clientHeight/2}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
   $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgFmVisit')&&($('#vgFmVisit').onclick=()=>vgFarmFriend(VG.friend.user_id,VG.friend.display_name));$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);if($('#vgFmBtn'))setTimeout(()=>{try{fmPeek()}catch(e){}},300);
   $('#vgBoxBtn')&&($('#vgBoxBtn').onclick=()=>{VG.box=VG.box?null:{};VG.ter=null;VG.mode=null;vgRenderStage()});vgBoxBind(stage);$('#vgTerBtn')&&($('#vgTerBtn').onclick=()=>{if(VG.ter){VG.ter=null;vgRenderStage();vgRenderSide()}else vgTerStart()});$('#vgBgBtn')&&($('#vgBgBtn').onclick=vgBgPick);$('#vgFull')&&($('#vgFull').onclick=vgFullToggle);vgTerBind(stage);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
@@ -2066,6 +2074,7 @@ function vgTerBind(stage){if(!VG.ter)return;stage.querySelectorAll('[data-tt]').
   const bb=stage.querySelector('[data-tbig]');if(bb)bb.onclick=()=>{VG.ter.big=!VG.ter.big;vgRenderStage()};
   stage.querySelector('#vgTerX').onclick=()=>{VG.ter=null;vgRenderStage();vgRenderSide()};stage.querySelector('#vgTerS').onclick=vgTerSave}
 function vgOnWater(id,x,y){const it=(VG.state.items||[]).find(i=>i.id===id),c=it&&VG.cat[it.item_key];return !!(c&&c.kind==='animal'&&vgTAt(x,y)==='water')}
+window.addEventListener('resize',()=>{clearTimeout(VG._rt);VG._rt=setTimeout(()=>{if(document.getElementById('vgScroll'))vgRenderStage()},250)});
 function vgFullToggle(){VG.full=!VG.full;if(window.matchMedia('(max-width:860px)').matches){if(VG.full){VG.zoomKeep=VG.zoom;VG.zoom=.6}else if(VG.zoomKeep){VG.zoom=VG.zoomKeep}}const r=document.getElementById('vgRoot');if(r)r.classList.toggle('vg-full',VG.full);document.body.classList.toggle('vg-noscroll',VG.full);vgRenderStage(true)}
 
 /* 🖼️ 배경 그림 위에 마을을 '땅'으로 앉히기 : 배경을 지도 안에 넣고, 마을 둘레를 배경 땅 색으로 자연스럽게 이어 줌 */

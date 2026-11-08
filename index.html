@@ -1066,6 +1066,33 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .dx-c.no>img{filter:brightness(0) opacity(.22)}.dx-c.g4{border-color:#e5c9ff}.dx-c.g5{border-color:#ffe08a}.dx-c .vg-grade{font-size:9.5px;padding:0 5px}
 .dx-ing{width:18px;height:18px;object-fit:contain}.dx-star{position:absolute;right:4px;top:2px;font-style:normal;font-size:14px}
 @media(max-width:860px){.dx-grid{grid-template-columns:repeat(3,1fr)}.dx-st{min-width:58px}}
+/* ===== 낚시터 · 모바일 세로/가로 맞춤 (u32b) ===== */
+@media (max-width:860px) and (min-height:561px){
+ .vg-modal-box.fs-modal{display:flex;flex-direction:column;height:100dvh;max-height:100dvh;border-radius:0;padding:max(10px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom));overflow:hidden}
+ .fs-stage{aspect-ratio:auto;flex:1 1 auto;min-height:0}
+ .fs-foot{flex:none;max-height:34dvh;overflow:auto}
+}
+/* 가로 화면 (높이가 낮은 화면) : 왼쪽 낚시 화면 · 오른쪽 메뉴 */
+@media (max-height:560px){
+ .vg-modal-box{max-height:96dvh;overflow:auto}
+ .vg-modal-box.fs-modal{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border-radius:0;overflow:hidden;
+   padding:6px max(8px,env(safe-area-inset-right)) 6px max(8px,env(safe-area-inset-left));
+   display:grid;grid-template-columns:minmax(0,1fr) clamp(170px,27vw,250px);grid-template-rows:auto minmax(0,1fr);gap:6px 8px}
+ .fs-modal .vg-x{top:6px;right:max(8px,env(safe-area-inset-right))}
+ .fs-stage{grid-column:1;grid-row:1/3;aspect-ratio:auto;height:100%;min-height:0;border-radius:14px}
+ .fs-top{grid-column:2;grid-row:1;margin:0;padding-right:38px;gap:4px}
+ .fs-top h3{font-size:16px;width:100%}.fs-top #fsDex{margin-left:0;width:100%}
+ .fs-foot{grid-column:2;grid-row:2;margin:0;overflow:auto;min-height:0}
+ .fs-baits{flex-direction:column;gap:6px}.fs-baits .vg-btn{min-width:0;width:100%;padding:6px 8px}
+ .fs-foot .vg-note{font-size:11px;line-height:1.35}
+ .fs-hud{grid-template-columns:1fr 1fr auto}.fs-time{grid-column:auto;justify-self:auto}
+ .fs-fish{width:15%}.fs-msg{font-size:14px;white-space:normal;max-width:80%;width:auto}
+ .fs-res h3{font-size:18px}.fs-catch{max-height:42%}
+ .dx-grid{max-height:none}.vg-modal-box.dx-modal{max-height:96dvh;overflow:auto}
+}
+@media (max-width:860px) and (min-height:561px){.fs-top{padding-right:40px;margin-right:0}.fs-top .fm-chip{display:inline-flex}}
+@media (max-height:560px){.fs-top .fm-chip{display:inline-flex}}
+@media (max-height:560px){.dx-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}.vg-modal-box.dx-modal{width:min(96vw,760px)}.dx-modal h3{margin:2px 0}.dx-modal .vg-note{margin:4px 0}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>

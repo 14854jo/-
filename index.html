@@ -1719,7 +1719,7 @@ const VG_CRE={
 };
 function vgCreature(key){const f=VG_CRE[key];return f?`<g>${f()}</g>`:''}
 function vgEgg(key){const g=key==='egg_gold';return `<g><ellipse cx="0" cy="-1" rx="20" ry="5" fill="#0002"/><path d="M0,-62 C16,-62 24,-34 24,-22 C24,-6 13,0 0,0 C-13,0 -24,-6 -24,-22 C-24,-34 -16,-62 0,-62Z" fill="url(#${g?'vg-egg2':'vg-egg1'})" stroke="${VG_OL}" stroke-width="2.6"/>${g?`<path d="M-22,-26 L-14,-32 L-6,-24 L2,-32 L10,-24 L18,-32 L23,-27" fill="none" stroke="#fff3b0" stroke-width="3" stroke-linejoin="round"/><path d="M0,-46 l2,-5 l2,5 l5,2 l-5,2 l-2,5 l-2,-5 l-5,-2Z" fill="#fff" class="vg-twinkle"/>`:`<circle cx="-8" cy="-36" r="5" fill="#b58cf0" opacity=".7"/><circle cx="9" cy="-22" r="6.5" fill="#8fd3ff" opacity=".7"/><circle cx="6" cy="-46" r="3.5" fill="#ff9fc4" opacity=".75"/><circle cx="-10" cy="-14" r="3" fill="#ffd36b" opacity=".8"/>`}<ellipse cx="-9" cy="-46" rx="5" ry="8" fill="#fff" opacity=".55" transform="rotate(20 -9 -46)"/></g>`}
-function vgDeco(key){const st=`stroke="${VG_OL}" stroke-width="2.2" stroke-linejoin="round"`;switch(key){
+function vgDeco(key){if(typeof key==='string'&&key.startsWith('ln_')&&typeof vgLineArt==='function')return vgLineArt(key);const st=`stroke="${VG_OL}" stroke-width="2.2" stroke-linejoin="round"`;switch(key){
   case 'tree':return `<g><ellipse cx="0" cy="0" rx="20" ry="7" fill="#0002"/><path d="M-5,0 L-4,-24 L4,-24 L5,0Z" fill="#a7744a" ${st}/><circle cx="-12" cy="-36" r="15" fill="url(#vg-leaf)" ${st}/><circle cx="12" cy="-38" r="15" fill="url(#vg-leaf)" ${st}/><circle cx="0" cy="-54" r="17" fill="url(#vg-leaf)" ${st}/><circle cx="-7" cy="-58" r="5" fill="#d7ffb2" opacity=".7"/><circle cx="8" cy="-40" r="3" fill="#ff7a8a"/><circle cx="-12" cy="-30" r="3" fill="#ff7a8a"/></g>`;
   case 'flower':{let f='';[[-14,-6,'#ff8fb1'],[0,-10,'#ffd34d'],[13,-4,'#b48cff'],[-4,2,'#7fc8ff'],[8,6,'#ff8fb1'],[-16,6,'#ffd34d']].forEach(([x,y,c])=>{f+=`<path d="M${x},${y} l0,-8" stroke="#4fa94a" stroke-width="2"/><g transform="translate(${x},${y-10})">${[0,72,144,216,288].map(a=>`<ellipse cx="0" cy="-3.2" rx="2.6" ry="3.6" fill="${c}" transform="rotate(${a})"/>`).join('')}<circle r="2" fill="#fff6b0"/></g>`});return `<g><ellipse cx="0" cy="2" rx="26" ry="10" fill="#7cc95e" opacity=".85"/>${f}</g>`}
   case 'bush':return `<g><ellipse cx="0" cy="0" rx="22" ry="7" fill="#0002"/><circle cx="-11" cy="-10" r="11" fill="url(#vg-leaf)" ${st}/><circle cx="11" cy="-10" r="11" fill="url(#vg-leaf)" ${st}/><circle cx="0" cy="-18" r="13" fill="url(#vg-leaf)" ${st}/>${[[-8,-18],[6,-22],[12,-8],[-14,-6],[2,-10]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.6" fill="#ff5f7e"/>`).join('')}</g>`;
@@ -1740,7 +1740,7 @@ function vgPK(p){return p&&p.key?(Number(p.lb)>=5?p.key+'@lb':p.key):p}
 function vgArt(key,kind){let lb=false;if(typeof key==='string'&&key.endsWith('@lb')){key=key.slice(0,-3);lb=true}
   const im=(typeof VG!=='undefined'&&VG.cat[key]&&VG.cat[key].image_url)||'';if(im){const u=String(im).replace(/["<>&]/g,''),lu=u.replace(/(\.[a-z0-9]+)$/i,'_lb$1');const use=lb&&lu!==u&&!VG_LBMISS.has(key);
     return `<g class="${VG.cat[key].kind==='animal'?'vg-bob':''}${use?' vg-lb5':''}"><image href="${use?lu:u}" x="-44" y="-92" width="88" height="94" preserveAspectRatio="xMidYMax meet"${use?` onerror="VG_LBMISS.add('${key}');this.onerror=null;this.setAttribute('href','${u}')"`:''}/></g>`}if(kind==='egg'||key.startsWith('egg_'))return vgEgg(key);if(VG_CRE[key])return `<g class="vg-bob">${vgCreature(key)}</g>`;return vgDeco(key)}
-const VG_VB={windmill:'-52 -112 104 120',pond:'-40 -40 80 64',stone_path:'-30 -30 60 46',flower:'-32 -40 64 54',fence:'-36 -48 72 80',bench:'-34 -44 68 62',bush:'-30 -44 60 54'};
+const VG_VB={ln_fence_wood:'-40 -46 80 66',ln_fence_white:'-40 -46 80 66',ln_wall_stone:'-40 -46 80 66',ln_hedge:'-40 -46 80 66',ln_stairs:'-40 -46 80 66',ln_rail:'-40 -46 80 66',windmill:'-52 -112 104 120',pond:'-40 -40 80 64',stone_path:'-30 -30 60 46',flower:'-32 -40 64 54',fence:'-36 -48 72 80',bench:'-34 -44 68 62',bush:'-30 -44 60 54'};
 function vgArtSvg(key,cls='vg-art',vb){vb=vb||VG_VB[String(key).replace(/@lb$/,'')]||'-48 -96 96 102';return `<svg class="${cls}" viewBox="${vb}" aria-hidden="true">${vgArt(key)}</svg>`}
 
 /* ── ⚔️ 속성 ── */
@@ -1757,7 +1757,7 @@ function vgElChart(){vgModal(`<h3>⚔️ 속성 상성</h3><p class="vg-mp">화�
 
 /* ===== 동물 마을: 화면 · 동작 ===== */
 const VG={catalog:[],cat:{},state:null,off:0,view:'mine',friend:null,friendState:null,mode:null,sel:null,tab:'shop',shopCat:'animal',zoom:1,ticker:null,friends:null,liked:new Set(),drag:null,moved:false,ready:false,setup:false,err:''};
-const VG_DOFF={tr_lily:10,tr_stonewall:4,tr_fence:4,tr_boulders:5,tr_stairs_stone:6,tr_stairs_wood:6,tr_bridge:6,tr_waterfall:6,fl_tulip:8,fl_daisy:8,fl_sunflower:8,fl_lavender:8,fl_hydrangea:8,fl_cosmos:8,fl_lily:8,fl_moon:8,bd_cottage:6,bd_treehouse:6,bd_cafe:6,bd_flowershop:6,bd_clock:6,bd_gazebo:6,bd_well:5,bd_lighthouse:6};
+const VG_DOFF={ln_fence_wood:-4,ln_fence_white:-4,ln_wall_stone:-4,ln_hedge:-4,ln_stairs:-4,ln_rail:-4,tr_lily:10,tr_stonewall:4,tr_fence:4,tr_boulders:5,tr_stairs_stone:6,tr_stairs_wood:6,tr_bridge:6,tr_waterfall:6,fl_tulip:8,fl_daisy:8,fl_sunflower:8,fl_lavender:8,fl_hydrangea:8,fl_cosmos:8,fl_lily:8,fl_moon:8,bd_cottage:6,bd_treehouse:6,bd_cafe:6,bd_flowershop:6,bd_clock:6,bd_gazebo:6,bd_well:5,bd_lighthouse:6};
 const VG_NOFLIP=new Set(['bd_cafe']);   // 글자가 들어간 그림은 좌우 반전 안 함
 function vgIsFloor(key){return (VG.cat[key]||{}).cat==='floor'}
 function vgFloorArt(key){const u=String((VG.cat[key]||{}).image_url||'').replace(/["<>&]/g,'');return `<image href="${u}" width="100" height="100" preserveAspectRatio="none" transform="matrix(.36,.18,-.36,.18,0,-18)"/><polygon points="0,-18 36,0 0,18 -36,0" fill="none" stroke="#0000001a" stroke-width="1"/>`}
@@ -1765,7 +1765,7 @@ function vgHl(x,y,col){const h=document.getElementById('vgHl');if(!h)return;if(x
   h.setAttribute('points',`${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}`);h.style.fill=col;h.style.display=''}
 function vgEvTile(target){if(!target||!target.closest)return null;const t=target.closest('[data-tile]');if(t)return t;const o=target.closest('#vgMap [data-item]');if(!o)return null;
   const it=(VG.state.items||[]).find(i=>i.id===o.dataset.item);return it&&it.x!=null?document.querySelector(`#vgMap [data-tile="${it.x},${it.y}"]`):null}
-const VG_DSCALE={tr_stairs_stone:1.05,tr_stairs_wood:1.05,tr_bridge:1.2,tr_waterfall:1.15,tr_boulders:.85,tr_stonewall:.85,tr_fence:.85,tr_lily:.75,fl_tulip:.82,fl_daisy:.82,fl_sunflower:.88,fl_lavender:.95,fl_hydrangea:.82,fl_cosmos:.84,fl_lily:.82,fl_moon:.84,bd_cottage:1.25,bd_treehouse:1.3,bd_cafe:1.25,bd_flowershop:1.3,bd_clock:1.45,bd_gazebo:1.3,bd_well:1.05,bd_lighthouse:1.45,stone_path:.7,fence:.8,bush:.72,flower:.82,flower_bed:.72,tree:1.1,lamp:.8,crystal_lantern:1.05,crystal_obelisk:.95,mushroom_house:1.35,fountain:1.25,crystal_tree:1.6};
+const VG_DSCALE={ln_fence_wood:1,ln_fence_white:1,ln_wall_stone:1,ln_hedge:1,ln_stairs:1,ln_rail:1,tr_stairs_stone:.72,tr_stairs_wood:.72,tr_bridge:1.2,tr_waterfall:1.15,tr_boulders:.85,tr_stonewall:.66,tr_fence:.62,tr_lily:.75,fl_tulip:.82,fl_daisy:.82,fl_sunflower:.88,fl_lavender:.95,fl_hydrangea:.82,fl_cosmos:.84,fl_lily:.82,fl_moon:.84,bd_cottage:1.25,bd_treehouse:1.3,bd_cafe:1.25,bd_flowershop:1.3,bd_clock:1.45,bd_gazebo:1.3,bd_well:1.05,bd_lighthouse:1.45,stone_path:.7,fence:.8,bush:.72,flower:.82,flower_bed:.72,tree:1.1,lamp:.8,crystal_lantern:1.05,crystal_obelisk:.95,mushroom_house:1.35,fountain:1.25,crystal_tree:1.6};
 const VG_EXPAND=[0,2000,6000,18000,50000,120000];
 const vgMob=()=>window.matchMedia('(max-width:760px)').matches;
 const vgN=v=>Math.floor(Number(v)||0).toLocaleString();
@@ -1819,7 +1819,7 @@ function vgRenderHud(){const st=VG.state;if(!st?.village)return;const v=st.villa
 function vgGeom(N){const top=190,W=N*72+260,H=N*36+top+70+N*26,ox=W/2;return {N,top,W,H,ox,c:(x,y)=>[(x-y)*36+ox,(x+y)*18+18+top]}}
 function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeom(N),D=24,bg=v.bg||'sky',TM=vgTerMap(st);let t='';
   const L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18],T=[G.ox,G.top];
-  const GR=vgGround(G,N,bg);t+=GR.pre;
+  const GR=vgGround(G,N,bg);t+=GR.pre+vgWallDefs();
     const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N);
   const hOf=(x,y)=>{const c=TM.get(x+','+y);return c?c.h:0};
   const floorSvg=i=>{const [cx,cy]=G.c(i.x,i.y),o=hOf(i.x,i.y)*VG_HU;return `<g class="vg-item vg-floor${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy-o})"><g transform="scale(${i.f?-1:1},1)">${vgFloorArt(i.item_key)}</g><polygon class="vg-sel-ring" points="0,-18 36,0 0,18 -36,0" fill="#fff4" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/></g>`};
@@ -1984,7 +1984,8 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
 /* =====================================================================
    🏔️ 지형 꾸미기 (높이 · 지형) · 🖼️ 마을 배경 · ⛶ 전체 화면
    ===================================================================== */
-const VG_HU=14;   // 높이 1층 = 14px
+const VG_HU=20;   // 높이 1층 = 20px
+const VG_HMAX=8;
 const VG_TT={
   grass:{n:'잔디',i:'🌱',a:'#a4e080',b:'#98d975',s1:'#7cb85a',s2:'#6aa64c',e:'#8acd69'},
   flower:{n:'꽃밭',i:'🌸',a:'#b7e892',b:'#aee18a',s1:'#7cb85a',s2:'#6aa64c',e:'#94d474'},
@@ -1995,14 +1996,17 @@ const VG_TT={
   snow:{n:'눈',i:'❄️',a:'#f7fbff',b:'#eef5fc',s1:'#c9d8e8',s2:'#b6c7da',e:'#dde8f3'}};
 const VG_BG={sky:{n:'하늘섬',i:'☁️'},spring:{n:'봄 산수화',i:'🌸'},sea:{n:'바다 섬',i:'🌊'},forest:{n:'숲속',i:'🌲'},night:{n:'별밤',i:'🌙'}};
 
-function vgTerMap(st){if(VG.ter&&st===VG.state)return VG.ter.draft;const m=new Map();(st&&st.terrain||[]).forEach(c=>m.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t||'grass'}));return m}
+function vgTerMap(st){if(VG.ter&&st===VG.state)return VG.ter.draft;const m=new Map();(st&&st.terrain||[]).forEach(c=>m.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t||'grass',w:c.w||undefined}));return m}
 function vgHAt(x,y,st){const c=vgTerMap(st||(VG.view==='friend'?VG.friendState:VG.state)).get(x+','+y);return c?c.h:0}
 function vgTAt(x,y,st){const c=vgTerMap(st||VG.state).get(x+','+y);return c?c.t:'grass'}
 
 /* 칸 하나 (윗면 + 옆면) */
 function vgTileSvg(x,y,G,c){const [cx,cy]=G.c(x,y),h=c?c.h:0,tt=VG_TT[c?c.t:'grass']||VG_TT.grass,o=h*VG_HU,ty=cy-o,dt=`data-tile="${x},${y}"`;let s='';
-  if(h>0){s+=`<polygon ${dt} class="vg-tside" points="${cx-36},${ty} ${cx},${ty+18} ${cx},${cy+18} ${cx-36},${cy}" fill="${tt.s1}"/><polygon ${dt} class="vg-tside" points="${cx},${ty+18} ${cx+36},${ty} ${cx+36},${cy} ${cx},${cy+18}" fill="${tt.s2}"/>`;
-    for(let k=1;k<h;k++){const yy=cy-k*VG_HU;s+=`<path d="M${cx-36},${yy} L${cx},${yy+18} L${cx+36},${yy}" stroke="#00000018" stroke-width="1.2" fill="none" pointer-events="none"/>`}
+  if(h>0){const w=vgWallOf(c),W=VG_WALL[w],Lf=`${cx-36},${ty} ${cx},${ty+18} ${cx},${cy+18} ${cx-36},${cy}`,Rf=`${cx},${ty+18} ${cx+36},${ty} ${cx+36},${cy} ${cx},${cy+18}`;
+    s+=`<polygon ${dt} class="vg-tside" points="${Lf}" fill="${W.c}"/><polygon ${dt} class="vg-tside" points="${Rf}" fill="${W.c}"/>`;
+    if(W.p)s+=`<polygon points="${Lf}" fill="url(#wp-${w}-L)" pointer-events="none"/><polygon points="${Rf}" fill="url(#wp-${w}-R)" pointer-events="none"/>`;
+    s+=`<polygon points="${Rf}" fill="#000" opacity=".16" pointer-events="none"/><polygon points="${Lf}" fill="#fff" opacity=".04" pointer-events="none"/>`;
+    if(W.lip)s+=`<path d="M${cx-36},${ty} L${cx},${ty+18} L${cx+36},${ty} L${cx+36},${ty+5} Q${cx+18},${ty+16} ${cx},${ty+23} Q${cx-18},${ty+16} ${cx-36},${ty+5}Z" fill="${tt.s1}" pointer-events="none"/>`;
     s+=`<path d="M${cx-36},${ty} L${cx},${ty+18} L${cx+36},${ty}" stroke="#ffffff55" stroke-width="1.5" fill="none" pointer-events="none"/>`}
   const pl=!VG.classic&&h===0&&(!c||c.t==='grass');s+=`<polygon class="vg-tile${pl?' plain':''}" ${dt} points="${cx},${ty-18} ${cx+36},${ty} ${cx},${ty+18} ${cx-36},${ty}" fill="${pl?'#ffffff':((x+y)%2?tt.a:tt.b)}"${pl?' fill-opacity="0"':''} stroke="${tt.e}" stroke-width=".8"/>`;
   const t=c?c.t:'grass',hs=(x*7+y*13)%5;
@@ -2042,19 +2046,19 @@ function vgBgPick(){const cur=(VG.state.village||{}).bg||'sky';const CL=`<button
   m.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{const k=b.dataset.bg;try{vgSetState(await window.fitVillage.setBg(k));m.remove();vgRenderStage();vgToast(k==='classic'?'🏝️ 예전 모습(클래식)으로 바꿨어요':`🖼️ 배경을 ${VG_BG[k].n}(으)로 바꿨어요`)}catch(e){vgToast(e.setup?'Supabase에 fit_village_update39.sql 실행이 필요합니다.':(e.message||String(e)),true)}})}
 
 /* 지형 편집 */
-function vgTerStart(){VG.mode=null;VG.sel=null;VG.ter={tool:'up',big:false,draft:new Map(),orig:new Map()};(VG.state.terrain||[]).forEach(c=>VG.ter.orig.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t}));
+function vgTerStart(){VG.mode=null;VG.sel=null;VG.ter={tool:'up',big:false,draft:new Map(),orig:new Map()};(VG.state.terrain||[]).forEach(c=>VG.ter.orig.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t,w:c.w||undefined}));
   VG.ter.draft=new Map([...VG.ter.orig].map(([k,v])=>[k,{...v}]));vgRenderStage();vgRenderSide()}
 function vgTerCells(){const T=VG.ter,keys=new Set([...T.draft.keys(),...T.orig.keys()]),out=[];let cost=0;
-  keys.forEach(k=>{const a=T.orig.get(k)||{h:0,t:'grass'},b=T.draft.get(k)||{h:0,t:'grass'};if(a.h===b.h&&a.t===b.t)return;const [x,y]=k.split(',').map(Number);out.push({x,y,h:b.h,t:b.t});cost+=(b.h-a.h)*100});return {cells:out,cost}}
+  keys.forEach(k=>{const a=T.orig.get(k)||{h:0,t:'grass'},b=T.draft.get(k)||{h:0,t:'grass'};if(a.h===b.h&&a.t===b.t&&(a.w||'')===(b.w||''))return;const [x,y]=k.split(',').map(Number);out.push({x,y,h:b.h,t:b.t,w:b.w||null});cost+=(b.h-a.h)*100});return {cells:out,cost}}
 function vgTerApply(x,y){const T=VG.ter,N=vgSize(VG.state.village.land_level),R=T.big?1:0;
   for(let dx=-R;dx<=R;dx++)for(let dy=-R;dy<=R;dy++){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=N||Y>=N)continue;const k=X+','+Y,c=T.draft.get(k)||{h:0,t:'grass'};
-    if(T.tool==='up')c.h=Math.min(4,c.h+1);else if(T.tool==='down')c.h=Math.max(0,c.h-1);else if(T.tool==='flat')c.h=0;else c.t=T.tool;
-    if(c.h===0&&c.t==='grass')T.draft.delete(k);else T.draft.set(k,c)}
+    if(T.tool.startsWith('w:'))c.w=T.tool.slice(2)==='auto'?undefined:T.tool.slice(2);else if(T.tool==='up')c.h=Math.min(VG_HMAX,c.h+1);else if(T.tool==='down')c.h=Math.max(0,c.h-1);else if(T.tool==='flat')c.h=0;else c.t=T.tool;
+    if(c.h===0&&c.t==='grass')T.draft.delete(k);else T.draft.set(k,{...c})}
   vgRenderStage()}
 function vgTerBar(){const T=VG.ter,{cells,cost}=vgTerCells();
-  const tools=[['up','⬆️','올리기'],['down','⬇️','내리기'],['flat','➖','평평'],...Object.entries(VG_TT).map(([k,t])=>[k,t.i,t.n])];
+  const tools=[['up','⬆️','올리기'],['down','⬇️','내리기'],['flat','➖','평평'],...Object.entries(VG_TT).map(([k,t])=>[k,t.i,t.n]),...Object.entries(VG_WALL).map(([k,w])=>['w:'+k,w.i,w.n])];
   return `<div class="vg-terbar"><div class="vg-tert">${tools.map(([k,i,n])=>`<button class="${T.tool===k?'on':''}" data-tt="${k}"><span>${i}</span><small>${n}</small></button>`).join('')}<button class="${T.big?'on':''}" data-tbig="1"><span>${T.big?'▣':'▫'}</span><small>${T.big?'3×3':'1칸'}</small></button></div>
-   <div class="vg-terf"><small>칸을 눌러 꾸미세요 · ${cells.length}칸 바뀜 · ${cost>0?`🪙 −${vgN(cost)}`:cost<0?`🪙 +${vgN(-cost)} 돌려받음`:'비용 없음'} (높이 1층 = 100)</small><button class="vg-btn sm" id="vgTerX">취소</button><button class="vg-btn sm gold" id="vgTerS" ${cells.length?'':'disabled'}>저장</button></div></div>`}
+   <div class="vg-terf"><small>칸을 눌러 꾸미세요 · ${cells.length}칸 바뀜 · ${cost>0?`🪙 −${vgN(cost)}`:cost<0?`🪙 +${vgN(-cost)} 돌려받음`:'비용 없음'} (높이 최대 ${VG_HMAX}층 · 1층 = 100 · 🧱벽은 올린 칸에 적용)</small><button class="vg-btn sm" id="vgTerX">취소</button><button class="vg-btn sm gold" id="vgTerS" ${cells.length?'':'disabled'}>저장</button></div></div>`}
 async function vgTerSave(){const {cells}=vgTerCells();if(!cells.length){VG.ter=null;vgRenderStage();return}
   try{const r=await window.fitVillage.terrainSave(cells);VG.ter=null;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`🏔️ 지형 저장 완료 (${r.changed}칸${r.cost>0?` · −${vgN(r.cost)}코인`:r.cost<0?` · +${vgN(-r.cost)}코인`:''})`)}
   catch(e){vgToast(e.setup?'Supabase에 fit_village_update37.sql 실행이 필요합니다.':(e.message||String(e)),true)}}
@@ -2137,6 +2141,38 @@ function vgBoxBind(stage){if(!VG.box)return;const sc=stage.querySelector('#vgScr
 function vgBoxPick(x0,y0,x1,y1){const out=[];document.querySelectorAll('#vgMap .vg-item[data-item]').forEach(g=>{const it=(VG.state.items||[]).find(i=>i.id===g.dataset.item);if(!it)return;if(vgIsFloor(it.item_key)&&!VG.boxFloor)return;
   const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(!m)return;const svg=g.ownerSVGElement,pt=svg.createSVGPoint();pt.x=+m[1];pt.y=+m[2]-(vgIsFloor(it.item_key)?0:16);const p=pt.matrixTransform(svg.getScreenCTM());
   if(p.x>=x0&&p.x<=x1&&p.y>=y0&&p.y<=y1)out.push(it.id)});return out}
+
+/* 🧱 올린 땅 옆면(벽) 꾸미기 */
+const VG_WALL={auto:{n:'흙벽',i:'🟫',c:'#a97c55',p:1,lip:1},stone:{n:'돌벽',i:'🪨',c:'#a7a39c',p:1},brick:{n:'벽돌벽',i:'🧱',c:'#b8674e',p:1},wood:{n:'나무벽',i:'🪵',c:'#a7754a',p:1},hedge:{n:'풀벽',i:'🌿',c:'#5f9a4f',p:1},marble:{n:'대리석',i:'⬜',c:'#ece6dc',p:1},cliff:{n:'절벽',i:'⛰️',c:'#8d8a86',p:1,lip:1}};
+function vgWallOf(c){if(c&&c.w&&VG_WALL[c.w])return c.w;const t=c?c.t:'grass';return t==='stone'?'stone':t==='snow'?'marble':t==='sand'?'auto':'auto'}
+function vgWallDefs(){const sk=a=>`patternTransform="skewY(${a})"`,P=(id,w,h,body)=>['L','R'].map(d=>`<pattern id="wp-${id}-${d}" patternUnits="userSpaceOnUse" width="${w}" height="${h}" ${sk(d==='L'?26.565:-26.565)}>${body}</pattern>`).join('');
+  return `<defs>${P('auto',36,20,'<path d="M0,6 Q9,3 18,6 T36,6 M0,14 Q9,11 18,14 T36,14" stroke="#7a5536" stroke-width="1.6" fill="none" opacity=".55"/><circle cx="8" cy="10" r="1.6" fill="#7a5536" opacity=".5"/><circle cx="26" cy="17" r="1.3" fill="#c99a6a"/>')}
+  ${P('stone',24,16,'<rect x="1" y="1" width="14" height="6.5" rx="2" fill="#bdb9b1" stroke="#77736d" stroke-width="1"/><rect x="16" y="1" width="7" height="6.5" rx="2" fill="#b2aea6" stroke="#77736d" stroke-width="1"/><rect x="-4" y="9" width="10" height="6.5" rx="2" fill="#b2aea6" stroke="#77736d" stroke-width="1"/><rect x="7" y="9" width="15" height="6.5" rx="2" fill="#c2beb6" stroke="#77736d" stroke-width="1"/>')}
+  ${P('brick',18,10,'<rect width="18" height="10" fill="#b8674e"/><path d="M0,0 H18 M0,5 H18 M0,10 H18 M6,0 V5 M15,5 V10" stroke="#e8d7c4" stroke-width="1.1"/>')}
+  ${P('wood',10,40,'<rect width="10" height="40" fill="#a7754a"/><path d="M0,0 V40" stroke="#6e4a2c" stroke-width="1.4"/><path d="M4,6 q2,6 0,12 M7,22 q2,6 0,10" stroke="#8a5d38" stroke-width="1" fill="none"/>')}
+  ${P('hedge',14,12,'<rect width="14" height="12" fill="#5f9a4f"/><circle cx="3" cy="3" r="3.2" fill="#78b462"/><circle cx="10" cy="5" r="3.4" fill="#6aa857"/><circle cx="6" cy="10" r="3" fill="#84bf6c"/><circle cx="12" cy="11" r="2" fill="#4e8a42"/>')}
+  ${P('marble',36,20,'<rect width="36" height="20" fill="#ece6dc"/><path d="M0,10 H36 M18,0 V10 M8,10 V20 M28,10 V20" stroke="#cfc6b8" stroke-width="1"/><path d="M3,4 q8,4 13,1" stroke="#d9cfe0" stroke-width=".8" fill="none"/>')}
+  ${P('cliff',30,24,'<rect width="30" height="24" fill="#8d8a86"/><path d="M0,8 L8,6 L16,9 L30,7 M0,18 L10,16 L20,19 L30,17 M6,8 L4,18 M22,9 L24,17" stroke="#6b6864" stroke-width="1.3" fill="none"/><path d="M2,2 L10,1" stroke="#b5b2ad" stroke-width="1.5"/>')}</defs>`}
+
+/* 일자 울타리 · 담 · 계단 (한 칸을 곧게 지나감 · 방향전환으로 반대 방향) */
+function vgLineArt(key){const ol='#4a3b30';const u=[18,9],A=[-u[0],-u[1]],B=[u[0],u[1]];
+  const posts=(n,h,c,w)=>Array.from({length:n},(_,i)=>{const t=i/(n-1),x=A[0]+(B[0]-A[0])*t,y=A[1]+(B[1]-A[1])*t;return `<path d="M${x-w},${y} L${x-w},${y-h} L${x},${y-h-w*.8} L${x+w},${y-h} L${x+w},${y}Z" fill="${c}" stroke="${ol}" stroke-width="1.4" stroke-linejoin="round"/>`}).join('');
+  const rail=(y0,c,th)=>`<path d="M${A[0]},${A[1]-y0} L${B[0]},${B[1]-y0} L${B[0]},${B[1]-y0+th} L${A[0]},${A[1]-y0+th}Z" fill="${c}" stroke="${ol}" stroke-width="1.3"/>`;
+  const sh=`<path d="M${A[0]-2},${A[1]+2} L${B[0]+2},${B[1]+2}" stroke="#0002" stroke-width="7" stroke-linecap="round"/>`;
+  switch(key){
+    case 'ln_fence_wood':return `<g>${sh}${rail(17,'#9b6b45',4)}${rail(8,'#9b6b45',4)}${posts(3,24,'#b07c50',3.2)}</g>`;
+    case 'ln_fence_white':return `<g>${sh}${rail(16,'#f4efe6',3.5)}${rail(8,'#f4efe6',3.5)}${posts(5,22,'#ffffff',2.6)}</g>`;
+    case 'ln_rail':return `<g>${sh}${rail(10,'#7a5a3e',3.5)}${posts(2,13,'#8a6646',2.6)}</g>`;
+    case 'ln_wall_stone':{const hh=16,t=6;let s=sh+`<path d="M${A[0]},${A[1]} L${B[0]},${B[1]} L${B[0]},${B[1]-hh} L${A[0]},${A[1]-hh}Z" fill="#a9a59d" stroke="${ol}" stroke-width="1.4"/><path d="M${A[0]},${A[1]-hh} L${B[0]},${B[1]-hh} L${B[0]+t},${B[1]-hh-t*.5} L${A[0]+t},${A[1]-hh-t*.5}Z" fill="#c9c5bd" stroke="${ol}" stroke-width="1.4"/>`;
+      for(let r=0;r<2;r++)for(let i=0;i<4;i++){const o=(r%2)*.12,t0=i/4+o,t1=Math.min(1,t0+.25);if(t0>=1)continue;const x0=A[0]+36*t0,y0=A[1]+18*t0-3-r*7,x1=A[0]+36*t1,y1=A[1]+18*t1-3-r*7;s+=`<path d="M${x0},${y0} L${x1},${y1}" stroke="#8a867f" stroke-width="1"/><path d="M${x0},${y0} L${x0},${y0-7}" stroke="#8a867f" stroke-width="1"/>`}return `<g>${s}</g>`}
+    case 'ln_hedge':{let s=sh+`<path d="M${A[0]},${A[1]} L${B[0]},${B[1]} L${B[0]},${B[1]-14} L${A[0]},${A[1]-14}Z" fill="#4f8a42" stroke="${ol}" stroke-width="1.3"/>`;for(let i=0;i<6;i++){const t=i/5,x=A[0]+36*t,y=A[1]+18*t-16;s+=`<circle cx="${x}" cy="${y}" r="7" fill="${i%2?'#6aa857':'#78b462'}" stroke="${ol}" stroke-width="1.2"/>`}return `<g>${s}</g>`}
+    case 'ln_stairs':{const v=[-12,6],H=VG_HU;let s='';for(let k=3;k>=0;k--){const t0=1-k*.5,t1=1-(k+1)*.5,a=[u[0]*t0,u[1]*t0],b=[u[0]*t1,u[1]*t1],h1=(k+1)*H/4,h0=k*H/4;
+        const q=(p,dv,hh)=>`${p[0]+v[0]*dv},${p[1]+v[1]*dv-hh}`;
+        s+=`<polygon points="${q(a,-1,h1)} ${q(b,-1,h1)} ${q(b,1,h1)} ${q(a,1,h1)}" fill="#c9c3b8" stroke="${ol}" stroke-width="1.2"/>`;
+        s+=`<polygon points="${q(a,-1,h1)} ${q(a,1,h1)} ${q(a,1,h0)} ${q(a,-1,h0)}" fill="#9e978b" stroke="${ol}" stroke-width="1.2"/>`;
+        s+=`<polygon points="${q(a,1,h0)} ${q(a,1,h1)} ${q(b,1,h1)} ${q(b,1,0)} ${q(a,1,0)}" fill="#8c867b" stroke="${ol}" stroke-width="1.2"/>`}
+      return `<g>${s}</g>`}}
+  return ''}
 
 
 /* ===== 미니게임: 틀린그림찾기 · 코인 룰렛 ===== */

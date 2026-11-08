@@ -1144,6 +1144,16 @@ body.vg-noscroll{overflow:hidden}
 .vg-map .vg-tile.plain{stroke-opacity:.16}
 .vg-map.placing .vg-tile.plain,.vg-map.terraform .vg-tile.plain,.vg-map:has(.vg-dragging) .vg-tile.plain{stroke-opacity:.7;stroke:#ffffff}
 .vg-map .vg-tile.plain.hl,.vg-map .vg-tile.plain.bad,.vg-map .vg-tile.plain.swap{fill-opacity:.7}
+.vg-stage>.vg-cloud.cl{display:block}.vg-bgclassic{background:linear-gradient(180deg,#bfe6ff,#eaf7ff)}.vg-bgclassic svg{width:100%;height:100%}
+/* 📦 구역 선택 */
+.vg-scroll.boxing{cursor:crosshair;touch-action:none}
+.vg-boxsel{position:absolute;z-index:5;border:2px dashed #ffb21f;background:#ffd34d33;border-radius:6px;pointer-events:none}
+.vg-boxsel:after{content:attr(data-n) '개';position:absolute;right:4px;bottom:2px;background:#ffb21f;color:#fff;border-radius:8px;padding:0 6px;font-size:12px;font-family:'Jua',sans-serif}
+.vg-map .vg-item.boxed{filter:drop-shadow(0 0 4px #ffb21f) drop-shadow(0 0 2px #fff) brightness(1.08)}
+.vg-boxopt{display:inline-flex;align-items:center;gap:3px;font-size:12px}
+.vg-grchips{margin:8px 0 4px;flex-wrap:wrap}.vg-grchips button i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gc,#bbb);margin-right:3px;vertical-align:1px}
+.vg-stage-top{flex-wrap:wrap;row-gap:6px}.vg-stage-top>.vg-btn{white-space:nowrap}.vg-stage-top .vg-banner{white-space:nowrap}.vg-stage-top .vg-zoom{margin-left:auto}
+.vg-boxbar{white-space:normal;max-width:calc(100% - 20px)}.vg-boxbar span{flex:1;min-width:0}.vg-boxbar label,.vg-boxbar .vg-btn{flex:none;white-space:nowrap}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1773,7 +1783,7 @@ function companionPage(){return `${head('🏡 동물 마을','동물을 배치�
 
 async function wireCompanion(){
   if(VG.ticker){clearInterval(VG.ticker);VG.ticker=null}
-  VG.view='mine';VG.mode=null;VG.sel=null;VG.friend=null;VG.ter=null;VG.full=false;document.body.classList.remove('vg-noscroll');
+  VG.view='mine';VG.mode=null;VG.sel=null;VG.friend=null;VG.ter=null;VG.box=null;VG.full=false;document.body.classList.remove('vg-noscroll');
   document.querySelectorAll('body > #vgSide').forEach(e=>e.remove());if(vgMob()){const sd=document.getElementById('vgSide');if(sd)document.body.appendChild(sd)}
   vgBindOnce();
   const stage=$('#vgStage');
@@ -1830,24 +1840,24 @@ function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const 
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
   const banner=friend?`<div class="vg-banner">${vgRepArt(VG.friendState&&VG.friendState.village)}🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn green sm" id="vgFmVisit">🌾 농장 구경</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">${vgRepArt(st.village)}🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button><button class="vg-btn sm green fm-btn" id="vgFmBtn">🌾 농장</button>`;
-  const tools=friend?'':`<button class="vg-btn ${VG.ter?'gold':''}" id="vgTerBtn" title="지형 꾸미기 (높이 · 물 · 모래…)">🏔️</button><button class="vg-btn" id="vgBgBtn" title="마을 배경">🖼️</button>`;
+  const tools=friend?'':`<button class="vg-btn ${VG.box?'gold':''}" id="vgBoxBtn" title="구역을 드래그해서 한꺼번에 보관함으로">📦</button><button class="vg-btn ${VG.ter?'gold':''}" id="vgTerBtn" title="지형 꾸미기 (높이 · 물 · 모래…)">🏔️</button><button class="vg-btn" id="vgBgBtn" title="마을 배경">🖼️</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요${VG.mode.left?` · <b>남은 ${VG.mode.left}개</b>`:''} <button class="vg-btn sm" id="vgCancel">${VG.mode.left?'그만 놓기':'취소'} (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom">${tools}<button class="vg-btn" id="vgFull" title="전체 화면">${VG.full?'✕':'⛶'}</button><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
-  ${vgBgHtml(st.village.bg||'sky')}${(st.village.bg||'sky')==='sky'?'<div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>':''}
-  <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${VG.ter&&!friend?vgTerBar():hint}`;
+  ${(st.village.bg||'sky')==='classic'?'':vgBgHtml(st.village.bg||'sky')}${(st.village.bg||'sky')==='classic'?'<div class="vg-cloud cl" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud cl" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>':''}
+  <div class="vg-scroll${VG.box?' boxing':''}" id="vgScroll">${vgMapSvg(st,!friend)}</div>${VG.ter&&!friend?vgTerBar():VG.box&&!friend?vgBoxBar():hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else if(VG.boardC){s2.scrollLeft=VG.boardC[0]-s2.clientWidth/2;s2.scrollTop=VG.boardC[1]-s2.clientHeight/2}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
   $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgFmVisit')&&($('#vgFmVisit').onclick=()=>vgFarmFriend(VG.friend.user_id,VG.friend.display_name));$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);if($('#vgFmBtn'))setTimeout(()=>{try{fmPeek()}catch(e){}},300);
-  $('#vgTerBtn')&&($('#vgTerBtn').onclick=()=>{if(VG.ter){VG.ter=null;vgRenderStage();vgRenderSide()}else vgTerStart()});$('#vgBgBtn')&&($('#vgBgBtn').onclick=vgBgPick);$('#vgFull')&&($('#vgFull').onclick=vgFullToggle);vgTerBind(stage);
+  $('#vgBoxBtn')&&($('#vgBoxBtn').onclick=()=>{VG.box=VG.box?null:{};VG.ter=null;VG.mode=null;vgRenderStage()});vgBoxBind(stage);$('#vgTerBtn')&&($('#vgTerBtn').onclick=()=>{if(VG.ter){VG.ter=null;vgRenderStage();vgRenderSide()}else vgTerStart()});$('#vgBgBtn')&&($('#vgBgBtn').onclick=vgBgPick);$('#vgFull')&&($('#vgFull').onclick=vgFullToggle);vgTerBind(stage);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
 function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;vgBindTouchDrag();
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&VG.mode&&document.getElementById('vgRoot'))vgCancelMode()});
-  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;const gi=VG.view==='mine'&&!VG.mode&&!VG.ter&&e.target.closest('[data-item]');if(gi){vgIdStart(gi,e.clientX,e.clientY,false);return}VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
+  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;if(VG.box)return;const gi=VG.view==='mine'&&!VG.mode&&!VG.ter&&e.target.closest('[data-item]');if(gi){vgIdStart(gi,e.clientX,e.clientY,false);return}VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
   document.addEventListener('pointermove',e=>{if(VG.idrag&&!VG.idrag.touch){vgIdMove(e.clientX,e.clientY);return}const d=VG.drag;if(d){const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!VG.moved&&Math.hypot(dx,dy)>6){VG.moved=true;d.sc.classList.add('dragging')}if(VG.moved){d.sc.scrollLeft=d.l-dx;d.sc.scrollTop=d.t-dy}}
     if(VG.mode&&!VG.moved){vgGhostAt(vgEvTile(e.target))}});
   document.addEventListener('pointerup',e=>{if(VG.idrag&&!VG.idrag.touch)vgIdEnd(e.clientX,e.clientY);if(VG.drag){VG.drag.sc.classList.remove('dragging');VG.drag=null}});
-  document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#vgScroll'))return;if(VG.moved){VG.moved=false;return}
+  document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#vgScroll'))return;if(VG.box)return;if(VG.moved){VG.moved=false;return}
     const it=e.target.closest('[data-item]'),tile=e.target.closest('[data-tile]');
     if(VG.view==='friend'){if(it)vgHop(it);return}
     if(VG.ter){const mt=vgEvTile(e.target);if(mt){const [x,y]=mt.dataset.tile.split(',').map(Number);vgTerApply(x,y)}return}
@@ -1876,7 +1886,7 @@ async function vgIdEnd(x,y){const d=VG.idrag;if(!d)return;const t=d.on?vgIdTile(
 async function vgFlip(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;it.f=!it.f;vgRenderStage();
   try{vgSetState(await window.fitVillage.flip(id));vgRenderStage()}catch(e){it.f=!it.f;vgRenderStage();vgToast(e.setup?'Supabase에 fit_village_update21.sql 실행이 필요합니다.':(e.message||String(e)),true)}}
 function vgBindTouchDrag(){
-  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||VG.view!=='mine'||VG.mode||VG.ter)return;const g=e.target.closest&&e.target.closest('#vgScroll [data-item]');if(!g)return;const t=e.touches[0];
+  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||VG.view!=='mine'||VG.mode||VG.ter||VG.box)return;const g=e.target.closest&&e.target.closest('#vgScroll [data-item]');if(!g)return;const t=e.touches[0];
     vgIdStart(g,t.clientX,t.clientY,true);VG.idrag.timer=setTimeout(()=>{if(VG.idrag&&VG.idrag.g===g)vgIdOn()},380)},{passive:true});
   document.addEventListener('touchmove',e=>{const d=VG.idrag;if(!d||!d.touch)return;const t=e.touches[0];if(!d.on){if(Math.hypot(t.clientX-d.x,t.clientY-d.y)>10){clearTimeout(d.timer);VG.idrag=null}return}
     e.preventDefault();d.lx=t.clientX;d.ly=t.clientY;vgIdMove(t.clientX,t.clientY)},{passive:false});
@@ -1937,9 +1947,9 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
     const BE=VG.bossEggs.length?`<div class="vg-bosseggs"><b>🥚 보스 알 ${VG.bossEggs.length}개</b>${VG.bossEggs.map(e=>`<div class="vg-egg-card boss"><svg class="vg-art" viewBox="-120 -170 240 178">${vgBossArt(e.floor,'images/bosses/boss'+e.floor+'.webp')}</svg><div style="flex:1"><b>${e.floor}층 보스 알</b><div class="vg-odds">${esc((VG.cat['boss_'+e.floor]||{}).name||'')} · ${[5,10].includes(e.floor)?'신화급':e.floor>=6?'전설급':'영웅급'}</div><button class="vg-btn purple sm full" data-bhatch="${e.id}">부화하기 (무료)</button></div></div>`).join('')}</div>`:'<p class="vg-note">🥚 <b>보스 알</b>: 동굴 던전 10층을 처음 깨면 랜덤 보스 알 1개를 받아요. 그 뒤로는 층 보스를 잡을 때마다 낮은 확률로 그 층의 보스 알이 나와요.</p>';
     body=BE+`<p class="vg-note">알에서는 <b style="color:#9b5cff">영웅</b>·<b style="color:#ff9a1f">전설</b>·<b style="color:#ff4f8b">신화</b> 등급 친구들만 태어나요. 상점 동물보다 훨씬 많은 코인을 만들어요!</p>${eggs.map(e=>{const o=odds[e.item_key]||[0,0,0];return `<div class="vg-egg-card">${vgArtSvg(vgK(e),'vg-art','-40 -74 80 80')}<div style="flex:1"><b style="font-size:17px">${esc(e.name)}</b><div class="vg-odds"><i style="color:#9b5cff">영웅 ${o[0]}%</i> · <i style="color:#ff9a1f">전설 ${o[1]}%</i> · <i style="color:#ff4f8b">신화 ${o[2]}%</i></div><button class="vg-btn purple sm full" data-hatch="${e.item_key}" ${coins<e.price?'disabled':''}>${vgCoinIcon(14)} ${vgN(e.price)} · 부화하기</button></div></div>`}).join('')}
     <b style="display:block;margin:6px 0 8px">태어날 수 있는 친구들</b><div class="vg-codex">${pool.map(c=>`<div class="vg-card g${c.grade}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgElB(c)}${vgArtSvg(vgK(c))}<b style="font-size:13px">${esc(c.name)}</b><div class="vg-meta">+${vgN(c.rate)}/h</div></div>`).join('')}</div>`}
-  if(VG.tab==='inv'){const grp={};inv.forEach(i=>(grp[i.item_key]=grp[i.item_key]||[]).push(i.id));const sub=VG.invSub||'animal',idc=VG.invDc||'all',keys=Object.keys(grp).filter(k=>{const c=VG.cat[k]||{};if(sub==='deco')return c.kind==='deco'&&(idc==='all'||(idc==='etc'?!['flower','building','floor','terrain'].includes(c.cat):c.cat===idc));return c.kind!=='deco'}).sort((a,b)=>(VG.cat[a]?.sort||0)-(VG.cat[b]?.sort||0));
+  if(VG.tab==='inv'){const grp={};inv.forEach(i=>(grp[i.item_key]=grp[i.item_key]||[]).push(i.id));const sub=VG.invSub||'animal',idc=VG.invDc||'all',keys=Object.keys(grp).filter(k=>{const c=VG.cat[k]||{};if(sub==='deco')return c.kind==='deco'&&(idc==='all'||(idc==='etc'?!['flower','building','floor','terrain'].includes(c.cat):c.cat===idc));return c.kind!=='deco'&&(!VG.invGr||c.grade===VG.invGr)}).sort((a,b)=>(VG.cat[a]?.sort||0)-(VG.cat[b]?.sort||0));
     const hasHouse=(st.items||[]).some(i=>i.item_key==='pet_house');
-    body=vgInvSub()+((VG.invSub||'animal')==='equip'?vgEquipHtml():(VG.invSub||'animal')==='cons'?vgConsHtml():(sub==='deco'?`<div class="vg-chips">${[['all','전체'],['flower','🌷 꽃'],['building','🏠 건물'],['floor','🧱 길'],['terrain','⛰️ 지형'],['etc','🌳 기타']].map(([k,n])=>`<button data-idc="${k}" class="${idc===k?'on':''}">${n}</button>`).join('')}</div>`:vgHouseHtml(hasHouse))+(keys.length?`<p class="vg-note">${sub==='deco'?'[배치]를 누르면 같은 꾸미기를 <b>이어서 계속</b> 놓을 수 있어요. (Esc로 끝내기)':'보관함의 개체는 코인을 만들지 않아요. 마을에 배치하거나 펫 하우스에 넣어 주세요!'}</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button>${hasHouse&&c.kind==='animal'?`<button class="vg-btn sm purple" data-hput="${k}" title="보관함의 이 동물 전부를 펫 하우스로">🏠 넣기</button>`:''}<button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>'))}
+    body=vgInvSub()+((VG.invSub||'animal')==='equip'?vgEquipHtml():(VG.invSub||'animal')==='cons'?vgConsHtml():(sub==='deco'?`<div class="vg-chips">${[['all','전체'],['flower','🌷 꽃'],['building','🏠 건물'],['floor','🧱 길'],['terrain','⛰️ 지형'],['etc','🌳 기타']].map(([k,n])=>`<button data-idc="${k}" class="${idc===k?'on':''}">${n}</button>`).join('')}</div>`:vgHouseHtml(hasHouse)+vgInvGrChips(inv))+(keys.length?`<p class="vg-note">${sub==='deco'?'[배치]를 누르면 같은 꾸미기를 <b>이어서 계속</b> 놓을 수 있어요. (Esc로 끝내기)':'보관함의 개체는 코인을 만들지 않아요. 마을에 배치하거나 펫 하우스에 넣어 주세요!'}</p>${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vg-list-row">${vgArtSvg(k)}<div class="grow"><b>${esc(c.name)} <span style="color:#9a8fab;font-size:13px">×${grp[k].length}</span></b><span class="vg-meta" style="font-family:Inter,'Malgun Gothic',sans-serif;font-size:12px;color:#7d7290">${c.kind==='animal'?`시간당 +${vgN(c.rate)}`:`매력 +${vgN(c.charm)}`}</span></div><button class="vg-btn sm green" data-mv="${grp[k][0]}">배치</button>${hasHouse&&c.kind==='animal'?`<button class="vg-btn sm purple" data-hput="${k}" title="보관함의 이 동물 전부를 펫 하우스로">🏠 넣기</button>`:''}<button class="vg-btn sm" data-sell="${grp[k][0]}">판매</button></div>`}).join('')}`:'<div class="vg-empty">📦 보관함이 비어 있어요.<br><small>마을의 개체를 클릭해 보관할 수 있어요.</small></div>'))}
   if(VG.tab==='codex'){if(!VG.codex){VG.codex={keys:[...vgSeen()],flags:{}};window.fitVillage.codexList().then(d=>{VG.codex={keys:d.keys||[],flags:d.flags||{}};vgMarkSeen(VG.codex.keys);if(VG.tab==='codex')vgRenderSide()}).catch(()=>{})}
     const seen=new Set([...VG.codex.keys,...vgSeen()]),an=VG.catalog.filter(c=>c.kind==='animal'),got=an.filter(c=>seen.has(c.item_key)).length;
     const CB={1:'공격 시 3% 확률로 추가 공격',2:'전투 시작 시 보호막 (최대 체력 8%)',3:'받는 피해 −3%',4:'필살기 피해 +5%',5:'매 턴 체력 2% 회복',6:'모든 능력치 +5%',7:'마을 코인 생산 +5%'};
@@ -1952,7 +1962,7 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.classList.toggle('open',!!VG.sheet);side.innerHTML=`<div class="vg-handle" id="vgHandle"><span></span></div><div class="vg-tabs">${tabs.map(([k,ic,l])=>`<button class="vg-tab ${VG.tab===k?'on':''}" data-tab="${k}"><span>${ic}</span>${l}</button>`).join('')}</div><div class="vg-side-body">${VG.sel&&VG.view==='mine'?vgSelCard():''}${body}</div>`;
   side.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(vgMob()){if(VG.tab===b.dataset.tab&&VG.sheet)VG.sheet=false;else{VG.tab=b.dataset.tab;VG.sheet=true}}else VG.tab=b.dataset.tab;vgRenderSide()});
   $('#vgHandle')&&($('#vgHandle').onclick=()=>{VG.sheet=!VG.sheet;vgRenderSide()});
-  side.querySelectorAll('[data-sc]').forEach(b=>b.onclick=()=>{VG.shopCat=b.dataset.sc;vgRenderSide()});side.querySelectorAll('[data-dc]').forEach(b=>b.onclick=()=>{VG.decoCat=b.dataset.dc;vgRenderSide()});side.querySelectorAll('[data-idc]').forEach(b=>b.onclick=()=>{VG.invDc=b.dataset.idc;vgRenderSide()});side.querySelectorAll('[data-buy10]').forEach(b=>b.onclick=()=>{b.disabled=true;vgBuyN(b.dataset.buy10,10)});
+  side.querySelectorAll('[data-sc]').forEach(b=>b.onclick=()=>{VG.shopCat=b.dataset.sc;vgRenderSide()});side.querySelectorAll('[data-dc]').forEach(b=>b.onclick=()=>{VG.decoCat=b.dataset.dc;vgRenderSide()});side.querySelectorAll('[data-idc]').forEach(b=>b.onclick=()=>{VG.invDc=b.dataset.idc;vgRenderSide()});side.querySelectorAll('[data-igr]').forEach(b=>b.onclick=()=>{VG.invGr=Number(b.dataset.igr)||0;vgRenderSide()});side.querySelectorAll('[data-buy10]').forEach(b=>b.onclick=()=>{b.disabled=true;vgBuyN(b.dataset.buy10,10)});
   side.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{b.disabled=true;vgBuy(b.dataset.buy)});
   side.querySelectorAll('[data-hatch]').forEach(b=>b.onclick=()=>vgHatch(b.dataset.hatch));
   side.querySelectorAll('[data-bhatch]').forEach(b=>b.onclick=()=>vgBossHatch(b.dataset.bhatch));
@@ -1994,7 +2004,7 @@ function vgTileSvg(x,y,G,c){const [cx,cy]=G.c(x,y),h=c?c.h:0,tt=VG_TT[c?c.t:'gra
   if(h>0){s+=`<polygon ${dt} class="vg-tside" points="${cx-36},${ty} ${cx},${ty+18} ${cx},${cy+18} ${cx-36},${cy}" fill="${tt.s1}"/><polygon ${dt} class="vg-tside" points="${cx},${ty+18} ${cx+36},${ty} ${cx+36},${cy} ${cx},${cy+18}" fill="${tt.s2}"/>`;
     for(let k=1;k<h;k++){const yy=cy-k*VG_HU;s+=`<path d="M${cx-36},${yy} L${cx},${yy+18} L${cx+36},${yy}" stroke="#00000018" stroke-width="1.2" fill="none" pointer-events="none"/>`}
     s+=`<path d="M${cx-36},${ty} L${cx},${ty+18} L${cx+36},${ty}" stroke="#ffffff55" stroke-width="1.5" fill="none" pointer-events="none"/>`}
-  const pl=h===0&&(!c||c.t==='grass');s+=`<polygon class="vg-tile${pl?' plain':''}" ${dt} points="${cx},${ty-18} ${cx+36},${ty} ${cx},${ty+18} ${cx-36},${ty}" fill="${pl?'#ffffff':((x+y)%2?tt.a:tt.b)}"${pl?' fill-opacity="0"':''} stroke="${tt.e}" stroke-width=".8"/>`;
+  const pl=!VG.classic&&h===0&&(!c||c.t==='grass');s+=`<polygon class="vg-tile${pl?' plain':''}" ${dt} points="${cx},${ty-18} ${cx+36},${ty} ${cx},${ty+18} ${cx-36},${ty}" fill="${pl?'#ffffff':((x+y)%2?tt.a:tt.b)}"${pl?' fill-opacity="0"':''} stroke="${tt.e}" stroke-width=".8"/>`;
   const t=c?c.t:'grass',hs=(x*7+y*13)%5;
   if(t==='grass'&&hs===0&&h>0)s+=`<path d="M${cx-8},${ty+4} l2,-6 l2,6 M${cx+10},${ty-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`;
   else if(t==='water')s+=`<path class="vg-wave" d="M${cx-16},${ty-2} q4,-3 8,0 t8,0 M${cx+2},${ty+6} q4,-3 8,0 t8,0" stroke="#ffffffaa" stroke-width="1.6" fill="none" stroke-linecap="round" pointer-events="none"/>`;
@@ -2027,9 +2037,9 @@ function vgBgHtml(bg){bg=VG_BG[bg]?bg:'sky';let s='';
   return `<div class="vg-bg bg-${bg}"><svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">${s}</svg><img src="images/bg/bg_${bg}.webp" alt="" onload="this.classList.add('on')" onerror="this.remove()"></div>`}
 
 /* 배경 고르기 */
-function vgBgPick(){const cur=(VG.state.village||{}).bg||'sky';
-  const m=vgModal(`<h3>🖼️ 마을 배경</h3><p class="vg-mp">친구가 놀러 와도 같은 배경이 보여요.</p><div class="vg-bgl">${Object.entries(VG_BG).map(([k,b])=>`<button class="vg-bgo ${k===cur?'on':''}" data-bg="${k}"><div class="vg-bgp">${vgBgHtml(k)}</div><b>${b.i} ${b.n}</b></button>`).join('')}</div>`,'vg-wide');
-  m.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{const k=b.dataset.bg;try{vgSetState(await window.fitVillage.setBg(k));m.remove();vgRenderStage();vgToast(`🖼️ 배경을 ${VG_BG[k].n}(으)로 바꿨어요`)}catch(e){vgToast(e.setup?'Supabase에 fit_village_update37.sql 실행이 필요합니다.':(e.message||String(e)),true)}})}
+function vgBgPick(){const cur=(VG.state.village||{}).bg||'sky';const CL=`<button class="vg-bgo ${cur==='classic'?'on':''}" data-bg="classic"><div class="vg-bgp vg-bgclassic"><svg viewBox="0 0 160 74"><polygon points="80,14 130,36 80,58 30,36" fill="#8fd46c"/><polygon points="30,36 80,58 80,68 30,46" fill="#c58f5c"/><polygon points="80,58 130,36 130,46 80,68" fill="#a87346"/><ellipse cx="40" cy="14" rx="14" ry="4" fill="#fff"/></svg></div><b>🏝️ 클래식 (예전 모습)</b></button>`;
+  const m=vgModal(`<h3>🖼️ 마을 배경</h3><p class="vg-mp">친구가 놀러 와도 같은 배경이 보여요.</p><div class="vg-bgl">${CL}${Object.entries(VG_BG).map(([k,b])=>`<button class="vg-bgo ${k===cur?'on':''}" data-bg="${k}"><div class="vg-bgp">${vgBgHtml(k)}</div><b>${b.i} ${b.n}</b></button>`).join('')}</div>`,'vg-wide');
+  m.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{const k=b.dataset.bg;try{vgSetState(await window.fitVillage.setBg(k));m.remove();vgRenderStage();vgToast(k==='classic'?'🏝️ 예전 모습(클래식)으로 바꿨어요':`🖼️ 배경을 ${VG_BG[k].n}(으)로 바꿨어요`)}catch(e){vgToast(e.setup?'Supabase에 fit_village_update39.sql 실행이 필요합니다.':(e.message||String(e)),true)}})}
 
 /* 지형 편집 */
 function vgTerStart(){VG.mode=null;VG.sel=null;VG.ter={tool:'up',big:false,draft:new Map(),orig:new Map()};(VG.state.terrain||[]).forEach(c=>VG.ter.orig.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t}));
@@ -2062,7 +2072,7 @@ const VG_GROUND={
   forest:{g:'#a4c27c',d:'#93b26c',l:'#b7d08f',e:'#87704f',s:'#6d5a40',t:['#a4c27c','#9aba73','#88a864'],tr:[['#6fa25f','#5a8c4e'],['#88b56f','#709d5c'],['#5d8f57','#4b7a47']],fl:['#ffffff','#d6c3ff','#ffd0e0']},
   night:{g:'#5d7a68',d:'#516d5d',l:'#6c8a76',e:'#4b4560',s:'#3c3750',t:['#5d7a68','#57725f','#4b6555'],tr:[['#3f6a63','#335850'],['#4c6f7a','#3d5c66']],fl:['#cfe0ff','#ffe9a0']}};
 function vgHash(x,y,k){let h=(x*374761393+y*668265263+k*2147483647)|0;h=(h^(h>>>13))*1274126177;return ((h^(h>>>16))>>>0)/4294967296}
-function vgGround(G,N,bg){bg=VG_BG[bg]?bg:'sky';const C=VG_GROUND[bg],M=6,z=VG.zoom||1;
+function vgGround(G,N,bg){VG.classic=bg==='classic';if(VG.classic)return vgClassic(G,N);bg=VG_BG[bg]?bg:'sky';const C=VG_GROUND[bg],M=6,z=VG.zoom||1;
   Object.assign(VG_TT.grass,{a:C.t[0],b:C.t[1],e:C.t[2]});
   const P=(x,y)=>G.c(x,y),T0=P(-M,-M),R0=P(N+M-1,-M),B0=P(N+M-1,N+M-1),L0=P(-M,N+M-1);
   const T=[T0[0],T0[1]-18],R=[R0[0]+36,R0[1]],B=[B0[0],B0[1]+18],L=[L0[0]-36,L0[1]];
@@ -2097,6 +2107,36 @@ function vgGround(G,N,bg){bg=VG_BG[bg]?bg:'sky';const C=VG_GROUND[bg],M=6,z=VG.z
   // 길가 꽃 무리 (칸 바로 바깥)
   for(let i=0;i<26;i++){const side=i%4,k=vgHash(i,1,41)*(N+2)-1,o=-1.6-vgHash(i,2,43)*1.2,[x,y]=side===0?P(k,o):side===1?P(N-1-o,k):side===2?P(k,N-1-o):P(o,k);t+=`<g transform="translate(${x.toFixed(0)},${y.toFixed(0)})">${flw(C.fl,i+500)}</g>`}
   return {pre:t,vb,base:'none',props}}
+
+/* 🏝️ 클래식 (배경 추가 전 모습) : 하늘에 떠 있는 작은 섬 */
+const VG_TT_GRASS0={a:'#a4e080',b:'#98d975',e:'#8acd69'};
+function vgClassic(G,N){Object.assign(VG_TT.grass,VG_TT_GRASS0);const D=24,L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18],T=[G.ox,G.top];let t='';
+  t+=`<ellipse cx="${G.ox}" cy="${B[1]+D+16}" rx="${N*30}" ry="${N*5}" fill="#5a8ab0" opacity=".12"/>`;
+  t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+D} ${L[0]},${L[1]+D}" fill="#c58f5c"/><polygon points="${B} ${R} ${R[0]},${R[1]+D} ${B[0]},${B[1]+D}" fill="#a87346"/>`;
+  t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+7} ${L[0]},${L[1]+7}" fill="#6fbf55"/><polygon points="${B} ${R} ${R[0]},${R[1]+7} ${B[0]},${B[1]+7}" fill="#5aa847"/>`;
+  for(let i=1;i<N;i+=2){const a=[(i-N)*36+G.ox,(i+N)*18+G.top],b=[(N-i)*36+G.ox,(N+i)*18+G.top];t+=`<circle cx="${a[0]}" cy="${a[1]+15}" r="2.5" fill="#e3b27f"/><circle cx="${b[0]}" cy="${b[1]+17}" r="2" fill="#d19b66"/>`}
+  t+=`<polygon points="${T} ${R} ${B} ${L}" fill="#8fd46c" stroke="#7cc95e" stroke-width="2"/>`;
+  const z=VG.zoom||1,w=N*72+170,h=N*36+200,vb=[G.ox-w/2,G.top-130,w,h];VG.boardC=null;return {pre:t,vb,props:[]}}
+
+/* 📦 구역 드래그 → 한꺼번에 보관함으로 */
+function vgBoxBar(){return `<div class="vg-hint vg-boxbar"><span>📦 <b>드래그해서 구역</b>을 고르면 그 안의 동물·꾸미기를 보관함으로 옮겨요</span><label class="vg-boxopt"><input type="checkbox" id="vgBoxFl" ${VG.boxFloor?'checked':''}> 길(바닥)도</label><button class="vg-btn sm" id="vgBoxX">끝내기</button></div>`}
+function vgBoxBind(stage){if(!VG.box)return;const sc=stage.querySelector('#vgScroll');if(!sc)return;
+  const x=stage.querySelector('#vgBoxX');if(x)x.onclick=()=>{VG.box=null;vgRenderStage()};const fl=stage.querySelector('#vgBoxFl');if(fl)fl.onchange=()=>{VG.boxFloor=fl.checked};
+  let st=null,el=null;const sr=()=>stage.getBoundingClientRect();
+  sc.onpointerdown=e=>{if(e.button>0)return;e.preventDefault();sc.setPointerCapture(e.pointerId);st={x:e.clientX,y:e.clientY};el=document.createElement('div');el.className='vg-boxsel';stage.appendChild(el);upd(e)};
+  const upd=e=>{if(!st||!el)return;const r=sr(),x0=Math.min(st.x,e.clientX),y0=Math.min(st.y,e.clientY),x1=Math.max(st.x,e.clientX),y1=Math.max(st.y,e.clientY);
+    Object.assign(el.style,{left:(x0-r.left)+'px',top:(y0-r.top)+'px',width:(x1-x0)+'px',height:(y1-y0)+'px'});
+    const ids=vgBoxPick(x0,y0,x1,y1);document.querySelectorAll('#vgMap .vg-item').forEach(g=>g.classList.toggle('boxed',ids.includes(g.dataset.item)));el.dataset.n=ids.length;
+    const E=40,v=12;if(e.clientX<r.left+E)sc.scrollLeft-=v;else if(e.clientX>r.right-E)sc.scrollLeft+=v;if(e.clientY<r.top+E)sc.scrollTop-=v;else if(e.clientY>r.bottom-E)sc.scrollTop+=v};
+  sc.onpointermove=upd;
+  sc.onpointerup=sc.onpointercancel=async e=>{if(!st)return;const x0=Math.min(st.x,e.clientX),y0=Math.min(st.y,e.clientY),x1=Math.max(st.x,e.clientX),y1=Math.max(st.y,e.clientY);st=null;if(el){el.remove();el=null}
+    const ids=vgBoxPick(x0,y0,x1,y1);if(!ids.length){document.querySelectorAll('#vgMap .vg-item.boxed').forEach(g=>g.classList.remove('boxed'));return}
+    const its=ids.map(id=>(VG.state.items||[]).find(i=>i.id===id)).filter(Boolean),an=its.filter(i=>VG.cat[i.item_key]?.kind==='animal').length;
+    if(!window.confirm(`고른 ${its.length}개 (동물 ${an} · 꾸미기 ${its.length-an})를 보관함으로 옮길까요?`)){document.querySelectorAll('#vgMap .vg-item.boxed').forEach(g=>g.classList.remove('boxed'));return}
+    const r=await vgRun(()=>window.fitVillage.storeMany(ids));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`📦 ${r.moved}개를 보관함으로 옮겼어요`)}}
+function vgBoxPick(x0,y0,x1,y1){const out=[];document.querySelectorAll('#vgMap .vg-item[data-item]').forEach(g=>{const it=(VG.state.items||[]).find(i=>i.id===g.dataset.item);if(!it)return;if(vgIsFloor(it.item_key)&&!VG.boxFloor)return;
+  const m=/translate\(([-\d.]+),([-\d.]+)\)/.exec(g.getAttribute('transform')||'');if(!m)return;const svg=g.ownerSVGElement,pt=svg.createSVGPoint();pt.x=+m[1];pt.y=+m[2]-(vgIsFloor(it.item_key)?0:16);const p=pt.matrixTransform(svg.getScreenCTM());
+  if(p.x>=x0&&p.x<=x1&&p.y>=y0&&p.y<=y1)out.push(it.id)});return out}
 
 
 /* ===== 미니게임: 틀린그림찾기 · 코인 룰렛 ===== */
@@ -2488,9 +2528,9 @@ async function vgHeroCut(e,mem){const c=VG.cat[mem.key]||{};if((c.grade||0)<5||!
 /* ===== 펫 하우스 · 일괄 조합 ===== */
 function vgBestOf(list){const sc=i=>(typeof eqCountOn==='function'?eqCountOn(i.id):0)*100+(i.tr||0)+(Number(i.lb)||0);const m={};list.forEach(i=>{const b=m[i.item_key];if(!b||sc(i)>sc(b))m[i.item_key]=i});return Object.values(m)}
 function vgHouseGroups(){const g={};(VG.state.items||[]).forEach(i=>{if(i.h)(g[i.item_key]=g[i.item_key]||[]).push(i)});return g}
-function vgHouseHtml(has){if(!has)return '<p class="vg-note">🏠 <b>펫 하우스</b>를 상점(장식)에서 사면 중복 동물을 최대 <b>10종 · 종류별 99마리</b>까지 넣을 수 있어요. 자리를 차지하지 않고 코인은 그대로 만들어요.</p>';
+function vgHouseHtml(has){if(!has)return '<p class="vg-note">🏠 <b>펫 하우스</b>를 상점(장식)에서 사면 중복 동물을 최대 <b>20종 · 종류별 99마리</b>까지 넣을 수 있어요. 자리를 차지하지 않고 코인은 그대로 만들어요.</p>';
   const g=vgHouseGroups(),keys=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);let rate=0;keys.forEach(k=>g[k].forEach(i=>rate+=(VG.cat[k]?.rate||0)*(1+.05*(i.tr||0))));
-  return `<div class="vh-box"><div class="vh-head"><span>🏠 펫 하우스</span><small>${keys.length}/10종 · 시간당 +${vgN(rate)}</small></div>${keys.length?`<div class="vh-grid">${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vh-cell">${vgArtSvg(k)}<b>${esc(c.name)}</b><em>×${g[k].length}</em><div><button class="vg-btn sm" data-htake="${k}" data-n="1">1 꺼내기</button><button class="vg-btn sm" data-htake="${k}" data-n="99">모두</button></div></div>`}).join('')}</div>`:'<div class="vg-empty" style="padding:10px">아래 보관함 목록의 🏠 넣기 버튼으로 동물을 넣어 보세요.</div>'}</div>`}
+  return `<div class="vh-box"><div class="vh-head"><span>🏠 펫 하우스</span><small>${keys.length}/20종 · 시간당 +${vgN(rate)}</small></div>${keys.length?`<div class="vh-grid">${keys.map(k=>{const c=VG.cat[k]||{};return `<div class="vh-cell">${vgArtSvg(k)}<b>${esc(c.name)}</b><em>×${g[k].length}</em><div><button class="vg-btn sm" data-htake="${k}" data-n="1">1 꺼내기</button><button class="vg-btn sm" data-htake="${k}" data-n="99">모두</button></div></div>`}).join('')}</div>`:'<div class="vg-empty" style="padding:10px">아래 보관함 목록의 🏠 넣기 버튼으로 동물을 넣어 보세요.</div>'}</div>`}
 async function vgHousePut(k){const r=await vgRun(()=>window.fitVillage.housePut(k,99));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`🏠 ${VG.cat[k]?.name||''} ${r.moved}마리를 하우스에 넣었어요`)}
 async function vgHouseTake(k,n){const r=await vgRun(()=>window.fitVillage.houseTake(k,n));if(!r)return;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`📦 ${r.moved}마리를 보관함으로 꺼냈어요`)}
 /* 일괄 조합 */
@@ -2509,6 +2549,10 @@ async function vgBatchFuse(){const g=VG.fuse.g,n=Math.min(10,Math.floor(vgBatchC
   m.querySelector('#vbAll').onclick=async()=>{for(const b of m.querySelectorAll('.vb-chest:not(.open)')){open(b);await vdSleep(120)}sum()};m._onclose=()=>vgRenderSide()}
 function vgHousePeek(st){const g={};(st.items||[]).forEach(i=>{if(i.h)g[i.item_key]=(g[i.item_key]||0)+1});const ks=Object.keys(g).sort((a,b)=>g[b]-g[a]);if(!ks.length)return '';const tot=ks.reduce((s,k)=>s+g[k],0);
   return `<g transform="translate(26,4) scale(.5)">${vgArt(ks[0])}</g><g transform="translate(0,-74)"><rect x="-20" y="-11" width="40" height="18" rx="9" fill="#ff8a6b" stroke="#3b2417" stroke-width="2"/><text x="0" y="3" text-anchor="middle" font-size="12" font-weight="800" fill="#fff" font-family="Inter,sans-serif">×${tot}</text></g>`}
+
+/* 보관함 동물 등급 필터 */
+function vgInvGrChips(inv){const cnt={};(inv||[]).forEach(i=>{const c=VG.cat[i.item_key];if(c&&c.kind==='animal')cnt[c.grade]=(cnt[c.grade]||0)+1});const tot=Object.values(cnt).reduce((a,b)=>a+b,0),cur=VG.invGr||0;
+  return `<div class="vg-chips vg-grchips"><button data-igr="0" class="${cur?'':'on'}">전체 ${tot}</button>${[1,2,3,4,5,6,7].filter(g=>cnt[g]).map(g=>`<button data-igr="${g}" class="${cur===g?'on':''}" style="--gc:${VG_GRADE[g].color}"><i></i>${VG_GRADE[g].name} ${cnt[g]}</button>`).join('')}</div>`}
 
 
 /* ===== 심연의 탑 (세븐나이츠식 전투) ===== */
@@ -3583,6 +3627,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     farmCharBuy(k){return vrpc('fit_farm_char_buy',{p_key:k})},
     terrainSave(cells){return vrpc('fit_village_terrain_save',{p_cells:cells})},
     setBg(bg){return vrpc('fit_village_set_bg',{p_bg:bg})},
+    storeMany(ids){return vrpc('fit_village_store_many',{p_ids:ids})},
     fishState(){return vrpc('fit_fish_state',{})},
     fishCast(b){return vrpc('fit_fish_cast',{p_bait:b})},
     fishEnd(ok){return vrpc('fit_fish_end',{p_ok:ok})},

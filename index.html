@@ -1111,6 +1111,32 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .el-cyc{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;margin:8px 0}
 .el-cyc span{display:flex;flex-direction:column;align-items:center;background:color-mix(in srgb,var(--elc) 15%,#fff);border:2px solid var(--elc);border-radius:12px;padding:4px 8px;font-size:18px;min-width:44px}
 .el-cyc span b{font-size:12px}.el-cyc i{font-style:normal;color:#8b7f99;font-weight:bold}.el-cyc small{width:100%;font-size:11.5px;color:#8b7f99}
+/* ===== 🏔️ 지형 · 🖼️ 배경 · ⛶ 전체 화면 ===== */
+.vg-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.vg-bg svg,.vg-bg img{position:absolute;inset:0;width:100%;height:100%}
+.vg-bg img{object-fit:cover;opacity:0;transition:opacity .4s}.vg-bg img.on{opacity:1}
+.vg-stage>.vg-scroll{position:relative;z-index:1}.vg-stage>.vg-cloud{z-index:1}
+.vg-star{animation:vgTw 3s ease-in-out infinite}@keyframes vgTw{50%{opacity:.25}}
+.vg-wave{animation:vgWv 2.6s ease-in-out infinite}@keyframes vgWv{50%{transform:translateX(3px)}}
+.vg-foam{animation:vgFoam 6s linear infinite}@keyframes vgFoam{to{stroke-dashoffset:-48}}
+.vg-map.terraform .vg-tile:hover,.vg-map.terraform .vg-tside:hover{filter:brightness(1.15) drop-shadow(0 0 2px #ffb21f)}
+.vg-map.terraform .vg-item{opacity:.55;pointer-events:none}
+.vg-map.terraform{cursor:crosshair}
+.vg-terbar{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:4;background:#fffdf8f2;border:2px solid #fff;border-radius:16px;box-shadow:0 8px 24px #0003;padding:6px 8px;max-width:calc(100% - 16px);display:flex;flex-direction:column;gap:4px}
+.vg-tert{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}.vg-tert::-webkit-scrollbar{display:none}
+.vg-tert button{flex:none;display:flex;flex-direction:column;align-items:center;min-width:46px;padding:4px 3px;border-radius:11px;border:2px solid #efe7d8;background:#fff;font-family:'Jua',sans-serif;cursor:pointer}
+.vg-tert button span{font-size:18px;line-height:1.1}.vg-tert button small{font-size:10.5px;color:#7d7290}
+.vg-tert button.on{border-color:#ffb21f;background:#fff4d6;box-shadow:0 2px 0 #f2c25a}
+.vg-terf{display:flex;align-items:center;gap:6px}.vg-terf small{flex:1;font-size:11.5px;color:#6b5f80;font-family:'Malgun Gothic',sans-serif;font-weight:700}
+.vg-bgl{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.vg-bgo{border:3px solid #efe7d8;border-radius:14px;padding:0;overflow:hidden;background:#fff;cursor:pointer;font-family:'Jua',sans-serif}
+.vg-bgo.on{border-color:#ffb21f}.vg-bgo b{display:block;padding:4px 0;font-size:13px}
+.vg-bgp{position:relative;height:74px}
+.vg-root.vg-full .vg-stage{position:fixed;inset:0;z-index:8500;border-radius:0;border:0;box-shadow:none}
+.vg-root.vg-full .vg-scroll{height:100dvh!important;min-height:0}
+.vg-root.vg-full .vg-stage-top{top:max(10px,env(safe-area-inset-top))}
+body.vg-noscroll{overflow:hidden}
+@media(max-width:860px){.vg-terbar{bottom:6px;padding:5px}.vg-tert button{min-width:42px}.vg-bgp{height:60px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1718,7 +1744,7 @@ const VG_DOFF={fl_tulip:8,fl_daisy:8,fl_sunflower:8,fl_lavender:8,fl_hydrangea:8
 const VG_NOFLIP=new Set(['bd_cafe']);   // 글자가 들어간 그림은 좌우 반전 안 함
 function vgIsFloor(key){return (VG.cat[key]||{}).cat==='floor'}
 function vgFloorArt(key){const u=String((VG.cat[key]||{}).image_url||'').replace(/["<>&]/g,'');return `<image href="${u}" width="100" height="100" preserveAspectRatio="none" transform="matrix(.36,.18,-.36,.18,0,-18)"/><polygon points="0,-18 36,0 0,18 -36,0" fill="none" stroke="#0000001a" stroke-width="1"/>`}
-function vgHl(x,y,col){const h=document.getElementById('vgHl');if(!h)return;if(x==null){h.style.display='none';return}const [cx,cy]=vgGeom(vgSize(VG.state.village.land_level)).c(x,y);
+function vgHl(x,y,col){const h=document.getElementById('vgHl');if(!h)return;if(x==null){h.style.display='none';return}let [cx,cy]=vgGeom(vgSize(VG.state.village.land_level)).c(x,y);cy-=vgHAt(x,y,VG.state)*VG_HU;
   h.setAttribute('points',`${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}`);h.style.fill=col;h.style.display=''}
 function vgEvTile(target){if(!target||!target.closest)return null;const t=target.closest('[data-tile]');if(t)return t;const o=target.closest('#vgMap [data-item]');if(!o)return null;
   const it=(VG.state.items||[]).find(i=>i.id===o.dataset.item);return it&&it.x!=null?document.querySelector(`#vgMap [data-tile="${it.x},${it.y}"]`):null}
@@ -1740,7 +1766,7 @@ function companionPage(){return `${head('🏡 동물 마을','동물을 배치�
 
 async function wireCompanion(){
   if(VG.ticker){clearInterval(VG.ticker);VG.ticker=null}
-  VG.view='mine';VG.mode=null;VG.sel=null;VG.friend=null;
+  VG.view='mine';VG.mode=null;VG.sel=null;VG.friend=null;VG.ter=null;VG.full=false;document.body.classList.remove('vg-noscroll');
   document.querySelectorAll('body > #vgSide').forEach(e=>e.remove());if(vgMob()){const sd=document.getElementById('vgSide');if(sd)document.body.appendChild(sd)}
   vgBindOnce();
   const stage=$('#vgStage');
@@ -1773,46 +1799,55 @@ function vgRenderHud(){const st=VG.state;if(!st?.village)return;const v=st.villa
   <div class="vg-collect"><div class="vg-collect-info"><small>쌓인 코인</small><b>${vgCoinIcon(18)} <span id="vgPending">${vgN(L.pending)}</span></b><div class="vg-store-bar"><span id="vgBar" style="width:${L.cap?Math.min(100,L.pending/L.cap*100):0}%"></span></div><small id="vgFull" style="font-weight:600">최대 ${vgN(L.cap)} (12시간분)</small></div><button class="vg-btn gold" id="vgCollect" ${L.pending<1?'disabled':''}>수확하기</button></div>`;
   $('#vgCollect').onclick=vgCollect;$('#vgExpand')&&($('#vgExpand').onclick=vgExpand)}
 
-function vgGeom(N){const top=130,W=N*72+170,H=N*36+top+70,ox=W/2;return {N,top,W,H,ox,c:(x,y)=>[(x-y)*36+ox,(x+y)*18+18+top]}}
-function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeom(N),D=24;let t='';
+function vgGeom(N){const top=190,W=N*72+260,H=N*36+top+70+N*26,ox=W/2;return {N,top,W,H,ox,c:(x,y)=>[(x-y)*36+ox,(x+y)*18+18+top]}}
+function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeom(N),D=24,bg=v.bg||'sky',TM=vgTerMap(st);let t='';
   const L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18],T=[G.ox,G.top];
-  t+=`<ellipse cx="${G.ox}" cy="${B[1]+D+16}" rx="${N*30}" ry="${N*5}" fill="#5a8ab0" opacity=".12"/>`;
+  t+=vgIslandBase(G,N,D,bg);
   t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+D} ${L[0]},${L[1]+D}" fill="#c58f5c"/><polygon points="${B} ${R} ${R[0]},${R[1]+D} ${B[0]},${B[1]+D}" fill="#a87346"/>`;
   t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+7} ${L[0]},${L[1]+7}" fill="#6fbf55"/><polygon points="${B} ${R} ${R[0]},${R[1]+7} ${B[0]},${B[1]+7}" fill="#5aa847"/>`;
   for(let i=1;i<N;i+=2){const a=[(i-N)*36+G.ox,(i+N)*18+G.top],b=[(N-i)*36+G.ox,(N+i)*18+G.top];t+=`<circle cx="${a[0]}" cy="${a[1]+15}" r="2.5" fill="#e3b27f"/><circle cx="${b[0]}" cy="${b[1]+17}" r="2" fill="#d19b66"/>`}
   t+=`<polygon points="${T} ${R} ${B} ${L}" fill="#8fd46c" stroke="#7cc95e" stroke-width="2"/>`;
-  for(let x=0;x<N;x++)for(let y=0;y<N;y++){const [cx,cy]=G.c(x,y),h=(x*7+y*13)%5;t+=`<polygon class="vg-tile" data-tile="${x},${y}" points="${cx},${cy-18} ${cx+36},${cy} ${cx},${cy+18} ${cx-36},${cy}" fill="${(x+y)%2?'#a4e080':'#98d975'}" stroke="#8acd69" stroke-width=".8"/>`;if(h===0)t+=`<path d="M${cx-8},${cy+4} l2,-6 l2,6 M${cx+10},${cy-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`}
-  const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N).sort((a,b)=>(a.x+a.y)-(b.x+b.y)||a.x-b.x);
-  items.filter(i=>vgIsFloor(i.item_key)).forEach(i=>{const [cx,cy]=G.c(i.x,i.y);
-    t+=`<g class="vg-item vg-floor${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy})"><g transform="scale(${i.f?-1:1},1)">${vgFloorArt(i.item_key)}</g><polygon class="vg-sel-ring" points="0,-18 36,0 0,18 -36,0" fill="#fff4" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/></g>`});
+  const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N);
+  const hOf=(x,y)=>{const c=TM.get(x+','+y);return c?c.h:0};
+  const floorSvg=i=>{const [cx,cy]=G.c(i.x,i.y),o=hOf(i.x,i.y)*VG_HU;return `<g class="vg-item vg-floor${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy-o})"><g transform="scale(${i.f?-1:1},1)">${vgFloorArt(i.item_key)}</g><polygon class="vg-sel-ring" points="0,-18 36,0 0,18 -36,0" fill="#fff4" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/></g>`};
+  const itemSvg=i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),o=hOf(i.x,i.y)*VG_HU,an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
+    return `<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4-o})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="translate(0,${VG_DOFF[i.item_key]||0}) scale(${i.f?-sc:sc},${sc})">${vgArt(vgK(i),c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`};
+  // 1) 평지 칸 + 그 위 길
+  for(let x=0;x<N;x++)for(let y=0;y<N;y++){const c=TM.get(x+','+y);if(!c||c.h===0)t+=vgTileSvg(x,y,G,c)}
+  items.filter(i=>vgIsFloor(i.item_key)&&hOf(i.x,i.y)===0).forEach(i=>t+=floorSvg(i));
   t+=`<polygon id="vgHl" class="vg-hl" points="0,0" style="display:none" pointer-events="none"/>`;
-  items.filter(i=>!vgIsFloor(i.item_key)).forEach(i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
-    t+=`<g class="vg-item${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy+4})"><ellipse class="vg-sel-ring" cx="0" cy="0" rx="32" ry="15" fill="#fff6" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/>${an?'<ellipse cx="0" cy="0" rx="19" ry="6" fill="#0000001f"/>':''}<g transform="translate(0,${VG_DOFF[i.item_key]||0}) scale(${i.f?-sc:sc},${sc})">${vgArt(vgK(i),c.kind)}</g>${i.item_key==='pet_house'?vgHousePeek(st):''}${an?`<g class="vg-coin" transform="translate(16,-74)"><g>${'<circle r="9" fill="url(#vg-coin)" stroke="#c98400" stroke-width="1.4"/><path d="M-3.5,-4 L0,4 L3.5,-4" fill="none" stroke="#a86b00" stroke-width="1.8" stroke-linecap="round"/>'}</g></g>`:''}</g>`});
+  // 2) 높은 칸 · 동물 · 꾸미기 — 뒤에서 앞으로
+  const Q=[];TM.forEach((c,k)=>{if(c.h>0){const [x,y]=k.split(',').map(Number);if(x<N&&y<N)Q.push({d:x+y,o:0,x,s:vgTileSvg(x,y,G,c)})}});
+  items.forEach(i=>{const fl=vgIsFloor(i.item_key),h=hOf(i.x,i.y);if(fl&&h===0)return;Q.push({d:i.x+i.y,o:fl?1:2,x:i.x,s:fl?floorSvg(i):itemSvg(i)})});
+  Q.sort((a,b)=>a.d-b.d||a.o-b.o||a.x-b.x).forEach(q=>t+=q.s);
   t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
-  return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
+  return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}${VG.ter?' terraform':''}" viewBox="0 0 ${G.W} ${G.H}" width="${G.W*VG.zoom}" height="${G.H*VG.zoom}">${t}</svg>`}
 
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
   const banner=friend?`<div class="vg-banner">${vgRepArt(VG.friendState&&VG.friendState.village)}🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn green sm" id="vgFmVisit">🌾 농장 구경</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">${vgRepArt(st.village)}🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button><button class="vg-btn sm green fm-btn" id="vgFmBtn">🌾 농장</button>`;
+  const tools=friend?'':`<button class="vg-btn ${VG.ter?'gold':''}" id="vgTerBtn" title="지형 꾸미기 (높이 · 물 · 모래…)">🏔️</button><button class="vg-btn" id="vgBgBtn" title="마을 배경">🖼️</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요${VG.mode.left?` · <b>남은 ${VG.mode.left}개</b>`:''} <button class="vg-btn sm" id="vgCancel">${VG.mode.left?'그만 놓기':'취소'} (Esc)</button></div>`:'';
-  stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom"><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
-  <div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>
-  <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${hint}`;
+  stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom">${tools}<button class="vg-btn" id="vgFull" title="전체 화면">${VG.full?'✕':'⛶'}</button><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
+  ${vgBgHtml(st.village.bg||'sky')}${(st.village.bg||'sky')==='sky'?'<div class="vg-cloud" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>':''}
+  <div class="vg-scroll" id="vgScroll">${vgMapSvg(st,!friend)}</div>${VG.ter&&!friend?vgTerBar():hint}`;
   const s2=$('#vgScroll');if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
   $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgFmVisit')&&($('#vgFmVisit').onclick=()=>vgFarmFriend(VG.friend.user_id,VG.friend.display_name));$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);if($('#vgFmBtn'))setTimeout(()=>{try{fmPeek()}catch(e){}},300);
+  $('#vgTerBtn')&&($('#vgTerBtn').onclick=()=>{if(VG.ter){VG.ter=null;vgRenderStage();vgRenderSide()}else vgTerStart()});$('#vgBgBtn')&&($('#vgBgBtn').onclick=vgBgPick);$('#vgFull')&&($('#vgFull').onclick=vgFullToggle);vgTerBind(stage);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
 
 function vgBindOnce(){if(window.__vgBound)return;window.__vgBound=true;vgBindTouchDrag();
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&VG.mode&&document.getElementById('vgRoot'))vgCancelMode()});
-  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;const gi=VG.view==='mine'&&!VG.mode&&e.target.closest('[data-item]');if(gi){vgIdStart(gi,e.clientX,e.clientY,false);return}VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
+  document.addEventListener('pointerdown',e=>{const sc=e.target.closest&&e.target.closest('#vgScroll');if(!sc||e.button!==0||e.pointerType==='touch')return;const gi=VG.view==='mine'&&!VG.mode&&!VG.ter&&e.target.closest('[data-item]');if(gi){vgIdStart(gi,e.clientX,e.clientY,false);return}VG.drag={x:e.clientX,y:e.clientY,l:sc.scrollLeft,t:sc.scrollTop,sc};VG.moved=false});
   document.addEventListener('pointermove',e=>{if(VG.idrag&&!VG.idrag.touch){vgIdMove(e.clientX,e.clientY);return}const d=VG.drag;if(d){const dx=e.clientX-d.x,dy=e.clientY-d.y;if(!VG.moved&&Math.hypot(dx,dy)>6){VG.moved=true;d.sc.classList.add('dragging')}if(VG.moved){d.sc.scrollLeft=d.l-dx;d.sc.scrollTop=d.t-dy}}
     if(VG.mode&&!VG.moved){vgGhostAt(vgEvTile(e.target))}});
   document.addEventListener('pointerup',e=>{if(VG.idrag&&!VG.idrag.touch)vgIdEnd(e.clientX,e.clientY);if(VG.drag){VG.drag.sc.classList.remove('dragging');VG.drag=null}});
   document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('#vgScroll'))return;if(VG.moved){VG.moved=false;return}
     const it=e.target.closest('[data-item]'),tile=e.target.closest('[data-tile]');
     if(VG.view==='friend'){if(it)vgHop(it);return}
+    if(VG.ter){const mt=vgEvTile(e.target);if(mt){const [x,y]=mt.dataset.tile.split(',').map(Number);vgTerApply(x,y)}return}
     if(VG.mode){const mt=vgEvTile(e.target);if(mt){const [x,y]=mt.dataset.tile.split(',').map(Number);vgPlace(VG.mode.id,x,y)}return}
     if(it){const id=it.dataset.item;VG.sel=VG.sel===id?null:id;if(VG.sel&&vgMob())VG.sheet=true;document.querySelectorAll('#vgMap .vg-item').forEach(g=>g.classList.toggle('sel',g.dataset.item===VG.sel));if(VG.sel)vgHop(it);vgRenderSide();return}
     if(VG.sel){VG.sel=null;document.querySelectorAll('#vgMap .vg-item.sel').forEach(g=>g.classList.remove('sel'));vgRenderSide()}},true);
@@ -1833,11 +1868,12 @@ function vgIdMove(x,y){const d=VG.idrag;if(!d)return;if(!d.on){if(Math.hypot(x-d
   const sc=$('#vgScroll');if(sc){const r=sc.getBoundingClientRect(),E=48,v=14;if(x<r.left+E)sc.scrollLeft-=v;else if(x>r.right-E)sc.scrollLeft+=v;if(y<r.top+E)sc.scrollTop-=v;else if(y>r.bottom-E)sc.scrollTop+=v}}
 async function vgIdEnd(x,y){const d=VG.idrag;if(!d)return;const t=d.on?vgIdTile(x,y):null;VG.idrag=null;clearTimeout(d.timer);if(!d.on)return;const it=(VG.state.items||[]).find(i=>i.id===d.id);
   if(!t||!it||(it.x===t.xy[0]&&it.y===t.xy[1])){vgRenderStage();return}
+  if(vgOnWater(d.id,t.xy[0],t.xy[1])){vgToast('💧 동물은 물 위에 둘 수 없어요.',true);vgRenderStage();return}
   const r=await vgRun(()=>window.fitVillage.move(d.id,t.xy[0],t.xy[1]));if(!r){vgRenderStage();return}vgSetState(r);vgRenderStage();if(r.swapped)vgToast('🔄 자리를 바꿨어요')}
 async function vgFlip(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;it.f=!it.f;vgRenderStage();
   try{vgSetState(await window.fitVillage.flip(id));vgRenderStage()}catch(e){it.f=!it.f;vgRenderStage();vgToast(e.setup?'Supabase에 fit_village_update21.sql 실행이 필요합니다.':(e.message||String(e)),true)}}
 function vgBindTouchDrag(){
-  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||VG.view!=='mine'||VG.mode)return;const g=e.target.closest&&e.target.closest('#vgScroll [data-item]');if(!g)return;const t=e.touches[0];
+  document.addEventListener('touchstart',e=>{if(e.touches.length!==1||VG.view!=='mine'||VG.mode||VG.ter)return;const g=e.target.closest&&e.target.closest('#vgScroll [data-item]');if(!g)return;const t=e.touches[0];
     vgIdStart(g,t.clientX,t.clientY,true);VG.idrag.timer=setTimeout(()=>{if(VG.idrag&&VG.idrag.g===g)vgIdOn()},380)},{passive:true});
   document.addEventListener('touchmove',e=>{const d=VG.idrag;if(!d||!d.touch)return;const t=e.touches[0];if(!d.on){if(Math.hypot(t.clientX-d.x,t.clientY-d.y)>10){clearTimeout(d.timer);VG.idrag=null}return}
     e.preventDefault();d.lx=t.clientX;d.ly=t.clientY;vgIdMove(t.clientX,t.clientY)},{passive:false});
@@ -1849,7 +1885,7 @@ function vgGhostAt(tile){const gh=document.getElementById('vgGhost');if(!gh)retu
   const [x,y]=tile.dataset.tile.split(',').map(Number),G=vgGeom(vgSize(VG.state.village.land_level)),[cx,cy]=G.c(x,y),bad=vgOcc(VG.mode.id).has(x+','+y),c=VG.cat[VG.mode.key]||{};
   tile.style.fill=bad?'#ffb3b3':'#e2ffc8';tile.classList.add(bad?'bad':'hl');vgHl(x,y,bad?'#ff7a7a88':'#c8ff9a88');
   if(gh.dataset.key!==VG.mode.key){gh.innerHTML=vgIsFloor(VG.mode.key)?vgFloorArt(VG.mode.key):`<g transform="translate(0,${VG_DOFF[VG.mode.key]||0}) scale(${c.kind==='animal'?.86:(c.image_url?(VG_DSCALE[VG.mode.key]||1):1)})">${vgArt(VG.mode.key,c.kind)}</g>`;gh.dataset.key=VG.mode.key}
-  gh.setAttribute('transform',`translate(${cx},${cy+(vgIsFloor(VG.mode.key)?0:4)})`);gh.style.display='';gh.style.opacity=bad?.35:.8}
+  gh.setAttribute('transform',`translate(${cx},${cy-vgHAt(x,y,VG.state)*VG_HU+(vgIsFloor(VG.mode.key)?0:4)})`);gh.style.display='';gh.style.opacity=bad?.35:.8}
 function vgStartPlace(id){const it=(VG.state.items||[]).find(i=>i.id===id);if(!it)return;VG.sheet=false;const nl=it.x==null?vgInvOf(it.item_key,'').length:0;VG.mode={id,key:it.item_key,left:nl>1?nl:0};VG.sel=null;if(VG.view!=='mine'){VG.view='mine';VG.friend=null}vgRenderStage();vgRenderSide()}
 function vgCancelMode(){VG.mode=null;vgRenderStage();vgRenderSide()}
 
@@ -1857,7 +1893,7 @@ async function vgRun(fn,okMsg){try{const r=await fn();return r}catch(e){vgToast(
 async function vgCollect(){const btn=$('#vgCollect');if(btn)btn.disabled=true;const r=await vgRun(()=>window.fitVillage.collect());if(!r){vgTick();return}vgSetState(r);vgRenderHud();vgTick();const g=Number(r.gained)||0;
   const box=$('#vgCollect')?.getBoundingClientRect();if(box&&g>0){const f=document.createElement('div');f.className='vg-float';f.style.position='fixed';f.style.left=(box.left+box.width/2)+'px';f.style.top=(box.top-6)+'px';f.innerHTML=`+${vgN(g)} ${vgCoinIcon(20)}`;document.body.appendChild(f);setTimeout(()=>f.remove(),1400)}
   vgToast(g>0?`코인 ${vgN(g)}개를 수확했어요!`:'아직 수확할 코인이 없어요.');vgRenderSide()}
-async function vgPlace(id,x,y){if(x!=null&&vgOcc(id).has(x+','+y)){vgToast('그 자리에는 이미 다른 개체가 있어요.',true);return}const was=(VG.state.items||[]).find(i=>i.id===id),fromInv=was&&was.x==null,key=was&&was.item_key;
+async function vgPlace(id,x,y){if(x!=null&&vgOcc(id).has(x+','+y)){vgToast('그 자리에는 이미 다른 개체가 있어요.',true);return}if(x!=null&&vgOnWater(id,x,y)){vgToast('💧 동물은 물 위에 둘 수 없어요.',true);return}const was=(VG.state.items||[]).find(i=>i.id===id),fromInv=was&&was.x==null,key=was&&was.item_key;
   const r=await vgRun(()=>window.fitVillage.place(id,x,y));if(!r)return;vgSetState(r);VG.sel=null;
   const next=x!=null&&fromInv?vgInvOf(key,id):[];if(next.length){VG.mode={id:next[0].id,key,left:next.length};vgAll();vgToast(`배치 완료! 남은 ${next.length}개 — 계속 놓을 칸을 누르세요 (Esc로 끝)`);return}
   VG.mode=null;vgAll();vgToast(x==null?'보관함으로 옮겼어요.':'배치 완료!')}
@@ -1931,6 +1967,90 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
   side.querySelectorAll('[data-tr]').forEach(b=>b.onclick=()=>vgOpenTr(b.dataset.tr));
   side.querySelectorAll('[data-visit]').forEach(b=>b.onclick=()=>vgVisit(b.dataset.visit));
   $('#vgFrRefresh')&&($('#vgFrRefresh').onclick=()=>{VG.friends=null;window.fitVillage.likedToday().then(s=>VG.liked=s).catch(()=>{});vgRenderSide()})}
+
+/* =====================================================================
+   🏔️ 지형 꾸미기 (높이 · 지형) · 🖼️ 마을 배경 · ⛶ 전체 화면
+   ===================================================================== */
+const VG_HU=14;   // 높이 1층 = 14px
+const VG_TT={
+  grass:{n:'잔디',i:'🌱',a:'#a4e080',b:'#98d975',s1:'#7cb85a',s2:'#6aa64c',e:'#8acd69'},
+  flower:{n:'꽃밭',i:'🌸',a:'#b7e892',b:'#aee18a',s1:'#7cb85a',s2:'#6aa64c',e:'#94d474'},
+  dirt:{n:'흙',i:'🟫',a:'#d9a873',b:'#d19f69',s1:'#b07a48',s2:'#9a683b',e:'#c49260'},
+  sand:{n:'모래',i:'🏖️',a:'#f6e2a8',b:'#f1da9b',s1:'#d8b874',s2:'#c7a663',e:'#e8cf8e'},
+  stone:{n:'돌',i:'🪨',a:'#c4c7cf',b:'#babec7',s1:'#9198a5',s2:'#7f8693',e:'#aeb3bd'},
+  water:{n:'물',i:'💧',a:'#7fd0f0',b:'#74c8ea',s1:'#4fa6c9',s2:'#3f94b8',e:'#6bbfe2'},
+  snow:{n:'눈',i:'❄️',a:'#f7fbff',b:'#eef5fc',s1:'#c9d8e8',s2:'#b6c7da',e:'#dde8f3'}};
+const VG_BG={sky:{n:'하늘섬',i:'☁️'},spring:{n:'봄 산수화',i:'🌸'},sea:{n:'바다 섬',i:'🌊'},forest:{n:'숲속',i:'🌲'},night:{n:'별밤',i:'🌙'}};
+
+function vgTerMap(st){if(VG.ter&&st===VG.state)return VG.ter.draft;const m=new Map();(st&&st.terrain||[]).forEach(c=>m.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t||'grass'}));return m}
+function vgHAt(x,y,st){const c=vgTerMap(st||(VG.view==='friend'?VG.friendState:VG.state)).get(x+','+y);return c?c.h:0}
+function vgTAt(x,y,st){const c=vgTerMap(st||VG.state).get(x+','+y);return c?c.t:'grass'}
+
+/* 칸 하나 (윗면 + 옆면) */
+function vgTileSvg(x,y,G,c){const [cx,cy]=G.c(x,y),h=c?c.h:0,tt=VG_TT[c?c.t:'grass']||VG_TT.grass,o=h*VG_HU,ty=cy-o,dt=`data-tile="${x},${y}"`;let s='';
+  if(h>0){s+=`<polygon ${dt} class="vg-tside" points="${cx-36},${ty} ${cx},${ty+18} ${cx},${cy+18} ${cx-36},${cy}" fill="${tt.s1}"/><polygon ${dt} class="vg-tside" points="${cx},${ty+18} ${cx+36},${ty} ${cx+36},${cy} ${cx},${cy+18}" fill="${tt.s2}"/>`;
+    for(let k=1;k<h;k++){const yy=cy-k*VG_HU;s+=`<path d="M${cx-36},${yy} L${cx},${yy+18} L${cx+36},${yy}" stroke="#00000018" stroke-width="1.2" fill="none" pointer-events="none"/>`}
+    s+=`<path d="M${cx-36},${ty} L${cx},${ty+18} L${cx+36},${ty}" stroke="#ffffff55" stroke-width="1.5" fill="none" pointer-events="none"/>`}
+  s+=`<polygon class="vg-tile" ${dt} points="${cx},${ty-18} ${cx+36},${ty} ${cx},${ty+18} ${cx-36},${ty}" fill="${(x+y)%2?tt.a:tt.b}" stroke="${tt.e}" stroke-width=".8"/>`;
+  const t=c?c.t:'grass',hs=(x*7+y*13)%5;
+  if(t==='grass'&&hs===0)s+=`<path d="M${cx-8},${ty+4} l2,-6 l2,6 M${cx+10},${ty-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`;
+  else if(t==='water')s+=`<path class="vg-wave" d="M${cx-16},${ty-2} q4,-3 8,0 t8,0 M${cx+2},${ty+6} q4,-3 8,0 t8,0" stroke="#ffffffaa" stroke-width="1.6" fill="none" stroke-linecap="round" pointer-events="none"/>`;
+  else if(t==='flower'){const C=['#ff8fb1','#fff27a','#ffffff','#c99bff'];for(let k=0;k<4;k++){const px=cx+((x*11+y*5+k*17)%40)-20,py=ty+((x*5+y*9+k*7)%16)-8;s+=`<circle cx="${px}" cy="${py}" r="2.4" fill="${C[(x+y+k)%4]}" pointer-events="none"/>`}}
+  else if(t==='stone'&&hs<3)s+=`<ellipse cx="${cx+((x*9)%20)-10}" cy="${ty+((y*7)%10)-5}" rx="5" ry="2.6" fill="#9ea3ad" pointer-events="none"/>`;
+  else if(t==='sand'&&hs<2)s+=`<circle cx="${cx-6}" cy="${ty+3}" r="1.2" fill="#d9b86a" pointer-events="none"/><circle cx="${cx+9}" cy="${ty-3}" r="1.2" fill="#d9b86a" pointer-events="none"/>`;
+  else if(t==='snow'&&hs<2)s+=`<circle cx="${cx+8}" cy="${ty+2}" r="1.6" fill="#ffffff" pointer-events="none"/>`;
+  return s}
+
+/* 섬 아래 (떠 있는 바위) · 바다 배경이면 물결 */
+function vgIslandBase(G,N,D,bg){const L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18];
+  if(bg==='sea')return `<ellipse cx="${G.ox}" cy="${B[1]+D-2}" rx="${N*44}" ry="${N*14}" fill="#ffffff55"/><ellipse class="vg-foam" cx="${G.ox}" cy="${B[1]+D-4}" rx="${N*40}" ry="${N*12}" fill="none" stroke="#ffffffaa" stroke-width="3" stroke-dasharray="14 10"/>`;
+  if(bg==='forest')return `<ellipse cx="${G.ox}" cy="${B[1]+D+4}" rx="${N*46}" ry="${N*15}" fill="#5f9e4a" opacity=".55"/>`;
+  const y0=L[1]+D,yb=B[1]+D,s=N/8;
+  const pts=[[L[0],y0],[B[0],yb],[R[0],y0],[R[0]-60*s,y0+70*s],[G.ox+120*s,yb+60*s],[G.ox+40*s,yb+140*s],[G.ox,yb+190*s],[G.ox-50*s,yb+130*s],[G.ox-130*s,yb+70*s],[L[0]+55*s,y0+80*s]];
+  const P=pts.map(p=>p.join(',')).join(' ');
+  return `<defs><linearGradient id="vgRock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6b45"/><stop offset=".45" stop-color="#7a5a48"/><stop offset="1" stop-color="#4e4458"/></linearGradient></defs>
+   <polygon points="${P}" fill="url(#vgRock)"/>
+   <polygon points="${B[0]},${yb} ${R[0]},${y0} ${R[0]-60*s},${y0+70*s} ${G.ox+120*s},${yb+60*s} ${G.ox+40*s},${yb+140*s} ${G.ox},${yb+190*s}" fill="#00000022"/>
+   <path d="M${L[0]+70*s},${y0+40*s} l${10*s},${8*s} l${-6*s},${10*s} M${G.ox+90*s},${yb+30*s} l${-8*s},${10*s} l${6*s},${8*s}" stroke="#00000025" stroke-width="2" fill="none"/>
+   <circle cx="${G.ox-30*s}" cy="${yb+70*s}" r="${7*s}" fill="#ffffff14"/><circle cx="${G.ox+60*s}" cy="${yb+40*s}" r="${5*s}" fill="#ffffff14"/>`}
+
+/* 배경 (그림이 있으면 그림, 없으면 그려서) */
+function vgBgHtml(bg){bg=VG_BG[bg]?bg:'sky';let s='';
+  const mt=(y,amp,col,seed,op)=>{let d=`M0,600 L0,${y}`;for(let i=0;i<=20;i++){const x=i*50,v=y-amp*Math.abs(Math.sin(i*1.7+seed))-amp*.4*Math.sin(i*.6+seed*2);d+=` L${x},${v.toFixed(1)}`}return `<path d="${d} L1000,600 Z" fill="${col}" opacity="${op||1}"/>`};
+  if(bg==='sky')s=`<defs><linearGradient id="bgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd6ff"/><stop offset=".7" stop-color="#dff2ff"/><stop offset="1" stop-color="#f4fbff"/></linearGradient></defs><rect width="1000" height="600" fill="url(#bgS)"/>${mt(470,60,'#c9e3f5',1,.8)}${mt(520,40,'#b7d8ef',3,.8)}<ellipse cx="200" cy="560" rx="260" ry="40" fill="#fff" opacity=".7"/><ellipse cx="820" cy="575" rx="300" ry="45" fill="#fff" opacity=".75"/>`;
+  else if(bg==='spring')s=`<defs><linearGradient id="bgP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe3ea"/><stop offset=".6" stop-color="#fff4e6"/><stop offset="1" stop-color="#f6efd9"/></linearGradient></defs><rect width="1000" height="600" fill="url(#bgP)"/><circle cx="800" cy="120" r="60" fill="#ffd8c2" opacity=".7"/>${mt(330,110,'#a9c9c4',2,.55)}${mt(400,90,'#7fb0a6',5,.65)}${mt(480,70,'#5e9a8e',8,.75)}<path d="M0,560 Q250,520 500,560 T1000,555 L1000,600 L0,600Z" fill="#9fcde0" opacity=".7"/>${Array.from({length:40},(_,i)=>`<circle cx="${(i*97)%1000}" cy="${80+(i*53)%380}" r="${2+(i%3)}" fill="#ffb3c8" opacity=".7"/>`).join('')}`;
+  else if(bg==='sea')s=`<defs><linearGradient id="bgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd2ff"/><stop offset=".38" stop-color="#d8f1ff"/><stop offset=".4" stop-color="#5cc3e6"/><stop offset="1" stop-color="#2f9fcf"/></linearGradient></defs><rect width="1000" height="600" fill="url(#bgA)"/><circle cx="160" cy="110" r="46" fill="#fff6c8"/><path d="M640,240 q40,-60 80,0 Z" fill="#7cbf6a"/><path d="M90,245 q30,-40 60,0 Z" fill="#8ccd78"/>${Array.from({length:30},(_,i)=>`<path d="M${(i*137)%1000},${260+(i*61)%330} q10,-6 20,0" stroke="#ffffff99" stroke-width="2" fill="none"/>`).join('')}`;
+  else if(bg==='forest')s=`<defs><linearGradient id="bgF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7efc9"/><stop offset=".6" stop-color="#eef7df"/><stop offset="1" stop-color="#cfe6b4"/></linearGradient></defs><rect width="1000" height="600" fill="url(#bgF)"/>${Array.from({length:26},(_,i)=>{const x=i*40-10,h=120+((i*37)%90);return `<path d="M${x},${360} l25,-${h} l25,${h} Z" fill="${i%2?'#6aa57a':'#5b9670'}" opacity=".8"/>`}).join('')}<rect y="350" width="1000" height="250" fill="#a6d38b"/>${Array.from({length:22},(_,i)=>{const x=i*48+5,h=90+((i*29)%70);return `<path d="M${x},${420} l22,-${h} l22,${h} Z" fill="#4f8a5e"/>`}).join('')}`;
+  else s=`<defs><linearGradient id="bgN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#171a45"/><stop offset=".7" stop-color="#3c3577"/><stop offset="1" stop-color="#5a4a8a"/></linearGradient></defs><rect width="1000" height="600" fill="url(#bgN)"/><circle cx="820" cy="110" r="42" fill="#fff4c8"/><circle cx="836" cy="100" r="38" fill="#2a2a60"/>${Array.from({length:70},(_,i)=>`<circle class="vg-star" style="animation-delay:-${i%5}s" cx="${(i*151)%1000}" cy="${(i*67)%420}" r="${(i%3)*.6+.8}" fill="#fff"/>`).join('')}${mt(500,60,'#2b2a5a',4,.9)}`;
+  return `<div class="vg-bg bg-${bg}"><svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">${s}</svg><img src="images/bg/bg_${bg}.webp" alt="" onload="this.classList.add('on')" onerror="this.remove()"></div>`}
+
+/* 배경 고르기 */
+function vgBgPick(){const cur=(VG.state.village||{}).bg||'sky';
+  const m=vgModal(`<h3>🖼️ 마을 배경</h3><p class="vg-mp">친구가 놀러 와도 같은 배경이 보여요.</p><div class="vg-bgl">${Object.entries(VG_BG).map(([k,b])=>`<button class="vg-bgo ${k===cur?'on':''}" data-bg="${k}"><div class="vg-bgp">${vgBgHtml(k)}</div><b>${b.i} ${b.n}</b></button>`).join('')}</div>`,'vg-wide');
+  m.querySelectorAll('[data-bg]').forEach(b=>b.onclick=async()=>{const k=b.dataset.bg;try{vgSetState(await window.fitVillage.setBg(k));m.remove();vgRenderStage();vgToast(`🖼️ 배경을 ${VG_BG[k].n}(으)로 바꿨어요`)}catch(e){vgToast(e.setup?'Supabase에 fit_village_update37.sql 실행이 필요합니다.':(e.message||String(e)),true)}})}
+
+/* 지형 편집 */
+function vgTerStart(){VG.mode=null;VG.sel=null;VG.ter={tool:'up',big:false,draft:new Map(),orig:new Map()};(VG.state.terrain||[]).forEach(c=>VG.ter.orig.set(c.x+','+c.y,{h:Number(c.h)||0,t:c.t}));
+  VG.ter.draft=new Map([...VG.ter.orig].map(([k,v])=>[k,{...v}]));vgRenderStage();vgRenderSide()}
+function vgTerCells(){const T=VG.ter,keys=new Set([...T.draft.keys(),...T.orig.keys()]),out=[];let cost=0;
+  keys.forEach(k=>{const a=T.orig.get(k)||{h:0,t:'grass'},b=T.draft.get(k)||{h:0,t:'grass'};if(a.h===b.h&&a.t===b.t)return;const [x,y]=k.split(',').map(Number);out.push({x,y,h:b.h,t:b.t});cost+=(b.h-a.h)*100});return {cells:out,cost}}
+function vgTerApply(x,y){const T=VG.ter,N=vgSize(VG.state.village.land_level),R=T.big?1:0;
+  for(let dx=-R;dx<=R;dx++)for(let dy=-R;dy<=R;dy++){const X=x+dx,Y=y+dy;if(X<0||Y<0||X>=N||Y>=N)continue;const k=X+','+Y,c=T.draft.get(k)||{h:0,t:'grass'};
+    if(T.tool==='up')c.h=Math.min(4,c.h+1);else if(T.tool==='down')c.h=Math.max(0,c.h-1);else if(T.tool==='flat')c.h=0;else c.t=T.tool;
+    if(c.h===0&&c.t==='grass')T.draft.delete(k);else T.draft.set(k,c)}
+  vgRenderStage()}
+function vgTerBar(){const T=VG.ter,{cells,cost}=vgTerCells();
+  const tools=[['up','⬆️','올리기'],['down','⬇️','내리기'],['flat','➖','평평'],...Object.entries(VG_TT).map(([k,t])=>[k,t.i,t.n])];
+  return `<div class="vg-terbar"><div class="vg-tert">${tools.map(([k,i,n])=>`<button class="${T.tool===k?'on':''}" data-tt="${k}"><span>${i}</span><small>${n}</small></button>`).join('')}<button class="${T.big?'on':''}" data-tbig="1"><span>${T.big?'▣':'▫'}</span><small>${T.big?'3×3':'1칸'}</small></button></div>
+   <div class="vg-terf"><small>칸을 눌러 꾸미세요 · ${cells.length}칸 바뀜 · ${cost>0?`🪙 −${vgN(cost)}`:cost<0?`🪙 +${vgN(-cost)} 돌려받음`:'비용 없음'} (높이 1층 = 100)</small><button class="vg-btn sm" id="vgTerX">취소</button><button class="vg-btn sm gold" id="vgTerS" ${cells.length?'':'disabled'}>저장</button></div></div>`}
+async function vgTerSave(){const {cells}=vgTerCells();if(!cells.length){VG.ter=null;vgRenderStage();return}
+  try{const r=await window.fitVillage.terrainSave(cells);VG.ter=null;vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();vgToast(`🏔️ 지형 저장 완료 (${r.changed}칸${r.cost>0?` · −${vgN(r.cost)}코인`:r.cost<0?` · +${vgN(-r.cost)}코인`:''})`)}
+  catch(e){vgToast(e.setup?'Supabase에 fit_village_update37.sql 실행이 필요합니다.':(e.message||String(e)),true)}}
+function vgTerBind(stage){if(!VG.ter)return;stage.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{VG.ter.tool=b.dataset.tt;vgRenderStage()});
+  const bb=stage.querySelector('[data-tbig]');if(bb)bb.onclick=()=>{VG.ter.big=!VG.ter.big;vgRenderStage()};
+  stage.querySelector('#vgTerX').onclick=()=>{VG.ter=null;vgRenderStage();vgRenderSide()};stage.querySelector('#vgTerS').onclick=vgTerSave}
+function vgOnWater(id,x,y){const it=(VG.state.items||[]).find(i=>i.id===id),c=it&&VG.cat[it.item_key];return !!(c&&c.kind==='animal'&&vgTAt(x,y)==='water')}
+function vgFullToggle(){VG.full=!VG.full;if(window.matchMedia('(max-width:860px)').matches){if(VG.full){VG.zoomKeep=VG.zoom;VG.zoom=.6}else if(VG.zoomKeep){VG.zoom=VG.zoomKeep}}const r=document.getElementById('vgRoot');if(r)r.classList.toggle('vg-full',VG.full);document.body.classList.toggle('vg-noscroll',VG.full);vgRenderStage(true)}
 
 
 /* ===== 미니게임: 틀린그림찾기 · 코인 룰렛 ===== */
@@ -3415,6 +3535,8 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     farmView(uid){return vrpc('fit_farm_view',{p_uid:uid})},
     farmWater(uid){return vrpc('fit_farm_water',{p_uid:uid})},
     farmCharBuy(k){return vrpc('fit_farm_char_buy',{p_key:k})},
+    terrainSave(cells){return vrpc('fit_village_terrain_save',{p_cells:cells})},
+    setBg(bg){return vrpc('fit_village_set_bg',{p_bg:bg})},
     fishState(){return vrpc('fit_fish_state',{})},
     fishCast(b){return vrpc('fit_fish_cast',{p_bait:b})},
     fishEnd(ok){return vrpc('fit_fish_end',{p_ok:ok})},
@@ -3457,7 +3579,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     dungeonStart(f,ids){return vrpc('fit_village_dungeon_start',{p_floor:f,p_items:ids})},
     dungeonAct(id,a){return vrpc('fit_village_dungeon_act',{p_battle:id,p_actions:a})},
     async bosses(){vNeed();const {data,error}=await supa.from('fit_village_bosses').select('*').order('floor');if(error)throw vErr(error);return data||[]},
-    async villageOf(uid){vNeed();const [v,i]=await Promise.all([supa.from('fit_village').select('*').eq('user_id',uid).maybeSingle(),supa.from('fit_village_items').select('id,item_key,x,y').eq('user_id',uid).not('x','is',null)]);if(v.error)throw vErr(v.error);if(i.error)throw vErr(i.error);return {village:v.data,items:i.data||[],server_time:new Date().toISOString()}},
+    async villageOf(uid){vNeed();const [v,i,tr]=await Promise.all([supa.from('fit_village').select('*').eq('user_id',uid).maybeSingle(),supa.from('fit_village_items').select('id,item_key,x,y,flip,lb').eq('user_id',uid).not('x','is',null),supa.from('fit_village_terrain').select('x,y,h,t').eq('user_id',uid)]);if(v.error)throw vErr(v.error);if(i.error)throw vErr(i.error);return {village:v.data,items:(i.data||[]).map(x=>({...x,f:x.flip})),terrain:tr.error?[]:(tr.data||[]),server_time:new Date().toISOString()}},
     async friends(){vNeed();const [v,p,i,c]=await Promise.all([supa.from('fit_village').select('*'),supa.from('fit_workspace_profiles').select('user_id,display_name'),supa.from('fit_village_items').select('user_id,item_key').not('x','is',null),supa.from('fit_village_catalog').select('item_key,kind,grade,rate')]);
       for(const r of [v,p,i,c])if(r.error)throw vErr(r.error);
       const names={},cat={};(p.data||[]).forEach(r=>names[r.user_id]=r.display_name);(c.data||[]).forEach(r=>cat[r.item_key]=r);

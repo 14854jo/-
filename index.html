@@ -1140,6 +1140,10 @@ body.vg-noscroll{overflow:hidden}
 /* 배경 그림을 지도 안으로 : 바깥은 같은 그림을 흐리게 */
 .vg-stage>.vg-bg img{filter:blur(10px) saturate(1.05);transform:scale(1.08)}
 .vg-stage>.vg-cloud{display:none}
+/* 넓은 들판 : 칸 선은 은은하게, 놓기·지형 편집 때만 또렷하게 */
+.vg-map .vg-tile.plain{stroke-opacity:.16}
+.vg-map.placing .vg-tile.plain,.vg-map.terraform .vg-tile.plain,.vg-map:has(.vg-dragging) .vg-tile.plain{stroke-opacity:.7;stroke:#ffffff}
+.vg-map .vg-tile.plain.hl,.vg-map .vg-tile.plain.bad,.vg-map .vg-tile.plain.swap{fill-opacity:.7}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1806,8 +1810,7 @@ function vgGeom(N){const top=190,W=N*72+260,H=N*36+top+70+N*26,ox=W/2;return {N,
 function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeom(N),D=24,bg=v.bg||'sky',TM=vgTerMap(st);let t='';
   const L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18],T=[G.ox,G.top];
   const GR=vgGround(G,N,bg);t+=GR.pre;
-  t+=`<polygon points="${T} ${R} ${B} ${L}" fill="${GR.base}"/>`;
-  const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N);
+    const items=(st.items||[]).filter(i=>i.x!=null&&i.x<N&&i.y<N);
   const hOf=(x,y)=>{const c=TM.get(x+','+y);return c?c.h:0};
   const floorSvg=i=>{const [cx,cy]=G.c(i.x,i.y),o=hOf(i.x,i.y)*VG_HU;return `<g class="vg-item vg-floor${VG.sel===i.id?' sel':''}" data-item="${i.id}" transform="translate(${cx},${cy-o})"><g transform="scale(${i.f?-1:1},1)">${vgFloorArt(i.item_key)}</g><polygon class="vg-sel-ring" points="0,-18 36,0 0,18 -36,0" fill="#fff4" stroke="#ffb21f" stroke-width="3" stroke-dasharray="6 4"/></g>`};
   const itemSvg=i=>{const c=VG.cat[i.item_key]||{},[cx,cy]=G.c(i.x,i.y),o=hOf(i.x,i.y)*VG_HU,an=c.kind==='animal',sc=an?.86:(c.image_url?(VG_DSCALE[i.item_key]||1):(i.item_key==='windmill'?1.05:1));
@@ -1819,7 +1822,7 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
   // 2) 높은 칸 · 동물 · 꾸미기 — 뒤에서 앞으로
   const Q=[];TM.forEach((c,k)=>{if(c.h>0){const [x,y]=k.split(',').map(Number);if(x<N&&y<N)Q.push({d:x+y,o:0,x,s:vgTileSvg(x,y,G,c)})}});
   items.forEach(i=>{const fl=vgIsFloor(i.item_key),h=hOf(i.x,i.y);if(fl&&h===0)return;Q.push({d:i.x+i.y,o:fl?1:2,x:i.x,s:fl?floorSvg(i):itemSvg(i)})});
-  Q.sort((a,b)=>a.d-b.d||a.o-b.o||a.x-b.x).forEach(q=>t+=q.s);
+  (GR.props||[]).forEach(p=>Q.push(p));Q.sort((a,b)=>a.d-b.d||a.o-b.o||a.x-b.x).forEach(q=>t+=q.s);
   t+=`<g id="vgGhost" class="vg-ghost" style="display:none"></g>`;
   return `<svg id="vgMap" class="vg-map${VG.mode?' placing':''}${VG.ter?' terraform':''}" viewBox="${GR.vb.join(' ')}" width="${GR.vb[2]*VG.zoom}" height="${GR.vb[3]*VG.zoom}">${t}</svg>`}
 
@@ -1991,9 +1994,9 @@ function vgTileSvg(x,y,G,c){const [cx,cy]=G.c(x,y),h=c?c.h:0,tt=VG_TT[c?c.t:'gra
   if(h>0){s+=`<polygon ${dt} class="vg-tside" points="${cx-36},${ty} ${cx},${ty+18} ${cx},${cy+18} ${cx-36},${cy}" fill="${tt.s1}"/><polygon ${dt} class="vg-tside" points="${cx},${ty+18} ${cx+36},${ty} ${cx+36},${cy} ${cx},${cy+18}" fill="${tt.s2}"/>`;
     for(let k=1;k<h;k++){const yy=cy-k*VG_HU;s+=`<path d="M${cx-36},${yy} L${cx},${yy+18} L${cx+36},${yy}" stroke="#00000018" stroke-width="1.2" fill="none" pointer-events="none"/>`}
     s+=`<path d="M${cx-36},${ty} L${cx},${ty+18} L${cx+36},${ty}" stroke="#ffffff55" stroke-width="1.5" fill="none" pointer-events="none"/>`}
-  s+=`<polygon class="vg-tile" ${dt} points="${cx},${ty-18} ${cx+36},${ty} ${cx},${ty+18} ${cx-36},${ty}" fill="${(x+y)%2?tt.a:tt.b}" stroke="${tt.e}" stroke-width=".8"/>`;
+  const pl=h===0&&(!c||c.t==='grass');s+=`<polygon class="vg-tile${pl?' plain':''}" ${dt} points="${cx},${ty-18} ${cx+36},${ty} ${cx},${ty+18} ${cx-36},${ty}" fill="${pl?'#ffffff':((x+y)%2?tt.a:tt.b)}"${pl?' fill-opacity="0"':''} stroke="${tt.e}" stroke-width=".8"/>`;
   const t=c?c.t:'grass',hs=(x*7+y*13)%5;
-  if(t==='grass'&&hs===0)s+=`<path d="M${cx-8},${ty+4} l2,-6 l2,6 M${cx+10},${ty-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`;
+  if(t==='grass'&&hs===0&&h>0)s+=`<path d="M${cx-8},${ty+4} l2,-6 l2,6 M${cx+10},${ty-4} l1.5,-5 l1.5,5" stroke="#6fbf55" stroke-width="1.4" fill="none" pointer-events="none"/>`;
   else if(t==='water')s+=`<path class="vg-wave" d="M${cx-16},${ty-2} q4,-3 8,0 t8,0 M${cx+2},${ty+6} q4,-3 8,0 t8,0" stroke="#ffffffaa" stroke-width="1.6" fill="none" stroke-linecap="round" pointer-events="none"/>`;
   else if(t==='flower'){const C=['#ff8fb1','#fff27a','#ffffff','#c99bff'];for(let k=0;k<4;k++){const px=cx+((x*11+y*5+k*17)%40)-20,py=ty+((x*5+y*9+k*7)%16)-8;s+=`<circle cx="${px}" cy="${py}" r="2.4" fill="${C[(x+y+k)%4]}" pointer-events="none"/>`}}
   else if(t==='stone'&&hs<3)s+=`<ellipse cx="${cx+((x*9)%20)-10}" cy="${ty+((y*7)%10)-5}" rx="5" ry="2.6" fill="#9ea3ad" pointer-events="none"/>`;
@@ -2053,21 +2056,47 @@ function vgFullToggle(){VG.full=!VG.full;if(window.matchMedia('(max-width:860px)
 
 /* 🖼️ 배경 그림 위에 마을을 '땅'으로 앉히기 : 배경을 지도 안에 넣고, 마을 둘레를 배경 땅 색으로 자연스럽게 이어 줌 */
 const VG_GROUND={
-  sky:{ay:.74,g:'#bfd292',e:'#a8bf7c',s:'#93a86a',t:['#a9d27e','#9fcb74','#93bf6a']},
-  spring:{ay:.76,g:'#b9c9a2',e:'#9fb38a',s:'#879c74',t:['#b0cd92','#a7c689','#9cbb80'],shore:'#e8f2f4'},
-  sea:{ay:.70,g:'#efd9a8',e:'#dcc28b',s:'#c8ac74',t:['#a4e080','#98d975','#8acd69'],shore:'#ffffff'},
-  forest:{ay:.76,g:'#c2c899',e:'#a9b07f',s:'#929a6b',t:['#a8c983','#9fc17a','#93b56f']},
-  night:{ay:.76,g:'#56627a',e:'#47526a',s:'#3a4459',t:['#6f9a78','#67916f','#5c8565']}};
-function vgGround(G,N,bg){bg=VG_BG[bg]?bg:'sky';const C=VG_GROUND[bg],z=VG.zoom||1,sh=VG.stageH||600,sw=VG.stageW||900;
-  const PW=Math.max(1400,N*190,sh/z*1024/572*1.02,sw/z*1.02),PH=PW*572/1024,cx=G.ox,cy=G.top+N*18,ix=cx-PW/2,iy=cy-C.ay*PH;
-  Object.assign(VG_TT.grass,{a:C.t[0],b:C.t[1],e:C.t[2]});VG.boardC=[(cx-ix)*z,(cy-iy-40)*z];
-  const L=[G.ox-N*36,G.top+N*18],B=[G.ox,G.top+N*36],R=[G.ox+N*36,G.top+N*18],D=9;let t='';
-  t+=`<image href="images/bg/bg_${bg}.webp" x="${ix}" y="${iy}" width="${PW}" height="${PH}" preserveAspectRatio="none" pointer-events="none"/>`;
-  t+=`<defs><radialGradient id="vgSk-${bg}"><stop offset=".55" stop-color="${C.g}" stop-opacity="1"/><stop offset=".8" stop-color="${C.g}" stop-opacity=".5"/><stop offset="1" stop-color="${C.g}" stop-opacity="0"/></radialGradient></defs>`;
-  if(C.shore)t+=`<ellipse cx="${cx}" cy="${cy+12}" rx="${N*36*1.5}" ry="${N*18*1.5}" fill="none" stroke="${C.shore}" stroke-opacity=".35" stroke-width="7"/>`;
-  t+=`<ellipse cx="${cx}" cy="${cy+10}" rx="${N*36*1.55}" ry="${N*18*1.55}" fill="url(#vgSk-${bg})"/>`;
-  t+=`<polygon points="${L} ${B} ${B[0]},${B[1]+D} ${L[0]},${L[1]+D}" fill="${C.e}"/><polygon points="${B} ${R} ${R[0]},${R[1]+D} ${B[0]},${B[1]+D}" fill="${C.s}"/>`;
-  return {pre:t,vb:[ix,iy,PW,PH],base:C.t[0]}}
+  sky:{g:'#a9cf80',d:'#97c06e',l:'#bcdc95',e:'#8f7a5a',s:'#75634a',t:['#a9cf80','#9fc777','#8db866'],tr:[['#e7b37a','#d99a5e'],['#f0c6a3','#e3a985'],['#8fbf6a','#76a957'],['#6aa36a','#558e58']],fl:['#ffffff','#ffd0e0','#fff2a0']},
+  spring:{g:'#b3cd94',d:'#a2bf84',l:'#c6dba8',e:'#8a9a7c',s:'#6f7f64',t:['#b3cd94','#a9c58b','#97b67a'],tr:[['#f6bfd0','#eaa0b8'],['#fbd9e2','#f0bccb'],['#9cc08a','#83aa72']],fl:['#ffd0e0','#ffffff']},
+  sea:{g:'#a7d07c',d:'#95c26c',l:'#bcdc95',e:'#e2c890',s:'#cdb078',band:'#ecd7a4',t:['#a7d07c','#9dc874','#8bb864'],tr:[['#7cc06a','#64a957'],['#95cc78','#7cb664']],fl:['#ffffff','#ffe27a']},
+  forest:{g:'#a4c27c',d:'#93b26c',l:'#b7d08f',e:'#87704f',s:'#6d5a40',t:['#a4c27c','#9aba73','#88a864'],tr:[['#6fa25f','#5a8c4e'],['#88b56f','#709d5c'],['#5d8f57','#4b7a47']],fl:['#ffffff','#d6c3ff','#ffd0e0']},
+  night:{g:'#5d7a68',d:'#516d5d',l:'#6c8a76',e:'#4b4560',s:'#3c3750',t:['#5d7a68','#57725f','#4b6555'],tr:[['#3f6a63','#335850'],['#4c6f7a','#3d5c66']],fl:['#cfe0ff','#ffe9a0']}};
+function vgHash(x,y,k){let h=(x*374761393+y*668265263+k*2147483647)|0;h=(h^(h>>>13))*1274126177;return ((h^(h>>>16))>>>0)/4294967296}
+function vgGround(G,N,bg){bg=VG_BG[bg]?bg:'sky';const C=VG_GROUND[bg],M=6,z=VG.zoom||1;
+  Object.assign(VG_TT.grass,{a:C.t[0],b:C.t[1],e:C.t[2]});
+  const P=(x,y)=>G.c(x,y),T0=P(-M,-M),R0=P(N+M-1,-M),B0=P(N+M-1,N+M-1),L0=P(-M,N+M-1);
+  const T=[T0[0],T0[1]-18],R=[R0[0]+36,R0[1]],B=[B0[0],B0[1]+18],L=[L0[0]-36,L0[1]];
+  // 화면 : 마을이 화면 대부분을 차지 · 위 모서리로만 배경이 보이게
+  const bx0=G.ox-N*36,bx1=G.ox+N*36,by0=G.top-190,by1=G.top+N*36+70,cx=G.ox,cy=(by0+by1)/2;
+  let vw=Math.max(bx1-bx0+150,(VG.stageW||900)/z),vh=Math.max(by1-by0,(VG.stageH||600)/z);
+  vw=Math.min(vw,R[0]-L[0]-60);const vb=[cx-vw/2,cy-vh/2,vw,vh];VG.boardC=[vw/2*z,vh/2*z];
+  const edge=(a,b,n,k)=>{const o=[];for(let i=0;i<n;i++){const t=i/n,j=(vgHash(i,k,7)-.5)*22;o.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t+j])}return o};
+  const ring=[...edge(T,R,14,1),...edge(R,B,14,2),...edge(B,L,14,3),...edge(L,T,14,4)];const pts=ring.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ');
+  const front=[...edge(L,B,14,3).reverse(),...edge(B,R,14,2).reverse()].reverse();
+  let t=`<image href="images/bg/bg_${bg}.webp" x="${vb[0]-60}" y="${vb[1]-40}" width="${vb[2]+120}" height="${vb[3]+80}" preserveAspectRatio="xMidYMid slice" pointer-events="none"/>`;
+  // 앞쪽 절벽
+  const cl=[...edge(L,B,14,3),B,...edge(B,R,14,2),R];const cd=bg==='sea'?16:46;
+  t+=`<polygon points="${cl.map(p=>p.join(',')).join(' ')} ${cl.slice().reverse().map(p=>`${p[0]},${p[1]+cd}`).join(' ')}" fill="${C.e}"/>`;
+  t+=`<polygon points="${B.join(',')} ${edge(B,R,14,2).map(p=>p.join(',')).join(' ')} ${R.join(',')} ${R[0]},${R[1]+cd} ${edge(B,R,14,2).reverse().map(p=>`${p[0]},${p[1]+cd}`).join(' ')} ${B[0]},${B[1]+cd}" fill="${C.s}"/>`;
+  if(C.band)t+=`<polygon points="${pts}" fill="${C.band}"/>`;
+  t+=`<polygon points="${pts}" fill="${C.g}" ${C.band?`transform="translate(${G.ox} ${(T[1]+B[1])/2}) scale(.93) translate(${-G.ox} ${-(T[1]+B[1])/2})"`:''}/>`;
+  // 들판 질감 (밝고 어두운 얼룩 · 풀포기)
+  for(let i=0;i<90;i++){const u=vgHash(i,3,1)*(N+2*M)-M,v=vgHash(i,5,2)*(N+2*M)-M,[x,y]=P(u,v),r=18+vgHash(i,1,3)*40;t+=`<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${r.toFixed(0)}" ry="${(r*.5).toFixed(0)}" fill="${i%2?C.l:C.d}" opacity=".45"/>`}
+  for(let i=0;i<120;i++){const u=vgHash(i,9,4)*(N+2*M)-M,v=vgHash(i,11,5)*(N+2*M)-M,[x,y]=P(u,v);t+=`<path d="M${(x-4).toFixed(0)},${y.toFixed(0)} l2,-6 l2,6 m2,0 l2,-5 l2,5" stroke="${C.d}" stroke-width="1.3" fill="none"/>`}
+  // 둘레 풍경 (직접 그린 나무 · 덤불 · 바위 · 꽃) — 마을 칸 밖, 바깥쪽일수록 많이
+  const props=[],ol='#5b4a3a';
+  const tree=(c,sc)=>`<g transform="scale(${sc})"><path d="M-4,0 L-3,-26 L3,-26 L4,0Z" fill="#8a6446" stroke="${ol}" stroke-width="1.5"/><circle cx="-14" cy="-34" r="15" fill="${c[1]}" stroke="${ol}" stroke-width="1.5"/><circle cx="13" cy="-36" r="15" fill="${c[1]}" stroke="${ol}" stroke-width="1.5"/><circle cx="0" cy="-50" r="19" fill="${c[0]}" stroke="${ol}" stroke-width="1.5"/><circle cx="-10" cy="-40" r="13" fill="${c[0]}"/><circle cx="9" cy="-42" r="13" fill="${c[0]}"/><circle cx="-6" cy="-56" r="5" fill="#ffffff33"/></g>`;
+  const pine=(c,sc)=>`<g transform="scale(${sc})"><rect x="-3" y="-12" width="6" height="12" fill="#8a6446" stroke="${ol}" stroke-width="1.4"/><path d="M0,-70 L18,-34 L10,-34 L22,-10 L-22,-10 L-10,-34 L-18,-34Z" fill="${c[1]}" stroke="${ol}" stroke-width="1.5" stroke-linejoin="round"/><path d="M0,-70 L10,-48 L-4,-40Z" fill="${c[0]}"/></g>`;
+  const bush=(c,sc)=>`<g transform="scale(${sc})"><ellipse cx="-9" cy="-8" rx="11" ry="9" fill="${c[1]}" stroke="${ol}" stroke-width="1.3"/><ellipse cx="9" cy="-8" rx="11" ry="9" fill="${c[1]}" stroke="${ol}" stroke-width="1.3"/><ellipse cx="0" cy="-14" rx="12" ry="10" fill="${c[0]}" stroke="${ol}" stroke-width="1.3"/></g>`;
+  const rock=sc=>`<g transform="scale(${sc})"><path d="M-14,0 Q-16,-12 -4,-15 Q10,-17 14,-6 Q16,0 10,1Z" fill="#b9b3aa" stroke="${ol}" stroke-width="1.3"/><path d="M-6,-12 Q2,-15 8,-10" stroke="#ffffff88" stroke-width="2" fill="none"/></g>`;
+  const flw=(cs,i)=>Array.from({length:5},(_,k)=>`<circle cx="${(vgHash(i,k,31)*30-15).toFixed(0)}" cy="${(vgHash(i,k,37)*12-6).toFixed(0)}" r="2.2" fill="${cs[k%cs.length]}"/>`).join('');
+  for(let x=-M;x<N+M;x++)for(let y=-M;y<N+M;y++){const dd=Math.max(-1-x,x-N,-1-y,y-N);if(dd<1)continue;const r=vgHash(x,y,11),p=.08+dd*.07;if(r>p)continue;
+    const [px,py]=P(x+vgHash(x,y,17)*.6-.3,y+vgHash(x,y,19)*.6-.3),q=vgHash(x,y,13),sc=.85+vgHash(x,y,23)*.45,c=C.tr[Math.floor(vgHash(x,y,29)*C.tr.length)];
+    const art=q<.45?(bg==='forest'||bg==='night'?(q<.25?pine(c,sc):tree(c,sc)):(q<.12?pine(c,sc):tree(c,sc))):q<.72?bush(c,sc*.9):q<.86?rock(sc*.8):`<g>${flw(C.fl,x*31+y)}</g>`;
+    props.push({d:x+y,o:3,x,s:`<g pointer-events="none" transform="translate(${px.toFixed(1)},${(py+4).toFixed(1)})">${q<.86?`<ellipse rx="${(16*sc).toFixed(0)}" ry="${(5*sc).toFixed(0)}" fill="#00000020"/>`:''}${art}</g>`})}
+  // 길가 꽃 무리 (칸 바로 바깥)
+  for(let i=0;i<26;i++){const side=i%4,k=vgHash(i,1,41)*(N+2)-1,o=-1.6-vgHash(i,2,43)*1.2,[x,y]=side===0?P(k,o):side===1?P(N-1-o,k):side===2?P(k,N-1-o):P(o,k);t+=`<g transform="translate(${x.toFixed(0)},${y.toFixed(0)})">${flw(C.fl,i+500)}</g>`}
+  return {pre:t,vb,base:'none',props}}
 
 
 /* ===== 미니게임: 틀린그림찾기 · 코인 룰렛 ===== */

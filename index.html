@@ -1162,6 +1162,46 @@ main:has(#vgRoot){max-width:none}
  .vg-layout{grid-template-columns:minmax(0,1fr) 380px}
 }
 @media(min-width:1900px){.vg-layout{grid-template-columns:minmax(0,1fr) 420px}}
+/* ===== ⚔️ PvP 아레나 ===== */
+.vg-btn.pv-btn{background:linear-gradient(180deg,#ffb35c,#ff7a3d)!important;color:#fff!important}
+.vg-modal-box.pv-modal{width:min(96vw,900px);max-height:94dvh;overflow:auto}
+.pv-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 36px 8px 0}.pv-top h3{margin:0 6px 0 0}
+.pv-tier{font-size:14px;background:linear-gradient(90deg,#fff3c4,#ffe2ef);border-radius:10px;padding:2px 10px}
+.pv-my{background:#f7f2fd;border-radius:14px;padding:8px 10px;margin-bottom:6px}
+.pv-myh{display:flex;align-items:center;gap:8px}.pv-myh small{flex:1;font-size:12px;color:#7d7290}
+.pv-myt{display:flex;gap:6px;overflow-x:auto;padding:6px 0}
+.pv-mu{flex:0 0 88px;background:#fff;border-radius:12px;padding:4px;text-align:center;border:2px solid #efe7d8}
+.pv-mu .vg-art{width:64px;height:64px}.pv-mu b{display:block;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pv-mu small{font-size:10px;color:#8b7f99}
+.pv-mu.g4,.pv-u.g4{border-color:#ffd79a}.pv-mu.g5,.pv-u.g5{border-color:#ffb3cf}.pv-mu.g6,.pv-u.g6{border-color:#9fe3d4}
+.pv-opp{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.pv-o{background:#fff;border:2px solid #efe7d8;border-radius:14px;padding:8px}.pv-o.bot{background:#f6f8fb}
+.pv-oh{display:flex;justify-content:space-between;align-items:center}.pv-oh span{font-size:12px;color:#7d7290}
+.pv-mini{display:flex;gap:2px;margin:6px 0}.pv-mi{position:relative;width:44px;height:44px;background:#faf6ee;border-radius:10px}.pv-mi .vg-art{width:44px;height:44px}.pv-mi .vg-eli{position:absolute;right:-2px;bottom:-2px;transform:scale(.85)}
+.pv-of{display:flex;justify-content:space-between;align-items:center}.pv-of small{font-size:12px}
+.pv-hard,.pv-easy{font-style:normal;font-size:10.5px;border-radius:8px;padding:0 5px;margin-left:3px}.pv-hard{background:#ffe0e0;color:#d04848}.pv-easy{background:#e3f6dc;color:#3d8a28}
+.pv-rank,.pv-logs{display:flex;flex-direction:column;gap:5px;max-height:60vh;overflow:auto}
+.pv-r,.pv-l{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #efe7d8;border-radius:12px;padding:5px 10px}
+.pv-r.me{border-color:#ffb21f;background:#fff8e3}.pv-r em{font-style:normal;width:28px;text-align:center;font-size:16px}.pv-r .vg-art{width:36px;height:36px}.pv-noart{width:36px}
+.pv-r b{flex:1}.pv-r span{font-size:12px;color:#7d7290}.pv-r strong{font-size:16px;color:#c27a00}.pv-r small{font-size:11px;color:#8b7f99;width:60px;text-align:right}
+.pv-l em{font-style:normal;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;background:#d04848}.pv-l.w em{background:#3d9a3a}
+.pv-l span{flex:1;display:flex;flex-direction:column}.pv-l small{font-size:11px;color:#8b7f99}
+.up{color:#2a9d4a}.dn{color:#d04848}
+.pv-arena{position:relative;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;background:linear-gradient(180deg,#cfe9ff,#f3ead7 60%,#e3cfa8);border-radius:16px;padding:12px;min-height:300px}
+.pv-vs{font-size:28px;font-weight:900;color:#ff7a3d;text-shadow:0 2px 0 #fff}
+.pv-side{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.pv-side.b .pv-ua{transform:scaleX(-1)}
+.pv-u{position:relative;background:#ffffffd9;border:2px solid #efe7d8;border-radius:12px;padding:4px;text-align:center;transition:opacity .3s,filter .3s}
+.pv-u.back{opacity:.92}.pv-ua .vg-art{width:70px;height:70px}.pv-u b{display:block;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-hp{height:7px;border-radius:5px;background:#0002;overflow:hidden;margin-top:2px}.pv-hp i{display:block;height:100%;background:linear-gradient(90deg,#7be36a,#3fbf4a);transition:width .25s}
+.pv-u.dead{filter:grayscale(1);opacity:.4}
+.pv-u.act{animation:pvAct .35s}@keyframes pvAct{50%{transform:translateY(-8px) scale(1.06)}}
+.pv-u.hit{animation:pvHit .3s}@keyframes pvHit{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.pv-pop{position:absolute;left:50%;top:20%;transform:translateX(-50%);font-size:16px;white-space:nowrap;pointer-events:none;animation:fsUp .9s forwards;text-shadow:0 2px 0 #fff,0 0 6px #fff;z-index:3}
+.pv-pop.dm{color:#e0405a}.pv-pop.cr{color:#ff7a00;font-size:19px}.pv-pop.hl{color:#2a9d4a}.pv-pop.sh{color:#3b8cff}.pv-pop.bf{color:#c27a00}.pv-pop.ms{color:#7d7290}
+.pv-log{margin-top:8px;background:#3a2f4a;color:#fff;border-radius:12px;padding:8px 12px;font-size:13.5px;min-height:20px}
+.pv-res{position:relative}.pv-rbox{margin-top:8px;text-align:center;border-radius:16px;padding:10px;background:#fff8e3;border:3px solid #ffd34d;animation:vgPop .4s}
+.pv-rbox.l{background:#f3f0f6;border-color:#cfc3e3}.pv-rbox h2{margin:0}
+@media(max-width:860px){.pv-side{grid-template-columns:1fr}.pv-ua .vg-art{width:52px;height:52px}.pv-arena{gap:4px;padding:8px}.pv-vs{font-size:18px}}
+.pv-l span,.pv-oh b,.pv-myh b{text-align:left}.pv-logs,.pv-rank{text-align:left}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -1848,14 +1888,14 @@ function vgMapSvg(st,editable){const v=st.village,N=vgSize(v.land_level),G=vgGeo
 function vgRenderStage(center){const stage=$('#vgStage');if(!stage)return;const sc=$('#vgScroll'),keep=sc&&!center?[sc.scrollLeft,sc.scrollTop]:null;if(sc){VG.stageH=sc.clientHeight;VG.stageW=sc.clientWidth}if(VG.full){VG.stageH=window.innerHeight;VG.stageW=window.innerWidth}
   const friend=VG.view==='friend',st=friend?VG.friendState:VG.state;if(!st?.village){stage.innerHTML='<div class="vg-empty" style="padding:120px 0">마을 정보를 찾을 수 없어요.</div>';return}
   const liked=friend&&VG.liked.has(VG.friend.user_id);
-  const banner=friend?`<div class="vg-banner">${vgRepArt(VG.friendState&&VG.friendState.village)}🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn green sm" id="vgFmVisit">🌾 농장 구경</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">${vgRepArt(st.village)}🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button><button class="vg-btn sm green fm-btn" id="vgFmBtn">🌾 농장</button>`;
+  const banner=friend?`<div class="vg-banner">${vgRepArt(VG.friendState&&VG.friendState.village)}🏡 ${esc(VG.friend.display_name)}의 마을<small>좋아요 ${vgN(st.village.likes_received)}</small></div><button class="vg-btn pink sm" id="vgLike" ${liked?'disabled':''}>${liked?'💗 오늘 좋아요 완료':'💗 좋아요 (나 +10 · 친구 +20)'}</button><button class="vg-btn gold sm" id="vgGift">🎁 코인 선물</button><button class="vg-btn green sm" id="vgFmVisit">🌾 농장 구경</button><button class="vg-btn sm" id="vgBack">← 내 마을</button>`:`<div class="vg-banner">${vgRepArt(st.village)}🏡 내 마을<small>끌어서 바로 이동 · 클릭하면 방향·보관·판매</small></div><button class="vg-btn purple sm" id="vgDungeonBtn">⚔️ 동굴 던전</button><button class="vg-btn pink sm" id="vgWbBtn">🐉 월드 보스</button><button class="vg-btn sm tw-btn" id="vgTwBtn">🗼 심연의 탑</button><button class="vg-btn sm purple" id="vgPtBtn">🛡️ 파티 편성</button><button class="vg-btn sm pv-btn" id="vgPvBtn">🏆 PvP 아레나</button><button class="vg-btn sm green fm-btn" id="vgFmBtn">🌾 농장</button>`;
   const tools=friend?'':`<button class="vg-btn ${VG.box?'gold':''}" id="vgBoxBtn" title="구역을 드래그해서 한꺼번에 보관함으로">📦</button><button class="vg-btn ${VG.ter?'gold':''}" id="vgTerBtn" title="지형 꾸미기 (높이 · 물 · 모래…)">🏔️</button><button class="vg-btn" id="vgBgBtn" title="마을 배경">🖼️</button>`;
   const hint=VG.mode?`<div class="vg-hint">${vgArtSvg(VG.mode.key,'','-48 -96 96 102').replace('<svg ','<svg width="30" height="30" ')} 놓을 칸을 클릭하세요${VG.mode.left?` · <b>남은 ${VG.mode.left}개</b>`:''} <button class="vg-btn sm" id="vgCancel">${VG.mode.left?'그만 놓기':'취소'} (Esc)</button></div>`:'';
   stage.innerHTML=`<div class="vg-stage-top">${banner}<div class="vg-zoom">${tools}<button class="vg-btn" id="vgFull" title="전체 화면">${VG.full?'✕':'⛶'}</button><button class="vg-btn" data-zoom="-1" title="축소">－</button><button class="vg-btn" data-zoom="1" title="확대">＋</button></div></div>
   ${(st.village.bg||'sky')==='classic'?'':vgBgHtml(st.village.bg||'sky')}${(st.village.bg||'sky')==='classic'?'<div class="vg-cloud cl" style="width:120px;height:30px;top:70px;animation-duration:70s;animation-delay:-20s"></div><div class="vg-cloud cl" style="width:80px;height:22px;top:160px;animation-duration:55s;animation-delay:-40s;opacity:.6"></div>':''}
   <div class="vg-scroll${VG.box?' boxing':''}" id="vgScroll">${vgMapSvg(st,!friend)}</div>${VG.ter&&!friend?vgTerBar():VG.box&&!friend?vgBoxBar():hint}`;
   const s2=$('#vgScroll');if(!VG.full&&s2&&(Math.abs(s2.clientWidth-(VG.stageW||0))>4||Math.abs(s2.clientHeight-(VG.stageH||0))>4)&&!VG._rs){VG.stageW=s2.clientWidth;VG.stageH=s2.clientHeight;VG._rs=1;vgRenderStage(center);VG._rs=0;return}if(keep){s2.scrollLeft=keep[0];s2.scrollTop=keep[1]}else if(VG.boardC){s2.scrollLeft=VG.boardC[0]-s2.clientWidth/2;s2.scrollTop=VG.boardC[1]-s2.clientHeight/2}else{s2.scrollLeft=(s2.scrollWidth-s2.clientWidth)/2;s2.scrollTop=Math.max(0,(s2.scrollHeight-s2.clientHeight)/2-20)}
-  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgFmVisit')&&($('#vgFmVisit').onclick=()=>vgFarmFriend(VG.friend.user_id,VG.friend.display_name));$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);if($('#vgFmBtn'))setTimeout(()=>{try{fmPeek()}catch(e){}},300);
+  $('#vgLike')&&($('#vgLike').onclick=vgLike);$('#vgFmVisit')&&($('#vgFmVisit').onclick=()=>vgFarmFriend(VG.friend.user_id,VG.friend.display_name));$('#vgGift')&&($('#vgGift').onclick=vgGiftOpen);$('#vgBack')&&($('#vgBack').onclick=()=>{VG.view='mine';VG.friend=null;vgRenderStage(true)});$('#vgCancel')&&($('#vgCancel').onclick=vgCancelMode);$('#vgDungeonBtn')&&($('#vgDungeonBtn').onclick=vgDungeon);$('#vgWbBtn')&&($('#vgWbBtn').onclick=vgWorldBoss);$('#vgTwBtn')&&($('#vgTwBtn').onclick=vgTower);$('#vgPtBtn')&&($('#vgPtBtn').onclick=vgParty);$('#vgPvBtn')&&($('#vgPvBtn').onclick=vgPvp);$('#vgFmBtn')&&($('#vgFmBtn').onclick=vgFarm);if($('#vgFmBtn'))setTimeout(()=>{try{fmPeek()}catch(e){}},300);
   $('#vgBoxBtn')&&($('#vgBoxBtn').onclick=()=>{VG.box=VG.box?null:{};VG.ter=null;VG.mode=null;vgRenderStage()});vgBoxBind(stage);$('#vgTerBtn')&&($('#vgTerBtn').onclick=()=>{if(VG.ter){VG.ter=null;vgRenderStage();vgRenderSide()}else vgTerStart()});$('#vgBgBtn')&&($('#vgBgBtn').onclick=vgBgPick);$('#vgFull')&&($('#vgFull').onclick=vgFullToggle);vgTerBind(stage);
   stage.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=()=>{VG.zoom=Math.max(.6,Math.min(1.6,+(VG.zoom+Number(b.dataset.zoom)*.2).toFixed(1)));vgRenderStage()});
   vgTick()}
@@ -3306,6 +3346,68 @@ function dxRender(){const s=DX.st,box=DX.m.querySelector('.vg-modal-box'),L=s[DX
   box.querySelectorAll('[data-dt]').forEach(b=>b.onclick=()=>{DX.tab=b.dataset.dt;dxRender()});
   box.querySelectorAll('[data-dc]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const r=await window.fitVillage.dexClaim(DX.tab,Number(b.dataset.dc));DX.st=r;vgToast(`📖 도감 보상! 🌾 농장코인 +${r.gain}`);if(FM.st){FM.st.farm_coins=r.farm_coins;if(FM.m)fmRender()}dxRender()}catch(e){b.disabled=false;vgToast(e.message||String(e),true)}})}
 
+/* =====================================================================
+   ⚔️ PvP 아레나 — 내 파티(방어 팀)로 친구 팀과 자동 전투 · 기록 다시 보기
+   ===================================================================== */
+const PV={m:null,st:null,tab:'fight',play:null};
+const PV_SK={nuke:'💥',execute:'☠️',meteor:'☄️',combo:'⚡',burn:'🔥',timestop:'⏳',stun:'💫',confuse:'🌀',weaken:'⬇️',break:'💔',drain:'🩸'};
+async function vgPvp(){if(PV.m)PV.m.remove();PV.m=vgModal('<div class="fs-load">⚔️ 아레나 입장 중…</div>','vg-xwide pv-modal');PV.m._onclose=()=>{PV.m=null;pvStop()};
+  try{PV.st=await window.fitVillage.pvpStatus()}catch(e){PV.m.remove();PV.m=null;vgToast(e.setup?'Supabase에 fit_village_update42.sql 실행이 필요합니다.':(e.message||String(e)),true);return}
+  pvLobby()}
+function pvBox(){return PV.m.querySelector('.vg-modal-box')}
+function pvMini(t){return `<span class="pv-mini">${(t||[]).map(u=>`<span class="pv-mi g${u.grade}">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}${vgElI(u.el)}</span>`).join('')}</span>`}
+function pvLobby(){const s=PV.st,box=pvBox();
+  const tabs=[['fight','⚔️ 도전'],['rank','🏆 랭킹'],['log','📜 기록']];
+  let body='';
+  if(PV.tab==='fight')body=`<div class="pv-my"><div class="pv-myh"><b>🛡️ 내 방어 팀</b><small>전투력 ${vgN(s.power)}</small><button class="vg-btn sm purple" id="pvParty">파티 편성</button></div>
+      ${s.team.length?`<div class="pv-myt">${s.team.map(u=>`<div class="pv-mu g${u.grade}">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}<b>${vgElI(u.el)}${esc(u.name)}</b><small>${u.row==='front'?'앞줄':'뒷줄'}${u.sr==='atk'?' · ⚔️':u.sr==='def'?' · 🛡️':''}</small></div>`).join('')}</div>`:'<div class="vg-empty">파티 편성에서 팀을 꾸려 주세요.</div>'}
+      <p class="vg-note">파티 편성에 저장한 팀이 그대로 <b>공격 · 방어 팀</b>이 돼요. 속성 상성(⚔️ 상성표)과 앞줄 · 뒷줄 배치가 승부를 갈라요.</p></div>
+    <b class="fq-sub">🎯 도전 상대 <small>(남은 도전 ${s.left}/5 · 자정 초기화)</small></b>
+    <div class="pv-opp">${s.opp.map(o=>`<div class="pv-o ${o.bot?'bot':''}"><div class="pv-oh"><b>${esc(o.name)}</b><span>${o.bot?'연습':`${esc(o.tier)} · ${o.rating}`}</span></div>${pvMini(o.team)}
+      <div class="pv-of"><small>전투력 <b>${vgN(o.power)}</b> ${o.power>s.power*1.1?'<i class="pv-hard">강함</i>':o.power<s.power*.9?'<i class="pv-easy">약함</i>':''}</small><button class="vg-btn sm gold" data-pvf="${o.uid}" ${s.left>0&&s.team.length?'':'disabled'}>도전</button></div></div>`).join('')}</div>
+    <p class="vg-note">승리 🪙400 · 패배 🪙100 · 점수는 상대 점수에 따라 오르내려요 (연습 상대는 절반). 내 방어 팀이 지거나 이기면 내 점수도 바뀌어요.</p>`;
+  else if(PV.tab==='rank')body=`<div class="pv-rank">${s.rank.map((r,i)=>`<div class="pv-r ${r.uid===window.fitVillage.me()?'me':''}"><em>${i<3?['🥇','🥈','🥉'][i]:i+1}</em>${r.rep?vgArtSvg(r.rep):'<span class="pv-noart"></span>'}<b>${esc(r.name)}</b><span>${esc(r.tier)}</span><strong>${r.rating}</strong><small>${r.win}승 ${r.lose}패</small></div>`).join('')||'<div class="vg-empty">아직 기록이 없어요.</div>'}</div>`;
+  else body=`<div class="pv-logs">${s.logs.map(l=>`<div class="pv-l ${l.win?'w':'l'}"><em>${l.win?'승':'패'}</em><span><b>${l.atk?'⚔️ 공격':'🛡️ 방어'} vs ${esc(l.vs)}</b><small>${new Date(l.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</small></span><strong class="${l.d>=0?'up':'dn'}">${l.d>=0?'+':''}${l.d}</strong><button class="vg-btn sm" data-pvr="${l.id}">▶ 다시 보기</button></div>`).join('')||'<div class="vg-empty">아직 전투 기록이 없어요.</div>'}</div>`;
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pv-top"><h3>⚔️ PvP 아레나</h3><span class="pv-tier">${esc(s.tier)}</span><span class="fm-chip">점수 <b>${s.rating}</b></span><span class="fm-chip">${s.win}승 ${s.lose}패</span><button class="vg-btn sm" onclick="vgElChart()">⚔️ 상성</button></div>
+   <div class="dx-tabs">${tabs.map(([k,n])=>`<button class="vg-btn sm ${PV.tab===k?'gold':''}" data-pvt="${k}">${n}</button>`).join('')}</div><div class="pv-body">${body}</div>`;
+  box.querySelector('.vg-x').onclick=()=>{PV.m.remove();PV.m._onclose()};
+  box.querySelectorAll('[data-pvt]').forEach(b=>b.onclick=()=>{PV.tab=b.dataset.pvt;pvLobby()});
+  const pp=box.querySelector('#pvParty');if(pp)pp.onclick=()=>{PV.m.remove();PV.m=null;vgParty()};
+  box.querySelectorAll('[data-pvf]').forEach(b=>b.onclick=()=>pvFight(b.dataset.pvf));
+  box.querySelectorAll('[data-pvr]').forEach(b=>b.onclick=async()=>{try{pvShow(await window.fitVillage.pvpReplay(b.dataset.pvr),true)}catch(e){vgToast(e.message||String(e),true)}})}
+async function pvFight(t){const btns=pvBox().querySelectorAll('[data-pvf]');btns.forEach(b=>b.disabled=true);
+  try{const r=await window.fitVillage.pvpFight(t);if(VG.state&&r.coins!=null){VG.state.village.coins=r.coins;try{vgRenderHud()}catch(e){}}pvShow(r,false)}catch(e){vgToast(e.message||String(e),true);btns.forEach(b=>b.disabled=false)}}
+/* ── 전투 다시 보기 ── */
+function pvStop(){if(PV.play){clearTimeout(PV.play.t);PV.play=null}}
+function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.length,all=A.concat(B);
+  const unit=(u,i)=>`<div class="pv-u g${u.grade} ${u.row==='back'?'back':''}" data-pu="${i}"><div class="pv-ua">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}</div><b>${vgElI(u.el)}${esc(u.name)}</b><div class="pv-hp"><i style="width:100%"></i></div><span class="pv-sh"></span></div>`;
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pv-top"><h3>⚔️ ${esc(r.an||'나')} vs ${esc(r.bn||'상대')}</h3><span class="fm-chip" id="pvRnd">1 라운드</span><button class="vg-btn sm" id="pvSpd">⏩ 2배</button><button class="vg-btn sm" id="pvSkip">⏭ 건너뛰기</button></div>
+   <div class="pv-arena"><div class="pv-side a">${A.map((u,i)=>unit(u,i)).join('')}</div><div class="pv-vs">VS</div><div class="pv-side b">${B.map((u,i)=>unit(u,na+i)).join('')}</div></div>
+   <div class="pv-log" id="pvLog">전투 시작!</div><div class="pv-res" id="pvRes"></div>`;
+  box.querySelector('.vg-x').onclick=()=>{pvStop();PV.m.remove();PV.m._onclose()};
+  const ev=r.ev||[],P=PV.play={i:0,spd:1,t:0},el=i=>box.querySelector(`[data-pu="${i}"]`),log=box.querySelector('#pvLog');
+  const pop=(i,txt,cls)=>{const e=el(i);if(!e)return;const d=document.createElement('b');d.className='pv-pop '+cls;d.textContent=txt;e.appendChild(d);setTimeout(()=>d.remove(),900)};
+  const setHp=(i,h)=>{const e=el(i);if(!e)return;e.querySelector('.pv-hp i').style.width=Math.max(0,h/all[i].max*100)+'%';e.classList.toggle('dead',h<=0)};
+  const nm=i=>`${i<na?'🔵':'🔴'}${all[i].name}`;
+  const step=()=>{if(!PV.play)return;if(P.i>=ev.length)return end();const e=ev[P.i++],a=el(e.a);box.querySelector('#pvRnd').textContent=`${e.r} 라운드`;
+    if(a){a.classList.remove('act');void a.offsetWidth;a.classList.add('act')}
+    if(e.k==='stunned'){pop(e.a,'💫 기절','ms');log.textContent=`${nm(e.a)} — 기절해서 쉬어요`}
+    else if(e.k==='heal'){pop(e.t[0],`+${e.v}`,'hl');setHp(e.t[0],e.hp[0]);log.textContent=`💚 ${nm(e.a)}의 ${all[e.a].skill_name}! ${nm(e.t[0])} +${e.v}`}
+    else if(e.k==='guard'){(e.a<na?A:B).forEach((u,k)=>{const j=e.a<na?k:na+k;const x=el(j);if(x&&!x.classList.contains('dead'))pop(j,`🛡️+${e.v}`,'sh')});log.textContent=`🛡️ ${nm(e.a)}의 ${all[e.a].skill_name}! 팀 전체 보호막${e.tnt?' · 도발':''}`}
+    else if(e.k==='buff'){pop(e.a,'⬆️ 공격 UP','bf');log.textContent=`⚡ ${nm(e.a)}의 ${all[e.a].skill_name}! 팀 공격력 상승`}
+    else{(e.t||[]).forEach((t,k)=>{const c=e.cr[k],m=e.em[k];pop(t,`${c?'💥':''}-${vgN(e.d[k])}${m>1?' 🔺':m<1?' 🔻':''}`,c?'cr':'dm');setHp(t,e.hp[k]);const x=el(t);if(x){x.classList.remove('hit');void x.offsetWidth;x.classList.add('hit')}});
+      if(e.ahp!=null)setHp(e.a,e.ahp);
+      log.textContent=e.k==='skill'?`${PV_SK[e.s]||'✨'} ${nm(e.a)}의 ${all[e.a].skill_name}!${(e.t||[]).length>1?' (전체 공격)':''}`:`${nm(e.a)} → ${nm(e.t[0])} ${vgN(e.d[0])}${e.em[0]>1?' (상성 유리!)':e.em[0]<1?' (상성 불리)':''}`}
+    P.t=setTimeout(step,(e.k==='skill'?720:480)/P.spd)};
+  const end=()=>{pvStop();const me=replay&&r.mine==='b'?!r.win:r.win;
+    // 최종 체력 반영
+    const last={};ev.forEach(e=>{(e.t||[]).forEach((t,k)=>{if(e.hp)last[t]=e.hp[k]});if(e.ahp!=null)last[e.a]=e.ahp});Object.entries(last).forEach(([i,h])=>setHp(+i,h));
+    box.querySelector('#pvRes').innerHTML=`<div class="pv-rbox ${me?'w':'l'}"><h2>${me?'🏆 승리!':'😢 패배'}</h2><p>점수 <b class="${r.d>=0?'up':'dn'}">${r.d>=0?'+':''}${r.d}</b>${r.coin?` · 🪙 +${vgN(r.coin)}`:''}${r.rating?` · 현재 ${r.rating} (${esc(r.tier||'')})`:''}</p><div><button class="vg-btn gold" id="pvBack">아레나로</button></div></div>`;
+    box.querySelector('#pvBack').onclick=async()=>{try{PV.st=await window.fitVillage.pvpStatus()}catch(e){}pvLobby()}};
+  box.querySelector('#pvSpd').onclick=e=>{P.spd=P.spd===1?2.5:1;e.target.textContent=P.spd===1?'⏩ 2배':'▶ 보통'};
+  box.querySelector('#pvSkip').onclick=()=>{clearTimeout(P.t);P.i=ev.length;end()};
+  P.t=setTimeout(step,700)}
+
 
 function daily(){
   let r=rec(selectedDate), totals=calcMealTotals(selectedDate), calGoal=n(db.profile.calorieTarget)||1720, proteinGoal=n(db.profile.proteinTarget)||138;
@@ -3674,6 +3776,9 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     terrainSave(cells){return vrpc('fit_village_terrain_save',{p_cells:cells})},
     setBg(bg){return vrpc('fit_village_set_bg',{p_bg:bg})},
     storeMany(ids){return vrpc('fit_village_store_many',{p_ids:ids})},
+    pvpStatus(){return vrpc('fit_pvp_status',{})},
+    pvpFight(t){return vrpc('fit_pvp_fight',{p_target:t})},
+    pvpReplay(id){return vrpc('fit_pvp_replay',{p_id:id})},
     fishState(){return vrpc('fit_fish_state',{})},
     fishCast(b){return vrpc('fit_fish_cast',{p_bait:b})},
     fishEnd(ok){return vrpc('fit_fish_end',{p_ok:ok})},

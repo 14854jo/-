@@ -1241,6 +1241,22 @@ main:has(#vgRoot){max-width:none}
 @media (max-width:600px){.pt-tab{min-width:0;flex:1 1 30%;padding:6px 8px}.pt-tab b{font-size:12.5px;max-width:100%}}
 
 .eq-subs span.up{background:linear-gradient(135deg,#fff0c9,#ffe0ef);color:#b5487a;font-weight:700}.eq-subs span.up em{font-style:normal;font-size:9px;color:#e0457b;margin-left:2px}
+
+/* PvP 전투 기록 */
+.pv-stats{margin-top:12px;display:flex;flex-direction:column;gap:10px;text-align:left}
+.pvs-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.pvs-h b{font-size:15px;color:#3d3155}.pvs-h small{font-size:11.5px;color:#8a7fa3}
+.pvs-t{background:#fff;border:2px solid #ece4f7;border-radius:14px;padding:8px 10px}.pvs-t.w{border-color:#ffd36b;background:linear-gradient(180deg,#fffbea,#fff)}
+.pvs-th{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}.pvs-th b{font-size:14px}.pvs-th span{font-size:12px;color:#8a6a12;font-weight:700}
+.pvs-r{display:grid;grid-template-columns:minmax(120px,1.3fr) 1fr 1fr 1fr;gap:8px;align-items:center;padding:4px 4px;border-radius:9px}
+.pvs-r.hd{font-size:11px;color:#8a7fa3;font-weight:700;padding-top:0;padding-bottom:0}
+.pvs-r.mvp{background:linear-gradient(90deg,#fff1c2,#fff8e1 60%,transparent)}.pvs-r.dead .pvs-a{filter:grayscale(1);opacity:.55}
+.pvs-n{display:flex;align-items:center;gap:6px;min-width:0}.pvs-n b{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pvs-n em{font-style:normal;font-size:10.5px;color:#c0395e;font-weight:700;white-space:nowrap}
+.pvs-a{width:30px;height:30px;flex:0 0 30px;display:block}.pvs-a svg,.pvs-a img{width:100%;height:100%}
+.pvs-b{position:relative;height:18px;background:#f3eff8;border-radius:9px;overflow:hidden}.pvs-b i{position:absolute;left:0;top:0;bottom:0;border-radius:9px}
+.pvs-b i.d{background:linear-gradient(90deg,#ff9a6b,#ff5e7e)}.pvs-b i.t{background:linear-gradient(90deg,#b9a6d9,#8e78bd)}.pvs-b i.h{background:linear-gradient(90deg,#8fe3a9,#3fbf74)}
+.pvs-b span{position:relative;z-index:1;font-size:11px;font-weight:700;color:#3d3155;padding-left:6px;line-height:18px;text-shadow:0 0 3px #fff}
+@media (max-width:600px){.pvs-r{grid-template-columns:92px 1fr 1fr 1fr;gap:4px}.pvs-n b{font-size:11px}.pvs-a{width:24px;height:24px;flex-basis:24px}.pvs-b span{font-size:10px;padding-left:3px}.pvs-r.hd{font-size:9.5px}}
+@media (max-width:600px){.pvs-n{display:grid;grid-template-columns:24px 1fr;column-gap:4px;row-gap:0;align-items:center}.pvs-n .pvs-a{grid-row:span 2}.pvs-n em{grid-column:2;font-size:9.5px;line-height:1}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -3440,6 +3456,21 @@ async function pvFight(t,fr){const btns=pvBox().querySelectorAll('[data-pvf],[da
   try{const r=await window.fitVillage.pvpFight(t,!!fr);PV.last={t,fr:!!fr};if(VG.state&&r.coins!=null){VG.state.village.coins=r.coins;try{vgRenderHud()}catch(e){}}pvShow(r,false)}catch(e){vgToast(e.message||String(e),true);btns.forEach(b=>b.disabled=false)}}
 /* ── 전투 다시 보기 ── */
 function pvStop(){if(PV.play){clearTimeout(PV.play.t);PV.play=null}}
+// 전투 통계 (캐릭터별 피해량 · 받은 피해 · 회복 · 보호막)
+function pvStats(ev,all,na){const n=all.length,z=()=>Array(n).fill(0),S={dmg:z(),tak:z(),heal:z(),sh:z(),ko:z()},hp=all.map(u=>u.max);
+  const hit=(f,t,d)=>{d=Number(d)||0;if(f!=null&&f>=0)S.dmg[f]+=d;S.tak[t]+=d};
+  ev.forEach(e=>{if(e.k==='heal'){(e.t||[]).forEach((t,k)=>{const v=Number((e.vs||[e.v])[k])||0,real=Math.max(0,Math.min(v,all[t].max-hp[t]));S.heal[e.a]+=real;if(e.hp)hp[t]=e.hp[k]})}
+    else if(e.k==='guard'){if(e.v){const lo=e.a<na?0:na,hi=e.a<na?na:n;let c=0;for(let j=lo;j<hi;j++)if(hp[j]>0)c++;S.sh[e.a]+=e.v*c}}
+    else if(e.k==='attack'||e.k==='hit'||e.k==='skill'){(e.t||[]).forEach((t,k)=>{const was=hp[t];hit(e.a,t,e.d&&e.d[k]);if(e.hp)hp[t]=e.hp[k];if(was>0&&hp[t]<=0)S.ko[e.a]++});
+      (e.cnt||[]).forEach(c=>{const was=hp[c.t];hit(c.f,c.t,c.d);if(c.hp!=null)hp[c.t]=c.hp;if(was>0&&hp[c.t]<=0)S.ko[c.f]++});if(e.ahp!=null)hp[e.a]=e.ahp}});
+  S.score=all.map((u,i)=>S.dmg[i]+S.heal[i]+S.sh[i]*.5+S.tak[i]*.4+S.ko[i]*300);S.hp=hp;return S}
+function pvStatTable(r,S,all,na,me){const mineB=r._mineB,teams=[{nm:'🔵 우리 팀',lo:mineB?na:0,hi:mineB?all.length:na,win:me},{nm:'🔴 상대 팀',lo:mineB?0:na,hi:mineB?na:all.length,win:!me}];
+  const mx=Math.max(1,...S.dmg,...S.tak,...S.heal.map((h,i)=>h+S.sh[i]));
+  const mvp=(lo,hi)=>{let b=lo;for(let i=lo;i<hi;i++)if(S.score[i]>S.score[b])b=i;return b};
+  const bar=(v,c)=>`<div class="pvs-b"><i class="${c}" style="width:${Math.max(2,v/mx*100)}%"></i><span>${vgN(Math.round(v))}</span></div>`;
+  return `<div class="pv-stats"><div class="pvs-h"><b>📊 전투 기록</b><small>⚔️ 준 피해 · 💔 받은 피해 · 💚 회복+보호막 · 💀 처치</small></div>${teams.map(T=>{const m=mvp(T.lo,T.hi);let rows='';
+    for(let i=T.lo;i<T.hi;i++){const u=all[i],dead=S.hp[i]<=0;rows+=`<div class="pvs-r ${i===m?'mvp':''} ${dead?'dead':''}"><div class="pvs-n"><span class="pvs-a">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}</span><b>${i===m?(T.win?'👑 ':'⭐ '):''}${esc(u.name)}</b>${S.ko[i]?`<em>💀${S.ko[i]}</em>`:''}</div>${bar(S.dmg[i],'d')}${bar(S.tak[i],'t')}${bar(S.heal[i]+S.sh[i],'h')}</div>`}
+    return `<div class="pvs-t ${T.win?'w':''}"><div class="pvs-th"><b>${T.nm}</b><span>${T.win?'승리':'패배'} · ${T.win?'👑 MVP':'⭐ 최고 활약'} ${esc(all[m].name)}</span></div><div class="pvs-r hd"><div>캐릭터</div><div>⚔️ 준 피해</div><div>💔 받은 피해</div><div>💚 회복·보호막</div></div>${rows}</div>`}).join('')}</div>`}
 function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.length,all=A.concat(B);
   const unit=(u,i)=>`<div class="pv-u g${u.grade} ${u.row==='back'?'back':''}" data-pu="${i}"><div class="pv-ua">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}</div><b>${vgElI(u.el)}${esc(u.name)}</b><small class="pv-spd">⚡${u.spd||100}</small><div class="pv-hp"><i style="width:100%"></i></div><span class="pv-sh"></span></div>`;
   box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pv-top"><h3>⚔️ ${esc(r.an||'나')} vs ${esc(r.bn||'상대')}</h3><span class="fm-chip" id="pvRnd">1 행동</span><button class="vg-btn sm" id="pvSpd">⏩ 2배</button><button class="vg-btn sm" id="pvSkip">⏭ 건너뛰기</button></div>
@@ -3464,7 +3495,7 @@ function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.le
   const end=()=>{pvStop();const me=replay&&r.mine==='b'?!r.win:r.win;
     // 최종 체력 반영
     const last={};ev.forEach(e=>{(e.t||[]).forEach((t,k)=>{if(e.hp)last[t]=e.hp[k]});if(e.ahp!=null)last[e.a]=e.ahp});Object.entries(last).forEach(([i,h])=>setHp(+i,h));
-    box.querySelector('#pvRes').innerHTML=`<div class="pv-rbox ${me?'w':'l'}"><h2>${me?'🏆 승리!':'😢 패배'}</h2>${r.friendly?'<p>🤝 친선전 — 점수 · 코인 변동 없음</p>':`<p>점수 <b class="${r.d>=0?'up':'dn'}">${r.d>=0?'+':''}${r.d}</b>${r.coin?` · 🪙 +${vgN(r.coin)}`:''}${r.rating?` · 현재 ${r.rating} (${esc(r.tier||'')})`:''}</p>`}<div style="display:flex;gap:8px;justify-content:center">${!replay&&r.friendly&&PV.last?'<button class="vg-btn" id="pvAgain">🤝 한 번 더</button>':''}<button class="vg-btn gold" id="pvBack">아레나로</button></div></div>`;
+    box.querySelector('#pvRes').innerHTML=`<div class="pv-rbox ${me?'w':'l'}"><h2>${me?'🏆 승리!':'😢 패배'}</h2>${r.friendly?'<p>🤝 친선전 — 점수 · 코인 변동 없음</p>':`<p>점수 <b class="${r.d>=0?'up':'dn'}">${r.d>=0?'+':''}${r.d}</b>${r.coin?` · 🪙 +${vgN(r.coin)}`:''}${r.rating?` · 현재 ${r.rating} (${esc(r.tier||'')})`:''}</p>`}<div style="display:flex;gap:8px;justify-content:center">${!replay&&r.friendly&&PV.last?'<button class="vg-btn" id="pvAgain">🤝 한 번 더</button>':''}<button class="vg-btn gold" id="pvBack">아레나로</button></div></div>`+(()=>{r._mineB=!!(replay&&r.mine==='b');return pvStatTable(r,pvStats(ev,all,na),all,na,me)})();
     const ag=box.querySelector('#pvAgain');if(ag)ag.onclick=()=>{ag.disabled=true;pvFight(PV.last.t,true)};box.querySelector('#pvBack').onclick=async()=>{try{PV.st=await window.fitVillage.pvpStatus()}catch(e){}pvLobby()}};
   box.querySelector('#pvSpd').onclick=e=>{P.spd=P.spd===1?2.5:1;e.target.textContent=P.spd===1?'⏩ 2배':'▶ 보통'};
   box.querySelector('#pvSkip').onclick=()=>{clearTimeout(P.t);P.i=ev.length;end()};

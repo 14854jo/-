@@ -2491,7 +2491,7 @@ async function vgFuse(){const F=VG.fuse,A=(VG.state.items||[]).find(i=>i.id===F.
 /* ===== 초월 시스템 + 필살기 연출 ===== */
 const VG_TRB={1:300,2:800,3:2000,4:5000,5:12000,6:9000,7:9000};
 const vgTrCost=(g,t)=>(VG_TRB[g]||9000)*(t+1);
-const VG_TR5={nuke:'방어를 무시하는 일격',burn:'화상 5턴 지속',stun:'기절 저항 무시',weaken:'약화 3턴 지속',break:'방어 파괴 5턴 지속',shield:'보호막 + 아군 전체 10% 회복',heal:'쓰러진 아군 20% 부활',buff:'강화 1턴 연장',taunt:'받은 피해의 50% 반사',revive:'부활 체력 50%',aegis:'결계 3턴 · 피해 −60%',grove:'숲 4턴 지속',confuse:'실패 확률 70%',rebirth:'부활 체력 60%',combo:'12연격',charge_up:'피해 2.5배',execute:'잃은 체력 18% 비례',lifelink:'오라 4턴 지속',counter:'반격 3턴',timestop:'봉인 + 피해 강화',overdrive:'일반 공격 3회',web:'속박 4턴',cleanse:'회복 45%',meteor:'화상 5턴',dodge:'회피 확률 70%',drain:'최대 −40%'};
+const VG_TR5={nuke:'방어를 무시하는 일격',burn:'화상 5턴 지속',stun:'기절 저항 무시',weaken:'약화 3턴 지속',break:'방어 파괴 5턴 지속',shield:'보호막 + 아군 전체 10% 회복',heal:'쓰러진 아군 20% 부활',buff:'강화 1턴 연장',taunt:'받은 피해의 50% 반사',revive:'부활 체력 50%',aegis:'결계 3턴 · 피해 −60%',grove:'숲 4턴 지속',confuse:'실패 확률 70%',rebirth:'부활 체력 60%',combo:'12연격',charge_up:'피해 2.5배',execute:'잃은 체력 18% 비례',lifelink:'오라 4턴 지속',counter:'반격 3턴',timestop:'봉인 + 피해 강화',overdrive:'일반 공격 3회',web:'속박 4턴',cleanse:'회복 45%',meteor:'화상 5턴',dodge:'회피 확률 70%',drain:'최대 −40%',tidal:'피해 +30%',hunt:'피해 +40%',judgement:'피해 +30% · 아군 전체 15% 회복',world_tree:'회복량 +50% · 면역 3턴',magma_armor:'도발 4턴 · 받는 피해 −30%',abyss_gate:'도발 3턴 · 받는 피해 −30%',storm_wall:'보호막 +50% · 반격 3턴',quake:'방어 파괴 4턴',fortress:'아군 받는 피해 −65%',crystal_ward:'완전 회피 2회'};
 function vgStars(t,cls=''){t=Number(t)||0;return t?`<span class="vg-stars ${cls} ${t>=5?'max':''}">${'★'.repeat(t)}<i>${'★'.repeat(5-t)}</i></span>`:''}
 function vgTrTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal');
   const grades=[1,2,3,4,5,6,7].filter(g=>items.some(i=>VG.cat[i.item_key].grade===g));if(!grades.includes(F.tg))F.tg=grades[grades.length-1]||1;
@@ -2503,7 +2503,7 @@ function vgTrTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items
     detail=`<div class="vt-detail"><div class="vt-head">${vgArtSvg(vgK(it))}<div><span class="vg-grade vg-g${c.grade}" style="position:static">${VG_GRADE[c.grade].name}</span> <b style="font-size:17px">${esc(c.name)}</b><div class="vt-big">${vgStars(t)||'<span class="vg-stars"><i>★★★★★</i></span>'}</div></div></div>
      ${row('시간당 생산',+(c.rate*(1+.05*t)).toFixed(1),+(c.rate*(1+.05*(t+1))).toFixed(1))}${row('체력',Math.round(st[0]*f(t)),Math.round(st[0]*f(t+1)))}${row('공격',Math.round(st[1]*f(t)),Math.round(st[1]*f(t+1)))}${row('방어',Math.round(st[2]*f(t)),Math.round(st[2]*f(t+1)))}${row('필살기 위력',`+${t*12}%`,`+${(t+1)*12}%`)}
      <div class="vt-skill">${sk[0]} <b>${esc(c.skill_name||'필살 일격')}</b><small>${sk[1]}</small>
-       <div class="vt-mile ${t>=3?'on':''}">★3 각성 — 필살기 쿨타임 1턴 감소</div><div class="vt-mile ${t>=5?'on':''}">★5 초월 각성 — ${VG_TR5[c.skill||'nuke']}</div></div>
+       <div class="vt-mile ${t>=3?'on':''}">★3 각성 — 필살기 쿨타임 1턴 감소</div><div class="vt-mile ${t>=5?'on':''}">★5 초월 각성 — ${VG_TR5[c.skill||'nuke']||'필살기 강화'}</div></div>
      <button class="vg-btn gold full" id="vtGo" ${t>=5||coins<cost?'disabled':''}>${t>=5?'최대 단계 (★5) 달성!':coins<cost?`코인이 부족해요 (${vgN(cost)})`:`✨ ${t+1}성으로 초월 · ${vgN(cost)}코인`}</button></div>`}
   return `<p class="vg-note">코인을 사용해 캐릭터를 최대 <b>★5</b>까지 초월할 수 있어요. 1성마다 <b>능력치 +10%</b>, <b>생산 +5%</b>, <b>필살기 위력 +12%</b>. 조합 재료로 쓰면 초월 단계는 사라져요. 일반·희귀·영웅은 ★5 이후 <b>🔓 한계돌파</b>(돌파석)로 심연의 탑 능력치를 더 올릴 수 있어요.</p>
   <div class="vf-grades g6">${[1,2,3,4,5,6,7].map(g=>`<button class="${F.tg===g?'on':''}" data-tg="${g}" ${grades.includes(g)?'':'disabled'}><span class="vg-grade vg-g${g}" style="position:static">${VG_GRADE[g].name}</span></button>`).join('')}</div>
@@ -2519,7 +2519,7 @@ async function vgTranscend(){const F=VG.fuse,it=(VG.state.items||[]).find(i=>i.i
   const t0=Date.now();let r=null,err=null;try{r=await window.fitVillage.transcend(it.id)}catch(e){err=e}await new Promise(res=>setTimeout(res,Math.max(0,1500-(Date.now()-t0))));
   if(err||!r){m.remove();vgToast(err?.setup?'Supabase에 초월 SQL(fit_village_update6.sql) 실행이 필요합니다.':(err?.message||'초월에 실패했어요.'),true);return}
   vgSetState(r);vgRenderHud();vgRenderStage();vgRenderSide();
-  const c=VG.cat[it.item_key];m.querySelector('.vt-box').innerHTML=`<div class="vg-rays"></div><div style="position:relative"><div class="vg-modal-art vg-pop">${vgArtSvg(vgK(it))}</div><div class="vt-big vg-pop">${vgStars(t)}</div><h3>${esc(c.name)} ${t}성 초월!</h3><p class="vg-mp">${t===3?'★3 각성! 필살기 쿨타임이 1턴 줄었어요.':t===5?`★5 초월 각성! ${VG_TR5[c.skill||'nuke']}`:'능력치·생산량·필살기 위력이 올랐어요.'}</p><button class="vg-btn gold" id="vtOk">확인</button></div>`;
+  const c=VG.cat[it.item_key];m.querySelector('.vt-box').innerHTML=`<div class="vg-rays"></div><div style="position:relative"><div class="vg-modal-art vg-pop">${vgArtSvg(vgK(it))}</div><div class="vt-big vg-pop">${vgStars(t)}</div><h3>${esc(c.name)} ${t}성 초월!</h3><p class="vg-mp">${t===3?'★3 각성! 필살기 쿨타임이 1턴 줄었어요.':t===5?`★5 초월 각성! ${VG_TR5[c.skill||'nuke']||'필살기 강화'}`:'능력치·생산량·필살기 위력이 올랐어요.'}</p><button class="vg-btn gold" id="vtOk">확인</button></div>`;
   if(t>=5)m.querySelector('.vt-box').classList.add('vt-max');m.querySelector('#vtOk').onclick=()=>m.remove()}
 
 /* --- 필살기 연출 --- */

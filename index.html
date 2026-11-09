@@ -1272,6 +1272,7 @@ main:has(#vgRoot){max-width:none}
 .eqb-sum{display:flex;justify-content:space-between;background:#fbf7ff;border-radius:12px;padding:10px 14px;margin:10px 0;font-size:14px}.eqb-sum b{color:#6d3fe0;font-size:17px}
 .eq-filter{flex-wrap:wrap}.eq-filter .eq-bulk{flex:1 1 100%}
 .eq-bulkm .vg-modal-box{text-align:left}.eq-bulkm h3,.eq-bulkm .vg-mp{text-align:center}.eq-bulkm input[type=checkbox]{width:16px!important;height:16px;margin:0;flex:0 0 16px;padding:0}.eqb-g{white-space:nowrap}.eqb-chk{justify-content:flex-start;white-space:normal}
+.pv-stats.pve{margin-top:10px}.vd-result+.vd-acts+.pv-stats,.pv-stats.pve{max-width:720px;margin-left:auto;margin-right:auto}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2475,6 +2476,7 @@ async function vgAct(actions){if(VD.busy)return;if(actions[0]==='flee'&&!window.
   if(r.floor===0){vgWbResult(r);return}
   const acts=VD.m.querySelector('#vdActs'),won=r.status==='won',why=(r.events||[]).some(e=>e.t==='timeout')?`제한 턴(${r.max_turn}턴)을 넘겼어요.`:(r.events||[]).some(e=>e.t==='flee')?'던전에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
   acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 승리! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어 보상)</small>':''}${r.boss_egg?`<div class="vd-bossegg">🥚 ${r.boss_egg}층 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>`:''}`:`💤 패배… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="vdBack">던전으로 돌아가기</button></div>`;
+  acts.insertAdjacentHTML('beforeend',vgPveStats(r.party,(r.fx||{}).stats,won));
   acts.querySelector('#vdBack').onclick=()=>{VD.battle=null;VD.sel=null;vgLobby()};
   if(won&&r.hatched_key){await vdSleep(1400);const holder=document.createElement('div');holder.className='vg-modal';holder.innerHTML='<div class="vg-modal-box"></div>';document.body.appendChild(holder);vgReveal(holder,r,'보상 알에서 ')}}
 
@@ -2819,7 +2821,7 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
   const flushA=()=>{if(hitSum)L('a',`⚔️ 일반 공격 총 <b>${vgN(hitSum)}</b> 피해`);if(burnSum)L('a',`🔥 화상 피해 총 <b>${vgN(burnSum)}</b>`);hitSum=0;burnSum=0};
   const flushE=()=>{if(!cur)return;const c=cur,ba=VD_BA[c.act]||['❔',c.act],n=c.hits.size;cur=null;
     const tg=n===1&&c.dmg>0?`<b>${nm([...c.hits][0])}</b>에게 ${vgN(c.dmg)} 피해`:n>1?`아군 ${n}명 · 총 <b>${vgN(c.dmg)}</b> 피해`:'';
-    L('e',`${ba[0]} <b>${en(c.e)}</b>의 <b>${ba[1]}</b>${tg?' → '+tg:''}${c.dodge?` · 💨 회피 ${c.dodge}`:''}${c.abs?` · 🛡️ 보호막 흡수 ${vgN(c.abs)}`:''}${c.stun?` · 💫 ${c.stun} 기절`:''}${c.heal?` · 💚 ${vgN(c.heal)} 회복`:''}${TW_BA_X[c.act]?` · ${TW_BA_X[c.act]}`:''}`)};
+    L('e',`${ba[0]} <b>${en(c.e)}</b>의 <b>${ba[1]}</b>${tg?' → '+tg:''}${c.dodge?` · 💨 회피 ${c.dodge}`:''}${c.abs?` · 🛡️ 보호막 흡수 ${vgN(c.abs)}`:''}${c.stun?` · 💫 ${c.stun} 기절`:''}${c.heal?` · 💚 ${vgN(c.heal)} 회복`:''}${c.cnt?` · 🪓 반격·반사 ${vgN(c.cnt)}`:''}${TW_BA_X[c.act]?` · ${TW_BA_X[c.act]}`:''}`)};
   for(const e of r.events||[]){let w=200;if(waved&&!['win','lose','timeout'].includes(e.t))continue;
     if(e.t==='hit'||e.t==='extra'){vdShake(M(e.who),'vd-lunge');ehp[e.e]-=e.dmg;setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),(e.t==='extra'?'📖 ':'')+(e.crit?'치명타 ':'')+'-'+e.dmg,e.crit?'crit':'');hitSum+=e.dmg;w=150}
     else if(e.t==='skill'){const s=VD_SK[e.skill]||['✨',''];act(M(e.who));vdShake(M(e.who),'vd-lunge');
@@ -2852,6 +2854,7 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
       vdPop(M(e.who),`🌟 ${e.emoji||''} ${e.name}!`,'sk');if(e.sup)old.party.forEach((p,j)=>vdPop(M(j),e.emoji||'✨','heal'));
       if(old.fx)old.fx.uqused=true;L('u',`🌟 <b>${nm(e.who)}</b>의 고유 스킬 <b>${esc(e.emoji||'')} ${esc(e.name)}</b>${ud?`<small>${esc(ud)}</small>`:''}`);w=450}
     else if(e.t==='uend'){if(e.dmg>0)L('u',`🌟 고유 스킬 총 피해 <b>${vgN(e.dmg)}</b>`)}
+    else if(e.t==='counter'||e.t==='reflect'){if(e.e!=null&&ehp[e.e]!=null){ehp[e.e]=Math.max(1,ehp[e.e]-e.dmg);setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),(e.t==='counter'?'🪓 반격 -':'🪨 반사 -')+e.dmg,'crit')}if(cur){cur.cnt=(cur.cnt||0)+e.dmg}w=110}
     else if(e.t==='rebirth'){vdPop(M(e.who),'🔥 부활!','heal');L('a',`🔥 <b>${nm(e.who)}</b> 부활!`)}
     await vdSleep(w)}
   flushA();flushE();if(poiSum)L('e',`☠️ 독 피해 총 <b>${vgN(poiSum)}</b>`);
@@ -2862,7 +2865,7 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
   twBattle(logHtml);const acts=TW.m.querySelector('#twActs'),why=(r.events||[]).some(e=>e.t==='timeout')?'제한 턴(30턴)을 넘겼어요.':(r.events||[]).some(e=>e.t==='flee')?'탑에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
   acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 ${r.floor}층 클리어! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어)</small>':''}${r.boss_egg?'<div class="vd-bossegg">🥚 관문 보상: 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>':''}${r.equip?`<div class="eq-drop"><small>🎁 장비 획득</small>${eqCard(r.equip,false)}</div>`:''}${r.stones?`<div class="aw-drop">💠 각성석 <b>+${r.stones}</b> <button class="vg-btn sm purple" data-awopen="1">🌟 각성하러 가기</button></div>`:''}${r.lbst?`<div class="aw-drop lb">🔶 돌파석 <b>+${r.lbst}</b> <small>초월 탭에서 일반·희귀·영웅을 한계돌파할 수 있어요</small></div>`:''}`:`💤 실패… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="twBack">탑으로 돌아가기</button></div>`;
   if(won&&r.stones&&TW.st)TW.st.stones=(TW.st.stones||0)+r.stones;if(won&&r.lbst&&TW.st)TW.st.lbstones=(TW.st.lbstones||0)+r.lbst;acts.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
-  acts.querySelector('#twBack').onclick=()=>{TW.battle=null;if(won&&TW.floor<30&&r.floor===TW.floor)TW.floor=Math.min(30,r.floor+1);twLobby()}}
+  acts.insertAdjacentHTML('beforeend',vgPveStats(r.party,(r.fx||{}).stats,won));acts.querySelector('#twBack').onclick=()=>{TW.battle=null;if(won&&TW.floor<30&&r.floor===TW.floor)TW.floor=Math.min(30,r.floor+1);twLobby()}}
 
 /* ===== 보관함 세분화 (동물 · 장비 · 소모품) ===== */
 function vgInvSub(){const s=VG.invSub||'animal';return `<div class="vg-subtabs">${[['animal','🐾 동물'],['deco','🌳 꾸미기'],['equip','⚔️ 장비'],['cons','🎒 소모품']].map(([k,l])=>`<button data-isub="${k}" class="${s===k?'on':''}">${l}</button>`).join('')}</div>`}
@@ -3571,6 +3574,16 @@ function pvPlan(){const s=PV.st,plan=JSON.parse(JSON.stringify(s.plan||{}));let 
     b.querySelectorAll('[data-dn]').forEach(x=>x.onclick=()=>{const i=+x.dataset.dn;[p.order[i+1],p.order[i]]=[p.order[i],p.order[i+1]];draw()});
     b.querySelector('#pvPlS').onclick=async()=>{get('a');get('d');try{await window.fitVillage.pvpPlan(plan);m.remove();vgToast('⚙️ 전투 설정을 저장했어요');PV.st=await window.fitVillage.pvpStatus();pvLobby()}catch(e){vgToast(e.setup?'Supabase에 fit_village_update45.sql 실행이 필요합니다.':(e.message||String(e)),true)}}};
   draw()}
+
+// 탑 · 던전 전투 기록 (서버가 fx.stats 에 누적)
+function vgPveStats(party,st,won){if(!st||!Array.isArray(st.d)||!party||!party.length)return '';const n=party.length,g=(k,i)=>Number((st[k]||[])[i])||0;
+  const sc=i=>g('d',i)+g('h',i)+g('t',i)*.4+g('k',i)*300;let m=0;for(let i=1;i<n;i++)if(sc(i)>sc(m))m=i;
+  const mx=Math.max(1,...party.map((_,i)=>Math.max(g('d',i),g('t',i),g('h',i))));
+  const bar=(v,c)=>`<div class="pvs-b"><i class="${c}" style="width:${Math.max(2,v/mx*100)}%"></i><span>${vgN(Math.round(v))}</span></div>`;
+  const tot=k=>party.reduce((a,_,i)=>a+g(k,i),0);
+  return `<div class="pv-stats pve"><div class="pvs-h"><b>📊 전투 기록</b><small>총 피해 ${vgN(tot('d'))} · 받은 피해 ${vgN(tot('t'))} · 회복·보호막 ${vgN(tot('h'))}</small></div>
+   <div class="pvs-t ${won?'w':''}"><div class="pvs-th"><b>🔵 우리 파티</b><span>${won?'👑 MVP':'⭐ 최고 활약'} ${esc(party[m].name||'')}</span></div><div class="pvs-r hd"><div>캐릭터</div><div>⚔️ 준 피해</div><div>💔 받은 피해</div><div>💚 회복·보호막</div></div>
+   ${party.map((u,i)=>`<div class="pvs-r ${i===m?'mvp':''} ${(Number(u.hp)||0)<=0?'dead':''}"><div class="pvs-n"><span class="pvs-a">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}</span><b>${i===m?(won?'👑 ':'⭐ '):''}${esc(u.name||'')}</b>${g('k',i)?`<em>💀${g('k',i)}</em>`:''}</div>${bar(g('d',i),'d')}${bar(g('t',i),'t')}${bar(g('h',i),'h')}</div>`).join('')}</div></div>`}
 
 
 function daily(){

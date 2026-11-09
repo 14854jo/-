@@ -1202,6 +1202,9 @@ main:has(#vgRoot){max-width:none}
 .pv-rbox.l{background:#f3f0f6;border-color:#cfc3e3}.pv-rbox h2{margin:0}
 @media(max-width:860px){.pv-side{grid-template-columns:1fr}.pv-ua .vg-art{width:52px;height:52px}.pv-arena{gap:4px;padding:8px}.pv-vs{font-size:18px}}
 .pv-l span,.pv-oh b,.pv-myh b{text-align:left}.pv-logs,.pv-rank{text-align:left}
+.pv-btns{display:flex;gap:4px}.pv-fr{font-style:normal;font-size:11px;background:#e3f2ff;color:#2a6ab0;border-radius:8px;padding:0 6px}
+.pv-side{grid-template-columns:repeat(3,1fr)}.pv-ua .vg-art{width:60px;height:60px}
+@media(max-width:860px){.pv-side{grid-template-columns:1fr}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -3362,21 +3365,21 @@ function pvLobby(){const s=PV.st,box=pvBox();
   if(PV.tab==='fight')body=`<div class="pv-my"><div class="pv-myh"><b>🛡️ 내 방어 팀</b><small>전투력 ${vgN(s.power)}</small><button class="vg-btn sm purple" id="pvParty">파티 편성</button></div>
       ${s.team.length?`<div class="pv-myt">${s.team.map(u=>`<div class="pv-mu g${u.grade}">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}<b>${vgElI(u.el)}${esc(u.name)}</b><small>${u.row==='front'?'앞줄':'뒷줄'}${u.sr==='atk'?' · ⚔️':u.sr==='def'?' · 🛡️':''}</small></div>`).join('')}</div>`:'<div class="vg-empty">파티 편성에서 팀을 꾸려 주세요.</div>'}
       <p class="vg-note">파티 편성에 저장한 팀이 그대로 <b>공격 · 방어 팀</b>이 돼요. 속성 상성(⚔️ 상성표)과 앞줄 · 뒷줄 배치가 승부를 갈라요.</p></div>
-    <b class="fq-sub">🎯 도전 상대 <small>(남은 도전 ${s.left}/5 · 자정 초기화)</small></b>
+    <b class="fq-sub">🎯 도전 상대 <small>(순위전 남은 ${s.left}/10 · 자정 초기화 · 🤝 친선전은 무제한)</small></b>
     <div class="pv-opp">${s.opp.map(o=>`<div class="pv-o ${o.bot?'bot':''}"><div class="pv-oh"><b>${esc(o.name)}</b><span>${o.bot?'연습':`${esc(o.tier)} · ${o.rating}`}</span></div>${pvMini(o.team)}
-      <div class="pv-of"><small>전투력 <b>${vgN(o.power)}</b> ${o.power>s.power*1.1?'<i class="pv-hard">강함</i>':o.power<s.power*.9?'<i class="pv-easy">약함</i>':''}</small><button class="vg-btn sm gold" data-pvf="${o.uid}" ${s.left>0&&s.team.length?'':'disabled'}>도전</button></div></div>`).join('')}</div>
-    <p class="vg-note">승리 🪙400 · 패배 🪙100 · 점수는 상대 점수에 따라 오르내려요 (연습 상대는 절반). 내 방어 팀이 지거나 이기면 내 점수도 바뀌어요.</p>`;
+      <div class="pv-of"><small>전투력 <b>${vgN(o.power)}</b> ${o.power>s.power*1.1?'<i class="pv-hard">강함</i>':o.power<s.power*.9?'<i class="pv-easy">약함</i>':''}</small><span class="pv-btns">${o.bot?'':`<button class="vg-btn sm" data-pvfr="${o.uid}" ${s.team.length?'':'disabled'} title="점수·코인 변동 없이 계속 대결">🤝 친선</button>`}<button class="vg-btn sm gold" data-pvf="${o.uid}" ${s.left>0&&s.team.length?'':'disabled'}>⚔️ 순위전</button></span></div></div>`).join('')}</div>
+    <p class="vg-note">${s.team.length<5?`<b style="color:#d04848">팀이 ${s.team.length}마리예요 — 파티 편성에서 5마리를 채우면 더 유리해요!</b><br>`:''}순위전 승리 🪙400 · 패배 🪙100 · 점수는 상대 점수에 따라 오르내려요 (연습 상대는 절반). 내 방어 팀이 지거나 이기면 내 점수도 바뀌어요.</p>`;
   else if(PV.tab==='rank')body=`<div class="pv-rank">${s.rank.map((r,i)=>`<div class="pv-r ${r.uid===window.fitVillage.me()?'me':''}"><em>${i<3?['🥇','🥈','🥉'][i]:i+1}</em>${r.rep?vgArtSvg(r.rep):'<span class="pv-noart"></span>'}<b>${esc(r.name)}</b><span>${esc(r.tier)}</span><strong>${r.rating}</strong><small>${r.win}승 ${r.lose}패</small></div>`).join('')||'<div class="vg-empty">아직 기록이 없어요.</div>'}</div>`;
-  else body=`<div class="pv-logs">${s.logs.map(l=>`<div class="pv-l ${l.win?'w':'l'}"><em>${l.win?'승':'패'}</em><span><b>${l.atk?'⚔️ 공격':'🛡️ 방어'} vs ${esc(l.vs)}</b><small>${new Date(l.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</small></span><strong class="${l.d>=0?'up':'dn'}">${l.d>=0?'+':''}${l.d}</strong><button class="vg-btn sm" data-pvr="${l.id}">▶ 다시 보기</button></div>`).join('')||'<div class="vg-empty">아직 전투 기록이 없어요.</div>'}</div>`;
+  else body=`<div class="pv-logs">${s.logs.map(l=>`<div class="pv-l ${l.win?'w':'l'}"><em>${l.win?'승':'패'}</em><span><b>${l.fr?'<i class="pv-fr">🤝 친선</i> ':''}${l.atk?'⚔️ 공격':'🛡️ 방어'} vs ${esc(l.vs)}</b><small>${new Date(l.at).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</small></span><strong class="${l.d>=0?'up':'dn'}">${l.d>=0?'+':''}${l.d}</strong><button class="vg-btn sm" data-pvr="${l.id}">▶ 다시 보기</button></div>`).join('')||'<div class="vg-empty">아직 전투 기록이 없어요.</div>'}</div>`;
   box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pv-top"><h3>⚔️ PvP 아레나</h3><span class="pv-tier">${esc(s.tier)}</span><span class="fm-chip">점수 <b>${s.rating}</b></span><span class="fm-chip">${s.win}승 ${s.lose}패</span><button class="vg-btn sm" onclick="vgElChart()">⚔️ 상성</button></div>
    <div class="dx-tabs">${tabs.map(([k,n])=>`<button class="vg-btn sm ${PV.tab===k?'gold':''}" data-pvt="${k}">${n}</button>`).join('')}</div><div class="pv-body">${body}</div>`;
   box.querySelector('.vg-x').onclick=()=>{PV.m.remove();PV.m._onclose()};
   box.querySelectorAll('[data-pvt]').forEach(b=>b.onclick=()=>{PV.tab=b.dataset.pvt;pvLobby()});
   const pp=box.querySelector('#pvParty');if(pp)pp.onclick=()=>{PV.m.remove();PV.m=null;vgParty()};
-  box.querySelectorAll('[data-pvf]').forEach(b=>b.onclick=()=>pvFight(b.dataset.pvf));
+  box.querySelectorAll('[data-pvf]').forEach(b=>b.onclick=()=>pvFight(b.dataset.pvf,false));box.querySelectorAll('[data-pvfr]').forEach(b=>b.onclick=()=>pvFight(b.dataset.pvfr,true));
   box.querySelectorAll('[data-pvr]').forEach(b=>b.onclick=async()=>{try{pvShow(await window.fitVillage.pvpReplay(b.dataset.pvr),true)}catch(e){vgToast(e.message||String(e),true)}})}
-async function pvFight(t){const btns=pvBox().querySelectorAll('[data-pvf]');btns.forEach(b=>b.disabled=true);
-  try{const r=await window.fitVillage.pvpFight(t);if(VG.state&&r.coins!=null){VG.state.village.coins=r.coins;try{vgRenderHud()}catch(e){}}pvShow(r,false)}catch(e){vgToast(e.message||String(e),true);btns.forEach(b=>b.disabled=false)}}
+async function pvFight(t,fr){const btns=pvBox().querySelectorAll('[data-pvf],[data-pvfr]');btns.forEach(b=>b.disabled=true);
+  try{const r=await window.fitVillage.pvpFight(t,!!fr);PV.last={t,fr:!!fr};if(VG.state&&r.coins!=null){VG.state.village.coins=r.coins;try{vgRenderHud()}catch(e){}}pvShow(r,false)}catch(e){vgToast(e.message||String(e),true);btns.forEach(b=>b.disabled=false)}}
 /* ── 전투 다시 보기 ── */
 function pvStop(){if(PV.play){clearTimeout(PV.play.t);PV.play=null}}
 function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.length,all=A.concat(B);
@@ -3402,8 +3405,8 @@ function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.le
   const end=()=>{pvStop();const me=replay&&r.mine==='b'?!r.win:r.win;
     // 최종 체력 반영
     const last={};ev.forEach(e=>{(e.t||[]).forEach((t,k)=>{if(e.hp)last[t]=e.hp[k]});if(e.ahp!=null)last[e.a]=e.ahp});Object.entries(last).forEach(([i,h])=>setHp(+i,h));
-    box.querySelector('#pvRes').innerHTML=`<div class="pv-rbox ${me?'w':'l'}"><h2>${me?'🏆 승리!':'😢 패배'}</h2><p>점수 <b class="${r.d>=0?'up':'dn'}">${r.d>=0?'+':''}${r.d}</b>${r.coin?` · 🪙 +${vgN(r.coin)}`:''}${r.rating?` · 현재 ${r.rating} (${esc(r.tier||'')})`:''}</p><div><button class="vg-btn gold" id="pvBack">아레나로</button></div></div>`;
-    box.querySelector('#pvBack').onclick=async()=>{try{PV.st=await window.fitVillage.pvpStatus()}catch(e){}pvLobby()}};
+    box.querySelector('#pvRes').innerHTML=`<div class="pv-rbox ${me?'w':'l'}"><h2>${me?'🏆 승리!':'😢 패배'}</h2>${r.friendly?'<p>🤝 친선전 — 점수 · 코인 변동 없음</p>':`<p>점수 <b class="${r.d>=0?'up':'dn'}">${r.d>=0?'+':''}${r.d}</b>${r.coin?` · 🪙 +${vgN(r.coin)}`:''}${r.rating?` · 현재 ${r.rating} (${esc(r.tier||'')})`:''}</p>`}<div style="display:flex;gap:8px;justify-content:center">${!replay&&r.friendly&&PV.last?'<button class="vg-btn" id="pvAgain">🤝 한 번 더</button>':''}<button class="vg-btn gold" id="pvBack">아레나로</button></div></div>`;
+    const ag=box.querySelector('#pvAgain');if(ag)ag.onclick=()=>{ag.disabled=true;pvFight(PV.last.t,true)};box.querySelector('#pvBack').onclick=async()=>{try{PV.st=await window.fitVillage.pvpStatus()}catch(e){}pvLobby()}};
   box.querySelector('#pvSpd').onclick=e=>{P.spd=P.spd===1?2.5:1;e.target.textContent=P.spd===1?'⏩ 2배':'▶ 보통'};
   box.querySelector('#pvSkip').onclick=()=>{clearTimeout(P.t);P.i=ev.length;end()};
   P.t=setTimeout(step,700)}
@@ -3777,7 +3780,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     setBg(bg){return vrpc('fit_village_set_bg',{p_bg:bg})},
     storeMany(ids){return vrpc('fit_village_store_many',{p_ids:ids})},
     pvpStatus(){return vrpc('fit_pvp_status',{})},
-    pvpFight(t){return vrpc('fit_pvp_fight',{p_target:t})},
+    pvpFight(t,fr){return vrpc('fit_pvp_fight',{p_target:t,p_friendly:!!fr})},
     pvpReplay(id){return vrpc('fit_pvp_replay',{p_id:id})},
     fishState(){return vrpc('fit_fish_state',{})},
     fishCast(b){return vrpc('fit_fish_cast',{p_bait:b})},

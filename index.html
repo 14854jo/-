@@ -1257,6 +1257,21 @@ main:has(#vgRoot){max-width:none}
 .pvs-b span{position:relative;z-index:1;font-size:11px;font-weight:700;color:#3d3155;padding-left:6px;line-height:18px;text-shadow:0 0 3px #fff}
 @media (max-width:600px){.pvs-r{grid-template-columns:92px 1fr 1fr 1fr;gap:4px}.pvs-n b{font-size:11px}.pvs-a{width:24px;height:24px;flex-basis:24px}.pvs-b span{font-size:10px;padding-left:3px}.pvs-r.hd{font-size:9.5px}}
 @media (max-width:600px){.pvs-n{display:grid;grid-template-columns:24px 1fr;column-gap:4px;row-gap:0;align-items:center}.pvs-n .pvs-a{grid-row:span 2}.pvs-n em{grid-column:2;font-size:9.5px;line-height:1}}
+
+/* 세트 · 일괄 판매 */
+.eq-set{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:5px;padding:5px 8px;border-radius:10px;border:1.5px solid color-mix(in srgb,var(--sc) 45%,#fff);background:color-mix(in srgb,var(--sc) 9%,#fff)}
+.eq-set b{font-size:12px;color:var(--sc)}.eq-set em{font-style:normal;font-size:10.5px;font-weight:800;color:#fff;background:var(--sc);border-radius:8px;padding:0 6px}
+.eq-set span{font-size:11px;color:#9a91ad;background:#fff;border-radius:8px;padding:1px 7px;border:1px dashed #ddd5ea}.eq-set span.on{color:#2f2445;font-weight:700;border:1px solid var(--sc)}
+.eq-bulk{margin-left:auto;border:1.5px solid #f2c94c!important;background:#fff8dd!important;color:#8a6a12!important;font-weight:700}
+.eqb-sec{margin:10px 0}.eqb-sec>b{display:block;font-size:13px;margin-bottom:6px;color:#4a3d63}.eqb-row{display:flex;gap:6px;flex-wrap:wrap}
+.eqb-g{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:12px;border:2px solid #e8e1f2;background:#fff;cursor:pointer;font-weight:700;color:var(--g);font-size:13px}
+.eqb-g input{accent-color:var(--g)}.eqb-g small{color:#8a7fa3;font-weight:600}.eqb-g.on{border-color:var(--g);background:color-mix(in srgb,var(--g) 10%,#fff)}
+.eqb-s{padding:6px 12px;border-radius:12px;border:2px solid #e8e1f2;background:#fff;cursor:pointer;font:inherit;font-size:13px}.eqb-s.on{border-color:#8b5cf6;background:#f4edff;color:#6d3fe0;font-weight:700}
+.eqb-chk{display:flex;gap:6px;align-items:center;font-size:13px;margin:8px 0}
+.eqb-warn{background:#ffe9ef;color:#c0395e;border-radius:10px;padding:7px 10px;font-size:12.5px;font-weight:700}
+.eqb-sum{display:flex;justify-content:space-between;background:#fbf7ff;border-radius:12px;padding:10px 14px;margin:10px 0;font-size:14px}.eqb-sum b{color:#6d3fe0;font-size:17px}
+.eq-filter{flex-wrap:wrap}.eq-filter .eq-bulk{flex:1 1 100%}
+.eq-bulkm .vg-modal-box{text-align:left}.eq-bulkm h3,.eq-bulkm .vg-mp{text-align:center}.eq-bulkm input[type=checkbox]{width:16px!important;height:16px;margin:0;flex:0 0 16px;padding:0}.eqb-g{white-space:nowrap}.eqb-chk{justify-content:flex-start;white-space:normal}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2860,22 +2875,30 @@ const EQ_GR={1:['일반','#8a97ad'],2:['희귀','#3b8cff'],3:['영웅','#9b5cff'
 const EQ_SUB={atk:'공격력',hp:'체력',def:'방어력',crit:'치명타 확률',skill:'필살기 피해'};
 function eqMain(slot,g,l){return Math.round(({weapon:[0,20,40,70,110,170],armor:[0,150,300,520,800,1250],acc:[0,8,16,28,44,70]})[slot][g]*(1+.1*l))}
 function eqSpd(e){return (e.slot!=='weapon'&&e.slot!=='armor'?e.grade*2:0)+(e.lvl>=10?8:e.lvl>=5?3:0)}
+const EQ_SET={fury:['🔥','광폭','#ff5e5e','공격력 +12%','치명타 +15%'],guard:['🛡️','수호','#3fa8ff','체력 +15%','방어력 +20% · 체력 +5%'],ruin:['💥','파멸','#a855f7','필살기 피해 +15%','필살기 피해 +20%'],swift:['⚡','신속','#22c08a','속도 +12','속도 +12 · 공격력 +8%']};
+function eqSetCnt(itemId){const c={};(VG.equips||[]).forEach(e=>{if(itemId&&e.item_id===itemId&&e.eset)c[e.eset]=(c[e.eset]||0)+1});return c}
+function eqSetBonus(itemId){const c=eqSetCnt(itemId),p={atk:0,hp:0,def:0,crit:0,skill:0,spd:0};
+  if((c.fury||0)>=2)p.atk+=.12;if((c.fury||0)>=3)p.crit+=.15;if((c.guard||0)>=2)p.hp+=.15;if((c.guard||0)>=3){p.def+=.2;p.hp+=.05}
+  if((c.ruin||0)>=2)p.skill+=.15;if((c.ruin||0)>=3)p.skill+=.2;if((c.swift||0)>=2)p.spd+=12;if((c.swift||0)>=3){p.spd+=12;p.atk+=.08}return p}
+function eqSetChip(e){const S=e.eset&&EQ_SET[e.eset];if(!S)return '';const n=e.item_id?(eqSetCnt(e.item_id)[e.eset]||0):0;
+  return `<div class="eq-set" style="--sc:${S[2]}"><b>${S[0]} ${S[1]} 세트</b>${e.item_id?`<em>${n}/3 착용</em>`:''}<span class="${n>=2?'on':''}">2세트 ${S[3]}</span><span class="${n>=3?'on':''}">3세트 ${S[4]}</span></div>`}
 function eqCost(e){return [0,1,2,4,8][e.grade]*(e.lvl+1)*300}
-function eqSellV(e){return [0,200,600,2000,6000][e.grade]+Math.floor([0,1,2,4,8][e.grade]*300*e.lvl*(e.lvl+1)/2/2)}
+function eqSellV(e){return [0,200,600,2000,6000,15000][e.grade]+Math.floor(Math.floor([0,1,2,4,8,16][e.grade]*300*e.lvl*(e.lvl+1)/2)/2)}
+function eqSort(a,b){return (b.grade-a.grade)||(b.lvl-a.lvl)||(!!b.item_id-!!a.item_id)}
 function eqLoad(force){if(VG.equips&&!force)return Promise.resolve(VG.equips);return window.fitVillage.eqList().then(l=>{VG.equips=l||[];return VG.equips}).catch(()=>{VG.equips=VG.equips||[];return VG.equips})}
 function eqCountOn(id){return (VG.equips||[]).filter(e=>e.item_id===id).length}
 function eqBadge(id){const n=eqCountOn(id);return n?`<span class="eq-badge">⚔️${n}</span>`:''}
 function eqCard(e,btns=true){const s=EQ_SLOT[e.slot],g=EQ_GR[e.grade],it=e.item_id&&(VG.state.items||[]).find(i=>i.id===e.item_id),c=it&&VG.cat[it.item_key];
   return `<div class="eq-card g${e.grade}"><div class="eq-ic" style="--g:${g[1]}">${s[0]}<i>+${e.lvl}</i></div><div class="grow"><b style="color:${g[1]}">${g[0]} ${s[1]}</b> <small>${s[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${eqSpd(e)?` · ⚡속도 +${eqSpd(e)}`:''}</small>${e.lvl>=10?'<i class="eq-ms m10">✨+5 · +10 옵션 강화 완료</i>':e.lvl>=5?`<i class="eq-ms">✨+10강 옵션 강화까지 ${10-e.lvl}</i>`:`<i class="eq-ms off">+5강 옵션 강화까지 ${5-e.lvl}</i>`}
-   <div class="eq-subs">${(e.subs||[]).map(x=>`<span class="${x.up?'up':''}">${EQ_SUB[x.k]||x.k} +${x.v}%${x.up?` <em>${'▲'.repeat(x.up)}</em>`:''}</span>`).join('')||'<span class="none">부가 옵션 없음</span>'}</div>
+   <div class="eq-subs">${(e.subs||[]).map(x=>`<span class="${x.up?'up':''}">${EQ_SUB[x.k]||x.k} +${x.v}%${x.up?` <em>${'▲'.repeat(x.up)}</em>`:''}</span>`).join('')||'<span class="none">부가 옵션 없음</span>'}</div>${eqSetChip(e)}
    ${it?`<div class="eq-on">${vgArtSvg(vgK(it))} ${esc(c?.name||'')} 착용 중</div>`:''}</div>
    ${btns?`<div class="eq-btns"><button class="vg-btn sm purple" data-eqon="${e.id}">${it?'교체':'장착'}</button>${it?`<button class="vg-btn sm" data-eqoff="${e.id}">해제</button>`:''}<button class="vg-btn sm gold" data-equp="${e.id}" ${e.lvl>=10?'disabled':''}>${e.lvl>=10?'MAX':`강화 ${vgN(eqCost(e))}`}</button><button class="vg-btn sm" data-eqsell="${e.id}">판매</button></div>`:''}</div>`}
 function vgEquipHtml(){if(!VG.equips){eqLoad().then(()=>{if(VG.tab==='inv'&&VG.invSub==='equip')vgRenderSide()});return '<div class="vg-empty">불러오는 중…</div>'}
-  const f=VG.eqFilter||'all',l=VG.equips.filter(e=>f==='all'||e.slot===f).sort((a,b)=>(!!b.item_id-!!a.item_id)||(b.grade-a.grade)||(b.lvl-a.lvl));
-  return `<p class="vg-note">장비는 <b>심연의 탑</b>에서 얻고, 아무 동물에게나 끼울 수 있어요(공용). 장비 효과는 탑 전투에 적용돼요.</p>
-   <div class="eq-filter">${[['all','전체'],['weapon','🗡️ 무기'],['armor','🛡️ 갑옷'],['acc','💍 장신구']].map(([k,n])=>`<button class="${f===k?'on':''}" data-eqf="${k}">${n}</button>`).join('')}</div>
+  const f=VG.eqFilter||'all',l=VG.equips.filter(e=>f==='all'||e.slot===f).sort(eqSort);
+  return `<p class="vg-note">장비는 <b>심연의 탑</b>에서 얻고, 아무 동물에게나 끼울 수 있어요(공용). 장비 효과는 탑 · 던전 · PvP 전투에 적용돼요. <b>신화 장비</b>는 세트가 붙어 있어 같은 세트를 2 · 3개 끼면 추가 효과가 생겨요.</p>
+   <div class="eq-filter">${[['all','전체'],['weapon','🗡️ 무기'],['armor','🛡️ 갑옷'],['acc','💍 장신구']].map(([k,n])=>`<button class="${f===k?'on':''}" data-eqf="${k}">${n}</button>`).join('')}<button class="eq-bulk" id="eqBulk">🧹 일괄 판매</button></div>
    ${l.length?l.map(e=>eqCard(e)).join(''):'<div class="vg-empty">⚔️ 아직 장비가 없어요.<br><small>심연의 탑을 클리어하면 장비가 나와요.</small></div>'}`}
-function vgEquipBind(side){side.querySelectorAll('[data-eqf]').forEach(b=>b.onclick=()=>{VG.eqFilter=b.dataset.eqf;vgRenderSide()});
+function vgEquipBind(side){const bk=side.querySelector('#eqBulk');if(bk)bk.onclick=eqBulk;side.querySelectorAll('[data-eqf]').forEach(b=>b.onclick=()=>{VG.eqFilter=b.dataset.eqf;vgRenderSide()});
   side.querySelectorAll('[data-eqon]').forEach(b=>b.onclick=()=>eqPick(b.dataset.eqon));
   side.querySelectorAll('[data-eqoff]').forEach(b=>b.onclick=async()=>{try{await window.fitVillage.eqEquip(b.dataset.eqoff,null);await eqLoad(true);vgRenderSide();vgToast('장비를 해제했어요')}catch(e){vgToast(e.message||String(e),true)}});
   side.querySelectorAll('[data-equp]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const r=await window.fitVillage.eqEnhance(b.dataset.equp);vgSetState(r);vgRenderHud();await eqLoad(true);vgRenderSide();vgToast(`✨ +${r.lvl} 강화 성공!${r.boost?` · 🎁 ${EQ_SUB[r.boost.k]||r.boost.k} ${r.boost.new?'옵션 생성':'옵션'} +${r.boost.add}%`:''}`)}catch(e){vgToast(e.message||String(e),true);b.disabled=false}});
@@ -2883,6 +2906,27 @@ function vgEquipBind(side){side.querySelectorAll('[data-eqf]').forEach(b=>b.oncl
 function eqPick(eqId){const e=VG.equips.find(x=>x.id===eqId);if(!e)return;const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>((VG.cat[b.item_key].stat_grade||VG.cat[b.item_key].grade)-(VG.cat[a.item_key].stat_grade||VG.cat[a.item_key].grade))||((b.tr||0)-(a.tr||0)));
   const m=vgModal(`<h3>${EQ_SLOT[e.slot][0]} 누구에게 장착할까요?</h3>${eqCard(e,false)}<p class="vg-mp">같은 칸에 끼고 있던 장비는 자동으로 빠져요.</p><div class="vd-picks" style="max-height:52vh">${animals.map(i=>{const c=VG.cat[i.item_key],cur=(VG.equips||[]).find(x=>x.item_id===i.id&&x.slot===e.slot);return `<button class="vd-pick" data-eqto="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgElB(c)}${vgArtSvg(vgK(i))}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>${cur?`${EQ_SLOT[e.slot][0]} ${EQ_GR[cur.grade][0]} +${cur.lvl}`:'비어 있음'}</small></button>`}).join('')}</div>`,'vg-wide eq-modal');
   m.querySelectorAll('[data-eqto]').forEach(b=>b.onclick=async()=>{try{await window.fitVillage.eqEquip(eqId,b.dataset.eqto);await eqLoad(true);m.remove();vgRenderSide();vgToast('⚔️ 장착 완료!')}catch(x){vgToast(x.message||String(x),true)}})}
+
+// 일괄 판매
+function eqBulk(){const st={g:{1:true,2:false,3:false,4:false,5:false},slot:VG.eqFilter||'all',enh:false};
+  const m=vgModal('<div></div>','vg-wide eq-bulkm');
+  const pick=()=>(VG.equips||[]).filter(e=>!e.item_id&&st.g[e.grade]&&(st.slot==='all'||e.slot===st.slot)&&(st.enh||e.lvl===0));
+  const draw=()=>{const l=pick(),sum=l.reduce((a,e)=>a+eqSellV(e),0),cnt=g=>(VG.equips||[]).filter(e=>!e.item_id&&e.grade===g&&(st.slot==='all'||e.slot===st.slot)&&(st.enh||e.lvl===0)).length;
+    m.querySelector('.vg-modal-box').innerHTML=`<button class="vg-x">✕</button><h3>🧹 장비 일괄 판매</h3><p class="vg-mp">조건에 맞는 장비를 한 번에 팔아요. <b>동물이 끼고 있는 장비는 판매되지 않아요.</b></p>
+     <div class="eqb-sec"><b>등급</b><div class="eqb-row">${[1,2,3,4,5].map(g=>`<label class="eqb-g ${st.g[g]?'on':''}" style="--g:${EQ_GR[g][1]}"><input type="checkbox" data-bg="${g}" ${st.g[g]?'checked':''}>${EQ_GR[g][0]} <small>${cnt(g)}</small></label>`).join('')}</div></div>
+     <div class="eqb-sec"><b>부위</b><div class="eqb-row">${[['all','전체'],['weapon','🗡️ 무기'],['armor','🛡️ 갑옷'],['acc','💍 장신구']].map(([k,n])=>`<button class="eqb-s ${st.slot===k?'on':''}" data-bs="${k}">${n}</button>`).join('')}</div></div>
+     <label class="eqb-chk"><input type="checkbox" id="eqbEnh" ${st.enh?'checked':''}> 강화한 장비(+1 이상)도 포함</label>
+     ${st.g[5]?'<p class="eqb-warn">⚠️ 신화 장비가 포함돼 있어요. 다시 얻기 어려우니 꼭 확인해 주세요.</p>':''}
+     <div class="eqb-sum"><span>판매 <b>${l.length}</b>개</span><span>🪙 <b>${vgN(sum)}</b> 코인</span></div>
+     <button class="vg-btn gold" id="eqbGo" ${l.length?'':'disabled'} style="width:100%">${l.length?`${l.length}개 판매하기`:'판매할 장비가 없어요'}</button>`;
+    const b=m.querySelector('.vg-modal-box');b.querySelector('.vg-x').onclick=()=>m.remove();
+    b.querySelectorAll('[data-bg]').forEach(x=>x.onchange=()=>{st.g[x.dataset.bg]=x.checked;draw()});
+    b.querySelectorAll('[data-bs]').forEach(x=>x.onclick=()=>{st.slot=x.dataset.bs;draw()});
+    b.querySelector('#eqbEnh').onchange=e=>{st.enh=e.target.checked;draw()};
+    b.querySelector('#eqbGo').onclick=async e=>{const l2=pick();if(!l2.length)return;if(!window.confirm(`장비 ${l2.length}개를 ${vgN(sum)}코인에 판매할까요?`+(st.g[5]?'\n(신화 장비 포함)':'')))return;e.target.disabled=true;
+      try{const r=await window.fitVillage.eqSellMany(l2.map(x=>x.id));vgSetState(r);vgRenderHud();await eqLoad(true);m.remove();vgRenderSide();vgToast(`💰 장비 ${r.sold}개 판매 · ${vgN(r.gained)}코인`)}
+      catch(x){vgToast(x.setup?'Supabase에 fit_village_update51.sql 실행이 필요합니다.':(x.message||String(x)),true);e.target.disabled=false}}};
+  draw()}
 
 
 /* ===== 심연의 탑 3단계 : 고유 스킬 · 각성석 ===== */
@@ -2968,7 +3012,7 @@ async function ptRename(k){const ps=ptSlots(),nm=prompt('파티 이름 (1~12자)
 function ptItem(id){return (VG.state.items||[]).find(i=>i.id===id)}
 // 탑 기준 능력치 (초월 · 한계돌파 · 장비 포함)
 function ptStat(it){const b=vgTwStat(it),a={hp:0,atk:0,def:0},p={hp:0,atk:0,def:0,crit:0,skill:0};
-  (VG.equips||[]).filter(e=>e.item_id===it.id).forEach(e=>{const v=eqMain(e.slot,e.grade,e.lvl);if(e.slot==='weapon')a.atk+=v;else if(e.slot==='armor')a.hp+=v;else a.def+=v;(e.subs||[]).forEach(x=>p[x.k]=(p[x.k]||0)+x.v/100)});
+  (VG.equips||[]).filter(e=>e.item_id===it.id).forEach(e=>{const v=eqMain(e.slot,e.grade,e.lvl);if(e.slot==='weapon')a.atk+=v;else if(e.slot==='armor')a.hp+=v;else a.def+=v;(e.subs||[]).forEach(x=>p[x.k]=(p[x.k]||0)+x.v/100)});const sb=eqSetBonus(it.id);['atk','hp','def','crit','skill'].forEach(k=>p[k]+=sb[k]);
   const sr=(VG.cat[it.item_key]||{}).srole,fa=sr==='atk'?1.2:sr==='def'?.85:1,fd=sr==='atk'?.9:sr==='def'?1.35:1,fh=sr==='atk'?.95:sr==='def'?1.2:1;
   return {hp:Math.round((b[0]+a.hp)*(1+p.hp)*fh),atk:Math.round((b[1]+a.atk)*(1+p.atk)*fa),def:Math.round((b[2]+a.def)*(1+p.def)*fd),crit:12+Math.round(p.crit*100)+((Number(it.lb)||0)>=5?10:0),skill:(it.tr||0)*12+(Number(it.lb)||0)*6+Math.round(p.skill*100),b}}
 async function vgParty(){if(PT.m)PT.m.remove();const sp=ptSaved();PT.ids=sp.ids;PT.form=sp.form;
@@ -2979,7 +3023,7 @@ function ptCard(id,k){const front=k<TW_FORM[PT.form].front,row=`<span class="pt-
   const c=VG.cat[it.item_key],g=VG_GRADE[c.grade]||{name:''},st=ptStat(it),t=it.tr||0,l=Number(it.lb)||0,sk=VD_SK[c.skill||'nuke']||VD_SK.nuke;
   const eqs=['weapon','armor','acc'].map(sl=>{const e=(VG.equips||[]).find(x=>x.item_id===it.id&&x.slot===sl),S=EQ_SLOT[sl];
     if(!e)return `<button class="pt-eq none" data-pteq="${sl}" data-pti="${it.id}"><span class="pt-eqic">${S[0]}</span><span><b>${S[1]} 비어 있음</b><small>눌러서 장착</small></span></button>`;
-    const G=EQ_GR[e.grade];return `<button class="pt-eq g${e.grade}" data-pteq="${sl}" data-pti="${it.id}" style="--g:${G[1]}"><span class="pt-eqic">${S[0]}<i>+${e.lvl}</i></span><span><b style="color:${G[1]}">${G[0]} ${S[1]}</b><small>${S[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${(e.subs||[]).length?' · '+e.subs.map(x=>`${EQ_SUB[x.k]||x.k} +${x.v}%`).join(' · '):''}</small></span></button>`}).join('');
+    const G=EQ_GR[e.grade];return `<button class="pt-eq g${e.grade}" data-pteq="${sl}" data-pti="${it.id}" style="--g:${G[1]}"><span class="pt-eqic">${S[0]}<i>+${e.lvl}</i></span><span><b style="color:${G[1]}">${G[0]} ${S[1]}</b><small>${S[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${e.eset&&EQ_SET[e.eset]?` · ${EQ_SET[e.eset][0]}${EQ_SET[e.eset][1]}`:''}${(e.subs||[]).length?' · '+e.subs.map(x=>`${EQ_SUB[x.k]||x.k} +${x.v}%`).join(' · '):''}</small></span></button>`}).join('');
   let aw;if(c.grade>=4){const u=awOf(it.item_key);aw=!u?'<div class="pt-aw off">🌟 고유 스킬 정보 없음</div>':awOn(it.item_key)?`<div class="pt-aw on"><b>🌟 각성 완료 · ${esc(u.emoji)} ${esc(u.name)}</b><small>${esc(u.descr)} · 탑에서 파티당 1회</small></div>`:`<div class="pt-aw"><b>🌟 미각성 · ${esc(u.emoji)} ${esc(u.name)}</b><small>${esc(u.descr)}</small><button class="vg-btn sm purple" data-awopen="1">💠${u.cost} 각성</button></div>`}
   else aw=t<5?`<div class="pt-aw off"><b>🔓 한계돌파 잠김</b><small>★5 초월 후 돌파석으로 탑 능력치를 올릴 수 있어요</small></div>`:`<div class="pt-aw lb"><b>🔓 한계돌파 +${l} / 5</b><small>탑 능력치 +${Math.round((LB_RATE[c.grade]||0)*100*l)}% · 필살기 +${l*6}%${l>=5?' · 치명타 +10%':''}</small>${l<5?`<button class="vg-btn sm" data-ptlb="${it.id}">돌파하기</button>`:''}</div>`;
   return `<div class="pt-card g${c.grade}">${row}
@@ -3018,7 +3062,7 @@ function ptPickMember(slot){const cur=slot==null?null:PT.ids[slot],used=new Set(
    <div class="vd-picks" style="max-height:60vh">${list.map(({i,s})=>{const c=VG.cat[i.item_key];return `<button class="vd-pick ${i.id===cur?'on':''}" data-ptto="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgElB(c)}${vgArtSvg(vgK(i))}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${vgLbBadge(i,'sm')}${eqBadge(i.id)}${awBadge(i.item_key)}<small>❤${vgN(s.hp)} ⚔${vgN(s.atk)} 🛡${vgN(s.def)}</small></button>`}).join('')||'<div class="vg-empty">넣을 수 있는 동물이 없어요.</div>'}</div>`,'vg-wide');
   m.querySelectorAll('[data-ptto]').forEach(b=>b.onclick=()=>{const id=b.dataset.ptto;if(slot==null){if(PT.ids.length>=5){vgToast('파티는 최대 5마리예요.',true);return}PT.ids.push(id)}else PT.ids[slot]=id;m.remove();ptSave()})}
 function ptPickEquip(itemId,slot){const it=ptItem(itemId),c=VG.cat[it.item_key],cur=(VG.equips||[]).find(e=>e.item_id===itemId&&e.slot===slot);
-  const list=(VG.equips||[]).filter(e=>e.slot===slot&&e.id!==(cur&&cur.id)).sort((a,b)=>(!!a.item_id-!!b.item_id)||(b.grade-a.grade)||(b.lvl-a.lvl));
+  const list=(VG.equips||[]).filter(e=>e.slot===slot&&e.id!==(cur&&cur.id)).sort((a,b)=>(b.grade-a.grade)||(b.lvl-a.lvl)||(!!a.item_id-!!b.item_id));
   const m=vgModal(`<h3>${EQ_SLOT[slot][0]} ${esc(c.name)}의 ${EQ_SLOT[slot][1]}</h3>
    ${cur?`<div class="pt-cur"><small>지금 장착 중</small>${eqCard(cur,false)}<button class="vg-btn sm" id="ptUnEq">해제하기</button></div>`:''}
    <p class="vg-mp">${list.length?'다른 동물이 끼고 있는 장비를 고르면 그 동물에게서 빠져서 옮겨 와요.':'이 칸에 끼울 장비가 없어요. 심연의 탑을 클리어하면 장비가 나와요.'}</p>
@@ -3922,7 +3966,8 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     eqEquip(id,item){return vrpc('fit_eq_equip',{p_eq:id,p_item:item})},
     eqEnhance(id){return vrpc('fit_eq_enhance',{p_eq:id})},
     eqSell(id){return vrpc('fit_eq_sell',{p_eq:id})},
-    async eqList(){vNeed();const {data,error}=await supa.from('fit_village_equips').select('id,slot,grade,lvl,subs,item_id,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
+    eqSellMany(ids){return vrpc('fit_eq_sell_many',{p_ids:ids})},
+    async eqList(){vNeed();const {data,error}=await supa.from('fit_village_equips').select('id,slot,grade,lvl,subs,item_id,eset,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     twStatus(){return vrpc('fit_tw_status')},
     twBuy(n){return vrpc('fit_tw_buy_ticket',{p_n:n})},
     twStart(f,ids,form){return vrpc('fit_tw_start',{p_floor:f,p_items:ids,p_form:form})},

@@ -1239,6 +1239,8 @@ main:has(#vgRoot){max-width:none}
 .tw-ptrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px}
 .tw-ptrow>span{font-size:13px;font-weight:700;color:#6b5d86}
 @media (max-width:600px){.pt-tab{min-width:0;flex:1 1 30%;padding:6px 8px}.pt-tab b{font-size:12.5px;max-width:100%}}
+
+.eq-subs span.up{background:linear-gradient(135deg,#fff0c9,#ffe0ef);color:#b5487a;font-weight:700}.eq-subs span.up em{font-style:normal;font-size:9px;color:#e0457b;margin-left:2px}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2840,7 +2842,7 @@ function vgConsHtml(){const s=TW.st;if(!s){window.fitVillage.twStatus().then(x=>
 const EQ_SLOT={weapon:['🗡️','무기','공격'],armor:['🛡️','갑옷','체력'],acc:['💍','장신구','방어']};
 const EQ_GR={1:['일반','#8a97ad'],2:['희귀','#3b8cff'],3:['영웅','#9b5cff'],4:['전설','#ff9a1f'],5:['신화','#ff4f8b']};
 const EQ_SUB={atk:'공격력',hp:'체력',def:'방어력',crit:'치명타 확률',skill:'필살기 피해'};
-function eqMain(slot,g,l){return Math.round(({weapon:[0,20,40,70,110,170],armor:[0,150,300,520,800,1250],acc:[0,8,16,28,44,70]})[slot][g]*(1+.1*l)*(l>=10?1.2:l>=5?1.08:1))}
+function eqMain(slot,g,l){return Math.round(({weapon:[0,20,40,70,110,170],armor:[0,150,300,520,800,1250],acc:[0,8,16,28,44,70]})[slot][g]*(1+.1*l))}
 function eqSpd(e){return (e.slot!=='weapon'&&e.slot!=='armor'?e.grade*2:0)+(e.lvl>=10?8:e.lvl>=5?3:0)}
 function eqCost(e){return [0,1,2,4,8][e.grade]*(e.lvl+1)*300}
 function eqSellV(e){return [0,200,600,2000,6000][e.grade]+Math.floor([0,1,2,4,8][e.grade]*300*e.lvl*(e.lvl+1)/2/2)}
@@ -2848,8 +2850,8 @@ function eqLoad(force){if(VG.equips&&!force)return Promise.resolve(VG.equips);re
 function eqCountOn(id){return (VG.equips||[]).filter(e=>e.item_id===id).length}
 function eqBadge(id){const n=eqCountOn(id);return n?`<span class="eq-badge">⚔️${n}</span>`:''}
 function eqCard(e,btns=true){const s=EQ_SLOT[e.slot],g=EQ_GR[e.grade],it=e.item_id&&(VG.state.items||[]).find(i=>i.id===e.item_id),c=it&&VG.cat[it.item_key];
-  return `<div class="eq-card g${e.grade}"><div class="eq-ic" style="--g:${g[1]}">${s[0]}<i>+${e.lvl}</i></div><div class="grow"><b style="color:${g[1]}">${g[0]} ${s[1]}</b> <small>${s[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${eqSpd(e)?` · ⚡속도 +${eqSpd(e)}`:''}</small>${e.lvl>=10?'<i class="eq-ms m10">✨+10 보너스</i>':e.lvl>=5?'<i class="eq-ms">✨+5 보너스</i>':`<i class="eq-ms off">+5강 보너스까지 ${5-e.lvl}</i>`}
-   <div class="eq-subs">${(e.subs||[]).map(x=>`<span>${EQ_SUB[x.k]||x.k} +${x.v}%</span>`).join('')||'<span class="none">부가 옵션 없음</span>'}</div>
+  return `<div class="eq-card g${e.grade}"><div class="eq-ic" style="--g:${g[1]}">${s[0]}<i>+${e.lvl}</i></div><div class="grow"><b style="color:${g[1]}">${g[0]} ${s[1]}</b> <small>${s[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${eqSpd(e)?` · ⚡속도 +${eqSpd(e)}`:''}</small>${e.lvl>=10?'<i class="eq-ms m10">✨+5 · +10 옵션 강화 완료</i>':e.lvl>=5?`<i class="eq-ms">✨+10강 옵션 강화까지 ${10-e.lvl}</i>`:`<i class="eq-ms off">+5강 옵션 강화까지 ${5-e.lvl}</i>`}
+   <div class="eq-subs">${(e.subs||[]).map(x=>`<span class="${x.up?'up':''}">${EQ_SUB[x.k]||x.k} +${x.v}%${x.up?` <em>${'▲'.repeat(x.up)}</em>`:''}</span>`).join('')||'<span class="none">부가 옵션 없음</span>'}</div>
    ${it?`<div class="eq-on">${vgArtSvg(vgK(it))} ${esc(c?.name||'')} 착용 중</div>`:''}</div>
    ${btns?`<div class="eq-btns"><button class="vg-btn sm purple" data-eqon="${e.id}">${it?'교체':'장착'}</button>${it?`<button class="vg-btn sm" data-eqoff="${e.id}">해제</button>`:''}<button class="vg-btn sm gold" data-equp="${e.id}" ${e.lvl>=10?'disabled':''}>${e.lvl>=10?'MAX':`강화 ${vgN(eqCost(e))}`}</button><button class="vg-btn sm" data-eqsell="${e.id}">판매</button></div>`:''}</div>`}
 function vgEquipHtml(){if(!VG.equips){eqLoad().then(()=>{if(VG.tab==='inv'&&VG.invSub==='equip')vgRenderSide()});return '<div class="vg-empty">불러오는 중…</div>'}
@@ -2860,7 +2862,7 @@ function vgEquipHtml(){if(!VG.equips){eqLoad().then(()=>{if(VG.tab==='inv'&&VG.i
 function vgEquipBind(side){side.querySelectorAll('[data-eqf]').forEach(b=>b.onclick=()=>{VG.eqFilter=b.dataset.eqf;vgRenderSide()});
   side.querySelectorAll('[data-eqon]').forEach(b=>b.onclick=()=>eqPick(b.dataset.eqon));
   side.querySelectorAll('[data-eqoff]').forEach(b=>b.onclick=async()=>{try{await window.fitVillage.eqEquip(b.dataset.eqoff,null);await eqLoad(true);vgRenderSide();vgToast('장비를 해제했어요')}catch(e){vgToast(e.message||String(e),true)}});
-  side.querySelectorAll('[data-equp]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const r=await window.fitVillage.eqEnhance(b.dataset.equp);vgSetState(r);vgRenderHud();await eqLoad(true);vgRenderSide();vgToast(`✨ +${r.lvl} 강화 성공!`)}catch(e){vgToast(e.message||String(e),true);b.disabled=false}});
+  side.querySelectorAll('[data-equp]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{const r=await window.fitVillage.eqEnhance(b.dataset.equp);vgSetState(r);vgRenderHud();await eqLoad(true);vgRenderSide();vgToast(`✨ +${r.lvl} 강화 성공!${r.boost?` · 🎁 ${EQ_SUB[r.boost.k]||r.boost.k} ${r.boost.new?'옵션 생성':'옵션'} +${r.boost.add}%`:''}`)}catch(e){vgToast(e.message||String(e),true);b.disabled=false}});
   side.querySelectorAll('[data-eqsell]').forEach(b=>b.onclick=async()=>{const e=VG.equips.find(x=>x.id===b.dataset.eqsell);if(!e||!window.confirm(`${EQ_GR[e.grade][0]} ${EQ_SLOT[e.slot][1]} +${e.lvl}을(를) ${vgN(eqSellV(e))}코인에 판매할까요?`))return;try{const r=await window.fitVillage.eqSell(e.id);vgSetState(r);vgRenderHud();await eqLoad(true);vgRenderSide();vgToast(`💰 ${vgN(r.gained)}코인을 받았어요`)}catch(x){vgToast(x.message||String(x),true)}})}
 function eqPick(eqId){const e=VG.equips.find(x=>x.id===eqId);if(!e)return;const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>((VG.cat[b.item_key].stat_grade||VG.cat[b.item_key].grade)-(VG.cat[a.item_key].stat_grade||VG.cat[a.item_key].grade))||((b.tr||0)-(a.tr||0)));
   const m=vgModal(`<h3>${EQ_SLOT[e.slot][0]} 누구에게 장착할까요?</h3>${eqCard(e,false)}<p class="vg-mp">같은 칸에 끼고 있던 장비는 자동으로 빠져요.</p><div class="vd-picks" style="max-height:52vh">${animals.map(i=>{const c=VG.cat[i.item_key],cur=(VG.equips||[]).find(x=>x.item_id===i.id&&x.slot===e.slot);return `<button class="vd-pick" data-eqto="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgElB(c)}${vgArtSvg(vgK(i))}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}<small>${cur?`${EQ_SLOT[e.slot][0]} ${EQ_GR[cur.grade][0]} +${cur.lvl}`:'비어 있음'}</small></button>`}).join('')}</div>`,'vg-wide eq-modal');

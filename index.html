@@ -1227,6 +1227,18 @@ main:has(#vgRoot){max-width:none}
 .h10-c.g4{border-color:#ffd79a;background:#fffaf0}.h10-c.myth{border-color:#ff9cc3;background:linear-gradient(160deg,#fff0f7,#f0f4ff);box-shadow:0 0 14px #ff8cc077}
 @media(max-width:860px){.h10-grid{grid-template-columns:repeat(3,1fr)}}
 .tw-fl.deep{background:linear-gradient(160deg,#3b2a5c,#1d2140)!important;color:#e8dcff!important;border-color:#6b4fb3!important}.tw-fl.deep.lock{opacity:.5}
+
+/* 파티 프리셋 */
+.pt-tabrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 2px}
+.pt-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.pt-tab{display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-width:108px;padding:7px 12px;border-radius:12px;border:2px solid #e3d9f3;background:#fff;cursor:pointer;font:inherit;color:#4a3d63;text-align:left}
+.pt-tab b{font-size:13.5px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pt-tab small{font-size:11px;color:#8a7fa3}
+.pt-tab.on{border-color:#8b5cf6;background:linear-gradient(135deg,#f4edff,#ebe1ff);box-shadow:0 2px 8px rgba(139,92,246,.25)}
+.pt-tab.on b{color:#6d3fe0}
+.tw-ptrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px}
+.tw-ptrow>span{font-size:13px;font-weight:700;color:#6b5d86}
+@media (max-width:600px){.pt-tab{min-width:0;flex:1 1 30%;padding:6px 8px}.pt-tab b{font-size:12.5px;max-width:100%}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2353,7 +2365,7 @@ function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=
   vgCutBind(VD.m);VD.m.querySelectorAll('[data-sweep]').forEach(b=>b.onclick=()=>vgSweep(VD.floor,Number(b.dataset.sweep)));VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
   VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
   VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used_by_floor[VD.floor]=(Number(VD.st.used_by_floor[VD.floor])||0)+1;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
-const VD_SK={tidal:['🌊','적 전체에 큰 피해 + 적 행동 지연'],magma_armor:['🔥','3턴 도발 · 받은 피해 반사'],hunt:['🐾','체력이 가장 낮은 적 2.6배 · 처치하면 필살기 바로 다시 사용'],world_tree:['🌳','아군 전체 회복 + 약화 해제 · 2턴 면역'],quake:['🌋','적 전체 피해 + 방어 파괴'],fortress:['🏰','아군 받는 피해 크게 감소 (3턴)'],storm_wall:['🌩️','아군 보호막 + 번개 반격'],judgement:['⚖️','방어 무시 3.5배 일격'],crystal_ward:['💎','아군 전체 다음 공격 완전 회피'],abyss_gate:['🌑','도발 + 적 전체 행동 봉인'],nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 1.5배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 25%만큼 아군 회복 (신화 전용)'],counter:['🪓','룬 반격: 2턴간 보스 공격을 대신 받고 맞을 때마다 1.5배 반격 (돌연변이 전용)'],timestop:['🌌','성운 붕괴: 피해 + 보스 2턴 행동 봉인 (돌연변이 전용)'],overdrive:['⚙️','증기 과부하: 3턴간 일반 공격 2회 (돌연변이 전용)'],web:['🕸️','거미줄 속박: 3턴간 보스 공격력 −25% + 받는 피해 +20% (돌연변이 전용)'],cleanse:['💎','수정의 빛: 전체 30% 회복 + 2턴간 독·저주·기절 면역 (돌연변이 전용)'],meteor:['☄️','용암 운석: 공격력 4배 + 강한 화상 3턴 (돌연변이 전용)'],dodge:['🌪️','질풍의 날개: 2턴간 아군이 50% 확률로 보스 공격 회피 (돌연변이 전용)'],drain:['🌀','심해 흡수: 피해 + 보스 공격력 영구 −10% (최대 −30%) (돌연변이 전용)']};
+const VD_SK={tidal:['🌊','적 전체에 큰 피해 + 적 행동 지연'],magma_armor:['🔥','3턴 도발 · 받은 피해 반사'],hunt:['🐾','체력이 가장 낮은 적 2.6배 · 처치하면 필살기 바로 다시 사용'],world_tree:['🌳','아군 전체 회복 + 약화 해제 · 2턴 면역'],quake:['🌋','적 전체 피해 + 방어 파괴'],fortress:['🏰','아군 받는 피해 크게 감소 (3턴)'],storm_wall:['🌩️','아군 보호막 + 번개 반격'],judgement:['⚖️','방어 무시 4배 일격'],crystal_ward:['💎','아군 전체 다음 공격 완전 회피'],abyss_gate:['🌑','도발 + 적 전체 행동 봉인'],nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 2.2배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 32%만큼 아군 회복 (신화 전용)'],counter:['🪓','룬 반격: 2턴간 보스 공격을 대신 받고 맞을 때마다 1.5배 반격 (돌연변이 전용)'],timestop:['🌌','성운 붕괴: 피해 + 보스 2턴 행동 봉인 (돌연변이 전용)'],overdrive:['⚙️','증기 과부하: 3턴간 일반 공격 2회 (돌연변이 전용)'],web:['🕸️','거미줄 속박: 3턴간 보스 공격력 −25% + 받는 피해 +20% (돌연변이 전용)'],cleanse:['💎','수정의 빛: 전체 40% 회복 + 2턴간 독·저주·기절 면역 (돌연변이 전용)'],meteor:['☄️','용암 운석: 공격력 2.6배 + 강한 화상 3턴 (돌연변이 전용)'],dodge:['🌪️','질풍의 날개: 2턴간 아군이 50% 확률로 보스 공격 회피 (돌연변이 전용)'],drain:['🌀','심해 흡수: 피해 + 보스 공격력 영구 −10% (최대 −30%) (돌연변이 전용)']};
 const VD_BA={drain:['🩸','흡혈','한 명 공격 + 체력 흡수'],freeze:['❄️','빙결','전체 피해 + 일부 기절'],shatter:['💔','보호막 파괴','아군 보호막 전부 제거 + 공격'],enrage:['😡','광폭화','공격력 영구 상승!'],silence:['🔇','침묵','아군 필살기 대기 +1턴'],pierce:['🏹','관통','뒷줄을 노리는 강한 공격 (도발 무시)'],bite:['🗡️','물어뜯기','한 명에게 공격'],sweep:['🌀','휩쓸기','아군 전체 공격'],charge:['💢','힘 모으기','다음 턴에 강력한 일격!'],smash:['💥','강력한 일격','전체 큰 피해 — 방어·보호막·기절로 대비하세요!'],poison:['☠️','독안개','전체 피해 + 3턴 독'],curse:['🌑','저주','전체 피해 + 공격력 −30%'],harden:['🪨','단단해지기','다음 턴 받는 피해 −50%'],regen:['💚','재생','체력 8% 회복'],stunhit:['⚡','기절 일격','한 명 피해 + 1턴 기절']};
 function vdSkillOf(key){const c=VG.cat[key]||{};return {s:c.skill||'nuke',n:c.skill_name||'필살 일격'}}
 function vgBattleView(logHtml){const bt=VD.battle,bs=bt.floor===0?(VD.bosses.find(x=>x.floor===10)||{image_url:'images/bosses/boss10.webp'}):(VD.bosses.find(x=>x.floor===bt.floor)||{}),b=bt.boss,fx=bt.fx||{},en=b.hp<b.max*.5;
@@ -2697,7 +2709,8 @@ function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
    <div class="tw-floors">${floors}</div>
    <div class="vd-info"><div><b>${TW.floor}층</b> <small>졸개 웨이브 → ${TW.floor%5===0?'<b style="color:#d64a7a">관문 보스</b>':'보스'} 웨이브</small></div><div>🎁 ${first?`첫 클리어 ${vgN(TW.floor*1500)}코인${TW.floor%5===0?' + 보스 알':''}`:`반복 클리어 ${vgN(TW.floor*300)}코인`}</div></div>
    <div class="tw-forms">${Object.entries(TW_FORM).map(([k,v])=>`<button class="${TW.form===k?'on':''}" data-twform="${k}"><b>${v.n}</b><small>${v.d}</small></button>`).join('')}</div>
-   <div class="vd-sub">파티 <b>${TW.pick.length}/5</b> <small style="font-size:12px;color:#7d7290">— 3~5마리 · 고른 순서대로 앞줄부터 배치 · 앞줄이 공격을 더 많이 받아요 · 🌟 각성한 캐릭터는 고유 스킬(파티당 1회) 사용</small><span class="tw-ptb"><button class="vg-btn sm purple" id="twParty">🛡️ 파티 편성 · 장비</button><button class="vg-btn sm" id="twSaveP" ${TW.pick.length?'':'disabled'}>💾 이 파티 저장</button></span></div>
+   <div class="tw-ptrow"><span>📋 저장한 파티</span>${ptTabs('twslot')}</div>
+   <div class="vd-sub">파티 <b>${TW.pick.length}/5</b> <small style="font-size:12px;color:#7d7290">— 3~5마리 · 고른 순서대로 앞줄부터 배치 · 앞줄이 공격을 더 많이 받아요 · 🌟 각성한 캐릭터는 고유 스킬(파티당 1회) 사용</small><span class="tw-ptb"><button class="vg-btn sm purple" id="twParty">🛡️ 파티 편성 · 장비</button><button class="vg-btn sm" id="twSaveP" ${TW.pick.length?'':'disabled'}>💾 '${esc(ptSlots()[ptSlot()].name)}'에 저장</button></span></div>
    <div class="tw-slots">${slots}</div>
    <div class="vd-picks">${picks}</div>
    <button class="vg-btn green" id="twGo" style="min-width:260px;margin-top:10px" ${TW.pick.length<3||(!s.free&&s.tickets<1)?'disabled':''}>${TW.pick.length<3?'3마리 이상 골라 주세요':(!s.free&&s.tickets<1)?'입장권이 필요해요':`${TW.floor}층 도전 (${s.free?'무료 입장':'입장권 1장'})`}</button>
@@ -2708,7 +2721,7 @@ function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
   TW.m.querySelectorAll('[data-tws]').forEach(b=>b.onclick=()=>{const k=Number(b.dataset.tws);if(TW.pick[k]){TW.pick.splice(k,1);twLobby()}});
   TW.m.querySelectorAll('[data-twp]').forEach(b=>b.onclick=()=>{const id=b.dataset.twp,i=TW.pick.indexOf(id);if(i>=0)TW.pick.splice(i,1);else if(TW.pick.length<5)TW.pick.push(id);else{vgToast('파티는 최대 5마리예요.',true);return}twLobby()});
   TW.m.querySelectorAll('[data-twbuy]').forEach(b=>b.onclick=twBuy);TW.m.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
-  TW.m.querySelector('#twParty').onclick=vgParty;TW.m.querySelector('#twSaveP').onclick=async()=>{try{const r=await window.fitVillage.partySave(TW.pick,TW.form);VG.state.village.party=r.party;VG.state.village.party_form=r.party_form;vgToast('💾 파티를 저장했어요')}catch(e){vgToast(e.setup?'Supabase에 fit_village_update20.sql 실행이 필요합니다.':(e.message||String(e)),true)}};
+  TW.m.querySelectorAll('[data-twslot]').forEach(b=>b.onclick=async()=>{const k=Number(b.dataset.twslot);if(await ptSwitch(k)){const sp=ptSaved();TW.pick=sp.ids.slice();TW.form=sp.form;twLobby();vgToast(`📋 '${ptSlots()[k].name}' 파티를 불러왔어요`)}});TW.m.querySelector('#twParty').onclick=vgParty;TW.m.querySelector('#twSaveP').onclick=async()=>{try{const r=await window.fitVillage.partySave(TW.pick,TW.form);ptApply(r);vgToast(`💾 '${ptSlots()[ptSlot()].name}'에 저장했어요`);twLobby()}catch(e){vgToast(e.setup?'Supabase에 fit_village_update20.sql 실행이 필요합니다.':(e.message||String(e)),true)}};
   const go=TW.m.querySelector('#twGo');if(go)go.onclick=async()=>{go.disabled=true;try{const r=await window.fitVillage.twStart(TW.floor,TW.pick,TW.form);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.battle=r;TW.order=[];TW.uq=null;TW.target=0;twBattle(`🗼 ${TW.floor}층 도전 시작! 1웨이브 — 졸개들이 나타났다.`)}catch(e){vgToast(e.message||String(e),true);go.disabled=false}};
   const sw=TW.m.querySelector('#twSweep');if(sw)sw.onclick=async()=>{try{const r=await window.fitVillage.twSweep(TW.floor);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.st.clears[TW.floor]=(Number(TW.st.clears[TW.floor])||0)+1;vgSetState(r);vgRenderHud();VG.equips=null;vgToast(`⚡ 소탕 완료! +${vgN(r.reward_coins)} 코인${r.equip?` · ${EQ_GR[r.equip.grade][0]} ${EQ_SLOT[r.equip.slot][1]} 획득`:''}${r.stones?` · 💠 각성석 +${r.stones}`:''}${r.lbst?` · 🔶 돌파석 +${r.lbst}`:''}`);if(r.lbst)TW.st.lbstones=(TW.st.lbstones||0)+r.lbst;if(r.stones)TW.st.stones=(TW.st.stones||0)+r.stones;twLobby()}catch(e){vgToast(e.message||String(e),true)}}}
 async function twBuy(){if(!window.confirm('입장권 1장을 10,000코인에 구매할까요?'))return;try{const r=await window.fitVillage.twBuy(1);vgSetState(r);vgRenderHud();if(TW.st)TW.st.tickets+=r.bought;vgToast('🎟️ 입장권을 구매했어요');if(TW.m&&!TW.battle)twLobby();vgRenderSide()}catch(e){vgToast(e.message||String(e),true)}}
@@ -2928,6 +2941,12 @@ function vgLbOpen(){const c=(VG.state.items||[]).filter(i=>vgLbOk(i)&&(i.tr||0)>
 /* ===== 마을 파티 편성 (파티원별 장비 · 각성 · 스킬 정보) ===== */
 const PT={m:null,ids:[],form:'bal'};
 function ptSaved(){const v=(VG.state&&VG.state.village)||{},have=new Set((VG.state.items||[]).map(i=>i.id));return {ids:(v.party||[]).filter(id=>have.has(id)).slice(0,5),form:v.party_form||'bal'}}
+function ptSlots(){const v=(VG.state&&VG.state.village)||{},ps=Array.isArray(v.parties)?v.parties.slice(0,3):[];for(let k=ps.length;k<3;k++)ps.push({name:'파티 '+(k+1),ids:k===0?(v.party||[]):[],form:k===0?(v.party_form||'bal'):'bal'});return ps}
+function ptSlot(){return Math.min(2,Math.max(0,Number(((VG.state&&VG.state.village)||{}).party_slot)||0))}
+function ptApply(r){const v=VG.state.village;['party','party_form','parties','party_slot'].forEach(k=>{if(r&&k in r)v[k]=r[k]})}
+function ptTabs(attr){const ps=ptSlots(),cur=ptSlot();return `<div class="pt-tabs">${ps.map((p,k)=>`<button class="pt-tab ${k===cur?'on':''}" data-${attr}="${k}"><b>${esc(p.name||('파티 '+(k+1)))}</b><small>${(p.ids||[]).length}마리 · ${(TW_FORM[p.form]||TW_FORM.bal).n}</small></button>`).join('')}</div>`}
+async function ptSwitch(k){try{const r=await window.fitVillage.partySwitch(k);ptApply(r);return true}catch(e){vgToast(e.setup?'Supabase에 fit_village_update49.sql 실행이 필요합니다.':(e.message||String(e)),true);return false}}
+async function ptRename(k){const ps=ptSlots(),nm=prompt('파티 이름 (1~12자)',ps[k].name||('파티 '+(k+1)));if(nm==null)return;try{const r=await window.fitVillage.partyRename(k,nm.trim());ptApply(r);vgToast('✏️ 파티 이름을 바꿨어요')}catch(e){vgToast(e.setup?'Supabase에 fit_village_update49.sql 실행이 필요합니다.':(e.message||String(e)),true)}}
 function ptItem(id){return (VG.state.items||[]).find(i=>i.id===id)}
 // 탑 기준 능력치 (초월 · 한계돌파 · 장비 포함)
 function ptStat(it){const b=vgTwStat(it),a={hp:0,atk:0,def:0},p={hp:0,atk:0,def:0,crit:0,skill:0};
@@ -2957,11 +2976,14 @@ function ptCard(id,k){const front=k<TW_FORM[PT.form].front,row=`<span class="pt-
 function ptRender(){const box=PT.m.querySelector('.vg-modal-box'),n=PT.ids.length;
   const tot=PT.ids.map(ptItem).filter(Boolean).reduce((s,it)=>{const x=ptStat(it);return s+x.hp/10+x.atk*2+x.def},0);
   box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pt-head"><h3>🛡️ 파티 편성</h3><span class="pt-pow">⚡ 전투력 <b>${vgN(Math.round(tot))}</b></span><span class="pt-cnt">파티 <b>${n}</b>/5</span><button class="vg-btn sm" id="ptElc">⚔️ 속성 상성</button><span class="pt-elsum">${PT.ids.map(ptItem).filter(Boolean).map(it=>vgElI((VG.cat[it.item_key]||{}).elem)).join('')}</span></div>
-   <p class="vg-mp">여기서 저장한 파티와 진형이 <b>심연의 탑</b>에 자동으로 들어가요. 능력치는 탑 기준(초월·한계돌파·장비 포함)이에요.</p>
+   <div class="pt-tabrow">${ptTabs('ptslot')}<button class="vg-btn sm" id="ptRen">✏️ 이름 바꾸기</button></div>
+   <p class="vg-mp">파티를 3개까지 따로 저장해 둘 수 있어요. 고른 파티와 진형이 <b>심연의 탑</b>에 바로 들어가요. 능력치는 탑 기준(초월·한계돌파·장비 포함)이에요.</p>
    <div class="tw-forms">${Object.entries(TW_FORM).map(([k,v])=>`<button class="${PT.form===k?'on':''}" data-ptform="${k}"><b>${v.n}</b><small>${v.d}</small></button>`).join('')}</div>
    <div class="pt-grid">${Array.from({length:5},(_,k)=>ptCard(PT.ids[k],k)).join('')}</div>
    <div class="pt-foot"><button class="vg-btn gold" id="ptTower">🗼 이 파티로 심연의 탑 가기</button></div>`;
-  box.querySelector('.vg-x').onclick=()=>{PT.m.remove();PT.m._onclose()};box.querySelector('#ptElc').onclick=vgElChart;
+  box.querySelector('.vg-x').onclick=()=>{PT.m.remove();PT.m._onclose()};
+  box.querySelectorAll('[data-ptslot]').forEach(b=>b.onclick=async()=>{const k=Number(b.dataset.ptslot);if(k===ptSlot())return;if(await ptSwitch(k)){const sp=ptSaved();PT.ids=sp.ids;PT.form=sp.form;ptRender()}});
+  box.querySelector('#ptRen').onclick=async()=>{await ptRename(ptSlot());if(PT.m)ptRender()};box.querySelector('#ptElc').onclick=vgElChart;
   box.querySelectorAll('[data-ptform]').forEach(b=>b.onclick=()=>{PT.form=b.dataset.ptform;ptSave()});
   box.querySelectorAll('[data-ptadd]').forEach(b=>b.onclick=()=>ptPickMember(null));
   box.querySelectorAll('[data-ptswap]').forEach(b=>b.onclick=()=>ptPickMember(Number(b.dataset.ptswap)));
@@ -2970,7 +2992,7 @@ function ptRender(){const box=PT.m.querySelector('.vg-modal-box'),n=PT.ids.lengt
   box.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=async()=>{await vgAwaken();const w=document.querySelector('.aw-modal');if(w){const mo=new MutationObserver(()=>{if(!w.isConnected){mo.disconnect();if(PT.m)ptRender()}});mo.observe(document.body,{childList:true})}});
   box.querySelectorAll('[data-ptlb]').forEach(b=>b.onclick=()=>{const id=b.dataset.ptlb;PT.m.remove();PT.m=null;if(TW.m){TW.m.remove();TW.m=null}vgOpenTr(id)});
   box.querySelector('#ptTower').onclick=()=>{const m=PT.m;PT.m=null;m.remove();if(TW.m&&!TW.battle){const s=ptSaved();TW.pick=s.ids;TW.form=s.form;twLobby()}else if(!TW.m){TW.pick=[];vgTower()}}}
-async function ptSave(){const ids=PT.ids.slice(0,5),form=PT.form;try{const r=await window.fitVillage.partySave(ids,form);VG.state.village.party=r.party;VG.state.village.party_form=r.party_form}
+async function ptSave(){const ids=PT.ids.slice(0,5),form=PT.form;try{const r=await window.fitVillage.partySave(ids,form);ptApply(r)}
   catch(e){vgToast(e.setup?'Supabase에 파티 편성 SQL(fit_village_update20.sql) 실행이 필요합니다.':(e.message||String(e)),true);const s=ptSaved();PT.ids=s.ids;PT.form=s.form}if(PT.m)ptRender()}
 function ptPickMember(slot){const cur=slot==null?null:PT.ids[slot],used=new Set(PT.ids.filter(x=>x!==cur).map(id=>(ptItem(id)||{}).item_key));
   const list=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal'&&!used.has(i.item_key))).map(i=>({i,s:ptStat(i)})).sort((a,b)=>(b.s.hp/10+b.s.atk*2+b.s.def)-(a.s.hp/10+a.s.atk*2+a.s.def));
@@ -3877,6 +3899,8 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     awUnlock(k){return vrpc('fit_aw_unlock',{p_key:k})},
     lbUp(id){return vrpc('fit_lb_up',{p_item:id})},
     partySave(ids,form){return vrpc('fit_party_save',{p_items:ids,p_form:form})},
+    partySwitch(slot){return vrpc('fit_party_switch',{p_slot:slot})},
+    partyRename(slot,name){return vrpc('fit_party_rename',{p_slot:slot,p_name:name})},
     bossHatch(id){return vrpc('fit_village_boss_hatch',{p_egg:id})},
     async bossEggs(){vNeed();const {data,error}=await supa.from('fit_village_boss_eggs').select('id,floor,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     wbStart(ids){return vrpc('fit_village_wb_start',{p_items:ids})},

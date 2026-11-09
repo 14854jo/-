@@ -1205,6 +1205,19 @@ main:has(#vgRoot){max-width:none}
 .pv-btns{display:flex;gap:4px}.pv-fr{font-style:normal;font-size:11px;background:#e3f2ff;color:#2a6ab0;border-radius:8px;padding:0 6px}
 .pv-side{grid-template-columns:repeat(3,1fr)}.pv-ua .vg-art{width:60px;height:60px}
 @media(max-width:860px){.pv-side{grid-template-columns:1fr}}
+/* PvP 개편 */
+.pv-spd{display:block;font-size:10px;color:#c27a00}
+.vg-modal-box.pv-plan{width:min(94vw,640px)}
+.pv-pl{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.pv-pr{display:flex;align-items:center;gap:6px;background:#fff;border:2px solid #efe7d8;border-radius:12px;padding:5px 8px;text-align:left}
+.pv-pr em{font-style:normal;width:22px;height:22px;border-radius:50%;background:#ffb21f;color:#fff;display:grid;place-items:center;font-size:12px;flex:none}
+.pv-pa .vg-art{width:44px;height:44px}.pv-pi{flex:1;min-width:0;display:flex;flex-direction:column}.pv-pi small{font-size:11px;color:#7d7290}
+.pv-pr select{font:inherit;font-size:12px;border-radius:8px;border:2px solid #e6dcf3;padding:3px}
+.pv-mv{display:flex;flex-direction:column;gap:2px}.pv-mv .vg-btn{padding:0 8px;min-height:0;line-height:1.4}
+.eq-ms{display:inline-block;font-style:normal;font-size:10.5px;background:#fff3c4;color:#c27a00;border-radius:8px;padding:0 6px;margin-left:4px}.eq-ms.m10{background:#ffe2ef;color:#d04888}.eq-ms.off{background:#f3f0f6;color:#8b7f99}
+@media(max-width:860px){.pv-pr{flex-wrap:wrap}.pv-pr select{order:5;flex:1}}
+.vg-modal-box.pv-plan{max-height:92dvh;overflow:auto}
+.pv-pr select{width:auto!important;flex:0 0 auto;max-width:150px}.pv-pi{min-width:140px}@media(max-width:860px){.pv-pr select{max-width:none;flex:1 1 100%}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2321,7 +2334,7 @@ function vgLobby(){const st=VD.st,ub=st.used_by_floor||(st.used_by_floor={}),fl=
   vgCutBind(VD.m);VD.m.querySelectorAll('[data-sweep]').forEach(b=>b.onclick=()=>vgSweep(VD.floor,Number(b.dataset.sweep)));VD.m.querySelectorAll('[data-floor]').forEach(x=>x.onclick=()=>{VD.floor=Number(x.dataset.floor);vgLobby()});
   VD.m.querySelectorAll('[data-pick]').forEach(x=>x.onclick=()=>{const id=x.dataset.pick,i=VD.pick.indexOf(id);if(i>=0)VD.pick.splice(i,1);else if(VD.pick.some(pid=>{const a=(VG.state.items||[]).find(x=>x.id===pid),b=(VG.state.items||[]).find(x=>x.id===id);return a&&b&&a.item_key===b.item_key})){vgToast('같은 종류의 동물은 한 마리만 출전할 수 있어요.',true);return}else if(VD.pick.length<3)VD.pick.push(id);else{vgToast('파티는 최대 3마리예요.',true);return}vgLobby()});
   VD.m.querySelector('#vdGo').onclick=async e=>{e.target.disabled=true;try{VD.battle=await window.fitVillage.dungeonStart(VD.floor,VD.pick);VD.sel=null;VD.st.used_by_floor[VD.floor]=(Number(VD.st.used_by_floor[VD.floor])||0)+1;vgBattleView()}catch(err){vgToast(err.message||String(err),true);e.target.disabled=false}}}
-const VD_SK={nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 1.5배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 25%만큼 아군 회복 (신화 전용)'],counter:['🪓','룬 반격: 2턴간 보스 공격을 대신 받고 맞을 때마다 1.5배 반격 (돌연변이 전용)'],timestop:['🌌','성운 붕괴: 피해 + 보스 2턴 행동 봉인 (돌연변이 전용)'],overdrive:['⚙️','증기 과부하: 3턴간 일반 공격 2회 (돌연변이 전용)'],web:['🕸️','거미줄 속박: 3턴간 보스 공격력 −25% + 받는 피해 +20% (돌연변이 전용)'],cleanse:['💎','수정의 빛: 전체 30% 회복 + 2턴간 독·저주·기절 면역 (돌연변이 전용)'],meteor:['☄️','용암 운석: 공격력 4배 + 강한 화상 3턴 (돌연변이 전용)'],dodge:['🌪️','질풍의 날개: 2턴간 아군이 50% 확률로 보스 공격 회피 (돌연변이 전용)'],drain:['🌀','심해 흡수: 피해 + 보스 공격력 영구 −10% (최대 −30%) (돌연변이 전용)']};
+const VD_SK={tidal:['🌊','적 전체에 큰 피해 + 적 행동 지연'],magma_armor:['🔥','3턴 도발 · 받은 피해 반사'],hunt:['🐾','체력이 가장 낮은 적 2.6배 · 처치하면 필살기 바로 다시 사용'],world_tree:['🌳','아군 전체 회복 + 약화 해제 · 2턴 면역'],quake:['🌋','적 전체 피해 + 방어 파괴'],fortress:['🏰','아군 받는 피해 크게 감소 (3턴)'],storm_wall:['🌩️','아군 보호막 + 번개 반격'],judgement:['⚖️','방어 무시 3.5배 일격'],crystal_ward:['💎','아군 전체 다음 공격 완전 회피'],abyss_gate:['🌑','도발 + 적 전체 행동 봉인'],nuke:['💥','강력한 일격 (공격력 3.2배)'],burn:['🔥','피해 + 3턴 지속 피해'],stun:['💫','피해 + 보스 기절 (이번 턴 보스 행동 취소)'],weaken:['⬇️','피해 + 보스 공격력 −35% (2턴)'],break:['💔','피해 + 보스 방어 무시·받는 피해 +30% (3턴)'],shield:['🛡️','아군 전체 보호막 (최대 체력 30%)'],heal:['💚','아군 전체 35% 회복 + 독·저주·기절 해제'],buff:['⚡','아군 전체 공격력 +50% (2턴)'],taunt:['🪨','2턴간 보스 공격을 대신 맞고 피해 −60%'],revive:['🕊️','아군 전체 30% 회복 + 쓰러진 아군 부활'],aegis:['🛡️','해태 결계: 2턴간 아군이 받는 피해 −50% (전설 전용)'],grove:['🌳','생명의 숲: 3턴간 매 턴 아군 전체 15% 회복 (전설 전용)'],confuse:['🌙','달빛 현혹: 피해 + 2턴간 보스 행동 50% 실패 (전설 전용)'],rebirth:['🔥','불사의 불꽃: 전체 20% 회복 + 3턴간 쓰러지면 40%로 부활 (전설 전용)'],combo:['🦊','9연격 (각 0.55배, 치명 30%) (신화 전용)'],charge_up:['🐉','피해 1.5배 + 다른 아군 필살기 쿨타임 초기화 (신화 전용)'],execute:['💀','보스가 잃은 체력 12% 비례 피해 (최소 3배) (신화 전용)'],lifelink:['🌌','3턴간 준 피해의 25%만큼 아군 회복 (신화 전용)'],counter:['🪓','룬 반격: 2턴간 보스 공격을 대신 받고 맞을 때마다 1.5배 반격 (돌연변이 전용)'],timestop:['🌌','성운 붕괴: 피해 + 보스 2턴 행동 봉인 (돌연변이 전용)'],overdrive:['⚙️','증기 과부하: 3턴간 일반 공격 2회 (돌연변이 전용)'],web:['🕸️','거미줄 속박: 3턴간 보스 공격력 −25% + 받는 피해 +20% (돌연변이 전용)'],cleanse:['💎','수정의 빛: 전체 30% 회복 + 2턴간 독·저주·기절 면역 (돌연변이 전용)'],meteor:['☄️','용암 운석: 공격력 4배 + 강한 화상 3턴 (돌연변이 전용)'],dodge:['🌪️','질풍의 날개: 2턴간 아군이 50% 확률로 보스 공격 회피 (돌연변이 전용)'],drain:['🌀','심해 흡수: 피해 + 보스 공격력 영구 −10% (최대 −30%) (돌연변이 전용)']};
 const VD_BA={bite:['🗡️','물어뜯기','한 명에게 공격'],sweep:['🌀','휩쓸기','아군 전체 공격'],charge:['💢','힘 모으기','다음 턴에 강력한 일격!'],smash:['💥','강력한 일격','전체 큰 피해 — 방어·보호막·기절로 대비하세요!'],poison:['☠️','독안개','전체 피해 + 3턴 독'],curse:['🌑','저주','전체 피해 + 공격력 −30%'],harden:['🪨','단단해지기','다음 턴 받는 피해 −50%'],regen:['💚','재생','체력 8% 회복'],stunhit:['⚡','기절 일격','한 명 피해 + 1턴 기절']};
 function vdSkillOf(key){const c=VG.cat[key]||{};return {s:c.skill||'nuke',n:c.skill_name||'필살 일격'}}
 function vgBattleView(logHtml){const bt=VD.battle,bs=bt.floor===0?(VD.bosses.find(x=>x.floor===10)||{image_url:'images/bosses/boss10.webp'}):(VD.bosses.find(x=>x.floor===bt.floor)||{}),b=bt.boss,fx=bt.fx||{},en=b.hp<b.max*.5;
@@ -2795,14 +2808,15 @@ function vgConsHtml(){const s=TW.st;if(!s){window.fitVillage.twStatus().then(x=>
 const EQ_SLOT={weapon:['🗡️','무기','공격'],armor:['🛡️','갑옷','체력'],acc:['💍','장신구','방어']};
 const EQ_GR={1:['일반','#8a97ad'],2:['희귀','#3b8cff'],3:['영웅','#9b5cff'],4:['전설','#ff9a1f']};
 const EQ_SUB={atk:'공격력',hp:'체력',def:'방어력',crit:'치명타 확률',skill:'필살기 피해'};
-function eqMain(slot,g,l){return Math.round(({weapon:[0,20,40,70,110],armor:[0,150,300,520,800],acc:[0,8,16,28,44]})[slot][g]*(1+.1*l))}
+function eqMain(slot,g,l){return Math.round(({weapon:[0,20,40,70,110],armor:[0,150,300,520,800],acc:[0,8,16,28,44]})[slot][g]*(1+.1*l)*(l>=10?1.2:l>=5?1.08:1))}
+function eqSpd(e){return (e.slot!=='weapon'&&e.slot!=='armor'?e.grade*2:0)+(e.lvl>=10?8:e.lvl>=5?3:0)}
 function eqCost(e){return [0,1,2,4,8][e.grade]*(e.lvl+1)*300}
 function eqSellV(e){return [0,200,600,2000,6000][e.grade]+Math.floor([0,1,2,4,8][e.grade]*300*e.lvl*(e.lvl+1)/2/2)}
 function eqLoad(force){if(VG.equips&&!force)return Promise.resolve(VG.equips);return window.fitVillage.eqList().then(l=>{VG.equips=l||[];return VG.equips}).catch(()=>{VG.equips=VG.equips||[];return VG.equips})}
 function eqCountOn(id){return (VG.equips||[]).filter(e=>e.item_id===id).length}
 function eqBadge(id){const n=eqCountOn(id);return n?`<span class="eq-badge">⚔️${n}</span>`:''}
 function eqCard(e,btns=true){const s=EQ_SLOT[e.slot],g=EQ_GR[e.grade],it=e.item_id&&(VG.state.items||[]).find(i=>i.id===e.item_id),c=it&&VG.cat[it.item_key];
-  return `<div class="eq-card g${e.grade}"><div class="eq-ic" style="--g:${g[1]}">${s[0]}<i>+${e.lvl}</i></div><div class="grow"><b style="color:${g[1]}">${g[0]} ${s[1]}</b> <small>${s[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}</small>
+  return `<div class="eq-card g${e.grade}"><div class="eq-ic" style="--g:${g[1]}">${s[0]}<i>+${e.lvl}</i></div><div class="grow"><b style="color:${g[1]}">${g[0]} ${s[1]}</b> <small>${s[2]} +${vgN(eqMain(e.slot,e.grade,e.lvl))}${eqSpd(e)?` · ⚡속도 +${eqSpd(e)}`:''}</small>${e.lvl>=10?'<i class="eq-ms m10">✨+10 보너스</i>':e.lvl>=5?'<i class="eq-ms">✨+5 보너스</i>':`<i class="eq-ms off">+5강 보너스까지 ${5-e.lvl}</i>`}
    <div class="eq-subs">${(e.subs||[]).map(x=>`<span>${EQ_SUB[x.k]||x.k} +${x.v}%</span>`).join('')||'<span class="none">부가 옵션 없음</span>'}</div>
    ${it?`<div class="eq-on">${vgArtSvg(vgK(it))} ${esc(c?.name||'')} 착용 중</div>`:''}</div>
    ${btns?`<div class="eq-btns"><button class="vg-btn sm purple" data-eqon="${e.id}">${it?'교체':'장착'}</button>${it?`<button class="vg-btn sm" data-eqoff="${e.id}">해제</button>`:''}<button class="vg-btn sm gold" data-equp="${e.id}" ${e.lvl>=10?'disabled':''}>${e.lvl>=10?'MAX':`강화 ${vgN(eqCost(e))}`}</button><button class="vg-btn sm" data-eqsell="${e.id}">판매</button></div>`:''}</div>`}
@@ -3353,7 +3367,8 @@ function dxRender(){const s=DX.st,box=DX.m.querySelector('.vg-modal-box'),L=s[DX
    ⚔️ PvP 아레나 — 내 파티(방어 팀)로 친구 팀과 자동 전투 · 기록 다시 보기
    ===================================================================== */
 const PV={m:null,st:null,tab:'fight',play:null};
-const PV_SK={nuke:'💥',execute:'☠️',meteor:'☄️',combo:'⚡',burn:'🔥',timestop:'⏳',stun:'💫',confuse:'🌀',weaken:'⬇️',break:'💔',drain:'🩸'};
+const PV_MODE={auto:['🔢','순서대로'],first:['⚡','선제 사용'],low:['🆘','위기 때만'],off:['🚫','사용 안 함']};
+const PV_SK={tidal:'🌊',hunt:'🐾',quake:'🌋',judgement:'⚖️',magma_armor:'🔥',fortress:'🏰',storm_wall:'🌩️',crystal_ward:'💎',abyss_gate:'🌑',world_tree:'🌳',nuke:'💥',execute:'☠️',meteor:'☄️',combo:'⚡',burn:'🔥',timestop:'⏳',stun:'💫',confuse:'🌀',weaken:'⬇️',break:'💔',drain:'🩸'};
 async function vgPvp(){if(PV.m)PV.m.remove();PV.m=vgModal('<div class="fs-load">⚔️ 아레나 입장 중…</div>','vg-xwide pv-modal');PV.m._onclose=()=>{PV.m=null;pvStop()};
   try{PV.st=await window.fitVillage.pvpStatus()}catch(e){PV.m.remove();PV.m=null;vgToast(e.setup?'Supabase에 fit_village_update42.sql 실행이 필요합니다.':(e.message||String(e)),true);return}
   pvLobby()}
@@ -3362,9 +3377,9 @@ function pvMini(t){return `<span class="pv-mini">${(t||[]).map(u=>`<span class="
 function pvLobby(){const s=PV.st,box=pvBox();
   const tabs=[['fight','⚔️ 도전'],['rank','🏆 랭킹'],['log','📜 기록']];
   let body='';
-  if(PV.tab==='fight')body=`<div class="pv-my"><div class="pv-myh"><b>🛡️ 내 방어 팀</b><small>전투력 ${vgN(s.power)}</small><button class="vg-btn sm purple" id="pvParty">파티 편성</button></div>
-      ${s.team.length?`<div class="pv-myt">${s.team.map(u=>`<div class="pv-mu g${u.grade}">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}<b>${vgElI(u.el)}${esc(u.name)}</b><small>${u.row==='front'?'앞줄':'뒷줄'}${u.sr==='atk'?' · ⚔️':u.sr==='def'?' · 🛡️':''}</small></div>`).join('')}</div>`:'<div class="vg-empty">파티 편성에서 팀을 꾸려 주세요.</div>'}
-      <p class="vg-note">파티 편성에 저장한 팀이 그대로 <b>공격 · 방어 팀</b>이 돼요. 속성 상성(⚔️ 상성표)과 앞줄 · 뒷줄 배치가 승부를 갈라요.</p></div>
+  if(PV.tab==='fight')body=`<div class="pv-my"><div class="pv-myh"><b>🛡️ 내 팀</b><small>전투력 ${vgN(s.power)}</small><button class="vg-btn sm gold" id="pvPlan">⚙️ 전투 설정</button><button class="vg-btn sm purple" id="pvParty">파티 편성</button></div>
+      ${s.team.length?`<div class="pv-myt">${s.team.map(u=>`<div class="pv-mu g${u.grade}">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}<b>${vgElI(u.el)}${esc(u.name)}</b><small>${u.row==='front'?'앞줄':'뒷줄'}${u.sr==='atk'?' · ⚔️':u.sr==='def'?' · 🛡️':''} · ⚡${u.spd||100}</small></div>`).join('')}</div>`:'<div class="vg-empty">파티 편성에서 팀을 꾸려 주세요.</div>'}
+      <p class="vg-note">파티 편성의 동물들이 출전해요. <b>⚙️ 전투 설정</b>에서 공격 · 방어 때 필살기 순서와 사용 방식을 따로 정할 수 있어요. <b>⚡속도</b>가 빠를수록 자주 행동해요.</p></div>
     <b class="fq-sub">🎯 도전 상대 <small>(순위전 남은 ${s.left}/10 · 자정 초기화 · 🤝 친선전은 무제한)</small></b>
     <div class="pv-opp">${s.opp.map(o=>`<div class="pv-o ${o.bot?'bot':''}"><div class="pv-oh"><b>${esc(o.name)}</b><span>${o.bot?'연습':`${esc(o.tier)} · ${o.rating}`}</span></div>${pvMini(o.team)}
       <div class="pv-of"><small>전투력 <b>${vgN(o.power)}</b> ${o.power>s.power*1.1?'<i class="pv-hard">강함</i>':o.power<s.power*.9?'<i class="pv-easy">약함</i>':''}</small><span class="pv-btns">${o.bot?'':`<button class="vg-btn sm" data-pvfr="${o.uid}" ${s.team.length?'':'disabled'} title="점수·코인 변동 없이 계속 대결">🤝 친선</button>`}<button class="vg-btn sm gold" data-pvf="${o.uid}" ${s.left>0&&s.team.length?'':'disabled'}>⚔️ 순위전</button></span></div></div>`).join('')}</div>
@@ -3375,7 +3390,7 @@ function pvLobby(){const s=PV.st,box=pvBox();
    <div class="dx-tabs">${tabs.map(([k,n])=>`<button class="vg-btn sm ${PV.tab===k?'gold':''}" data-pvt="${k}">${n}</button>`).join('')}</div><div class="pv-body">${body}</div>`;
   box.querySelector('.vg-x').onclick=()=>{PV.m.remove();PV.m._onclose()};
   box.querySelectorAll('[data-pvt]').forEach(b=>b.onclick=()=>{PV.tab=b.dataset.pvt;pvLobby()});
-  const pp=box.querySelector('#pvParty');if(pp)pp.onclick=()=>{PV.m.remove();PV.m=null;vgParty()};
+  const pq=box.querySelector('#pvPlan');if(pq)pq.onclick=pvPlan;const pp=box.querySelector('#pvParty');if(pp)pp.onclick=()=>{PV.m.remove();PV.m=null;vgParty()};
   box.querySelectorAll('[data-pvf]').forEach(b=>b.onclick=()=>pvFight(b.dataset.pvf,false));box.querySelectorAll('[data-pvfr]').forEach(b=>b.onclick=()=>pvFight(b.dataset.pvfr,true));
   box.querySelectorAll('[data-pvr]').forEach(b=>b.onclick=async()=>{try{pvShow(await window.fitVillage.pvpReplay(b.dataset.pvr),true)}catch(e){vgToast(e.message||String(e),true)}})}
 async function pvFight(t,fr){const btns=pvBox().querySelectorAll('[data-pvf],[data-pvfr]');btns.forEach(b=>b.disabled=true);
@@ -3383,8 +3398,8 @@ async function pvFight(t,fr){const btns=pvBox().querySelectorAll('[data-pvf],[da
 /* ── 전투 다시 보기 ── */
 function pvStop(){if(PV.play){clearTimeout(PV.play.t);PV.play=null}}
 function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.length,all=A.concat(B);
-  const unit=(u,i)=>`<div class="pv-u g${u.grade} ${u.row==='back'?'back':''}" data-pu="${i}"><div class="pv-ua">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}</div><b>${vgElI(u.el)}${esc(u.name)}</b><div class="pv-hp"><i style="width:100%"></i></div><span class="pv-sh"></span></div>`;
-  box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pv-top"><h3>⚔️ ${esc(r.an||'나')} vs ${esc(r.bn||'상대')}</h3><span class="fm-chip" id="pvRnd">1 라운드</span><button class="vg-btn sm" id="pvSpd">⏩ 2배</button><button class="vg-btn sm" id="pvSkip">⏭ 건너뛰기</button></div>
+  const unit=(u,i)=>`<div class="pv-u g${u.grade} ${u.row==='back'?'back':''}" data-pu="${i}"><div class="pv-ua">${vgArtSvg(Number(u.lb)>=5?u.key+'@lb':u.key)}</div><b>${vgElI(u.el)}${esc(u.name)}</b><small class="pv-spd">⚡${u.spd||100}</small><div class="pv-hp"><i style="width:100%"></i></div><span class="pv-sh"></span></div>`;
+  box.innerHTML=`<button class="vg-x" title="닫기">✕</button><div class="pv-top"><h3>⚔️ ${esc(r.an||'나')} vs ${esc(r.bn||'상대')}</h3><span class="fm-chip" id="pvRnd">1 행동</span><button class="vg-btn sm" id="pvSpd">⏩ 2배</button><button class="vg-btn sm" id="pvSkip">⏭ 건너뛰기</button></div>
    <div class="pv-arena"><div class="pv-side a">${A.map((u,i)=>unit(u,i)).join('')}</div><div class="pv-vs">VS</div><div class="pv-side b">${B.map((u,i)=>unit(u,na+i)).join('')}</div></div>
    <div class="pv-log" id="pvLog">전투 시작!</div><div class="pv-res" id="pvRes"></div>`;
   box.querySelector('.vg-x').onclick=()=>{pvStop();PV.m.remove();PV.m._onclose()};
@@ -3392,15 +3407,16 @@ function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.le
   const pop=(i,txt,cls)=>{const e=el(i);if(!e)return;const d=document.createElement('b');d.className='pv-pop '+cls;d.textContent=txt;e.appendChild(d);setTimeout(()=>d.remove(),900)};
   const setHp=(i,h)=>{const e=el(i);if(!e)return;e.querySelector('.pv-hp i').style.width=Math.max(0,h/all[i].max*100)+'%';e.classList.toggle('dead',h<=0)};
   const nm=i=>`${i<na?'🔵':'🔴'}${all[i].name}`;
-  const step=()=>{if(!PV.play)return;if(P.i>=ev.length)return end();const e=ev[P.i++],a=el(e.a);box.querySelector('#pvRnd').textContent=`${e.r} 라운드`;
+  const step=()=>{if(!PV.play)return;if(P.i>=ev.length)return end();const e=ev[P.i++],a=el(e.a);box.querySelector('#pvRnd').textContent=`${e.r} 행동`;
     if(a){a.classList.remove('act');void a.offsetWidth;a.classList.add('act')}
     if(e.k==='stunned'){pop(e.a,'💫 기절','ms');log.textContent=`${nm(e.a)} — 기절해서 쉬어요`}
-    else if(e.k==='heal'){pop(e.t[0],`+${e.v}`,'hl');setHp(e.t[0],e.hp[0]);log.textContent=`💚 ${nm(e.a)}의 ${all[e.a].skill_name}! ${nm(e.t[0])} +${e.v}`}
-    else if(e.k==='guard'){(e.a<na?A:B).forEach((u,k)=>{const j=e.a<na?k:na+k;const x=el(j);if(x&&!x.classList.contains('dead'))pop(j,`🛡️+${e.v}`,'sh')});log.textContent=`🛡️ ${nm(e.a)}의 ${all[e.a].skill_name}! 팀 전체 보호막${e.tnt?' · 도발':''}`}
+    else if(e.k==='heal'){(e.t||[]).forEach((t,k)=>{pop(t,`+${vgN((e.vs||[e.v])[k])}`,'hl');setHp(t,e.hp[k])});log.textContent=`💚 ${nm(e.a)}의 ${all[e.a].skill_name}! ${(e.t||[]).length>1?'아군 전체 회복':`${nm(e.t[0])} +${e.v}`}`}
+    else if(e.k==='guard'){const GT={magma_armor:'🔥 도발 · 피해 반사',fortress:'🏰 아군 받는 피해 −40%',storm_wall:'🌩️ 보호막 · 번개 반격',crystal_ward:'💎 다음 피해 1회 무효',abyss_gate:'🌑 도발 · 적 행동 지연'};(e.a<na?A:B).forEach((u,k)=>{const j=e.a<na?k:na+k;const x=el(j);if(x&&!x.classList.contains('dead'))pop(j,e.v?`🛡️+${vgN(e.v)}`:(PV_SK[e.s]||'🛡️'),'sh')});log.textContent=`${PV_SK[e.s]||'🛡️'} ${nm(e.a)}의 ${all[e.a].skill_name}! ${GT[e.s]||('팀 전체 보호막'+(e.tnt?' · 도발':''))}`}
     else if(e.k==='buff'){pop(e.a,'⬆️ 공격 UP','bf');log.textContent=`⚡ ${nm(e.a)}의 ${all[e.a].skill_name}! 팀 공격력 상승`}
     else{(e.t||[]).forEach((t,k)=>{const c=e.cr[k],m=e.em[k];pop(t,`${c?'💥':''}-${vgN(e.d[k])}${m>1?' 🔺':m<1?' 🔻':''}`,c?'cr':'dm');setHp(t,e.hp[k]);const x=el(t);if(x){x.classList.remove('hit');void x.offsetWidth;x.classList.add('hit')}});
+      (e.cnt||[]).forEach(c=>{setTimeout(()=>{pop(c.t,`${c.w} -${vgN(c.d)}`,'cr');setHp(c.t,c.hp)},260/P.spd)});
       if(e.ahp!=null)setHp(e.a,e.ahp);
-      log.textContent=e.k==='skill'?`${PV_SK[e.s]||'✨'} ${nm(e.a)}의 ${all[e.a].skill_name}!${(e.t||[]).length>1?' (전체 공격)':''}`:`${nm(e.a)} → ${nm(e.t[0])} ${vgN(e.d[0])}${e.em[0]>1?' (상성 유리!)':e.em[0]<1?' (상성 불리)':''}`}
+      log.textContent=e.k==='skill'?`${PV_SK[e.s]||'✨'} ${nm(e.a)}의 ${all[e.a].skill_name}!${(e.t||[]).length>1?' (전체 공격)':''}`:`${nm(e.a)} → ${nm(e.t[0])} ${vgN(e.d[0])}${e.em[0]>1?' (상성 유리!)':e.em[0]<1?' (상성 불리)':''}`;if(e.ex)log.textContent+=' · 🐾 처치! 한 번 더 행동'}
     P.t=setTimeout(step,(e.k==='skill'?720:480)/P.spd)};
   const end=()=>{pvStop();const me=replay&&r.mine==='b'?!r.win:r.win;
     // 최종 체력 반영
@@ -3410,6 +3426,29 @@ function pvShow(r,replay){pvStop();const box=pvBox(),A=r.a||[],B=r.b||[],na=A.le
   box.querySelector('#pvSpd').onclick=e=>{P.spd=P.spd===1?2.5:1;e.target.textContent=P.spd===1?'⏩ 2배':'▶ 보통'};
   box.querySelector('#pvSkip').onclick=()=>{clearTimeout(P.t);P.i=ev.length;end()};
   P.t=setTimeout(step,700)}
+
+/* ── ⚙️ 전투 설정 : 공격 / 방어 따로 · 필살기 순서 · 사용 방식 ── */
+function pvPlan(){const s=PV.st,plan=JSON.parse(JSON.stringify(s.plan||{}));let side='a';
+  const T={a:s.team||[],d:s.dteam||s.team||[]};
+  const get=sd=>{const p=plan[sd]||(plan[sd]={});p.mode=p.mode||{};const ids=T[sd].map(u=>u.id);let o=(p.order||[]).filter(x=>ids.includes(x));ids.forEach(x=>{if(!o.includes(x))o.push(x)});p.order=o;return p};
+  const m=vgModal('','vg-wide pv-plan');
+  const draw=()=>{const p=get(side),U=Object.fromEntries(T[side].map(u=>[u.id,u]));
+    m.querySelector('.vg-modal-box').innerHTML=`<button class="vg-x">✕</button><h3>⚙️ 전투 설정</h3>
+     <div class="dx-tabs"><button class="vg-btn sm ${side==='a'?'gold':''}" data-ps="a">⚔️ 공격할 때</button><button class="vg-btn sm ${side==='d'?'gold':''}" data-ps="d">🛡️ 방어할 때</button></div>
+     <p class="vg-mp">${side==='a'?'내가 도전할 때':'다른 친구가 나에게 도전할 때'} 쓰는 설정이에요. 필살기는 행동 3번마다 찰 수 있고, <b>🔢 순서대로</b>인 동물들은 위에서부터 차례로 써요.</p>
+     <div class="pv-pl">${p.order.map((id,i)=>{const u=U[id];if(!u)return '';const md=p.mode[id]||'auto';return `<div class="pv-pr"><em>${i+1}</em><span class="pv-pa">${vgArtSvg(u.key)}</span>
+       <span class="pv-pi"><b>${vgElI(u.el)}${esc(u.name)}</b><small>⚡${u.spd} · ${esc(u.skill_name||'')}${u.skill_desc?` — ${esc(u.skill_desc)}`:''}</small></span>
+       <select data-pm="${id}">${Object.entries(PV_MODE).map(([k,[ic,n]])=>`<option value="${k}" ${md===k?'selected':''}>${ic} ${n}</option>`).join('')}</select>
+       <span class="pv-mv"><button class="vg-btn sm" data-up="${i}" ${i?'':'disabled'}>▲</button><button class="vg-btn sm" data-dn="${i}" ${i<p.order.length-1?'':'disabled'}>▼</button></span></div>`}).join('')}</div>
+     <p class="vg-note">⚡ <b>선제 사용</b> : 첫 행동부터 필살기 · 🆘 <b>위기 때만</b> : 아군 체력 50% 아래일 때 (회복 · 보호막 추천) · 🚫 <b>사용 안 함</b> : 일반 공격만<br>⚡ 속도는 종족값 + 장신구 + 장비 +5/+10강 보너스 + 한계돌파로 올라요.</p>
+     <div style="display:flex;gap:8px;justify-content:center"><button class="vg-btn" id="pvPlX">취소</button><button class="vg-btn gold" id="pvPlS">저장</button></div>`;
+    const b=m.querySelector('.vg-modal-box');b.querySelector('.vg-x').onclick=()=>m.remove();b.querySelector('#pvPlX').onclick=()=>m.remove();
+    b.querySelectorAll('[data-ps]').forEach(x=>x.onclick=()=>{side=x.dataset.ps;draw()});
+    b.querySelectorAll('[data-pm]').forEach(x=>x.onchange=()=>{p.mode[x.dataset.pm]=x.value});
+    b.querySelectorAll('[data-up]').forEach(x=>x.onclick=()=>{const i=+x.dataset.up;[p.order[i-1],p.order[i]]=[p.order[i],p.order[i-1]];draw()});
+    b.querySelectorAll('[data-dn]').forEach(x=>x.onclick=()=>{const i=+x.dataset.dn;[p.order[i+1],p.order[i]]=[p.order[i],p.order[i+1]];draw()});
+    b.querySelector('#pvPlS').onclick=async()=>{get('a');get('d');try{await window.fitVillage.pvpPlan(plan);m.remove();vgToast('⚙️ 전투 설정을 저장했어요');PV.st=await window.fitVillage.pvpStatus();pvLobby()}catch(e){vgToast(e.setup?'Supabase에 fit_village_update45.sql 실행이 필요합니다.':(e.message||String(e)),true)}}};
+  draw()}
 
 
 function daily(){
@@ -3782,6 +3821,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     pvpStatus(){return vrpc('fit_pvp_status',{})},
     pvpFight(t,fr){return vrpc('fit_pvp_fight',{p_target:t,p_friendly:!!fr})},
     pvpReplay(id){return vrpc('fit_pvp_replay',{p_id:id})},
+    pvpPlan(p){return vrpc('fit_pvp_plan_save',{p_plan:p})},
     fishState(){return vrpc('fit_fish_state',{})},
     fishCast(b){return vrpc('fit_fish_cast',{p_bait:b})},
     fishEnd(ok){return vrpc('fit_fish_end',{p_ok:ok})},

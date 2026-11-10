@@ -342,7 +342,7 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
 .vg-codex .locked b{color:#b6abc4}
 .vg-note{font-family:Inter,'Malgun Gothic',sans-serif;font-size:12.5px;line-height:1.6;color:#7d7290;background:#f7f2e7;border-radius:12px;padding:9px 11px;margin:0 0 12px}
 .vg-empty{text-align:center;color:#9a8fab;padding:24px 8px;font-size:15px}
-.vg-modal{position:fixed;inset:0;z-index:9000;background:rgba(40,25,60,.55);display:grid;place-items:center;backdrop-filter:blur(3px)}
+.vg-modal{position:fixed;inset:0;z-index:9000;background:rgba(40,25,60,.55);display:grid;place-items:center;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .vg-modal-box{width:min(92vw,380px);background:#fffdf8;border-radius:26px;border:3px solid #fff;box-shadow:0 20px 60px #0004;padding:22px;text-align:center;font-family:'Jua','Malgun Gothic',sans-serif;color:#3a2f4a;position:relative;overflow:hidden}
 .vg-modal-box h3{font-size:24px;margin:6px 0 2px}
 .vg-modal-art{width:190px;height:190px;margin:4px auto}
@@ -466,7 +466,7 @@ label{font-size:12px;letter-spacing:.015em}.pill{border-radius:999px;padding:5px
   .vg-codex{grid-template-columns:repeat(3,1fr)}
   .vg-egg-card .vg-art{width:70px;height:70px;flex:0 0 70px}
   .vg-modal-box{padding:16px 12px}
-  .vg-modal-box.vg-dungeon,.vg-modal-box.vg-xwide{width:100vw;max-height:100vh;height:100%;border-radius:0}
+  .vg-modal-box.vg-dungeon,.vg-modal-box.vg-xwide{width:100vw;max-height:100vh;max-height:100dvh;height:100%;border-radius:0}
   .vd-floors{grid-template-columns:repeat(5,1fr);gap:4px}.vd-floor{padding:4px 2px}.vd-fart{width:44px;height:42px}.vd-floor small{display:none}
   .vd-picks{grid-template-columns:repeat(3,1fr)}
   .vd-arena{flex-direction:column-reverse;height:auto;align-items:center;gap:6px;padding:10px 8px}
@@ -1273,6 +1273,34 @@ main:has(#vgRoot){max-width:none}
 .eq-filter{flex-wrap:wrap}.eq-filter .eq-bulk{flex:1 1 100%}
 .eq-bulkm .vg-modal-box{text-align:left}.eq-bulkm h3,.eq-bulkm .vg-mp{text-align:center}.eq-bulkm input[type=checkbox]{width:16px!important;height:16px;margin:0;flex:0 0 16px;padding:0}.eqb-g{white-space:nowrap}.eqb-chk{justify-content:flex-start;white-space:normal}
 .pv-stats.pve{margin-top:10px}.vd-result+.vd-acts+.pv-stats,.pv-stats.pve{max-width:720px;margin-left:auto;margin-right:auto}
+
+/* ===== 아이폰(사파리) 대응 ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+header{-webkit-backdrop-filter:blur(18px)}
+.pill,#syncStatusBadge{white-space:nowrap}
+@media(max-width:700px){
+  .brand{min-width:0}.brand>span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header .right{flex:0 0 auto}#todayTop{display:none}
+}
+@media(max-width:440px){.brand .sub{display:none}.brand{gap:8px;font-size:17px}}
+/* 가로로 눕힌 휴대폰 : 데스크톱 사이드바 대신 모바일 메뉴 */
+@media (orientation:landscape) and (max-height:500px) and (max-width:1000px){
+  header{height:52px;padding:0 14px}.mobilemenu{display:block}.layout{display:block;min-height:0}
+  aside{display:none;position:fixed;top:52px;bottom:0;left:0;width:245px;z-index:5;box-shadow:0 8px 30px #0002;overflow:auto}.layout.menuopen aside{display:block}
+  main{padding:12px 14px}
+  .vg-side{max-height:86vh;max-height:86dvh}
+  .vg-root{padding-bottom:84px}
+}
+/* PvP 내 팀 · 탑 제목 (좁은 화면) */
+.pv-myh{flex-wrap:wrap}.pv-myh b{white-space:nowrap}.pv-myh small{white-space:nowrap}.pv-myh .vg-btn{white-space:nowrap}
+.tw-head{gap:8px;flex-wrap:wrap}.tw-head h3{white-space:nowrap}
+@media(max-width:440px){
+  .pv-myt{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;overflow:visible}
+  .pv-mu{flex:none;min-width:0;padding:3px 2px}.pv-mu .vg-art{width:100%;height:auto;aspect-ratio:1}
+  .pv-mu b{font-size:10px}.pv-mu small{font-size:8.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tw-head span{font-size:12.5px}
+}
+header{z-index:60}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2114,6 +2142,9 @@ function vgRenderSide(){const side=$('#vgSide');if(!side||!VG.state)return;const
 
 // 필살기 설명 (DB fit_village_skills 가 기준, 없으면 내장 문구 사용)
 function vgApplySkills(l){(l||[]).forEach(r=>{if(!r||!r.key)return;if(r.descr)VD_SK[r.key]=[r.emoji||(VD_SK[r.key]||['✨'])[0],r.descr];if(r.tr5)VG_TR5[r.key]=r.tr5})}
+
+// 아이폰 : 입력칸을 누를 때 화면이 확대된 채로 남아 겹쳐 보이는 문제 방지 (손가락 확대는 그대로 가능)
+(function(){try{if(/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){const m=document.querySelector('meta[name=viewport]');if(m&&!/maximum-scale/.test(m.content))m.content+=',maximum-scale=1'}}catch(e){}})();
 
 /* =====================================================================
    🏔️ 지형 꾸미기 (높이 · 지형) · 🖼️ 마을 배경 · ⛶ 전체 화면

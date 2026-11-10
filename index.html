@@ -2885,7 +2885,7 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
       vdPop(M(e.who),`🌟 ${e.emoji||''} ${e.name}!`,'sk');if(e.sup)old.party.forEach((p,j)=>vdPop(M(j),e.emoji||'✨','heal'));
       if(old.fx)old.fx.uqused=true;L('u',`🌟 <b>${nm(e.who)}</b>의 고유 스킬 <b>${esc(e.emoji||'')} ${esc(e.name)}</b>${ud?`<small>${esc(ud)}</small>`:''}`);w=450}
     else if(e.t==='uend'){if(e.dmg>0)L('u',`🌟 고유 스킬 총 피해 <b>${vgN(e.dmg)}</b>`)}
-    else if(e.t==='counter'||e.t==='reflect'){if(e.e!=null&&ehp[e.e]!=null){ehp[e.e]=Math.max(1,ehp[e.e]-e.dmg);setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),(e.t==='counter'?'🪓 반격 -':'🪨 반사 -')+e.dmg,'crit')}if(cur){cur.cnt=(cur.cnt||0)+e.dmg}w=110}
+    else if(e.t==='counter'||e.t==='reflect'){if(e.e!=null&&ehp[e.e]!=null){ehp[e.e]=Math.max(e.t==='reflect'?0:1,ehp[e.e]-e.dmg);setE(e.e);vdShake(EN(e.e));vdPop(EN(e.e),(e.t==='counter'?'🪓 반격 -':'🪨 반사 -')+e.dmg,'crit')}if(cur){cur.cnt=(cur.cnt||0)+e.dmg}w=110}
     else if(e.t==='rebirth'){vdPop(M(e.who),'🔥 부활!','heal');L('a',`🔥 <b>${nm(e.who)}</b> 부활!`)}
     await vdSleep(w)}
   flushA();flushE();if(poiSum)L('e',`☠️ 독 피해 총 <b>${vgN(poiSum)}</b>`);

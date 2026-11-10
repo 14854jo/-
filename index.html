@@ -2619,7 +2619,7 @@ function vgPrimBind(side){const P=VG.prim;
     catch(e){vgToast(e.setup?'Supabase에 fit_village_update55.sql 실행이 필요합니다.':(e.message||String(e)),true);go.disabled=false}}}
 // 태초 필살기 기본 설명 (DB 설명이 있으면 그걸 씀)
 setTimeout(()=>{try{Object.assign(VD_SK,{sunfire:VD_SK.sunfire||['🔥','적 전체 2.4배 + 화상 3턴 (공격력 0.8배 + 적 최대 체력 2%, 보스 1%) · 화상으로 처치하면 쿨타임 −1 ｜ 패시브 「태양의 재림」 전투당 1회, 쓰러지면 체력 40%로 부활 + 2턴 공격력 +30%'],
-  gravewall:VD_SK.gravewall||['🛡️','3턴 도발 · 받는 피해 감소 · 맞을 때마다 반사(감소 전 피해 25% + 방어력 × 2) + 아군 전체 보호막 30% ｜ 패시브 「망령의 비호」 살아 있는 동안 매 턴 아군 전체 6% 회복'],
+  gravewall:VD_SK.gravewall||['🛡️','3턴 도발 · 받는 피해 감소 · 맞을 때마다 반사(감소 전 피해 25% + 방어력 × 2) + 아군 전체 보호막 30% ｜ 패시브 「망령의 비호」 살아 있는 동안 매 턴 아군 전체 6% 회복 · 공격을 받을 때마다 아군 전체 공격력 +5% (최대 8중첩)'],
   revelation:VD_SK.revelation||['📖','적 전체 2.2배 방어 무시 피해 + 방어 붕괴 3턴 + 계시의 표식 3턴(받는 피해 +30%, 다른 효과와 곱연산) ｜ 패시브 「예언된 승리」 살아 있는 동안 아군 필살기 피해 +25%']});
 Object.assign(VG_TR5,{sunfire:VG_TR5.sunfire||'피해 3.0배 · 화상 5턴',gravewall:VG_TR5.gravewall||'도발 4턴 · 받는 피해 추가 감소 · 보호막 35%',revelation:VG_TR5.revelation||'피해 2.6배 · 표식 +40%'})}catch(e){}},0);
 

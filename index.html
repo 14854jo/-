@@ -1301,6 +1301,28 @@ header{-webkit-backdrop-filter:blur(18px)}
   .tw-head span{font-size:12.5px}
 }
 header{z-index:60}
+/* 🌌 태초 */
+.vg-g8{background:linear-gradient(90deg,#f7d774,#ff9ad5,#a46bff,#5fd3ff,#9effc4);color:#3a2a55!important;text-shadow:0 0 4px #fff}
+.h10-c.g8,.vd-pick.g8{box-shadow:0 0 0 2px #e6d3ff,0 0 14px rgba(164,107,255,.55)}
+.pm-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:linear-gradient(135deg,#f6efff,#fff4e0);border:2px solid #e2d2ff;border-radius:14px;padding:8px 12px;margin:6px 0}
+.pm-top span{font-size:15px}.pm-top b{color:#7b3fe4;font-size:18px}.pm-top small{font-size:11.5px;color:#8a7fa3}
+.pm-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+.pm-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;border:2px solid #ece4f7;background:#fff;cursor:pointer;font:inherit;color:#3a2f4a;position:relative}
+.pm-card.on{border-color:#a46bff;background:linear-gradient(180deg,#f7f0ff,#fff);box-shadow:0 0 14px rgba(164,107,255,.35)}
+.pm-card.own::after{content:'보유';position:absolute;top:6px;right:6px;font-size:10px;background:#a46bff;color:#fff;border-radius:8px;padding:1px 6px}
+.pm-art{width:84px;height:84px;display:block}.pm-art svg{width:100%;height:100%}
+.pm-card b{font-size:13.5px}.pm-card small{font-size:10.5px;color:#8a7fa3;text-align:center}.pm-card em{font-style:normal;font-size:11px;color:#7b3fe4;font-weight:700}
+.pm-skill{background:#fbf8ff;border-radius:12px;padding:8px 10px;margin:6px 0}.pm-skill b{font-size:13.5px}.pm-skill p{margin:4px 0 0;font-size:12px;line-height:1.5;color:#5c5072}
+.pm-sel{display:flex;align-items:center;gap:6px;justify-content:center;margin:8px 0;flex-wrap:wrap}.pm-sel .vf-slot{width:78px}.pm-res{border-color:#a46bff!important}
+.pm-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px;max-height:300px;overflow:auto;margin-bottom:8px}
+.pm-pick .vd-pick.el{border-color:#ffcf6b}
+.pm-modal .vg-modal-box{text-align:center;background:radial-gradient(circle at 50% 30%,#fff7e6,#f3eaff 60%,#fff)}
+.pm-glow{width:220px;height:220px;margin:0 auto;filter:drop-shadow(0 0 18px rgba(164,107,255,.7)) drop-shadow(0 0 30px rgba(255,214,120,.6));animation:pmFloat 3s ease-in-out infinite}
+.pm-glow svg{width:100%;height:100%}@keyframes pmFloat{50%{transform:translateY(-6px)}}
+.pm-reveal h3{margin:8px 0 2px;font-size:22px}.pm-drop{background:linear-gradient(90deg,#f6efff,#fff4e0)!important}.pm-tix b{color:#7b3fe4}
+.tw-fl.prim{background:linear-gradient(135deg,#3b1d6e,#7a3fd0 60%,#d39bff)!important;color:#fff}
+.tw-prim{filter:hue-rotate(40deg) saturate(1.4) drop-shadow(0 0 6px rgba(255,214,120,.9))}
+@media(max-width:440px){.pm-art{width:64px;height:64px}.pm-card b{font-size:12px}}
 .vg-map.placing .vg-item{pointer-events:none}
 .vg-map.placing .vg-tile{cursor:pointer}
 </style>
@@ -2533,8 +2555,8 @@ async function vgSweep(f,n){if(!window.confirm(`${f}층을 ${n}회 소탕할까�
 
 
 /* ===== 캐릭터 조합 ===== */
-VG_GRADE[6]={name:'돌연변이',color:'#0fb59a'};VG_GRADE[7]={name:'보스',color:'#6a3df0'};
-VG_GSTAT[6]=[680,110,33];
+VG_GRADE[6]={name:'돌연변이',color:'#0fb59a'};VG_GRADE[7]={name:'보스',color:'#6a3df0'};VG_GRADE[8]={name:'태초',color:'#a46bff'};
+VG_GSTAT[6]=[680,110,33];VG_GSTAT[8]=[1150,185,52];
 const VG_FUSE={rate:[0,60,45,30,15,8],fee:[0,100,300,800,2000,5000]};
 VG.fuse={g:1,a:null,b:null,mode:'fuse',tg:1,ti:null};
 function vgFuseTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal');
@@ -2543,8 +2565,9 @@ function vgFuseTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,ite
   const list=items.filter(i=>VG.cat[i.item_key].grade===F.g).sort((a,b)=>(VG.cat[a.item_key].sort-VG.cat[b.item_key].sort));
   const slot=(id,n)=>{const it=id&&items.find(i=>i.id===id);return `<button class="vf-slot ${it?'on':''}" data-fslot="${n}">${it?vgArtSvg(vgK(it))+`<b>${esc(VG.cat[it.item_key].name)}</b>`:`<span>＋</span><small>재료 ${n}</small>`}</button>`};
   const next=F.g===5?'돌연변이':VG_GRADE[F.g+1].name,rate=VG_FUSE.rate[F.g],fee=VG_FUSE.fee[F.g],ready=F.a&&F.b;
-  const sub=`<div class="vg-subtabs"><button data-fm="fuse" class="${F.mode!=='tr'?'on':''}">🧬 조합</button><button data-fm="tr" class="${F.mode==='tr'?'on':''}">✨ 초월</button></div>`;
+  const sub=`<div class="vg-subtabs"><button data-fm="fuse" class="${F.mode!=='tr'&&F.mode!=='prim'?'on':''}">🧬 조합</button><button data-fm="tr" class="${F.mode==='tr'?'on':''}">✨ 초월</button><button data-fm="prim" class="${F.mode==='prim'?'on':''}">🌌 태초</button></div>`;
   if(F.mode==='tr')return sub+vgTrTab();
+  if(F.mode==='prim')return sub+vgPrimTab();
   return sub+`<p class="vg-note">같은 등급 2마리를 합치면 확률적으로 <b>상위 등급</b>이 태어나요. 실패하면 같은 등급 1마리가 나와요. 성공하면 <b style="color:#0fb59a">5% 확률로 돌연변이</b>!</p>
   <div class="vf-grades">${[1,2,3,4,5].map(g=>`<button class="${F.g===g?'on':''}" data-fg="${g}"><span class="vg-grade vg-g${g}" style="position:static">${VG_GRADE[g].name}</span><small>${cnt(g)}마리</small></button>`).join('')}</div>
   <div class="vf-slots">${slot(F.a,1)}<div class="vf-plus">＋</div>${slot(F.b,2)}<div class="vf-plus">→</div><div class="vf-slot res"><span>?</span><small>${next}</small></div></div>
@@ -2552,7 +2575,7 @@ function vgFuseTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,ite
   <button class="vg-btn purple full" id="vfGo" ${!ready||coins<fee?'disabled':''}>${!ready?'재료 2마리를 골라 주세요':coins<fee?'코인이 부족해요':`🧬 조합하기 (${vgN(fee)}코인)`}</button>${vgBatchHtml(F.g)}
   <b style="display:block;margin:14px 0 8px">내 ${VG_GRADE[F.g].name} 캐릭터</b>
   ${list.length?`<div class="vf-list">${list.map(i=>{const c=VG.cat[i.item_key],on=F.a===i.id||F.b===i.id;return `<button class="vf-pick ${on?'on':''}" data-fp="${i.id}">${vgArtSvg(vgK(i))}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${i.x!=null?'<i>배치중</i>':''}${on?'<em>✓</em>':''}</button>`}).join('')}</div>`:'<div class="vg-empty">이 등급의 캐릭터가 없어요.</div>'}`}
-function vgFuseBind(side){const F=VG.fuse;
+function vgFuseBind(side){const F=VG.fuse;if(F.mode==='prim'){vgPrimBind(side);side.querySelectorAll('[data-fm]').forEach(b=>b.onclick=()=>{F.mode=b.dataset.fm;vgRenderSide()});return}
   side.querySelectorAll('[data-fm]').forEach(b=>b.onclick=()=>{F.mode=b.dataset.fm;vgRenderSide()});if(F.mode==='tr'){vgTrBind(side);return}
   side.querySelectorAll('[data-fg]').forEach(b=>b.onclick=()=>{F.g=Number(b.dataset.fg);F.a=F.b=null;vgRenderSide()});
   side.querySelectorAll('[data-fslot]').forEach(b=>b.onclick=()=>{if(b.dataset.fslot==='1')F.a=null;else F.b=null;vgRenderSide()});
@@ -2569,6 +2592,37 @@ async function vgFuse(){const F=VG.fuse,A=(VG.state.items||[]).find(i=>i.id===F.
   if(r.result==='mutant')m.querySelector('.vg-modal-box')?.classList.add('vf-mutant');
   vgRenderSide()}
 
+/* ===== 🌌 태초 합성 ===== */
+const VG_PRIM=[{k:'pr_sun',t:'태양을 삼킨 봉황왕',r:'광역 딜러'},{k:'pr_myeong',t:'응보의 흑기사',r:'반격 탱커'},{k:'pr_seer',t:'여명과 황혼의 쌍둥이',r:'공격형 서포터'}];
+VG.prim={k:'pr_sun',sel:[]};
+function vgPrimTab(){const P=VG.prim,core=Number(VG.state.village.pcore)||0,items=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal');
+  const T=VG.cat[P.k]||{},own=k=>items.some(i=>i.item_key===k),party=new Set((VG.state.village.party||[]).map(String));
+  P.sel=P.sel.filter(id=>items.some(i=>i.id===id));
+  const myth=items.filter(i=>VG.cat[i.item_key].grade===5).sort((a,b)=>((VG.cat[b.item_key].elem===T.elem)-(VG.cat[a.item_key].elem===T.elem))||((Number(a.tr)||0)-(Number(b.tr)||0)));
+  const same=P.sel.filter(id=>VG.cat[items.find(i=>i.id===id).item_key].elem===T.elem).length,ready=P.sel.length===3&&same>=1&&core>=1&&!own(P.k);
+  const uq=(VG.uniques||{})[P.k];
+  return `<div class="pm-top"><span>🌌 태초의 핵 <b>${core}</b>개</span><small>탑 30 · 35 · 40층 첫 클리어 · 21층 이상 클리어 시 낮은 확률</small></div>
+  <div class="pm-list">${VG_PRIM.map(x=>{const c=VG.cat[x.k]||{};return `<button class="pm-card ${P.k===x.k?'on':''} ${own(x.k)?'own':''}" data-pk="${x.k}"><span class="pm-art">${vgArtSvg(x.k)}</span><b>${vgElI(c.elem)}${esc(c.name||'')}</b><small>${x.t}</small><em>${own(x.k)?'보유 중':x.r}</em></button>`}).join('')}</div>
+  <div class="pm-skill"><b>${(VD_SK[T.skill]||['✨'])[0]} ${esc(T.skill_name||'')}</b><p>${esc((VD_SK[T.skill]||['',''])[1])}</p></div>
+  ${own(P.k)?`<p class="vg-note">이미 <b>${esc(T.name)}</b>을(를) 가지고 있어요. 태초는 종류별로 1마리만 가질 수 있어요.</p>`:`
+  <p class="vg-note">신화 <b>3마리</b>와 태초의 핵 <b>1개</b>로 합성해요. 재료 중 <b>1마리 이상</b>은 ${vgElI(T.elem)}<b>${(VG_EL[T.elem]||{}).n||''}</b> 속성이어야 해요. 재료가 끼던 장비는 보관함으로 돌아가요.</p>
+  <div class="pm-sel">${[0,1,2].map(n=>{const it=P.sel[n]&&items.find(i=>i.id===P.sel[n]);return `<div class="vf-slot ${it?'on':''}">${it?vgArtSvg(vgK(it))+`<b>${esc(VG.cat[it.item_key].name)}</b>`:`<span>＋</span><small>신화 ${n+1}</small>`}</div>`}).join('')}<div class="vf-plus">→</div><div class="vf-slot res pm-res">${vgArtSvg(P.k)}<b>${esc(T.name||'')}</b></div></div>
+  <div class="pm-pick">${myth.length?myth.map(i=>{const c=VG.cat[i.item_key],on=P.sel.includes(i.id);return `<button class="vd-pick ${on?'on':''} ${c.elem===T.elem?'el':''}" data-pmi="${i.id}">${vgArtSvg(vgK(i))}<b>${vgElI(c.elem)}${esc(c.name)}</b><small>★${Number(i.tr)||0}${party.has(String(i.id))?' · 파티':''}</small></button>`}).join(''):'<div class="vg-empty">신화 캐릭터가 없어요.</div>'}</div>
+  <button class="vg-btn purple full" id="pmGo" ${ready?'':'disabled'}>${core<1?'태초의 핵이 부족해요':P.sel.length<3?`신화 ${3-P.sel.length}마리를 더 골라 주세요`:same<1?'같은 속성 신화를 1마리 이상 넣어 주세요':'🌌 태초 합성하기 (핵 1개)'}</button>`}`}
+function vgPrimBind(side){const P=VG.prim;
+  side.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{P.k=b.dataset.pk;vgRenderSide()});
+  side.querySelectorAll('[data-pmi]').forEach(b=>b.onclick=()=>{const id=b.dataset.pmi;if(P.sel.includes(id))P.sel=P.sel.filter(x=>x!==id);else if(P.sel.length<3)P.sel.push(id);vgRenderSide()});
+  const go=side.querySelector('#pmGo');if(go)go.onclick=async()=>{const T=VG.cat[P.k],names=P.sel.map(id=>VG.cat[(VG.state.items.find(i=>i.id===id)||{}).item_key]?.name).join(', ');
+    if(!window.confirm(`${names}\n위 신화 3마리와 태초의 핵 1개를 써서\n「${T.name}」을(를) 합성할까요? (되돌릴 수 없어요)`))return;go.disabled=true;
+    try{const r=await window.fitVillage.primFuse(P.k,P.sel);vgSetState(r);P.sel=[];vgRenderHud();vgRenderSide();vgRenderStage(true);
+      vgModal(`<div class="pm-reveal"><div class="pm-glow">${vgArtSvg(P.k)}</div><span class="vg-grade vg-g8" style="position:static">태초</span><h3>${esc(T.name)} 탄생!</h3><p class="vg-mp">보관함에 들어갔어요. 파티에는 태초를 1마리만 넣을 수 있어요.</p></div>`,'pm-modal')}
+    catch(e){vgToast(e.setup?'Supabase에 fit_village_update55.sql 실행이 필요합니다.':(e.message||String(e)),true);go.disabled=false}}}
+// 태초 필살기 기본 설명 (DB 설명이 있으면 그걸 씀)
+setTimeout(()=>{try{Object.assign(VD_SK,{sunfire:VD_SK.sunfire||['🔥','적 전체 2.4배 + 화상 3턴 (공격력 0.8배 + 적 최대 체력 2%, 보스 1%) · 화상으로 처치하면 쿨타임 −1 ｜ 패시브 「태양의 재림」 전투당 1회, 쓰러지면 체력 40%로 부활 + 2턴 공격력 +30%'],
+  gravewall:VD_SK.gravewall||['🛡️','3턴 도발 · 받는 피해 감소 · 맞을 때마다 반사(감소 전 피해 25% + 방어력 × 2) + 아군 전체 보호막 30% ｜ 패시브 「망령의 비호」 살아 있는 동안 매 턴 아군 전체 6% 회복'],
+  revelation:VD_SK.revelation||['📖','적 전체 2.2배 방어 무시 피해 + 방어 붕괴 3턴 + 계시의 표식 3턴(받는 피해 +30%, 다른 효과와 곱연산) ｜ 패시브 「예언된 승리」 살아 있는 동안 아군 필살기 피해 +25%']});
+Object.assign(VG_TR5,{sunfire:VG_TR5.sunfire||'피해 3.0배 · 화상 5턴',gravewall:VG_TR5.gravewall||'도발 4턴 · 받는 피해 추가 감소 · 보호막 35%',revelation:VG_TR5.revelation||'피해 2.6배 · 표식 +40%'})}catch(e){}},0);
+
 
 /* ===== 초월 시스템 + 필살기 연출 ===== */
 const VG_TRB={1:300,2:800,3:2000,4:5000,5:12000,6:9000,7:9000};
@@ -2576,7 +2630,7 @@ const vgTrCost=(g,t)=>(VG_TRB[g]||9000)*(t+1);
 const VG_TR5={nuke:'방어를 무시하는 일격',burn:'화상 5턴 지속',stun:'기절 저항 무시',weaken:'약화 3턴 지속',break:'방어 파괴 5턴 지속',shield:'보호막 + 아군 전체 10% 회복',heal:'쓰러진 아군 20% 부활',buff:'강화 1턴 연장',taunt:'받은 피해의 50% 반사',revive:'부활 체력 50%',aegis:'결계 3턴 · 피해 −60%',grove:'숲 4턴 지속',confuse:'실패 확률 70%',rebirth:'부활 체력 60%',combo:'12연격',charge_up:'피해 2.5배',execute:'잃은 체력 18% 비례',lifelink:'오라 4턴 지속',counter:'반격 3턴',timestop:'봉인 + 피해 강화',overdrive:'일반 공격 3회',web:'속박 4턴',cleanse:'회복 45%',meteor:'화상 5턴',dodge:'회피 확률 70%',drain:'최대 −40%',tidal:'피해 +30%',hunt:'피해 +40%',judgement:'피해 +30% · 아군 전체 15% 회복',world_tree:'회복량 +50% · 면역 3턴',magma_armor:'도발 4턴 · 받는 피해 −30%',abyss_gate:'도발 3턴 · 받는 피해 −30%',storm_wall:'보호막 +50% · 반격 3턴',quake:'방어 파괴 4턴',fortress:'아군 받는 피해 −65%',crystal_ward:'완전 회피 2회'};
 function vgStars(t,cls=''){t=Number(t)||0;return t?`<span class="vg-stars ${cls} ${t>=5?'max':''}">${'★'.repeat(t)}<i>${'★'.repeat(5-t)}</i></span>`:''}
 function vgTrTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items=(VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal');
-  const grades=[1,2,3,4,5,6,7].filter(g=>items.some(i=>VG.cat[i.item_key].grade===g));if(!grades.includes(F.tg))F.tg=grades[grades.length-1]||1;
+  const grades=[1,2,3,4,5,6,7,8].filter(g=>items.some(i=>VG.cat[i.item_key].grade===g));if(!grades.includes(F.tg))F.tg=grades[grades.length-1]||1;
   const list=items.filter(i=>VG.cat[i.item_key].grade===F.tg).sort((a,b)=>(b.tr||0)-(a.tr||0)||VG.cat[a.item_key].sort-VG.cat[b.item_key].sort);
   if(F.ti&&!items.some(i=>i.id===F.ti))F.ti=null;if(!F.ti&&list[0])F.ti=list[0].id;
   const it=items.find(i=>i.id===F.ti);let detail='';
@@ -2588,7 +2642,7 @@ function vgTrTab(){const F=VG.fuse,coins=Number(VG.state.village.coins)||0,items
        <div class="vt-mile ${t>=3?'on':''}">★3 각성 — 필살기 쿨타임 1턴 감소</div><div class="vt-mile ${t>=5?'on':''}">★5 초월 각성 — ${VG_TR5[c.skill||'nuke']||'필살기 강화'}</div></div>
      <button class="vg-btn gold full" id="vtGo" ${t>=5||coins<cost?'disabled':''}>${t>=5?'최대 단계 (★5) 달성!':coins<cost?`코인이 부족해요 (${vgN(cost)})`:`✨ ${t+1}성으로 초월 · ${vgN(cost)}코인`}</button></div>`}
   return `<p class="vg-note">코인을 사용해 캐릭터를 최대 <b>★5</b>까지 초월할 수 있어요. 1성마다 <b>능력치 +10%</b>, <b>생산 +5%</b>, <b>필살기 위력 +12%</b>. 조합 재료로 쓰면 초월 단계는 사라져요. 일반·희귀·영웅은 ★5 이후 <b>🔓 한계돌파</b>(돌파석)로 심연의 탑 능력치를 더 올릴 수 있어요.</p>
-  <div class="vf-grades g6">${[1,2,3,4,5,6,7].map(g=>`<button class="${F.tg===g?'on':''}" data-tg="${g}" ${grades.includes(g)?'':'disabled'}><span class="vg-grade vg-g${g}" style="position:static">${VG_GRADE[g].name}</span></button>`).join('')}</div>
+  <div class="vf-grades g6">${[1,2,3,4,5,6,7,8].map(g=>`<button class="${F.tg===g?'on':''}" data-tg="${g}" ${grades.includes(g)?'':'disabled'}><span class="vg-grade vg-g${g}" style="position:static">${VG_GRADE[g].name}</span></button>`).join('')}</div>
   ${detail}${it?vgLbPanel(it):''}
   ${list.length?`<div class="vf-list" style="margin-top:10px">${list.map(i=>`<button class="vf-pick ${F.ti===i.id?'on':''}" data-ti="${i.id}">${vgArtSvg(vgK(i))}<b>${esc(VG.cat[i.item_key].name)}</b>${vgStars(i.tr,'sm')}${vgLbBadge(i,'sm')}${i.x!=null?'<i>배치중</i>':''}</button>`).join('')}</div>`:'<div class="vg-empty">초월할 캐릭터가 없어요.</div>'}`}
 function vgTrBind(side){const F=VG.fuse;
@@ -2755,7 +2809,7 @@ function vgHousePeek(st){const g={};(st.items||[]).forEach(i=>{if(i.h)g[i.item_k
 
 /* 보관함 동물 등급 필터 */
 function vgInvGrChips(inv){const cnt={};(inv||[]).forEach(i=>{const c=VG.cat[i.item_key];if(c&&c.kind==='animal')cnt[c.grade]=(cnt[c.grade]||0)+1});const tot=Object.values(cnt).reduce((a,b)=>a+b,0),cur=VG.invGr||0;
-  return `<div class="vg-chips vg-grchips"><button data-igr="0" class="${cur?'':'on'}">전체 ${tot}</button>${[1,2,3,4,5,6,7].filter(g=>cnt[g]).map(g=>`<button data-igr="${g}" class="${cur===g?'on':''}" style="--gc:${VG_GRADE[g].color}"><i></i>${VG_GRADE[g].name} ${cnt[g]}</button>`).join('')}</div>`}
+  return `<div class="vg-chips vg-grchips"><button data-igr="0" class="${cur?'':'on'}">전체 ${tot}</button>${[8,1,2,3,4,5,6,7].filter(g=>cnt[g]).map(g=>`<button data-igr="${g}" class="${cur===g?'on':''}" style="--gc:${VG_GRADE[g].color}"><i></i>${VG_GRADE[g].name} ${cnt[g]}</button>`).join('')}</div>`}
 
 
 /* ===== 심연의 탑 (세븐나이츠식 전투) ===== */
@@ -2766,16 +2820,16 @@ async function vgTower(){if(TW.m)TW.m.remove();eqLoad();TW.m=vgModal('<div class
   try{TW.st=await window.fitVillage.twStatus();if(!VD.bosses.length)VD.bosses=await window.fitVillage.bosses();await awLoad(true)}catch(e){TW.m.querySelector('.vg-empty').outerHTML=`<div class="vg-setup">${esc(e.setup?'Supabase에 심연의 탑 SQL(fit_village_update16.sql) 실행이 필요합니다.':(e.message||String(e)))}</div>`;return}
   if(!TW.st.open){twBody(`<div class="tw-lock"><div style="font-size:56px">🗼🔒</div><h3>심연의 탑</h3><p class="vg-mp">동굴 던전 <b>10층</b>을 클리어하면 열려요.</p></div>`);return}
   if(TW.st.battle&&TW.st.battle.status==='active'){TW.battle=TW.st.battle;TW.order=[];TW.uq=null;twBattle('진행 중이던 탑 전투를 이어서 합니다.');return}
-  TW.floor=Math.min(30,(TW.st.best||0)+1);{const sp=ptSaved();if(sp.ids.length){TW.pick=sp.ids.slice();TW.form=sp.form}}TW.pick=TW.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));twLobby()}
-function twTickets(){const s=TW.st;return `<div class="tw-tix"><span>🎟️ 입장권 <b>${s.tickets}</b>장</span><span class="${s.free?'on':''}">${s.free?'🎁 오늘 무료 1장 남음':'오늘 무료 입장 사용함'}</span><button class="vg-btn sm gold" data-twbuy="1">${vgCoinIcon(13)} 10,000 · 1장 구매</button><span class="tw-stone">💠 각성석 <b>${s.stones||0}</b>개</span><span class="tw-stone lb">🔶 돌파석 <b>${s.lbstones||0}</b>개</span><button class="vg-btn sm purple" data-awopen="1">🌟 각성</button></div>`}
+  TW.floor=Math.min(40,(TW.st.best||0)+1);{const sp=ptSaved();if(sp.ids.length){TW.pick=sp.ids.slice();TW.form=sp.form}}TW.pick=TW.pick.filter(id=>(VG.state.items||[]).some(i=>i.id===id));twLobby()}
+function twTickets(){const s=TW.st;return `<div class="tw-tix"><span>🎟️ 입장권 <b>${s.tickets}</b>장</span><span class="pm-tix">🌌 핵 <b>${Number((VG.state.village||{}).pcore)||0}</b></span><span class="${s.free?'on':''}">${s.free?'🎁 오늘 무료 1장 남음':'오늘 무료 입장 사용함'}</span><button class="vg-btn sm gold" data-twbuy="1">${vgCoinIcon(13)} 10,000 · 1장 구매</button><span class="tw-stone">💠 각성석 <b>${s.stones||0}</b>개</span><span class="tw-stone lb">🔶 돌파석 <b>${s.lbstones||0}</b>개</span><button class="vg-btn sm purple" data-awopen="1">🌟 각성</button></div>`}
 function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
-  const floors=Array.from({length:30},(_,k)=>k+1).map(f=>{const lock=f>best+1,clear=f<=best,c=Number((s.clears||{})[f])||0;return `<button class="tw-fl ${TW.floor===f?'on':''} ${lock?'lock':''} ${f%5===0?'gate':''} ${f>20?'deep':''}" data-twf="${f}" ${lock?'disabled':''}><b>${f}</b>${clear?'<i>✓</i>':''}${c>=s.sweep_need?'<em>⚡</em>':''}</button>`}).join('');
+  const floors=Array.from({length:40},(_,k)=>k+1).map(f=>{const lock=f>best+1,clear=f<=best,c=Number((s.clears||{})[f])||0;return `<button class="tw-fl ${TW.floor===f?'on':''} ${lock?'lock':''} ${f%5===0?'gate':''} ${f>30?'deep prim':f>20?'deep':''}" data-twf="${f}" ${lock?'disabled':''}><b>${f}</b>${clear?'<i>✓</i>':''}${c>=s.sweep_need?'<em>⚡</em>':''}</button>`}).join('');
   const animals=vgBestOf((VG.state.items||[]).filter(i=>VG.cat[i.item_key]?.kind==='animal')).sort((a,b)=>((VG.cat[b.item_key].stat_grade||VG.cat[b.item_key].grade)-(VG.cat[a.item_key].stat_grade||VG.cat[a.item_key].grade))||((b.tr||0)-(a.tr||0)));
   const slots=Array.from({length:5},(_,k)=>{const id=TW.pick[k],it=id&&(VG.state.items||[]).find(i=>i.id===id),c=it&&VG.cat[it.item_key];return `<button class="tw-slot ${k<front?'front':'back'} ${it?'on':''}" data-tws="${k}"><small>${k<front?'앞줄':'뒷줄'}</small>${it?`${vgArtSvg(vgK(it))}<b>${esc(c.name)}</b>${vgStars(it.tr,'sm')}${vgLbBadge(it,'sm')}${eqBadge(it.id)}${awBadge(it.item_key)}`:'<span>＋</span>'}</button>`}).join('');
   const picks=animals.map(i=>{const c=VG.cat[i.item_key],g=c.stat_grade||c.grade,st=vgTwStat(i),on=TW.pick.includes(i.id),sk=VD_SK[c.skill||'nuke']||VD_SK.nuke;
     return `<button class="vd-pick ${on?'on':''}" data-twp="${i.id}"><span class="vg-grade vg-g${c.grade}">${VG_GRADE[c.grade].name}</span>${vgElB(c)}${vgArtSvg(vgK(i))}<b>${esc(c.name)}</b>${vgStars(i.tr,'sm')}${vgLbBadge(i,'sm')}${eqBadge(i.id)}<small>❤${st[0]} ⚔${st[1]} 🛡${st[2]}</small><em class="vd-psk">${sk[0]} ${esc(c.skill_name||'필살기')}</em>${awOn(i.item_key)?`<em class="vd-psk aw-psk">${esc(awOf(i.item_key).emoji)} ${esc(awOf(i.item_key).name)}</em>`:''}${awBadge(i.item_key)}${on?`<i class="vd-chk">${TW.pick.indexOf(i.id)+1}</i>`:''}</button>`}).join('');
   const c=Number((s.clears||{})[TW.floor])||0,first=TW.floor>best;
-  twBody(`<div class="tw-head"><h3>🗼 심연의 탑</h3><span>최고 <b>${best}층</b> / 30층 ${vgCutToggles()}</span></div>${twTickets()}
+  twBody(`<div class="tw-head"><h3>🗼 심연의 탑</h3><span>최고 <b>${best}층</b> / 40층 ${vgCutToggles()}</span></div>${twTickets()}
    <div class="tw-floors">${floors}</div>
    <div class="vd-info"><div><b>${TW.floor}층</b> <small>졸개 웨이브 → ${TW.floor%5===0?'<b style="color:#d64a7a">관문 보스</b>':'보스'} 웨이브</small></div><div>🎁 ${first?`첫 클리어 ${vgN(TW.floor*1500)}코인${TW.floor%5===0?' + 보스 알':''}`:`반복 클리어 ${vgN(TW.floor*300)}코인`}</div></div>
    <div class="tw-forms">${Object.entries(TW_FORM).map(([k,v])=>`<button class="${TW.form===k?'on':''}" data-twform="${k}"><b>${v.n}</b><small>${v.d}</small></button>`).join('')}</div>
@@ -2795,7 +2849,7 @@ function twLobby(){const s=TW.st,best=s.best||0,front=TW_FORM[TW.form].front;
   const go=TW.m.querySelector('#twGo');if(go)go.onclick=async()=>{go.disabled=true;try{const r=await window.fitVillage.twStart(TW.floor,TW.pick,TW.form);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.battle=r;TW.order=[];TW.uq=null;TW.target=0;twBattle(`🗼 ${TW.floor}층 도전 시작! 1웨이브 — 졸개들이 나타났다.`)}catch(e){vgToast(e.message||String(e),true);go.disabled=false}};
   const sw=TW.m.querySelector('#twSweep');if(sw)sw.onclick=async()=>{try{const r=await window.fitVillage.twSweep(TW.floor);if(r.ticket_used==='free')TW.st.free=false;else TW.st.tickets--;TW.st.clears[TW.floor]=(Number(TW.st.clears[TW.floor])||0)+1;vgSetState(r);vgRenderHud();VG.equips=null;vgToast(`⚡ 소탕 완료! +${vgN(r.reward_coins)} 코인${r.equip?` · ${EQ_GR[r.equip.grade][0]} ${EQ_SLOT[r.equip.slot][1]} 획득`:''}${r.stones?` · 💠 각성석 +${r.stones}`:''}${r.lbst?` · 🔶 돌파석 +${r.lbst}`:''}`);if(r.lbst)TW.st.lbstones=(TW.st.lbstones||0)+r.lbst;if(r.stones)TW.st.stones=(TW.st.stones||0)+r.stones;twLobby()}catch(e){vgToast(e.message||String(e),true)}}}
 async function twBuy(){if(!window.confirm('입장권 1장을 10,000코인에 구매할까요?'))return;try{const r=await window.fitVillage.twBuy(1);vgSetState(r);vgRenderHud();if(TW.st)TW.st.tickets+=r.bought;vgToast('🎟️ 입장권을 구매했어요');if(TW.m&&!TW.battle)twLobby();vgRenderSide()}catch(e){vgToast(e.message||String(e),true)}}
-function twEnemyArt(e){if(e.mob&&!e.boss)return vgBossArt(1,'images/mobs/mob'+(+e.mob)+'.webp');if(e.boss&&/^심층의 /.test(e.name||''))return vgBossArt(1,'images/bosses/deep'+(((+e.art||1)-1)%10+1)+'.webp');const a=e.img?vgBossArt(e.art||10,e.img):vgBossArt(e.art||1,null);return e.hue?`<g style="filter:hue-rotate(${e.hue}deg) saturate(1.35) brightness(.92)">${a}</g>`:a}
+function twEnemyArt(e){if(e.prim)return `<g class="tw-prim">${twEnemyArt(Object.assign({},e,{prim:false,name:String(e.name||'').replace(/^태초의 /,'심층의 ')}))}</g>`;if(e.mob&&!e.boss)return vgBossArt(1,'images/mobs/mob'+(+e.mob)+'.webp');if(e.boss&&/^심층의 /.test(e.name||''))return vgBossArt(1,'images/bosses/deep'+(((+e.art||1)-1)%10+1)+'.webp');const a=e.img?vgBossArt(e.art||10,e.img):vgBossArt(e.art||1,null);return e.hue?`<g style="filter:hue-rotate(${e.hue}deg) saturate(1.35) brightness(.92)">${a}</g>`:a}
 function twBattle(log){const b=TW.battle,front=b.party.filter(p=>p.row==='front'),back=b.party.filter(p=>p.row!=='front'),fx=b.fx||{};
   if(TW.target>=b.enemies.length||b.enemies[TW.target].hp<=0)TW.target=Math.max(0,b.enemies.findIndex(e=>e.hp>0));
   const mem=p=>{const i=b.party.indexOf(p),tags=[];if(p.shield>0)tags.push(`🛡️${p.shield}`);if(p.stun>0)tags.push('💫');if(fx.taunt===i&&fx.tauntt>0)tags.push('🪨');if(p.od>0)tags.push('⚙️');if(p.uq&&!fx.uqused)tags.push('🌟');
@@ -2893,10 +2947,10 @@ async function twAct(order){if(TW.busy)return;TW.busy=true;TW.m.dataset.lock='1'
   if(r.status==='active'){await vdSleep(250);twBattle(logHtml);return}
   TW.auto=false;if(r.state){vgSetState(r.state);vgRenderHud();vgTick()}
   const won=r.status==='won';if(won){VG.equips=null;TW.st.best=Math.max(TW.st.best||0,r.floor);TW.st.clears[r.floor]=(Number(TW.st.clears[r.floor])||0)+1;if(r.boss_egg)VG.bossEggs=null}
-  twBattle(logHtml);const acts=TW.m.querySelector('#twActs'),why=(r.events||[]).some(e=>e.t==='timeout')?'제한 턴(30턴)을 넘겼어요.':(r.events||[]).some(e=>e.t==='flee')?'탑에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
-  acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 ${r.floor}층 클리어! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어)</small>':''}${r.boss_egg?'<div class="vd-bossegg">🥚 관문 보상: 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>':''}${r.equip?`<div class="eq-drop"><small>🎁 장비 획득</small>${eqCard(r.equip,false)}</div>`:''}${r.stones?`<div class="aw-drop">💠 각성석 <b>+${r.stones}</b> <button class="vg-btn sm purple" data-awopen="1">🌟 각성하러 가기</button></div>`:''}${r.lbst?`<div class="aw-drop lb">🔶 돌파석 <b>+${r.lbst}</b> <small>초월 탭에서 일반·희귀·영웅을 한계돌파할 수 있어요</small></div>`:''}`:`💤 실패… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="twBack">탑으로 돌아가기</button></div>`;
+  twBattle(logHtml);const acts=TW.m.querySelector('#twActs'),why=(r.events||[]).some(e=>e.t==='timeout')?`제한 턴(${r.max_turn||30}턴)을 넘겼어요.`:(r.events||[]).some(e=>e.t==='flee')?'탑에서 후퇴했어요.':'파티가 모두 쓰러졌어요.';
+  acts.innerHTML=`<div class="vd-result ${won?'win':'lose'}">${won?`🏆 ${r.floor}층 클리어! <b>+${vgN(r.reward_coins)}</b> 코인${r.first_clear?' <small>(첫 클리어)</small>':''}${r.boss_egg?'<div class="vd-bossegg">🥚 관문 보상: 보스 알 획득! <small>알 부화 탭에서 부화할 수 있어요</small></div>':''}${r.equip?`<div class="eq-drop"><small>🎁 장비 획득</small>${eqCard(r.equip,false)}</div>`:''}${(r.pcore?`<div class="aw-drop pm-drop">🌌 태초의 핵 <b>+${r.pcore}</b> <small>조합 탭 → 🌌 태초에서 합성</small></div>`:'')+(r.stones?`<div class="aw-drop">💠 각성석 <b>+${r.stones}</b> <button class="vg-btn sm purple" data-awopen="1">🌟 각성하러 가기</button></div>`:'')}${r.lbst?`<div class="aw-drop lb">🔶 돌파석 <b>+${r.lbst}</b> <small>초월 탭에서 일반·희귀·영웅을 한계돌파할 수 있어요</small></div>`:''}`:`💤 실패… ${why}`}</div><div class="vd-acts"><button class="vg-btn gold" id="twBack">탑으로 돌아가기</button></div>`;
   if(won&&r.stones&&TW.st)TW.st.stones=(TW.st.stones||0)+r.stones;if(won&&r.lbst&&TW.st)TW.st.lbstones=(TW.st.lbstones||0)+r.lbst;acts.querySelectorAll('[data-awopen]').forEach(b=>b.onclick=vgAwaken);
-  acts.insertAdjacentHTML('beforeend',vgPveStats(r.party,(r.fx||{}).stats,won));acts.querySelector('#twBack').onclick=()=>{TW.battle=null;if(won&&TW.floor<30&&r.floor===TW.floor)TW.floor=Math.min(30,r.floor+1);twLobby()}}
+  acts.insertAdjacentHTML('beforeend',vgPveStats(r.party,(r.fx||{}).stats,won));acts.querySelector('#twBack').onclick=()=>{TW.battle=null;if(won&&TW.floor<40&&r.floor===TW.floor)TW.floor=Math.min(40,r.floor+1);twLobby()}}
 
 /* ===== 보관함 세분화 (동물 · 장비 · 소모품) ===== */
 function vgInvSub(){const s=VG.invSub||'animal';return `<div class="vg-subtabs">${[['animal','🐾 동물'],['deco','🌳 꾸미기'],['equip','⚔️ 장비'],['cons','🎒 소모품']].map(([k,l])=>`<button data-isub="${k}" class="${s===k?'on':''}">${l}</button>`).join('')}</div>`}
@@ -2933,7 +2987,7 @@ function eqCard(e,btns=true){const s=EQ_SLOT[e.slot],g=EQ_GR[e.grade],it=e.item_
    ${btns?`<div class="eq-btns"><button class="vg-btn sm purple" data-eqon="${e.id}">${it?'교체':'장착'}</button>${it?`<button class="vg-btn sm" data-eqoff="${e.id}">해제</button>`:''}<button class="vg-btn sm gold" data-equp="${e.id}" ${e.lvl>=10?'disabled':''}>${e.lvl>=10?'MAX':`강화 ${vgN(eqCost(e))}`}</button><button class="vg-btn sm" data-eqsell="${e.id}">판매</button></div>`:''}</div>`}
 function vgEquipHtml(){if(!VG.equips){eqLoad().then(()=>{if(VG.tab==='inv'&&VG.invSub==='equip')vgRenderSide()});return '<div class="vg-empty">불러오는 중…</div>'}
   const f=VG.eqFilter||'all',l=VG.equips.filter(e=>f==='all'||e.slot===f).sort(eqSort);
-  return `<p class="vg-note">장비는 <b>심연의 탑</b>에서 얻고, 아무 동물에게나 끼울 수 있어요(공용). 장비 효과는 탑 · 던전 · PvP 전투에 적용돼요. <b>신화 장비</b>는 세트가 붙어 있어 같은 세트를 2 · 3개 끼면 추가 효과가 생겨요.</p>
+  return `<p class="vg-note">장비는 <b>심연의 탑</b>에서 얻고, 아무 동물에게나 끼울 수 있어요(공용). 장비 효과는 탑 · PvP 전투에 적용돼요(동굴 던전은 장비 없이 싸워요). <b>신화 장비</b>는 세트가 붙어 있어 같은 세트를 2 · 3개 끼면 추가 효과가 생겨요.</p>
    <div class="eq-filter">${[['all','전체'],['weapon','🗡️ 무기'],['armor','🛡️ 갑옷'],['acc','💍 장신구']].map(([k,n])=>`<button class="${f===k?'on':''}" data-eqf="${k}">${n}</button>`).join('')}<button class="eq-bulk" id="eqBulk">🧹 일괄 판매</button></div>
    ${l.length?l.map(e=>eqCard(e)).join(''):'<div class="vg-empty">⚔️ 아직 장비가 없어요.<br><small>심연의 탑을 클리어하면 장비가 나와요.</small></div>'}`}
 function vgEquipBind(side){const bk=side.querySelector('#eqBulk');if(bk)bk.onclick=eqBulk;side.querySelectorAll('[data-eqf]').forEach(b=>b.onclick=()=>{VG.eqFilter=b.dataset.eqf;vgRenderSide()});
@@ -4016,6 +4070,7 @@ function wireCardio(){const date=$('#cardioDate');date.onchange=()=>{selectedDat
     eqEnhance(id){return vrpc('fit_eq_enhance',{p_eq:id})},
     eqSell(id){return vrpc('fit_eq_sell',{p_eq:id})},
     eqSellMany(ids){return vrpc('fit_eq_sell_many',{p_ids:ids})},
+    primFuse(key,ids){return vrpc('fit_prim_fuse',{p_key:key,p_items:ids})},
     async eqList(){vNeed();const {data,error}=await supa.from('fit_village_equips').select('id,slot,grade,lvl,subs,item_id,eset,created_at').eq('user_id',user.id).order('created_at');if(error)throw vErr(error);return data||[]},
     twStatus(){return vrpc('fit_tw_status')},
     twBuy(n){return vrpc('fit_tw_buy_ticket',{p_n:n})},
